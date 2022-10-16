@@ -1,5 +1,16 @@
 baseURL = 'http://example.org/'
 languageCode = 'en-us'
-title = 'Zhoytou'
-themes = "hugo-ink"
-publishDir = "docs"
+title = 'Zhytou'
+theme = 'vitae'
+publishDir = 'docs'
+
+[params]
+	# Enable dark mode as default
+	#darkmode = true
+
+	# Use homepage.md instead of a list of posts
+	homepage = true
+
+    avatar = 'https://avatars.githubusercontent.com/u/56868292'
+    subtitle = 'May the force be with me.'
+
