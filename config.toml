@@ -1,0 +1,5 @@
+baseURL = 'http://example.org/'
+languageCode = 'en-us'
+title = 'Zhoytou'
+themes = "hugo-ink"
+publishDir = "docs"
