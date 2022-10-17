@@ -17,12 +17,16 @@ date: 2022-10-17T13:34:43+08:00
 
 ### Build your proj
 
+使用Hugo创建一个新项目，具体方法如下。
+
 ``` bash
 # 在当前路径中新建一个MySite文件夹，保存整个网站的相关文件
 hugo new site MySite
 ```
 
 ### Choose a Hugo theme(Vitae)
+
+选择一个[Hugo主题](https://themes.gohugo.io/)，并拷贝到本地。
 
 ``` bash
 cd MySite
@@ -80,11 +84,9 @@ url = "https://github.com/Zhytou"
 
 ## Github Pages
 
-用户以使用[Github Pages](https://docs.github.com/en/pages)来展示一些开源项目、主持博客甚或分享您的简历。
+[Github Pages](https://docs.github.com/en/pages)是Github提供给用户，用于展示一些开源项目、博客甚至是简历的工具。我们可以使用Hugo构建自己的博客，并使用Github Pages来向其他人展示。这主要有两种方法实现：
 
-将Hugo生成的静态网页资源，推送到GitHub的repo中并构建网站主要有两种方法：
-
-+ 可以将 GitHub Pages 站点配置为在将更改推送到特定分支时进行发布，
++ 可以使用Hugo生成静态资源文件到/docs目录，并设置Github repo根据/docs生成网页。
 + 也可以编写 GitHub Actions 工作流来发布站点。
 
 两种方法相比，第一种配置简单好理解，但每次都要手动操作有点麻烦；另一种全自动，但配置相对复杂一点。
@@ -155,7 +157,7 @@ jobs:
 
 接着，设置repo,将Github Page的源设置为gh pages的root目录
 
-整体流程就是每次push上去后，Github Action帮用户通过Hugo生成静态资源文件并且commit到另一个branch（gh pages）中，然后Github Pages根据这个branch生成。
+整体流程就是每次push到master分支后，Github Action触发。自动使用Hugo生成静态资源文件，并且将其commit到另一个branch（gh pages）中，最后Github Pages根据这个branch生成。
 
 ## Reference
 
