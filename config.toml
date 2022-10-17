@@ -4,7 +4,7 @@ title = 'Zhytou'
 theme = 'vitae'
 publishDir = 'docs'
 
-copyright = "© Copyright [Zhytou](https://github.com/Zhytou)"
+copyright = "© Copyright [Zhytou](https://github.com/Zhytou) | [Vitae](https://github.com/dataCobra/hugo-vitae) theme for [Hugo](https://gohugo.io)"
 
 pygmentsstyle = "colorful"
 pygmentscodefences = true
