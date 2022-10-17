@@ -1,10 +1,14 @@
-Hi, I'm Zhytou
++++
+title = "" 
++++
+
+Hi, I'm Zhytou.
 
 * [About Me](/about)
 * [Curriculum Vitae]()
-* [Blog]()
+* [Blog](/post)
 
 I'm also available at:
 
-* [GitHub]()
-* [Twitter]()
+* [GitHub](https://github.com/Zhytou)
+* [Twitter](https://twitter.com/_ZhoY_)
