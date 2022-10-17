@@ -1,9 +1,6 @@
-+++ 
-hidden = true
-title = "Home"
-+++
+Hi, I'm Zhytou
 
-* [About Me]()
+* [About Me](/about)
 * [Curriculum Vitae]()
 * [Blog]()
 
