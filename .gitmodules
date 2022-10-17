@@ -1,18 +1,6 @@
-[submodule "themes/ananke"]
-	path = themes/ananke
-	url = https://github.com/theNewDynamic/gohugo-theme-ananke.git
 [submodule "themes/ink"]
 	path = themes/ink
 	url = https://github.com/knadh/hugo-ink.git
-[submodule "themes/astatine"]
-	path = themes/astatine
-	url = https://github.com/hugcis/hugo-astatine-theme
-[submodule "themes/paper"]
-	path = themes/paper
-	url = https://github.com/nanxiaobei/hugo-paper
 [submodule "themes/vitae"]
 	path = themes/vitae
 	url = https://github.com/dataCobra/hugo-vitae
-[submodule "themes/introductions"]
-	path = themes/introductions
-	url = https://github.com/victoriadrake/hugo-theme-introduction.git
