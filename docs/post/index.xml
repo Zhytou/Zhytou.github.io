@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Posts on Zhoytou</title>
-    <link>http://example.org/post/</link>
-    <description>Recent content in Posts on Zhoytou</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="http://example.org/post/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title></title>
-      <link>http://example.org/post/hugo/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://example.org/post/hugo/</guid>
-      <description>GitHubPages搭建 </description>
-    </item>
-    
-  </channel>
+	<channel>
+		<title>Posts on Zhytou</title>
+		<link>https://zhytou.github.io/post/</link>
+		<description>Recent content in Posts on zhytou.github.io</description>
+		<generator>Hugo -- gohugo.io</generator>
+		<language>en-us</language>
+		<copyright>© Copyright Zhytou</copyright>
+		<lastBuildDate>Mon, 17 Oct 2022 13:34:43 +0800</lastBuildDate>
+		<atom:link href="https://zhytou.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+		<item>
+			<title>Hugo搭建博客</title>
+			<link>https://zhytou.github.io/post/2022-10-17/how-to-use-hugo/</link>
+			<pubDate>Mon, 17 Oct 2022 13:34:43 +0800</pubDate>
+			<guid>https://zhytou.github.io/post/2022-10-17/how-to-use-hugo/</guid>
+			<description>
+			一直想搞一个自己的网站，记录一下自己自己的想法。之前尝试用过JekyII和Hexo，但研究了很久还是最终选择使用Hugo。于是就有了这篇踩坑记录贴。
+Hugo Hugo是一个静态网页生成器，能够根据/content目录和config.toml设置生成一些列Html文件供用户使用。 …
+			</description>
+		</item>
+	</channel>
 </rss>

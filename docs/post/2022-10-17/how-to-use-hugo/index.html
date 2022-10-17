@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hugo搭建博客 | Zhytou</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.104.3" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" media="screen" href="/css/normalize.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/css/main.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/css/all.css" />
+
+
+
+
+<meta property="og:title" content="Hugo搭建博客" />
+<meta property="og:description" content="一直想搞一个自己的网站，记录一下自己自己的想法。之前尝试用过JekyII和Hexo，但研究了很久还是最终选择使用Hugo。于是就有了这篇踩坑记录贴。
+Hugo Hugo是一个静态网页生成器，能够根据/content目录和config.toml设置生成一些列Html文件供用户使用。
+Install Hugo 根据Hugo官网的教程，我们可以直接下载压缩包,解压到Hugo/bin文件夹中。
+此外，可以将Hugo/bin添加至环境变量，方便后续使用。具体方法：我的电脑——属性——高级系统设置——环境变量——Path添加/Hugo/bin。
+Build your proj # 在当前路径中新建一个MySite文件夹，保存整个网站的相关文件 hugo new site MySite Choose a Hugo theme(Vitae) cd MySite git init git submodule add https://github.com/dataCobra/hugo-vitae themes/vitae Hugo-Vitae Vitae是一种hugo主题，下面介绍一下怎么如何在config.toml中修改配置它。
+# 选择vitae主题 theme = &#39;vitae&#39; [params] # 启用homepage homepage = true # 头像 avatar = &#39;https://avatars.githubusercontent.com/u/56868292&#39; # 次级标题 subtitle = &#39;May the force be with me.&#39; # 页面标题 pagetitle = &#39;May the force be with me.&#39; # Home tab显示/content/homepage.md [[menu." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zhytou.github.io/post/2022-10-17/how-to-use-hugo/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-10-17T13:34:43+08:00" />
+<meta property="article:modified_time" content="2022-10-17T13:34:43+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hugo搭建博客"/>
+<meta name="twitter:description" content="一直想搞一个自己的网站，记录一下自己自己的想法。之前尝试用过JekyII和Hexo，但研究了很久还是最终选择使用Hugo。于是就有了这篇踩坑记录贴。
+Hugo Hugo是一个静态网页生成器，能够根据/content目录和config.toml设置生成一些列Html文件供用户使用。
+Install Hugo 根据Hugo官网的教程，我们可以直接下载压缩包,解压到Hugo/bin文件夹中。
+此外，可以将Hugo/bin添加至环境变量，方便后续使用。具体方法：我的电脑——属性——高级系统设置——环境变量——Path添加/Hugo/bin。
+Build your proj # 在当前路径中新建一个MySite文件夹，保存整个网站的相关文件 hugo new site MySite Choose a Hugo theme(Vitae) cd MySite git init git submodule add https://github.com/dataCobra/hugo-vitae themes/vitae Hugo-Vitae Vitae是一种hugo主题，下面介绍一下怎么如何在config.toml中修改配置它。
+# 选择vitae主题 theme = &#39;vitae&#39; [params] # 启用homepage homepage = true # 头像 avatar = &#39;https://avatars.githubusercontent.com/u/56868292&#39; # 次级标题 subtitle = &#39;May the force be with me.&#39; # 页面标题 pagetitle = &#39;May the force be with me.&#39; # Home tab显示/content/homepage.md [[menu."/>
+
+<meta itemprop="name" content="Hugo搭建博客">
+<meta itemprop="description" content="一直想搞一个自己的网站，记录一下自己自己的想法。之前尝试用过JekyII和Hexo，但研究了很久还是最终选择使用Hugo。于是就有了这篇踩坑记录贴。
+Hugo Hugo是一个静态网页生成器，能够根据/content目录和config.toml设置生成一些列Html文件供用户使用。
+Install Hugo 根据Hugo官网的教程，我们可以直接下载压缩包,解压到Hugo/bin文件夹中。
+此外，可以将Hugo/bin添加至环境变量，方便后续使用。具体方法：我的电脑——属性——高级系统设置——环境变量——Path添加/Hugo/bin。
+Build your proj # 在当前路径中新建一个MySite文件夹，保存整个网站的相关文件 hugo new site MySite Choose a Hugo theme(Vitae) cd MySite git init git submodule add https://github.com/dataCobra/hugo-vitae themes/vitae Hugo-Vitae Vitae是一种hugo主题，下面介绍一下怎么如何在config.toml中修改配置它。
+# 选择vitae主题 theme = &#39;vitae&#39; [params] # 启用homepage homepage = true # 头像 avatar = &#39;https://avatars.githubusercontent.com/u/56868292&#39; # 次级标题 subtitle = &#39;May the force be with me.&#39; # 页面标题 pagetitle = &#39;May the force be with me.&#39; # Home tab显示/content/homepage.md [[menu."><meta itemprop="datePublished" content="2022-10-17T13:34:43+08:00" />
+<meta itemprop="dateModified" content="2022-10-17T13:34:43+08:00" />
+<meta itemprop="wordCount" content="159">
+<meta itemprop="keywords" content="" />
+</head>
+<body>
+<header>
+<div id="avatar">
+<a href="https://zhytou.github.io/"><img src="https://avatars.githubusercontent.com/u/56868292" alt="Zhytou"></a>
+</div>
+<div id="titletext">
+<h2 id="title"><a href="https://zhytou.github.io/">Zhytou</a></h2>
+</div>
+<div id="title-description">
+<p id="subtitle">May the force be with me.</p>
+<div id="social">
+<nav><ul>
+<li><a href="https://github.com/Zhytou"><i title="Github" class="icons fab fa-github"></i></a></li>
+<li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li>
+</ul></nav>
+</div>
+</div>
+<div id="mainmenu">
+<nav>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/post">Posts</a></li>
+<li><a href="/about">About</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<main>
+<div class="post">
+<article>
+<div class="post-header">
+<div class="meta">
+<div class="date">
+<span class="day">17</span>
+<span class="rest">Oct 2022</span>
+</div>
+</div>
+<div class="matter">
+<h1 class="title">Hugo搭建博客</h1>
+<p class="post-meta">
+<span class="post-meta">
+
+
+
+
+
+</span>
+
+</p>
+</div>
+</div>
+<div class="markdown">
+<p>一直想搞一个自己的网站，记录一下自己自己的想法。之前尝试用过<a href="https://jekyllrb.com/" target="_blank">JekyII</a>和<a href="https://hexo.io/zh-cn/" target="_blank">Hexo</a>，但研究了很久还是最终选择使用<a href="https://gohugo.io/" target="_blank">Hugo</a>。于是就有了这篇踩坑记录贴。</p>
+<h2 id="hugo">Hugo</h2>
+<p><a href="https://gohugo.io/" target="_blank">Hugo</a>是一个静态网页生成器，能够根据/content目录和config.toml设置生成一些列Html文件供用户使用。</p>
+<h3 id="install-hugo">Install Hugo</h3>
+<p>根据<a href="https://gohugo.io/getting-started/installing/" target="_blank">Hugo</a>官网的教程，我们可以直接下载压缩包,解压到Hugo/bin文件夹中。</p>
+<p>此外，可以将Hugo/bin添加至环境变量，方便后续使用。具体方法：我的电脑——属性——高级系统设置——环境变量——Path添加/Hugo/bin。</p>
+<h3 id="build-your-proj">Build your proj</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888"># 在当前路径中新建一个MySite文件夹，保存整个网站的相关文件</span>
+</span></span><span style="display:flex;"><span>hugo new site MySite
+</span></span></code></pre></div><h3 id="choose-a-hugo-themevitae">Choose a Hugo theme(Vitae)</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#007020">cd</span> MySite
+</span></span><span style="display:flex;"><span>git init
+</span></span><span style="display:flex;"><span>git submodule add https://github.com/dataCobra/hugo-vitae themes/vitae
+</span></span></code></pre></div><h2 id="hugo-vitae">Hugo-Vitae</h2>
+<p><a href="https://github.com/dataCobra/hugo-vitae" target="_blank">Vitae</a>是一种hugo主题，下面介绍一下怎么如何在config.toml中修改配置它。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span><span style="color:#888"># 选择vitae主题</span>
+</span></span><span style="display:flex;"><span>theme = <span style="background-color:#fff0f0">&#39;vitae&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[params]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># 启用homepage</span>
+</span></span><span style="display:flex;"><span>homepage = <span style="color:#080;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># 头像</span>
+</span></span><span style="display:flex;"><span>avatar = <span style="background-color:#fff0f0">&#39;https://avatars.githubusercontent.com/u/56868292&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># 次级标题</span>
+</span></span><span style="display:flex;"><span>subtitle = <span style="background-color:#fff0f0">&#39;May the force be with me.&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># 页面标题</span>
+</span></span><span style="display:flex;"><span>pagetitle = <span style="background-color:#fff0f0">&#39;May the force be with me.&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># Home tab显示/content/homepage.md</span>
+</span></span><span style="display:flex;"><span>[[menu.main]]
+</span></span><span style="display:flex;"><span>name = <span style="background-color:#fff0f0">&#34;Home&#34;</span>
+</span></span><span style="display:flex;"><span>url = <span style="background-color:#fff0f0">&#34;/&#34;</span>
+</span></span><span style="display:flex;"><span>weight = <span style="color:#00d;font-weight:bold">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># Posts tab显示/content/post/*.md</span>
+</span></span><span style="display:flex;"><span>[[menu.main]]
+</span></span><span style="display:flex;"><span>name = <span style="background-color:#fff0f0">&#34;Posts&#34;</span>
+</span></span><span style="display:flex;"><span>url = <span style="background-color:#fff0f0">&#34;/post&#34;</span>
+</span></span><span style="display:flex;"><span>weight = <span style="color:#00d;font-weight:bold">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># About tab显示/content/about.md</span>
+</span></span><span style="display:flex;"><span>[[menu.main]]
+</span></span><span style="display:flex;"><span>name = <span style="background-color:#fff0f0">&#34;About&#34;</span>
+</span></span><span style="display:flex;"><span>url = <span style="background-color:#fff0f0">&#34;/about&#34;</span>
+</span></span><span style="display:flex;"><span>weight = <span style="color:#00d;font-weight:bold">3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># github图标</span>
+</span></span><span style="display:flex;"><span>[[params.social]]
+</span></span><span style="display:flex;"><span>name = <span style="background-color:#fff0f0">&#34;Github&#34;</span>
+</span></span><span style="display:flex;"><span>icon = <span style="background-color:#fff0f0">&#34;fab fa-github&#34;</span>
+</span></span><span style="display:flex;"><span>url = <span style="background-color:#fff0f0">&#34;https://github.com/Zhytou&#34;</span>
+</span></span></code></pre></div><h2 id="github-pages">Github Pages</h2>
+<p>用户以使用<a href="https://docs.github.com/en/pages" target="_blank">Github Pages</a>来展示一些开源项目、主持博客甚或分享您的简历。</p>
+<p>将Hugo生成的静态网页资源，推送到GitHub的repo中并构建网站主要有两种方法：</p>
+<ul>
+<li>可以将 GitHub Pages 站点配置为在将更改推送到特定分支时进行发布，</li>
+<li>也可以编写 GitHub Actions 工作流来发布站点。</li>
+</ul>
+<h3 id="deploy-on-github-pages-using-docs">Deploy on Github Pages using /docs</h3>
+<p>首先，在Hugo的配置文件config.toml中修改输出文件夹，具体如下：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span>publishDir = <span style="background-color:#fff0f0">&#39;docs&#39;</span>
+</span></span></code></pre></div><p>接着，在Github相应的repo中修改设置，选择任意分支上的 docs 文件夹作为发布源，具体如下：</p>
+<ul>
+<li>在侧边栏&quot;Code and automation&quot; 中选择Pages。</li>
+<li>在“生成和部署”的“源”下，选择“从分支进行部署”。</li>
+<li>在“生成和部署”的“分支”下，使用“无”或“分支”下拉菜单并选择发布源。</li>
+</ul>
+<p>最后，保存即可。</p>
+<h3 id="deploy-on-github-page-using-github-action">Deploy on github page using github action</h3>
+
+</div>
+</div>
+</article>
+</div>
+</main>
+<footer>
+© Copyright <a href="https://github.com/Zhytou" target="_blank">Zhytou</a>
+</footer><script src="/js/dark-mode.js"></script>
+
+</body>
+</html>
