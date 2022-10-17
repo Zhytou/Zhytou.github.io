@@ -145,18 +145,21 @@ jobs:
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/master'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
 ```
 
-接着，设置repo,将Github Page的源设置为Github Action
+注意：GITHUB_TOKEN 不是 personal access token，因此可以不用其他设置就可运行。
 
-整体流程就是每次push上去后，Github Action帮用户用Hugo在一个branch（gh-action）生成静态资源文件到docs，然后Github Pages根据这个branch生成。
+接着，设置repo,将Github Page的源设置为gh pages的root目录
+
+整体流程就是每次push上去后，Github Action帮用户通过Hugo生成静态资源文件并且commit到另一个branch（gh pages）中，然后Github Pages根据这个branch生成。
 
 ## Reference
 
-[Hugo quick start](https://gohugo.io/getting-started/quick-start/)
-[Hugo host on Github](https://gohugo.io/hosting-and-deployment/hosting-on-github/)
-[Github Pages Sources](https://docs.github.com/cn/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
++ [Hugo quick start](https://gohugo.io/getting-started/quick-start/)
++ [Hugo host on Github](https://gohugo.io/hosting-and-deployment/hosting-on-github/)
++ [Github Actions for Hugo](https://github.com/marketplace/actions/hugo-setup)
++ [Github Pages Sources](https://docs.github.com/cn/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
