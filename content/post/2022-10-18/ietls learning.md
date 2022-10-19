@@ -6,7 +6,7 @@ author: Zhytou
 
 等了3天，终于拿到自己的首考雅思成绩了。嘻嘻，先上图。
 
-![ielts score](ielts%20score.PNG)
+![ielts score](https://zhytou.github.io/post/2022-10-18/ielts%20score.PNG)
 
 ## 个人情况
 
