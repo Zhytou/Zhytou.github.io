@@ -3,12 +3,14 @@
 Raft是一种易于理解的共识算法。它通过保证 复制状态机(Replicated State Machine) 中的日志一致来保证一个分布式系统可靠、复制、冗余和容错。
 Basics 在Raft算法中，每一个服务器都是 …</description></item><item><title>IELTS学习总结</title><link>https://zhytou.github.io/post/2022-10-18/ietls-learning/</link><pubDate>Tue, 18 Oct 2022 18:51:08 +0800</pubDate><guid>https://zhytou.github.io/post/2022-10-18/ietls-learning/</guid><description>
 等了3天，终于拿到自己的首考雅思成绩了。嘻嘻，先上图。
-个人情况 上了大学之后，英语学习就是停滞了。最近参加的一次英语考试也是2年前的六级，考了500分左右。
+个人情况 上了大学之后，英语学习就是停滞了。最近参加的一次英语考试也是大一考的四级，考了590分左右。
 断断续续复习了两个月左右。前期以熟悉题型和看网课为主，后期每天一套听力和一篇大作文加口语练习。在此期间，也总结收集了一些 …</description></item><item><title>Hugo搭建博客</title><link>https://zhytou.github.io/post/2022-10-17/how-to-use-hugo/</link><pubDate>Mon, 17 Oct 2022 13:34:43 +0800</pubDate><guid>https://zhytou.github.io/post/2022-10-17/how-to-use-hugo/</guid><description>
 一直想搞一个自己的网站，记录一下自己的想法。之前尝试用过JekyII和Hexo，但研究了很久还是最终选择使用Hugo,于是就有了这篇踩坑记录贴。
-Hugo Hugo是一个静态网页生成器，能够根据/content目录和config.toml设置生成一些列Html文件供用户使用。 …</description></item><item><title/><link>https://zhytou.github.io/homepage/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhytou.github.io/homepage/</guid><description>
+Hugo Hugo是一个静态网页生成器，能够根据/content目录和config.toml设置生成一些列Html文件供用户使用。 …</description></item><item><title/><link>https://zhytou.github.io/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhytou.github.io/about/</guid><description>
+Hi, I’m Zhytou(ZHONG Yang). I obtained my Bachelor’s degree in information engineering from Zhejiang University.
+The attempt to work as a …</description></item><item><title/><link>https://zhytou.github.io/homepage/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhytou.github.io/homepage/</guid><description>
 🎯 Focus on 6.824
-💻 Just coding for fun
-C++ Go(Currently learning) 📺 Fan of TV series & animes
-Games of Thrones Breaking Bad Yellowstone …</description></item><item><title>Hi, I'm Zhytou</title><link>https://zhytou.github.io/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhytou.github.io/about/</guid><description>
-I’m currently a postgradute student studying at Zhejiang University.</description></item></channel></rss>
+💻 Code for fun & polyglot programmer
+C++ Python Javascript Go(currently learning) 📺 Fan of TV series & animes
+Games of …
+		</description></item></channel></rss>
