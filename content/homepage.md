@@ -4,10 +4,12 @@ title = ""
 
 🎯 Focus on 6.824
 
-💻 Just coding for fun
+💻 Code for fun & polyglot programmer
 
 + C++
-+ Go(Currently learning)
++ Python
++ Javascript
++ Go(currently learning)
 
 📺 Fan of TV series & animes
 
@@ -17,10 +19,15 @@ title = ""
 + Attack on Titan
 + Jujutsu Kaisen
 
+🎧 Hippop artists I love
+
++ zh: Ddg Gali Mercy Echo
++ non-zh: PopSmoke Jcole
+
 Check below for more information:
 
 + [About Me](/about)
-+ [Curriculum Vitae](/)
++ [Curriculum Vitae](https://github.com/Zhytou/Zhytou/CV.pdf)
 + [Blog](/post)
 
 Also available at:

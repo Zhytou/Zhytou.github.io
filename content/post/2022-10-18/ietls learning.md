@@ -10,7 +10,7 @@ author: Zhytou
 
 ## 个人情况
 
-+ 上了大学之后，英语学习就是停滞了。最近参加的一次英语考试也是2年前的六级，考了500分左右。
++ 上了大学之后，英语学习就是停滞了。最近参加的一次英语考试也是大一考的四级，考了590分左右。
 
 + 断断续续复习了两个月左右。前期以熟悉题型和看网课为主，后期每天一套听力和一篇大作文加口语练习。在此期间，也总结收集了一些素材，形成了自己的[学习笔记](https://github.com/Zhytou/IELTS-Notes)。
 
@@ -22,7 +22,7 @@ author: Zhytou
 
 + 用[雅思哥](https://ieltsbro.com/)练当季题库，尽可能的把当季题库全部刷完。
   
-+ 有时间的一定要和真人练习，可以去淘宝上买雅思口语陪练课，这里给一篇小红书上的[测评](https://www.xiaohongshu.com/discovery/item/623e834600000000010255f1?app_platform=android&app_version=7.58.1&share_from_user_hidden=true&type=normal&xhsshare=QQ&appuid=5c7a9d490000000012013f42&apptime=1666091253)，大家可以参考着选一下。比如我自己就是用的吾爱TALK，每节课是25分钟大约17块一节课，可以做一次mock test。当然你可以疯狂白嫖试听课程，就一节课可能10块左右，只不过可能要应对店家不停问反馈的尴尬场面。
++ 有时间的一定要和真人练习，可以去淘宝上买雅思口语陪练课。这里给一篇小红书上的[测评](https://www.xiaohongshu.com/discovery/item/623e834600000000010255f1?app_platform=android&app_version=7.58.1&share_from_user_hidden=true&type=normal&xhsshare=QQ&appuid=5c7a9d490000000012013f42&apptime=1666091253)，大家可以参考着选一下。比如我自己就是用的吾爱TALK，每节课是25分钟、大约17块一节课，可以做一次mock test。当然你可以疯狂白嫖试听课程（一节课大概10块左右），只不过可能要应对店家不停问反馈的尴尬场面。
 
 + 此外，也可以自己去找类似[Omegle](https://www.omegle.com/)这种网站和外国友人练习，锻炼一下胆子。
 

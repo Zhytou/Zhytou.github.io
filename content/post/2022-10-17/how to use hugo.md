@@ -111,7 +111,10 @@ publishDir = 'docs'
 最后，每次生成静态网页资源到docs文件夹中，然后push到remote repo即可。
 
 ``` bash
+# generate static files
 hugo -D
+# serve without generating static files
+hugo serve
 ```
 
 ### Deploy on Github PageS using Github Action
@@ -159,9 +162,34 @@ jobs:
 
 整体流程就是每次push到master分支后，Github Action触发。自动使用Hugo生成静态资源文件，并且将其commit到另一个branch（gh pages）中，最后Github Pages根据这个branch生成。
 
+## Additional infomation
+
+### Add your own domain name for github pages
+
+简单来说，就是到大平台（阿里云、华为云或者腾讯云）购买域名，接着配置域名解析，使其能够转到你的github pages即可。具体可以参考[这里](https://www.zhihu.com/question/31377141)。
+
+此外，注意当使用github actions部署网站时，要将CNAME文件添加在`publish_dir`中，否则个人域名会配置失败。具体可以参考[这里](https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-add-cname-file-cname)。
+
+### Add icon for your website
+
+首先，访问[favicon design](https://favicon.io/favicon-generator/)设计图标。
+
+接着，下载生成文件，并将文件解压到根目录static文件夹中。
+
+最后，有些主题需要修改html文件（Vatie不用），一般来说应该加一行`<link rel="shortcut icon" href="/favicon.ico">`就OK了。具体可以参考这篇[博文](https://ibrights.github.io/post/blog20210527/)。
+
 ## Reference
 
 + [Hugo quick start](https://gohugo.io/getting-started/quick-start/)
+
 + [Hugo host on Github](https://gohugo.io/hosting-and-deployment/hosting-on-github/)
-+ [Github Actions for Hugo](https://github.com/marketplace/actions/hugo-setup)
-+ [Github Pages Sources](https://docs.github.com/cn/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+
++ [Github actions for hugo](https://github.com/marketplace/actions/hugo-setup)
+
++ [Github pages sources](https://docs.github.com/cn/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+
++ [Add your own domain name for your github pages](https://www.zhihu.com/question/31377141)
+
++ [Add CNAME file in the publish_dir](https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-add-cname-file-cname)
+
++ [Add icon for your website](https://ibrights.github.io/post/blog20210527/)
