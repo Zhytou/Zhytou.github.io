@@ -2,7 +2,7 @@
 title = "" 
 +++
 
-🎯 Focus on 6.824
+🎯 Focus on [6.824](https://github.com/Zhytou/Mit-6.824-Labs)
 
 💻 Code for fun & polyglot programmer
 
