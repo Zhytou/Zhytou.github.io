@@ -8,7 +8,6 @@ title = ""
 
 + C++
 + Python
-+ Javascript
 + Go(currently learning)
 
 📺 Fan of TV series & animes
