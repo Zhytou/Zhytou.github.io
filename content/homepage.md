@@ -2,7 +2,7 @@
 title = "" 
 +++
 
-🎯 Focus on [6.824](https://github.com/Zhytou/Mit-6.824-Labs)
+🎯 Focus on Ray Tracing
 
 💻 Code for fun & polyglot programmer
 
