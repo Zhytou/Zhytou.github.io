@@ -2,7 +2,11 @@
 title = "" 
 +++
 
-🎯 Focus on Ray Tracing
+🎯 Focus on
+
++ Simple render engine using ray Tracing
++ Scan line z buffer shading technology
++ 6.824 lab3 kvraft
 
 💻 Code for fun & polyglot programmer
 
