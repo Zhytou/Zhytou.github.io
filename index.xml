@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Zhytou</title><link>https://zhytou.github.io/</link><description>Recent content on zhytou.github.io</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>© Copyright Zhytou | Vitae theme for Hugo</copyright><lastBuildDate>Fri, 13 Jan 2023 00:52:50 +0800</lastBuildDate><atom:link href="https://zhytou.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>2022年总结</title><link>https://zhytou.github.io/post/2023-1-13/2022-summary/</link><pubDate>Fri, 13 Jan 2023 00:52:50 +0800</pubDate><guid>https://zhytou.github.io/post/2023-1-13/2022-summary/</guid><description>
-22春招 后22春招学习 最后的大四时光 毕业啦 旅行 愚蠢的决定 IELTS与申请出国 10月之后的学习 后记 TODO-List 2022年对我来说是波澜起伏的一年，
-22春招 考完研之后我也没有完全放开玩，还是认真的在收集信息谋划我的未来。在此期间，我又去仔细地了解了出国 …</description></item><item><title>Raft 笔记</title><link>https://zhytou.github.io/post/2022-11-14/raft/</link><pubDate>Mon, 14 Nov 2022 10:38:10 +0800</pubDate><guid>https://zhytou.github.io/post/2022-11-14/raft/</guid><description>
+22春招 后22春招学习 最后的大四时光 毕业啦 旅行 愚蠢的决定 IELTS与申请出国 10月之后的学习 后记 TODO-List 22春招 考完研之后我也没有完全放开玩，还是认真的在收集信息谋划我的未来。在此期间，我又去仔细地了解了出国的事项，因为我发现通过出国留学最终成功 …</description></item><item><title>Raft 笔记</title><link>https://zhytou.github.io/post/2022-11-14/raft/</link><pubDate>Mon, 14 Nov 2022 10:38:10 +0800</pubDate><guid>https://zhytou.github.io/post/2022-11-14/raft/</guid><description>
 简单记录一下学习和实现Raft共识算法（6.824）的笔记。
 Raft是一种易于理解的共识算法。它通过保证 复制状态机(Replicated State Machine) 中的日志一致来保证一个分布式系统可靠、复制、冗余和容错。
 Basics 在Raft算法中，每一个服务器都是 …</description></item><item><title>IELTS学习总结</title><link>https://zhytou.github.io/post/2022-10-18/ietls-learning/</link><pubDate>Tue, 18 Oct 2022 18:51:08 +0800</pubDate><guid>https://zhytou.github.io/post/2022-10-18/ietls-learning/</guid><description>
@@ -11,8 +10,6 @@ Basics 在Raft算法中，每一个服务器都是 …</description></item><item
 Hugo Hugo是一个静态网页生成器，能够根据/content目录和config.toml设置生成一些列Html文件供用户使用。 …</description></item><item><title/><link>https://zhytou.github.io/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhytou.github.io/about/</guid><description>
 Hi, I’m Zhytou(ZHONG Yang). I obtained my Bachelor’s degree in information engineering from Zhejiang University.
 The attempt to work as a …</description></item><item><title/><link>https://zhytou.github.io/homepage/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhytou.github.io/homepage/</guid><description>
-🎯 Focus on Ray Tracing
-💻 Code for fun & polyglot programmer
-C++ Python Go(currently learning) 📺 Fan of TV series & animes
-Games of Thrones …
+🎯 Focus on
+Simple render engine using ray Tracing Scan line z buffer shading technology 6.824 lab3 kvraft 💻 Code for fun & polyglot …
 		</description></item></channel></rss>
