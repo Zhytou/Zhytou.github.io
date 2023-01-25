@@ -4,8 +4,7 @@ title = ""
 
 🎯 Focus on
 
-+ Simple render engine using ray Tracing
-+ Scan line z buffer shading technology
++ Simple render engine using path tracing
 + 6.824 lab3 kvraft
 
 💻 Code for fun & polyglot programmer
