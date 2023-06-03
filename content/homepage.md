@@ -5,9 +5,9 @@ title = ""
 🎯 Focus on
 
 - Simple render engine using path tracing
-- 6.824 lab3 kvraft
+- 6.824
 
-💻 Code for fun & polyglot programmer
+💻 Code for fun
 
 - C++
 - Go
