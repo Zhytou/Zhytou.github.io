@@ -2,7 +2,6 @@
 title: "Git Workflow&Tips"
 date: 2023-06-04T15:31:06+08:00
 draft: false
-author: Zhytou
 ---
 
 ## Basical Concepts

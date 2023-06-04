@@ -2,7 +2,6 @@
 title: "Raft 笔记"
 date: 2022-11-14T10:38:10+08:00
 draft: false
-author: Zhytou
 ---
 
 > 简单记录一下学习和实现Raft共识算法（6.824）的笔记。
