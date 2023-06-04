@@ -4,9 +4,9 @@ date: 2023-06-04T15:31:06+08:00
 draft: false
 ---
 
-## Basical Concepts
-
 Git is a version control system that will help you keep track of the changes and history of your project throughout its lifestyle.
+
+## Basical Concepts
 
 The diagram below most closely represents the flow of a typical group project using git.
 
