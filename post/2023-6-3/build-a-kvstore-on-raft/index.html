@@ -1,18 +1,18 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><title>基于Raft搭建一个简单KV存储服务 | Zhytou</title><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=generator content="Hugo 0.112.7"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="Zhytou"><link rel="shortcut icon" href=/favicon.ico><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css media=screen href=/css/all.css><meta property="og:title" content="基于Raft搭建一个简单KV存储服务"><meta property="og:description" content="虽然一结束实习就想着要把Raft捡起来做完，但还是拖拖拉拉地磨洋工。最近才勉强过了lab3的测试，早知道当时做完lab2就应该一鼓作气把6.824的4个lab全部做完的。
+<!doctype html><html lang=en><head><meta charset=utf-8><title>基于Raft搭建一个简单KV存储服务 | Zhytou</title><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=generator content="Hugo 0.113.0"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="Zhytou"><link rel="shortcut icon" href=/favicon.ico><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css media=screen href=/css/all.css><meta property="og:title" content="基于Raft搭建一个简单KV存储服务"><meta property="og:description" content="虽然一结束实习就想着要把Raft捡起来做完，但还是拖拖拉拉地磨洋工。最近才勉强过了lab3的测试，早知道当时做完lab2就应该一鼓作气把6.824的4个lab全部做完的。
 lab3要求我们在Raft基础上实现一个高可用的KV存储服务，包括对客户端和服务端的实现。而lab3又根据是否支持快照，将其分成A和B两部分。其中，lab3-B需要使用lab2-D留下的接口CondInstallSnapshot。需要注意是，即使lab2成功通过了，也应该注意该函数是否只是简单return true。如果是的话，可能就需要重新理解并实现InstallSnapshot和CondInstallSnapshot。我就是因为这一点卡了很久。
-lab3-A 客户端 仔细读完实验说明文档，客户端需要记录服务端领导者ID、自身ID和请求ID，并且在发送请求时，自增请求ID。
+lab3-A Client 仔细读完实验说明文档，客户端需要记录服务端领导者ID、自身ID和请求ID，并且在发送请求时，自增请求ID。
 值得注意的是，为了代码可读性和复用性，我的服务端实际上只提供了一种API，即：Command。原本的Get、Put以及Append实际上都是调用该接口来完成功能的。
 type Clerk struct { servers []*labrpc.ClientEnd leaderId int clientId int64 commandId int64 } func (ck *Clerk) Get(key string) string { return ck.Command(&amp;CommandArgs{Key: key, OpType: &#34;Get&#34;}) } func (ck *Clerk) PutAppend(key string, value string, op string) { ck.Command(&amp;CommandArgs{Key: key, Value: value, OpType: op}) } func (ck *Clerk) Put(key string, value string) { ck.PutAppend(key, value, &#34;Put&#34;) } func (ck *Clerk) Append(key string, value string) { ck."><meta property="og:type" content="article"><meta property="og:url" content="https://zhytou.github.io/post/2023-6-3/build-a-kvstore-on-raft/"><meta property="article:section" content="post"><meta property="article:published_time" content="2023-06-03T19:15:28+08:00"><meta property="article:modified_time" content="2023-06-03T19:15:28+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="基于Raft搭建一个简单KV存储服务"><meta name=twitter:description content="虽然一结束实习就想着要把Raft捡起来做完，但还是拖拖拉拉地磨洋工。最近才勉强过了lab3的测试，早知道当时做完lab2就应该一鼓作气把6.824的4个lab全部做完的。
 lab3要求我们在Raft基础上实现一个高可用的KV存储服务，包括对客户端和服务端的实现。而lab3又根据是否支持快照，将其分成A和B两部分。其中，lab3-B需要使用lab2-D留下的接口CondInstallSnapshot。需要注意是，即使lab2成功通过了，也应该注意该函数是否只是简单return true。如果是的话，可能就需要重新理解并实现InstallSnapshot和CondInstallSnapshot。我就是因为这一点卡了很久。
-lab3-A 客户端 仔细读完实验说明文档，客户端需要记录服务端领导者ID、自身ID和请求ID，并且在发送请求时，自增请求ID。
+lab3-A Client 仔细读完实验说明文档，客户端需要记录服务端领导者ID、自身ID和请求ID，并且在发送请求时，自增请求ID。
 值得注意的是，为了代码可读性和复用性，我的服务端实际上只提供了一种API，即：Command。原本的Get、Put以及Append实际上都是调用该接口来完成功能的。
 type Clerk struct { servers []*labrpc.ClientEnd leaderId int clientId int64 commandId int64 } func (ck *Clerk) Get(key string) string { return ck.Command(&amp;CommandArgs{Key: key, OpType: &#34;Get&#34;}) } func (ck *Clerk) PutAppend(key string, value string, op string) { ck.Command(&amp;CommandArgs{Key: key, Value: value, OpType: op}) } func (ck *Clerk) Put(key string, value string) { ck.PutAppend(key, value, &#34;Put&#34;) } func (ck *Clerk) Append(key string, value string) { ck."><meta itemprop=name content="基于Raft搭建一个简单KV存储服务"><meta itemprop=description content="虽然一结束实习就想着要把Raft捡起来做完，但还是拖拖拉拉地磨洋工。最近才勉强过了lab3的测试，早知道当时做完lab2就应该一鼓作气把6.824的4个lab全部做完的。
 lab3要求我们在Raft基础上实现一个高可用的KV存储服务，包括对客户端和服务端的实现。而lab3又根据是否支持快照，将其分成A和B两部分。其中，lab3-B需要使用lab2-D留下的接口CondInstallSnapshot。需要注意是，即使lab2成功通过了，也应该注意该函数是否只是简单return true。如果是的话，可能就需要重新理解并实现InstallSnapshot和CondInstallSnapshot。我就是因为这一点卡了很久。
-lab3-A 客户端 仔细读完实验说明文档，客户端需要记录服务端领导者ID、自身ID和请求ID，并且在发送请求时，自增请求ID。
+lab3-A Client 仔细读完实验说明文档，客户端需要记录服务端领导者ID、自身ID和请求ID，并且在发送请求时，自增请求ID。
 值得注意的是，为了代码可读性和复用性，我的服务端实际上只提供了一种API，即：Command。原本的Get、Put以及Append实际上都是调用该接口来完成功能的。
-type Clerk struct { servers []*labrpc.ClientEnd leaderId int clientId int64 commandId int64 } func (ck *Clerk) Get(key string) string { return ck.Command(&amp;CommandArgs{Key: key, OpType: &#34;Get&#34;}) } func (ck *Clerk) PutAppend(key string, value string, op string) { ck.Command(&amp;CommandArgs{Key: key, Value: value, OpType: op}) } func (ck *Clerk) Put(key string, value string) { ck.PutAppend(key, value, &#34;Put&#34;) } func (ck *Clerk) Append(key string, value string) { ck."><meta itemprop=datePublished content="2023-06-03T19:15:28+08:00"><meta itemprop=dateModified content="2023-06-03T19:15:28+08:00"><meta itemprop=wordCount content="578"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>03</span>
+type Clerk struct { servers []*labrpc.ClientEnd leaderId int clientId int64 commandId int64 } func (ck *Clerk) Get(key string) string { return ck.Command(&amp;CommandArgs{Key: key, OpType: &#34;Get&#34;}) } func (ck *Clerk) PutAppend(key string, value string, op string) { ck.Command(&amp;CommandArgs{Key: key, Value: value, OpType: op}) } func (ck *Clerk) Put(key string, value string) { ck.PutAppend(key, value, &#34;Put&#34;) } func (ck *Clerk) Append(key string, value string) { ck."><meta itemprop=datePublished content="2023-06-03T19:15:28+08:00"><meta itemprop=dateModified content="2023-06-03T19:15:28+08:00"><meta itemprop=wordCount content="1377"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>03</span>
 <span class=rest>Jun 2023</span></div></div><div class=matter><h1 class=title>基于Raft搭建一个简单KV存储服务</h1><p class=post-meta><span class=post-meta><i class="fas fa-user"></i>&nbsp;
-Zhytou</span></p></div></div><div class=markdown><p>虽然一结束实习就想着要把Raft捡起来做完，但还是拖拖拉拉地磨洋工。最近才勉强过了lab3的测试，早知道当时做完lab2就应该一鼓作气把6.824的4个lab全部做完的。</p><p>lab3要求我们在Raft基础上实现一个高可用的KV存储服务，包括对客户端和服务端的实现。而lab3又根据是否支持快照，将其分成A和B两部分。其中，lab3-B需要使用lab2-D留下的接口CondInstallSnapshot。需要注意是，即使lab2成功通过了，也应该注意该函数是否只是简单return true。如果是的话，可能就需要重新理解并实现InstallSnapshot和CondInstallSnapshot。我就是因为这一点卡了很久。</p><h2 id=lab3-a>lab3-A</h2><h3 id=客户端>客户端</h3><p>仔细读完实验说明文档，客户端需要记录服务端领导者ID、自身ID和请求ID，并且在发送请求时，自增请求ID。</p><p>值得注意的是，为了代码可读性和复用性，我的服务端实际上只提供了一种API，即：Command。原本的Get、Put以及Append实际上都是调用该接口来完成功能的。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#080;font-weight:700>type</span> Clerk <span style=color:#080;font-weight:700>struct</span> {
+Zhytou</span></p></div></div><div class=markdown><p>虽然一结束实习就想着要把Raft捡起来做完，但还是拖拖拉拉地磨洋工。最近才勉强过了lab3的测试，早知道当时做完lab2就应该一鼓作气把6.824的4个lab全部做完的。</p><p>lab3要求我们在Raft基础上实现一个高可用的KV存储服务，包括对客户端和服务端的实现。而lab3又根据是否支持快照，将其分成A和B两部分。其中，lab3-B需要使用lab2-D留下的接口CondInstallSnapshot。需要注意是，即使lab2成功通过了，也应该注意该函数是否只是简单return true。如果是的话，可能就需要重新理解并实现InstallSnapshot和CondInstallSnapshot。我就是因为这一点卡了很久。</p><h2 id=lab3-a>lab3-A</h2><h3 id=client>Client</h3><p>仔细读完实验说明文档，客户端需要记录服务端领导者ID、自身ID和请求ID，并且在发送请求时，自增请求ID。</p><p>值得注意的是，为了代码可读性和复用性，我的服务端实际上只提供了一种API，即：Command。原本的Get、Put以及Append实际上都是调用该接口来完成功能的。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#080;font-weight:700>type</span> Clerk <span style=color:#080;font-weight:700>struct</span> {
 </span></span><span style=display:flex><span> servers []<span style=color:#333>*</span>labrpc.ClientEnd
 </span></span><span style=display:flex><span> leaderId  <span style=color:#339;font-weight:700>int</span>
 </span></span><span style=display:flex><span> clientId  <span style=color:#339;font-weight:700>int64</span>
@@ -47,7 +47,7 @@ Zhytou</span></p></div></div><div class=markdown><p>虽然一结束实习就想�
 </span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span> reply.Value
 </span></span><span style=display:flex><span> }
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=服务端>服务端</h3><p>根据实验要求，服务端需要存储键值对，并支持Get、Put以及Append三种接口。为了代码的可读性，我就将其封装在一个自定义的MemoryKV类型中了。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#080;font-weight:700>type</span> MemoryKV <span style=color:#080;font-weight:700>struct</span> {
+</span></span></code></pre></div><h3 id=server>Server</h3><p>根据实验要求，服务端需要存储键值对，并支持Get、Put以及Append三种接口。为了代码的可读性，我就将其封装在一个自定义的MemoryKV类型中了。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#080;font-weight:700>type</span> MemoryKV <span style=color:#080;font-weight:700>struct</span> {
 </span></span><span style=display:flex><span> KV <span style=color:#080;font-weight:700>map</span>[<span style=color:#339;font-weight:700>string</span>]<span style=color:#339;font-weight:700>string</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
@@ -175,4 +175,202 @@ Zhytou</span></p></div></div><div class=markdown><p>虽然一结束实习就想�
 </span></span><span style=display:flex><span> }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h2 id=lab3-b>lab3-B</h2><h2 id=参考>参考</h2><p><a href=https://www.cnblogs.com/sun-lingyu/p/14591757.html target=_blank>lab2-D CondInstallSnapshot的理解</a></p></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
+</span></span></code></pre></div><h2 id=lab3-b>lab3-B</h2><h3 id=comprehend-lab2-d>Comprehend lab2-D</h3><p>lab2-D为服务层提供了两个方法，分别是：</p><ul><li><code>func (rf *Raft) Snapshot(index int, snapshot []byte)</code></li><li><code>func (rf *Raft) CondInstallSnapshot(lastIncludedTerm int, lastIncludedIndex int, snapshot []byte) bool</code>。</li></ul><p>其中，服务可以通过调用前者使Raft记录当前状态并持久化当前服务器状态（快照），而调用后者则是尝试使Raft状态机接收该快照。此外，lab2-D还实现了另一个方法<code>func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapshotReply)</code>。</p><p>该方法与<code>CondInstallSnapshot</code>联系紧密，它的工作流程如下：</p><ul><li>Raft领导者发现有服务器日志落后过多，尝试调用<code>InstallSnapshot</code>的RPC，要求它下载领导者的快照；</li><li>该服务器到接受<code>InstallSnapshot</code>的请求后进行处理判断，若快照包含日志序号比该服务器的提交序号小，说明快照过期，拒绝接受快照；反之，可以接受快照，向服务层发送ApplyMsg；</li><li>服务层applier线程接受到该消息后，调用Raft层<code>CondInstallSnapshot</code>方法，若返回为真且执行序号小于快照包含日志序号，则服务层接受快照并更新服务器状态机；反之，拒绝快照。</li></ul><p>也就说，<code>InstallSnapshot</code>并没实际更新Raft状态机，而是发送消息通知服务层，直到服务层调用<code>CondInstallSnapshot</code>才尝试更新Raft状态机，并在更新成功后返回true。至于为什么不能像实现lab2时，<code>InstallSnapshot</code>在满足条件就直接更新Raft状态机，而<code>CondInstallSnapshot</code>直接返回true去实现？</p><p>这是因为将实际安装快照放在<code>CondInstallSnapshot</code>中可以让Service层去主动调用，进而在避免死锁的情况下确保Service层与Raft层安装快照的原子性，具体可以参考<a href=https://www.cnblogs.com/sun-lingyu/p/14591757.html target=_blank>博客</a>。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#080;font-weight:700>func</span> (rf <span style=color:#333>*</span>Raft) <span style=color:#06b;font-weight:700>Snapshot</span>(index <span style=color:#339;font-weight:700>int</span>, snapshot []<span style=color:#339;font-weight:700>byte</span>) {
+</span></span><span style=display:flex><span> rf.mu.<span style=color:#06b;font-weight:700>Lock</span>()
+</span></span><span style=display:flex><span> <span style=color:#888>// rf.log[0] is the place where snapshot info is kept
+</span></span></span><span style=display:flex><span><span style=color:#888></span> snapshotIndex <span style=color:#333>:=</span> rf.<span style=color:#06b;font-weight:700>getFirstLogIndex</span>()
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>if</span> index <span style=color:#333>&lt;=</span> snapshotIndex {
+</span></span><span style=display:flex><span>  <span style=color:#06b;font-weight:700>DPrintf</span>(<span style=background-color:#fff0f0>&#34;Log Compaction: Server %d has already compacted log entries before %d&#34;</span>, rf.me, index)
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>
+</span></span><span style=display:flex><span> }
+</span></span><span style=display:flex><span> <span style=color:#06b;font-weight:700>DPrintf</span>(<span style=background-color:#fff0f0>&#34;Log Compaction: Server %d compacted log entries (%d , %d] successfully&#34;</span>, rf.me, rf.<span style=color:#06b;font-weight:700>getFirstLogIndex</span>(), index)
+</span></span><span style=display:flex><span> rf.log = <span style=color:#007020>append</span>([]LogEntry{}, rf.log[index<span style=color:#333>-</span>snapshotIndex:]<span style=color:#333>...</span>)
+</span></span><span style=display:flex><span> rf.log[<span style=color:#00d;font-weight:700>0</span>].Command = <span style=color:#080;font-weight:700>nil</span>
+</span></span><span style=display:flex><span> rf.mu.<span style=color:#06b;font-weight:700>Unlock</span>()
+</span></span><span style=display:flex><span> rf.persister.<span style=color:#06b;font-weight:700>SaveStateAndSnapshot</span>(rf.<span style=color:#06b;font-weight:700>encodeState</span>(), snapshot)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>func</span> (rf <span style=color:#333>*</span>Raft) <span style=color:#06b;font-weight:700>CondInstallSnapshot</span>(lastIncludedTerm <span style=color:#339;font-weight:700>int</span>, lastIncludedIndex <span style=color:#339;font-weight:700>int</span>, snapshot []<span style=color:#339;font-weight:700>byte</span>) <span style=color:#339;font-weight:700>bool</span> {
+</span></span><span style=display:flex><span> rf.mu.<span style=color:#06b;font-weight:700>Lock</span>()
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>defer</span> rf.mu.<span style=color:#06b;font-weight:700>Unlock</span>()
+</span></span><span style=display:flex><span> <span style=color:#06b;font-weight:700>DPrintf</span>(<span style=background-color:#fff0f0>&#34;{Node %v} service calls CondInstallSnapshot with lastIncludedTerm %v and lastIncludedIndex %v to check whether snapshot is still valid in term %v&#34;</span>, rf.me, lastIncludedTerm, lastIncludedIndex, rf.currentTerm)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> <span style=color:#888>// outdated snapshot
+</span></span></span><span style=display:flex><span><span style=color:#888></span> <span style=color:#080;font-weight:700>if</span> lastIncludedIndex <span style=color:#333>&lt;=</span> rf.commitIndex {
+</span></span><span style=display:flex><span>  <span style=color:#06b;font-weight:700>DPrintf</span>(<span style=background-color:#fff0f0>&#34;{Node %v} rejects the outdated snapshot because lastIncludedIndex = %v,commitIndex = %v, firstLogIndex = %v&#34;</span>, rf.me, lastIncludedIndex, rf.commitIndex, rf.<span style=color:#06b;font-weight:700>getFirstLogIndex</span>())
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span> <span style=color:#080;font-weight:700>false</span>
+</span></span><span style=display:flex><span> }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>if</span> lastIncludedIndex &gt; rf.<span style=color:#06b;font-weight:700>getLastLogIndex</span>() {
+</span></span><span style=display:flex><span>  rf.log = <span style=color:#007020>make</span>([]LogEntry, <span style=color:#00d;font-weight:700>1</span>)
+</span></span><span style=display:flex><span> } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>  rf.log = rf.<span style=color:#06b;font-weight:700>getSubLogFrom</span>(lastIncludedIndex)
+</span></span><span style=display:flex><span>  rf.log[<span style=color:#00d;font-weight:700>0</span>].Command = <span style=color:#080;font-weight:700>nil</span>
+</span></span><span style=display:flex><span> }
+</span></span><span style=display:flex><span> <span style=color:#888>// update dummy entry with lastIncludedTerm and lastIncludedIndex
+</span></span></span><span style=display:flex><span><span style=color:#888></span> rf.log[<span style=color:#00d;font-weight:700>0</span>].Term, rf.log[<span style=color:#00d;font-weight:700>0</span>].Index = lastIncludedTerm, lastIncludedIndex
+</span></span><span style=display:flex><span> rf.lastApplied, rf.commitIndex = lastIncludedIndex, lastIncludedIndex
+</span></span><span style=display:flex><span> rf.persister.<span style=color:#06b;font-weight:700>SaveStateAndSnapshot</span>(rf.<span style=color:#06b;font-weight:700>encodeState</span>(), snapshot)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> <span style=color:#06b;font-weight:700>DPrintf</span>(<span style=background-color:#fff0f0>&#34;{Node %v}&#39;s state is {state %v,term %v,commitIndex %v,lastApplied %v,firstLog %v,lastLog %v} after accepting the snapshot which lastIncludedTerm is %v, lastIncludedIndex is %v&#34;</span>, rf.me, rf.state, rf.currentTerm, rf.commitIndex, rf.lastApplied, rf.<span style=color:#06b;font-weight:700>getFirstLogIndex</span>(), rf.<span style=color:#06b;font-weight:700>getLastLogIndex</span>(), lastIncludedTerm, lastIncludedIndex)
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>return</span> <span style=color:#080;font-weight:700>true</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>func</span> (rf <span style=color:#333>*</span>Raft) <span style=color:#06b;font-weight:700>InstallSnapshot</span>(args <span style=color:#333>*</span>InstallSnapshotArgs, reply <span style=color:#333>*</span>InstallSnapshotReply) {
+</span></span><span style=display:flex><span> rf.mu.<span style=color:#06b;font-weight:700>Lock</span>()
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>defer</span> rf.mu.<span style=color:#06b;font-weight:700>Unlock</span>()
+</span></span><span style=display:flex><span> reply.Term = rf.currentTerm
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>if</span> args.Term &lt; rf.currentTerm {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>
+</span></span><span style=display:flex><span> }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>if</span> args.Term &gt; rf.currentTerm {
+</span></span><span style=display:flex><span>  rf.currentTerm, rf.votedFor = args.Term, <span style=color:#333>-</span><span style=color:#00d;font-weight:700>1</span>
+</span></span><span style=display:flex><span>  rf.<span style=color:#06b;font-weight:700>persist</span>()
+</span></span><span style=display:flex><span> }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> rf.state = FOLLOWER
+</span></span><span style=display:flex><span> rf.electionTimer.<span style=color:#06b;font-weight:700>Reset</span>(<span style=color:#06b;font-weight:700>randomElectionTimeout</span>())
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> <span style=color:#888>// outdated snapshots
+</span></span></span><span style=display:flex><span><span style=color:#888></span> <span style=color:#080;font-weight:700>if</span> args.LastIncludedIndex <span style=color:#333>&lt;=</span> rf.commitIndex {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>
+</span></span><span style=display:flex><span> }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> <span style=color:#888>// asynchronously send info to clients(service layer)
+</span></span></span><span style=display:flex><span><span style=color:#888></span> <span style=color:#080;font-weight:700>go</span> <span style=color:#080;font-weight:700>func</span>() {
+</span></span><span style=display:flex><span>  rf.applyCh <span style=color:#333>&lt;-</span> ApplyMsg{
+</span></span><span style=display:flex><span>   CommandValid:  <span style=color:#080;font-weight:700>false</span>,
+</span></span><span style=display:flex><span>   SnapshotValid: <span style=color:#080;font-weight:700>true</span>,
+</span></span><span style=display:flex><span>   Snapshot:      args.Data,
+</span></span><span style=display:flex><span>   SnapshotIndex: args.LastIncludedIndex,
+</span></span><span style=display:flex><span>   SnapshotTerm:  args.LastIncludedTerm,
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span> }()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=supprt-snapshot-in-service-layer>Supprt Snapshot in Service Layer</h3><p>lab3-B要求在part A的基础上支持快照功能，即：拍快照和读取快照。</p><p>根据实验说明，我们可以得到拍快照的时机，<code>Whenever your key/value server detects that the Raft state size is approaching this threshold, it should save a snapshot by calling Raft's Snapshot. If maxraftstate is -1, you do not have to snapshot.</code>。</p><p>至于读取快照，主要发生在两种情况下：</p><ul><li>服务器重启初始化时。</li><li>作为跟随者的服务器，因网络或其他问题日志落后过多，接受领导者快照。</li></ul><p>因此我们参考lab2-C持久化代码完成<code>readSnapshot</code>和<code>takeSnapshot</code>两个函数。具体实现如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#888>// take a snapshot(log compaction) when current size of persisent Raft state in bytes bigger than maxraftstate
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>func</span> (kv <span style=color:#333>*</span>KVServer) <span style=color:#06b;font-weight:700>takeSnapshot</span>(commandIndex <span style=color:#339;font-weight:700>int</span>) {
+</span></span><span style=display:flex><span> w <span style=color:#333>:=</span> <span style=color:#007020>new</span>(bytes.Buffer)
+</span></span><span style=display:flex><span> e <span style=color:#333>:=</span> labgob.<span style=color:#06b;font-weight:700>NewEncoder</span>(w)
+</span></span><span style=display:flex><span> e.<span style=color:#06b;font-weight:700>Encode</span>(kv.lastOperations)
+</span></span><span style=display:flex><span> e.<span style=color:#06b;font-weight:700>Encode</span>(<span style=color:#333>*</span>(kv.stateMachine))
+</span></span><span style=display:flex><span> e.<span style=color:#06b;font-weight:700>Encode</span>(kv.lastApplied)
+</span></span><span style=display:flex><span> data <span style=color:#333>:=</span> w.<span style=color:#06b;font-weight:700>Bytes</span>()
+</span></span><span style=display:flex><span> kv.rf.<span style=color:#06b;font-weight:700>Snapshot</span>(commandIndex, data)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#888>// read a snapshot and restore stateMachine
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>func</span> (kv <span style=color:#333>*</span>KVServer) <span style=color:#06b;font-weight:700>readSnapshot</span>(snapshot []<span style=color:#339;font-weight:700>byte</span>) {
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>if</span> snapshot <span style=color:#333>==</span> <span style=color:#080;font-weight:700>nil</span> <span style=color:#333>||</span> <span style=color:#007020>len</span>(snapshot) &lt; <span style=color:#00d;font-weight:700>1</span> {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>
+</span></span><span style=display:flex><span> }
+</span></span><span style=display:flex><span> r <span style=color:#333>:=</span> bytes.<span style=color:#06b;font-weight:700>NewBuffer</span>(snapshot)
+</span></span><span style=display:flex><span> d <span style=color:#333>:=</span> labgob.<span style=color:#06b;font-weight:700>NewDecoder</span>(r)
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>var</span> lastOperations <span style=color:#080;font-weight:700>map</span>[<span style=color:#339;font-weight:700>int64</span>]OperationContext
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>var</span> stateMachine MemoryKV
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>var</span> lastApplied <span style=color:#339;font-weight:700>int</span>
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>if</span> d.<span style=color:#06b;font-weight:700>Decode</span>(<span style=color:#333>&amp;</span>lastOperations) <span style=color:#333>!=</span> <span style=color:#080;font-weight:700>nil</span> <span style=color:#333>||</span> d.<span style=color:#06b;font-weight:700>Decode</span>(<span style=color:#333>&amp;</span>stateMachine) <span style=color:#333>!=</span> <span style=color:#080;font-weight:700>nil</span> <span style=color:#333>||</span> d.<span style=color:#06b;font-weight:700>Decode</span>(<span style=color:#333>&amp;</span>lastApplied) <span style=color:#333>!=</span> <span style=color:#080;font-weight:700>nil</span> {
+</span></span><span style=display:flex><span>  <span style=color:#06b;font-weight:700>DPrintf</span>(<span style=background-color:#fff0f0>&#34;error to read the snapshot data&#34;</span>)
+</span></span><span style=display:flex><span> } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>  kv.lastOperations = lastOperations
+</span></span><span style=display:flex><span>  kv.stateMachine = <span style=color:#333>&amp;</span>stateMachine
+</span></span><span style=display:flex><span>  kv.lastApplied = lastApplied
+</span></span><span style=display:flex><span> }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>至于KVServer初始化和applier调用上述函数的修改如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#080;font-weight:700>func</span> <span style=color:#06b;font-weight:700>StartKVServer</span>(servers []<span style=color:#333>*</span>labrpc.ClientEnd, me <span style=color:#339;font-weight:700>int</span>, persister <span style=color:#333>*</span>raft.Persister, maxraftstate <span style=color:#339;font-weight:700>int</span>) <span style=color:#333>*</span>KVServer {
+</span></span><span style=display:flex><span> <span style=color:#888>// call labgob.Register on structures you want
+</span></span></span><span style=display:flex><span><span style=color:#888></span> <span style=color:#888>// Go&#39;s RPC library to marshall/unmarshall.
+</span></span></span><span style=display:flex><span><span style=color:#888></span> labgob.<span style=color:#06b;font-weight:700>Register</span>(Op{})
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> kv <span style=color:#333>:=</span> <span style=color:#007020>new</span>(KVServer)
+</span></span><span style=display:flex><span> kv.me = me
+</span></span><span style=display:flex><span> kv.maxraftstate = maxraftstate
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> kv.dead = <span style=color:#00d;font-weight:700>0</span>
+</span></span><span style=display:flex><span> kv.lastApplied = <span style=color:#00d;font-weight:700>0</span>
+</span></span><span style=display:flex><span> kv.lastOperations = <span style=color:#007020>make</span>(<span style=color:#080;font-weight:700>map</span>[<span style=color:#339;font-weight:700>int64</span>]OperationContext)
+</span></span><span style=display:flex><span> kv.notifyChans = <span style=color:#007020>make</span>(<span style=color:#080;font-weight:700>map</span>[<span style=color:#339;font-weight:700>int</span>]<span style=color:#080;font-weight:700>chan</span> <span style=color:#333>*</span>CommandReply)
+</span></span><span style=display:flex><span> kv.stateMachine = <span style=color:#06b;font-weight:700>NewMemoryKV</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> kv.persister = persister
+</span></span><span style=display:flex><span> kv.<span style=color:#06b;font-weight:700>readSnapshot</span>(kv.persister.<span style=color:#06b;font-weight:700>ReadSnapshot</span>())
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> kv.applyCh = <span style=color:#007020>make</span>(<span style=color:#080;font-weight:700>chan</span> raft.ApplyMsg)
+</span></span><span style=display:flex><span> kv.rf = raft.<span style=color:#06b;font-weight:700>Make</span>(servers, me, persister, kv.applyCh)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>go</span> kv.<span style=color:#06b;font-weight:700>applier</span>()
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>return</span> kv
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>func</span> (kv <span style=color:#333>*</span>KVServer) <span style=color:#06b;font-weight:700>applier</span>() {
+</span></span><span style=display:flex><span> <span style=color:#080;font-weight:700>for</span> !kv.<span style=color:#06b;font-weight:700>killed</span>() {
+</span></span><span style=display:flex><span>  message <span style=color:#333>:=</span> <span style=color:#333>&lt;-</span>kv.applyCh
+</span></span><span style=display:flex><span>  <span style=color:#888>// DPrintf(&#34;{Node %v} tries to apply message %v&#34;, kv.rf.Me(), message)
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> message.CommandValid {
+</span></span><span style=display:flex><span>   kv.mu.<span style=color:#06b;font-weight:700>Lock</span>()
+</span></span><span style=display:flex><span>   <span style=color:#080;font-weight:700>if</span> message.CommandIndex <span style=color:#333>&lt;=</span> kv.lastApplied {
+</span></span><span style=display:flex><span>    <span style=color:#06b;font-weight:700>DPrintf</span>(<span style=background-color:#fff0f0>&#34;{Node %v} discards outdated message %v because lastApplied is %v&#34;</span>, kv.rf.<span style=color:#06b;font-weight:700>Me</span>(), message, kv.lastApplied)
+</span></span><span style=display:flex><span>    kv.mu.<span style=color:#06b;font-weight:700>Unlock</span>()
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>continue</span>
+</span></span><span style=display:flex><span>   }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#080;font-weight:700>var</span> cmd Op = message.Command.(Op)
+</span></span><span style=display:flex><span>   kv.lastApplied = message.CommandIndex
+</span></span><span style=display:flex><span>   <span style=color:#080;font-weight:700>var</span> reply <span style=color:#333>*</span>CommandReply
+</span></span><span style=display:flex><span>   <span style=color:#888>// no need to apply to stateMachine if request is duplicated
+</span></span></span><span style=display:flex><span><span style=color:#888></span>   <span style=color:#080;font-weight:700>if</span> cmd.OpType <span style=color:#333>!=</span> <span style=background-color:#fff0f0>&#34;Get&#34;</span> <span style=color:#333>&amp;&amp;</span> kv.<span style=color:#06b;font-weight:700>isDuplicateRequest</span>(cmd.ClientId, cmd.CommandId) {
+</span></span><span style=display:flex><span>    <span style=color:#06b;font-weight:700>DPrintf</span>(<span style=background-color:#fff0f0>&#34;{Node %v} doesn&#39;t apply duplicated message %v to stateMachine because maxAppliedCommandId is %v for client %v&#34;</span>, kv.rf.<span style=color:#06b;font-weight:700>Me</span>(), message, kv.lastOperations[cmd.ClientId], cmd.ClientId)
+</span></span><span style=display:flex><span>    reply = kv.lastOperations[cmd.ClientId].LastReply
+</span></span><span style=display:flex><span>   } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>    <span style=color:#888>// apply log to stateMachine
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    reply = <span style=color:#333>&amp;</span>CommandReply{}
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>switch</span> cmd.OpType {
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>case</span> <span style=background-color:#fff0f0>&#34;Get&#34;</span>:
+</span></span><span style=display:flex><span>     {
+</span></span><span style=display:flex><span>      reply.Value, reply.Err = kv.stateMachine.<span style=color:#06b;font-weight:700>Get</span>(cmd.Key)
+</span></span><span style=display:flex><span>     }
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>case</span> <span style=background-color:#fff0f0>&#34;Put&#34;</span>:
+</span></span><span style=display:flex><span>     {
+</span></span><span style=display:flex><span>      reply.Err = kv.stateMachine.<span style=color:#06b;font-weight:700>Put</span>(cmd.Key, cmd.Value)
+</span></span><span style=display:flex><span>     }
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>case</span> <span style=background-color:#fff0f0>&#34;Append&#34;</span>:
+</span></span><span style=display:flex><span>     {
+</span></span><span style=display:flex><span>      reply.Err = kv.stateMachine.<span style=color:#06b;font-weight:700>Append</span>(cmd.Key, cmd.Value)
+</span></span><span style=display:flex><span>     }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#888>// add to lastOperations
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> cmd.OpType <span style=color:#333>!=</span> <span style=background-color:#fff0f0>&#34;Get&#34;</span> {
+</span></span><span style=display:flex><span>     kv.lastOperations[cmd.ClientId] = OperationContext{CommandId: cmd.CommandId, LastReply: reply}
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>   }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#888>// only notify related channel for currentTerm&#39;s log when node is leader
+</span></span></span><span style=display:flex><span><span style=color:#888></span>   <span style=color:#080;font-weight:700>if</span> currentTerm, isLeader <span style=color:#333>:=</span> kv.rf.<span style=color:#06b;font-weight:700>GetState</span>(); isLeader <span style=color:#333>&amp;&amp;</span> message.CommandTerm <span style=color:#333>==</span> currentTerm {
+</span></span><span style=display:flex><span>    ch <span style=color:#333>:=</span> kv.<span style=color:#06b;font-weight:700>getNotifyChan</span>(message.CommandIndex)
+</span></span><span style=display:flex><span>    ch <span style=color:#333>&lt;-</span> reply
+</span></span><span style=display:flex><span>   }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#888>// need to take a snapshot
+</span></span></span><span style=display:flex><span><span style=color:#888></span>   <span style=color:#080;font-weight:700>if</span> kv.maxraftstate <span style=color:#333>!=</span> <span style=color:#333>-</span><span style=color:#00d;font-weight:700>1</span> <span style=color:#333>&amp;&amp;</span> kv.persister.<span style=color:#06b;font-weight:700>RaftStateSize</span>() &gt; kv.maxraftstate {
+</span></span><span style=display:flex><span>    <span style=color:#06b;font-weight:700>DPrintf</span>(<span style=background-color:#fff0f0>&#34;{Node %v} tries to take snapshot for message %v, kv.stateMachine = %v&#34;</span>, kv.rf.<span style=color:#06b;font-weight:700>Me</span>(), message, kv.stateMachine.KV)
+</span></span><span style=display:flex><span>    kv.<span style=color:#06b;font-weight:700>takeSnapshot</span>(message.CommandIndex)
+</span></span><span style=display:flex><span>   }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   kv.mu.<span style=color:#06b;font-weight:700>Unlock</span>()
+</span></span><span style=display:flex><span>  } <span style=color:#080;font-weight:700>else</span> <span style=color:#080;font-weight:700>if</span> message.SnapshotValid {
+</span></span><span style=display:flex><span>   kv.mu.<span style=color:#06b;font-weight:700>Lock</span>()
+</span></span><span style=display:flex><span>   <span style=color:#080;font-weight:700>if</span> kv.rf.<span style=color:#06b;font-weight:700>CondInstallSnapshot</span>(message.SnapshotTerm, message.SnapshotIndex, message.Snapshot) <span style=color:#333>&amp;&amp;</span> message.SnapshotIndex &gt; kv.lastApplied {
+</span></span><span style=display:flex><span>    <span style=color:#06b;font-weight:700>DPrintf</span>(<span style=background-color:#fff0f0>&#34;{Node %v} tries to install snapshot for message %v&#34;</span>, kv.rf.<span style=color:#06b;font-weight:700>Me</span>(), message)
+</span></span><span style=display:flex><span>    kv.<span style=color:#06b;font-weight:700>readSnapshot</span>(message.Snapshot)
+</span></span><span style=display:flex><span>    kv.lastApplied = message.SnapshotIndex
+</span></span><span style=display:flex><span>   }
+</span></span><span style=display:flex><span>   kv.mu.<span style=color:#06b;font-weight:700>Unlock</span>()
+</span></span><span style=display:flex><span>  } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>   <span style=color:#007020>panic</span>(fmt.<span style=color:#06b;font-weight:700>Sprintf</span>(<span style=background-color:#fff0f0>&#34;unexpected Message %v&#34;</span>, message))
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span> }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=参考>参考</h2><p><a href=https://www.cnblogs.com/sun-lingyu/p/14591757.html target=_blank>lab2-D CondInstallSnapshot的理解</a></p></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
