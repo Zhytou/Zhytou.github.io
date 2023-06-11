@@ -1,0 +1,83 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><title>数据库概念总结 | Zhytou</title><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=generator content="Hugo 0.113.0"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=/favicon.ico><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css media=screen href=/css/all.css><meta property="og:title" content="数据库概念总结"><meta property="og:description" content="概念 SQL vs NoSQL vs NewSQL：
+SQL数据库：SQL数据库，也称为关系型数据库管理系统（RDBMS），是一种用于存储和操作历史数据的传统数据库类型。在这种系统中，信息按照结构化的方式使用表格或关系进行组织。
+NoSQL数据库：NoSQL数据库也称为“非关系型数据库”，它使用键值对、文档、图形数据库或宽列存储等多种数据模型，没有固定的数据模式。NoSQL数据库可以水平扩展，可以在多个服务器上进行扩展，而传统的SQL数据库则通常只能进行纵向扩展，即增加单个服务器的资源。
+NewSQL数据库：NewSQL数据库是一种结合了传统SQL数据库的关系数据模型和NoSQL数据库的可扩展性和性能的新型数据库类型。它提供了两种方法的优点，可以实现高性能和水平扩展的关系型数据库。
+BASE vs ACID：
+ACID是原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）和持久性（Durability）的缩写。这是一组保证数据库事务被可靠地处理的属性。
+BASE是基本可用（Basically Available）、软状态（Soft state）和最终一致性（Eventual consistency）的缩写。这是一个数据一致性模型，它优先考虑可用性和分区容错性，而不是严格的一致性。
+OLAP vs OLTP vs HTAP：
+OLAP（Online Analytical Processing）用于支持在线分析处理应用程序，如商业智能、数据挖掘、数据分析等。OLAP通常需要处理大量的数据，而且需要进行复杂的查询和分析操作。OLAP系统通常使用列式存储和向量化查询技术来提高查询性能。
+OLTP（Online Transaction Processing）用于支持在线事务处理应用程序，如电子商务、金融交易、库存管理等。OLTP系统需要处理大量的事务，需要保证数据的一致性和可靠性，并且需要支持高并发的访问。
+HTAP（Hybrid Transactional and Analytical Processing）是一种将OLTP和OLAP结合起来的数据处理方式。在HTAP系统中，数据可以同时用于事务处理和分析处理。HTAP系统通常使用混合存储引擎，可以在行式存储和列式存储之间灵活切换，以支持不同的应用场景。
+Database vs Data Warehouse vs Data Lake：
+数据库存储应用程序所需的当前数据。
+数据仓库存储来自一个或多个系统的当前和历史数据，并采用预定义和固定的模式，使业务分析师和数据科学家能够轻松地分析数据。
+数据湖一般以数据的形式存储来自一个或多个系统的当前和历史数据，使业务分析师和数据科学家能够轻松地分析数据。
+分类 主流的数据库有几十种，这张图描述了当前数据库主流产品定位，通过管理数据量大小和SQL功能强弱把各个产品分为四大类：
+OLTP：在线事务处理平台，一般都是关系型数据库来支撑，常见的数据库有：SQLite、MySQL、PostgreSQL、PolarDB、TiDB、OceanBase OLAP：在线分析业务，一般是数据仓库，常见的产品有：Teradata、Clickhouse、Doris、Greenplum、Snowflake、AWS Redshift NoSQL：新数据模型，互联网行业用得非常多，代表产品有：Redis、Neo4j、InfluxDB、MongoDB、Cassandra、AWS DynamoDB BigData：大数据业务，和数据仓库比较类似，但是更擅长处理大规模数据分析业务，主流产品有：HBase、Hadoop、ElasticSearch、Spark 架构 外部 我们可以根据数据库节点部署整体架构分为几大种类：
+单机 计算节点和存储节点一般在同一台机器上，通常存储节点是本地硬盘，如单机版的MySQL、Oracle。单机模式没有高可用保障，常用于临时开发测试或者个人学习场景，生产环境不建议使用。
+分组 主从：
+一个主数据库负责所有写操作和一部分读操作，而其他一个或多个从数据库则通过复制主数据库的数据来提供读操作。
+主备：
+一个主数据库负责处理所有写操作和一部分读操作，而集群中一个备用数据库则通过复制数据库（不提供读操作）来保证主数据库挂之后的可用性。
+主主：
+多个数据库都可以处理写操作，而其他数据库则通过复制彼此的数据来提供读操作。
+分片 分片是将数据库中的数据分为多个片段或分片，每个分片可以单独存储在不同的服务器上。这种技术被广泛应用于分布式数据库中，以提高系统的可扩展性和性能。
+内部 存储引擎 HEAP:
+HEAP存储引擎是一种基于内存的存储引擎，它将数据存储在内存中而不是磁盘上，因此具有快速的读写速度。使用HEAP存储引擎的表不具有任何索引或约束，因此适用于临时存储数据或缓存数据。
+B+ TREE:"><meta property="og:type" content="article"><meta property="og:url" content="https://zhytou.github.io/post/2023-6-11/introduction-to-database/"><meta property="article:section" content="post"><meta property="article:published_time" content="2023-06-11T21:18:13+08:00"><meta property="article:modified_time" content="2023-06-11T21:18:13+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="数据库概念总结"><meta name=twitter:description content="概念 SQL vs NoSQL vs NewSQL：
+SQL数据库：SQL数据库，也称为关系型数据库管理系统（RDBMS），是一种用于存储和操作历史数据的传统数据库类型。在这种系统中，信息按照结构化的方式使用表格或关系进行组织。
+NoSQL数据库：NoSQL数据库也称为“非关系型数据库”，它使用键值对、文档、图形数据库或宽列存储等多种数据模型，没有固定的数据模式。NoSQL数据库可以水平扩展，可以在多个服务器上进行扩展，而传统的SQL数据库则通常只能进行纵向扩展，即增加单个服务器的资源。
+NewSQL数据库：NewSQL数据库是一种结合了传统SQL数据库的关系数据模型和NoSQL数据库的可扩展性和性能的新型数据库类型。它提供了两种方法的优点，可以实现高性能和水平扩展的关系型数据库。
+BASE vs ACID：
+ACID是原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）和持久性（Durability）的缩写。这是一组保证数据库事务被可靠地处理的属性。
+BASE是基本可用（Basically Available）、软状态（Soft state）和最终一致性（Eventual consistency）的缩写。这是一个数据一致性模型，它优先考虑可用性和分区容错性，而不是严格的一致性。
+OLAP vs OLTP vs HTAP：
+OLAP（Online Analytical Processing）用于支持在线分析处理应用程序，如商业智能、数据挖掘、数据分析等。OLAP通常需要处理大量的数据，而且需要进行复杂的查询和分析操作。OLAP系统通常使用列式存储和向量化查询技术来提高查询性能。
+OLTP（Online Transaction Processing）用于支持在线事务处理应用程序，如电子商务、金融交易、库存管理等。OLTP系统需要处理大量的事务，需要保证数据的一致性和可靠性，并且需要支持高并发的访问。
+HTAP（Hybrid Transactional and Analytical Processing）是一种将OLTP和OLAP结合起来的数据处理方式。在HTAP系统中，数据可以同时用于事务处理和分析处理。HTAP系统通常使用混合存储引擎，可以在行式存储和列式存储之间灵活切换，以支持不同的应用场景。
+Database vs Data Warehouse vs Data Lake：
+数据库存储应用程序所需的当前数据。
+数据仓库存储来自一个或多个系统的当前和历史数据，并采用预定义和固定的模式，使业务分析师和数据科学家能够轻松地分析数据。
+数据湖一般以数据的形式存储来自一个或多个系统的当前和历史数据，使业务分析师和数据科学家能够轻松地分析数据。
+分类 主流的数据库有几十种，这张图描述了当前数据库主流产品定位，通过管理数据量大小和SQL功能强弱把各个产品分为四大类：
+OLTP：在线事务处理平台，一般都是关系型数据库来支撑，常见的数据库有：SQLite、MySQL、PostgreSQL、PolarDB、TiDB、OceanBase OLAP：在线分析业务，一般是数据仓库，常见的产品有：Teradata、Clickhouse、Doris、Greenplum、Snowflake、AWS Redshift NoSQL：新数据模型，互联网行业用得非常多，代表产品有：Redis、Neo4j、InfluxDB、MongoDB、Cassandra、AWS DynamoDB BigData：大数据业务，和数据仓库比较类似，但是更擅长处理大规模数据分析业务，主流产品有：HBase、Hadoop、ElasticSearch、Spark 架构 外部 我们可以根据数据库节点部署整体架构分为几大种类：
+单机 计算节点和存储节点一般在同一台机器上，通常存储节点是本地硬盘，如单机版的MySQL、Oracle。单机模式没有高可用保障，常用于临时开发测试或者个人学习场景，生产环境不建议使用。
+分组 主从：
+一个主数据库负责所有写操作和一部分读操作，而其他一个或多个从数据库则通过复制主数据库的数据来提供读操作。
+主备：
+一个主数据库负责处理所有写操作和一部分读操作，而集群中一个备用数据库则通过复制数据库（不提供读操作）来保证主数据库挂之后的可用性。
+主主：
+多个数据库都可以处理写操作，而其他数据库则通过复制彼此的数据来提供读操作。
+分片 分片是将数据库中的数据分为多个片段或分片，每个分片可以单独存储在不同的服务器上。这种技术被广泛应用于分布式数据库中，以提高系统的可扩展性和性能。
+内部 存储引擎 HEAP:
+HEAP存储引擎是一种基于内存的存储引擎，它将数据存储在内存中而不是磁盘上，因此具有快速的读写速度。使用HEAP存储引擎的表不具有任何索引或约束，因此适用于临时存储数据或缓存数据。
+B+ TREE:"><meta itemprop=name content="数据库概念总结"><meta itemprop=description content="概念 SQL vs NoSQL vs NewSQL：
+SQL数据库：SQL数据库，也称为关系型数据库管理系统（RDBMS），是一种用于存储和操作历史数据的传统数据库类型。在这种系统中，信息按照结构化的方式使用表格或关系进行组织。
+NoSQL数据库：NoSQL数据库也称为“非关系型数据库”，它使用键值对、文档、图形数据库或宽列存储等多种数据模型，没有固定的数据模式。NoSQL数据库可以水平扩展，可以在多个服务器上进行扩展，而传统的SQL数据库则通常只能进行纵向扩展，即增加单个服务器的资源。
+NewSQL数据库：NewSQL数据库是一种结合了传统SQL数据库的关系数据模型和NoSQL数据库的可扩展性和性能的新型数据库类型。它提供了两种方法的优点，可以实现高性能和水平扩展的关系型数据库。
+BASE vs ACID：
+ACID是原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）和持久性（Durability）的缩写。这是一组保证数据库事务被可靠地处理的属性。
+BASE是基本可用（Basically Available）、软状态（Soft state）和最终一致性（Eventual consistency）的缩写。这是一个数据一致性模型，它优先考虑可用性和分区容错性，而不是严格的一致性。
+OLAP vs OLTP vs HTAP：
+OLAP（Online Analytical Processing）用于支持在线分析处理应用程序，如商业智能、数据挖掘、数据分析等。OLAP通常需要处理大量的数据，而且需要进行复杂的查询和分析操作。OLAP系统通常使用列式存储和向量化查询技术来提高查询性能。
+OLTP（Online Transaction Processing）用于支持在线事务处理应用程序，如电子商务、金融交易、库存管理等。OLTP系统需要处理大量的事务，需要保证数据的一致性和可靠性，并且需要支持高并发的访问。
+HTAP（Hybrid Transactional and Analytical Processing）是一种将OLTP和OLAP结合起来的数据处理方式。在HTAP系统中，数据可以同时用于事务处理和分析处理。HTAP系统通常使用混合存储引擎，可以在行式存储和列式存储之间灵活切换，以支持不同的应用场景。
+Database vs Data Warehouse vs Data Lake：
+数据库存储应用程序所需的当前数据。
+数据仓库存储来自一个或多个系统的当前和历史数据，并采用预定义和固定的模式，使业务分析师和数据科学家能够轻松地分析数据。
+数据湖一般以数据的形式存储来自一个或多个系统的当前和历史数据，使业务分析师和数据科学家能够轻松地分析数据。
+分类 主流的数据库有几十种，这张图描述了当前数据库主流产品定位，通过管理数据量大小和SQL功能强弱把各个产品分为四大类：
+OLTP：在线事务处理平台，一般都是关系型数据库来支撑，常见的数据库有：SQLite、MySQL、PostgreSQL、PolarDB、TiDB、OceanBase OLAP：在线分析业务，一般是数据仓库，常见的产品有：Teradata、Clickhouse、Doris、Greenplum、Snowflake、AWS Redshift NoSQL：新数据模型，互联网行业用得非常多，代表产品有：Redis、Neo4j、InfluxDB、MongoDB、Cassandra、AWS DynamoDB BigData：大数据业务，和数据仓库比较类似，但是更擅长处理大规模数据分析业务，主流产品有：HBase、Hadoop、ElasticSearch、Spark 架构 外部 我们可以根据数据库节点部署整体架构分为几大种类：
+单机 计算节点和存储节点一般在同一台机器上，通常存储节点是本地硬盘，如单机版的MySQL、Oracle。单机模式没有高可用保障，常用于临时开发测试或者个人学习场景，生产环境不建议使用。
+分组 主从：
+一个主数据库负责所有写操作和一部分读操作，而其他一个或多个从数据库则通过复制主数据库的数据来提供读操作。
+主备：
+一个主数据库负责处理所有写操作和一部分读操作，而集群中一个备用数据库则通过复制数据库（不提供读操作）来保证主数据库挂之后的可用性。
+主主：
+多个数据库都可以处理写操作，而其他数据库则通过复制彼此的数据来提供读操作。
+分片 分片是将数据库中的数据分为多个片段或分片，每个分片可以单独存储在不同的服务器上。这种技术被广泛应用于分布式数据库中，以提高系统的可扩展性和性能。
+内部 存储引擎 HEAP:
+HEAP存储引擎是一种基于内存的存储引擎，它将数据存储在内存中而不是磁盘上，因此具有快速的读写速度。使用HEAP存储引擎的表不具有任何索引或约束，因此适用于临时存储数据或缓存数据。
+B+ TREE:"><meta itemprop=datePublished content="2023-06-11T21:18:13+08:00"><meta itemprop=dateModified content="2023-06-11T21:18:13+08:00"><meta itemprop=wordCount content="106"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>11</span>
+<span class=rest>Jun 2023</span></div></div><div class=matter><h1 class=title>数据库概念总结</h1><p class=post-meta><span class=post-meta></span></p></div></div><div class=markdown><h2 id=概念>概念</h2><p><strong>SQL vs NoSQL vs NewSQL</strong>：</p><p>SQL数据库：SQL数据库，也称为关系型数据库管理系统（RDBMS），是一种用于存储和操作历史数据的传统数据库类型。在这种系统中，信息按照结构化的方式使用表格或关系进行组织。</p><p>NoSQL数据库：NoSQL数据库也称为“非关系型数据库”，它使用键值对、文档、图形数据库或宽列存储等多种数据模型，没有固定的数据模式。NoSQL数据库可以水平扩展，可以在多个服务器上进行扩展，而传统的SQL数据库则通常只能进行纵向扩展，即增加单个服务器的资源。</p><p>NewSQL数据库：NewSQL数据库是一种结合了传统SQL数据库的关系数据模型和NoSQL数据库的可扩展性和性能的新型数据库类型。它提供了两种方法的优点，可以实现高性能和水平扩展的关系型数据库。</p><p><strong>BASE vs ACID</strong>：</p><p>ACID是原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）和持久性（Durability）的缩写。这是一组保证数据库事务被可靠地处理的属性。</p><p>BASE是基本可用（Basically Available）、软状态（Soft state）和最终一致性（Eventual consistency）的缩写。这是一个数据一致性模型，它优先考虑可用性和分区容错性，而不是严格的一致性。</p><p><strong>OLAP vs OLTP vs HTAP</strong>：</p><p>OLAP（Online Analytical Processing）用于支持在线分析处理应用程序，如商业智能、数据挖掘、数据分析等。OLAP通常需要处理大量的数据，而且需要进行复杂的查询和分析操作。OLAP系统通常使用列式存储和向量化查询技术来提高查询性能。</p><p>OLTP（Online Transaction Processing）用于支持在线事务处理应用程序，如电子商务、金融交易、库存管理等。OLTP系统需要处理大量的事务，需要保证数据的一致性和可靠性，并且需要支持高并发的访问。</p><p>HTAP（Hybrid Transactional and Analytical Processing）是一种将OLTP和OLAP结合起来的数据处理方式。在HTAP系统中，数据可以同时用于事务处理和分析处理。HTAP系统通常使用混合存储引擎，可以在行式存储和列式存储之间灵活切换，以支持不同的应用场景。</p><p><strong>Database vs Data Warehouse vs Data Lake</strong>：</p><p>数据库存储应用程序所需的当前数据。</p><p>数据仓库存储来自一个或多个系统的当前和历史数据，并采用预定义和固定的模式，使业务分析师和数据科学家能够轻松地分析数据。</p><p>数据湖一般以数据的形式存储来自一个或多个系统的当前和历史数据，使业务分析师和数据科学家能够轻松地分析数据。</p><h2 id=分类>分类</h2><p><figure><img src=https://dev-media.amazoncloud.cn/4cbdf0e5acd44b428ecd39e0da9044b1_4.png alt=数据库分类></figure></p><p>主流的数据库有几十种，这张图描述了当前数据库主流产品定位，通过管理数据量大小和SQL功能强弱把各个产品分为四大类：</p><ul><li>OLTP：在线事务处理平台，一般都是关系型数据库来支撑，常见的数据库有：SQLite、MySQL、PostgreSQL、PolarDB、TiDB、OceanBase</li><li>OLAP：在线分析业务，一般是数据仓库，常见的产品有：Teradata、Clickhouse、Doris、Greenplum、Snowflake、AWS Redshift</li><li>NoSQL：新数据模型，互联网行业用得非常多，代表产品有：Redis、Neo4j、InfluxDB、MongoDB、Cassandra、AWS DynamoDB</li><li>BigData：大数据业务，和数据仓库比较类似，但是更擅长处理大规模数据分析业务，主流产品有：HBase、Hadoop、ElasticSearch、Spark</li></ul><h2 id=架构>架构</h2><h3 id=外部>外部</h3><p>我们可以根据数据库节点部署整体架构分为几大种类：</p><h3 id=单机>单机</h3><p>计算节点和存储节点一般在同一台机器上，通常存储节点是本地硬盘，如单机版的MySQL、Oracle。单机模式没有高可用保障，常用于临时开发测试或者个人学习场景，生产环境不建议使用。</p><h3 id=分组>分组</h3><p><strong>主从</strong>：</p><p>一个主数据库负责所有写操作和一部分读操作，而其他一个或多个从数据库则通过复制主数据库的数据来提供读操作。</p><p><strong>主备</strong>：</p><p>一个主数据库负责处理所有写操作和一部分读操作，而集群中一个备用数据库则通过复制数据库（不提供读操作）来保证主数据库挂之后的可用性。</p><p><strong>主主</strong>：</p><p>多个数据库都可以处理写操作，而其他数据库则通过复制彼此的数据来提供读操作。</p><h3 id=分片>分片</h3><p>分片是将数据库中的数据分为多个片段或分片，每个分片可以单独存储在不同的服务器上。这种技术被广泛应用于分布式数据库中，以提高系统的可扩展性和性能。</p><h3 id=内部>内部</h3><h4 id=存储引擎>存储引擎</h4><p><strong>HEAP</strong>:</p><p>HEAP存储引擎是一种基于内存的存储引擎，它将数据存储在内存中而不是磁盘上，因此具有快速的读写速度。使用HEAP存储引擎的表不具有任何索引或约束，因此适用于临时存储数据或缓存数据。</p><p><strong>B+ TREE</strong>:</p><p>B+ TREE存储引擎是一种基于磁盘的存储引擎，它将数据存储在磁盘上，支持高效的查找、插入和删除操作。B+ TREE存储引擎通常用于管理关系型数据库中的索引数据。</p><p><strong>COLUMN STORE</strong>:</p><p>COLUMN STORE存储引擎是一种基于列的存储引擎，它将表中的每个列存储在独立的列簇中，以提高查询性能和压缩比率。COLUMN STORE存储引擎通常用于处理大型数据集和分析查询。</p><p><strong>LSM-TREE</strong>:</p><p>LSM-TREE存储引擎是一种基于磁盘的存储引擎，它将数据存储在内存中的多个层次结构和磁盘上，以提高写入性能和查询性能。LSM-TREE存储引擎通常用于处理大量写入操作和高吞吐量的查询操作，例如日志记录和分析系统。</p><p><figure><img src=https://dev-media.amazoncloud.cn/bc95ea03e3834c8d97a5a02e1bf85434_22.png alt=存储引擎比较></figure></p><h4 id=查询引擎>查询引擎</h4><p><figure><img src=https://dev-media.amazoncloud.cn/160bb688f59a44dcbd07a90ff2285876_55.png alt=查询引擎比较></figure></p><h2 id=设计>设计</h2><h3 id=索引>索引</h3><h3 id=范式>范式</h3><h2 id=展望>展望</h2><p><strong>流式数据库</strong>：</p><p><strong>云原生数据库</strong>：</p><h2 id=参考>参考</h2><ul><li><a href=https://dev.amazoncloud.cn/column/article/63ef527a65a6d47c5e10b97c target=_blank>程序员必须掌握的数据库原理</a></li><li><a href=https://blog.reachsumit.com/posts/2022/06/sql-nosql-newsql/ target=_blank>SQL vs NoSQL vs NewSQL: An In-depth Literature Review</a></li><li><a href=https://www.mongodb.com/databases/data-lake-vs-data-warehouse-vs-database target=_blank>Databases vs. Data Warehouses vs. Data Lakes</a></li></ul></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
