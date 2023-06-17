@@ -36,16 +36,33 @@ HTAP（Hybrid Transactional and Analytical Processing）是一种将OLTP和OLAP�
 
 数据湖一般以数据的形式存储来自一个或多个系统的当前和历史数据，使业务分析师和数据科学家能够轻松地分析数据。
 
+**Spark vs Flink vs Hadoop**：
+
+Hadoop 是一个由 Apache 开发的大数据处理框架，它包括两个核心组件：分布式文件系统 HDFS 和分布式计算框架 MapReduce。Hadoop 基于分布式文件系统和分布式计算模型，可以处理大规模的结构化和半结构化数据，支持批量处理和离线处理等场景。Hadoop 使用 HDFS 存储数据，并使用 MapReduce 进行数据处理和计算。
+
+Spark 是一个由 Apache 开发的大数据处理框架，它基于内存计算和分布式计算模型，可以处理大规模的结构化和半结构化数据，支持批量处理、流处理和机器学习等场景。Spark 支持使用多种编程语言进行开发，例如 Scala、Java、Python 和 R 等，提供了丰富的 API 和库，以支持各种数据处理和分析操作。
+
+Flink 是一个由 Apache 开发的大数据处理框架，它基于流处理和批处理的统一计算模型，可以处理大规模的结构化和半结构化数据，支持实时处理、流式处理和批量处理等场景。Flink 支持使用多种编程语言进行开发，例如 Java、Scala 和 Python 等，提供了丰富的 API 和库，以支持各种数据处理和分析操作。
+
 ## 分类
 
-![数据库分类](https://dev-media.amazoncloud.cn/4cbdf0e5acd44b428ecd39e0da9044b1_4.png)
+我们可以按照数据库的存储模型将其分类，常见类型如下：
 
-主流的数据库有几十种，这张图描述了当前数据库主流产品定位，通过管理数据量大小和SQL功能强弱把各个产品分为四大类：
+**关系型数据库**：关系型数据库是使用表格来存储数据的，其中每个表格包含多个行和列，每列代表一个属性。关系型数据库使用 SQL（Structured Query Language）来进行数据查询和操作，支持事务处理和 ACID 原则。常见的关系型数据库有 MySQL、Oracle、SQL Server 等。
 
-- OLTP：在线事务处理平台，一般都是关系型数据库来支撑，常见的数据库有：SQLite、MySQL、PostgreSQL、PolarDB、TiDB、OceanBase
-- OLAP：在线分析业务，一般是数据仓库，常见的产品有：Teradata、Clickhouse、Doris、Greenplum、Snowflake、AWS Redshift
-- NoSQL：新数据模型，互联网行业用得非常多，代表产品有：Redis、Neo4j、InfluxDB、MongoDB、Cassandra、AWS DynamoDB
-- BigData：大数据业务，和数据仓库比较类似，但是更擅长处理大规模数据分析业务，主流产品有：HBase、Hadoop、ElasticSearch、Spark
+**键值数据库**：键值数据库是一种类型简单的 NoSQL 数据库，数据以键值对的形式存储，其中键是唯一的标识符，值可以是任何类型的数据。键值数据库通常用于存储非结构化的数据，例如缓存、会话管理等场景。常见的键值数据库有 Redis、Memcached 等。
+
+**文档数据库**：文档数据库是一种 NoSQL 数据库，数据以文档（Document）的形式存储，文档可以是 JSON、XML 等格式。文档数据库通常用于存储半结构化和非结构化的数据，例如 Web 应用程序、内容管理系统等场景。常见的文档数据库有 MongoDB、Couchbase 等。
+
+**时序数据库**：时序数据库是一种专门用于存储和查询时间序列数据的数据库，例如传感器数据、网络日志等。时序数据库的特点是高效地存储和查询大量的时间序列数据。常见的时序数据库有 InfluxDB、OpenTSDB 等。
+
+**图数据库**：图数据库是一种 NoSQL 数据库，数据以图的形式存储，其中节点表示实体，边表示实体之间的关系。图数据库通常用于存储和查询复杂的实体关系，例如社交网络、知识图谱等场景。常见的图数据库有 Neo4j、OrientDB 等。
+
+另一方面，我们还可以将其按照功能分类，比如OLAP、OLTP和HTAP三种。一般来说，数据库的功能和特性能够和其存储模型对应，例如：关系型数据库往往是OLTP数据库。
+
+但由于一些复杂的应用场景，人们又推出了一些多模型数据库，例如：将SQL和NoSQL结合的NewSQL数据库，就能在保持数据强一致性的同时，通过水平扩展获得一定的高可用性，比如国内大火的TiDB。
+
+除此之外，时序数据库常常用于和消息存储队列+流处理框架（）的解决方案（也有厂商将其包装成数据库，称为流数据库，例如：Confluent的ksqldb）对比；流数据处理和OLAP的对比，可以阅读这篇[文章](https://zhuanlan.zhihu.com/p/600701331)。
 
 ## 架构
 
@@ -132,18 +149,11 @@ LSM-TREE存储引擎是一种基于磁盘的存储引擎，它将数据存储在
 
 目前常见的范式包括1NF、2NF、3NF和BCNF范式。
 
-## 展望
-
-**流式数据库**：
-
-流式数据库（Streaming Database）是一类专门用于处理实时数据流的数据库系统。与传统的批处理数据库不同，流式数据库支持高并发、低延迟的数据访问和处理，并可以在数据流传输的同时进行实时的数据处理和分析。
-
-**时序数据库**：
-
-时序数据库（Time-Series Database，简称TSDB）是一种专门用于存储和处理时间序列数据的数据库系统。时间序列数据是指在时间轴上按照一定时间间隔采集的数据，例如传感器数据、日志数据、监控数据等。
-
 ## 参考
 
 - [程序员必须掌握的数据库原理](https://dev.amazoncloud.cn/column/article/63ef527a65a6d47c5e10b97c)
 - [SQL vs NoSQL vs NewSQL: An In-depth Literature Review](https://blog.reachsumit.com/posts/2022/06/sql-nosql-newsql/)
 - [Databases vs. Data Warehouses vs. Data Lakes](https://www.mongodb.com/databases/data-lake-vs-data-warehouse-vs-database)
+- [消息队列 + 流处理框架 vs 时序数据库](https://www.zhihu.com/question/310350496)
+- [流处理和流数据库](https://zhuanlan.zhihu.com/p/600701331)
+- [Hadoop vs Spark vs Flink](https://data-flair.training/blogs/hadoop-vs-spark-vs-flink/)
