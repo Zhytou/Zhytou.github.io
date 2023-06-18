@@ -80,6 +80,15 @@ git diff [file name]
 
 ### Advanced git tips
 
+**submodule support**：
+
+``` bash
+# add a submodule in your git repo
+git submodule add <url> <path>
+# update submodule
+git submodule update --init
+```
+
 **stash temporary changes**:
 
 ``` bash
