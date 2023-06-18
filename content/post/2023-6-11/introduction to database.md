@@ -30,7 +30,7 @@ NoSQL数据库虽然解决了高并发读写、多结构化数据存储等问题
 
 ## 概念
 
-**分布式数据库 vs 单机数据库集群**：
+**分布式数据库 vs 集中式数据库集群**：
 
 分布式数据库通常由多个节点组成，每个节点都可以独立地处理数据和请求，数据可以分布在多个节点上，从而实现数据的水平分割和扩展。分布式数据库通常需要考虑数据分片、数据复制、数据一致性、故障恢复、负载均衡等问题，并且需要使用一些额外的组件或工具来管理分片，比如 MongoDB、Cassandra、HBase 等。
 
@@ -79,6 +79,8 @@ Spark 是一个由 Apache 开发的大数据处理框架，它基于内存计算
 Flink 是一个由 Apache 开发的大数据处理框架，它基于流处理和批处理的统一计算模型，可以处理大规模的结构化和半结构化数据，支持实时处理、流式处理和批量处理等场景。Flink 支持使用多种编程语言进行开发，例如 Java、Scala 和 Python 等，提供了丰富的 API 和库，以支持各种数据处理和分析操作。
 
 ## 分类
+
+![db_classification](https://zhytou.github.io/post/2023-6-11/db_classification.png)
 
 我们可以按照数据库的存储模型将其分类，常见类型如下：
 
@@ -192,3 +194,4 @@ LSM-TREE存储引擎是一种基于磁盘的存储引擎，它将数据存储在
 - [流处理和流数据库](https://zhuanlan.zhihu.com/p/600701331)
 - [Hadoop vs Spark vs Flink](https://data-flair.training/blogs/hadoop-vs-spark-vs-flink/)
 - [数据库发展历史](https://tidb.net/blog/01f8c3ee)
+- [2020年中国金融级分布式数据库市场报告](https://www.modb.pro/db/228117)
