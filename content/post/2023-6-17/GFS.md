@@ -16,8 +16,12 @@ draft: false
   - [Consistency Model](#consistency-model)
 - [System Interactions](#system-interactions)
   - [Leases and Mutation Order](#leases-and-mutation-order)
+  - [Atomic Record Appends](#atomic-record-appends)
+  - [Snapshot](#snapshot)
 - [Master Operation](#master-operation)
   - [Namespace Management and Locking](#namespace-management-and-locking)
+  - [Replica Placement](#replica-placement)
+  - [Creation，Re-replication，Rebalancing](#creationre-replicationrebalancing)
 - [Fault Tolerance And Diagnosis](#fault-tolerance-and-diagnosis)
 - [Summary](#summary)
 - [References](#references)
@@ -51,7 +55,7 @@ GFS提供了一个熟悉的文件系统接口，具有创建，删除，打开�
 
 ### Architecture
 
-![gfs_architecture](https://zhytou.github.io/post/2023-6/17/gfs_architecture.png)
+![gfs_architecture](https://zhytou.github.io/post/2023-6-17/gfs_architecture.png)
 
 GFS的特点如下：
 
@@ -132,9 +136,36 @@ Master 不保留有关哪个块服务器具有给定块副本的持久记录。
 
 > lease 租约； mutation 修改
 
+### Atomic Record Appends
+
+### Snapshot
+
 ## Master Operation
 
 ### Namespace Management and Locking
+
+### Replica Placement
+
+chunk replica placement policy 有两个目的：
+
+- 最大化数据 reliability（可靠性）和 availability（可用性）；
+- 最大化 network bandwidth utilization（网络带宽利用率）；
+
+### Creation，Re-replication，Rebalancing
+
+**Creation**：
+
+**Re-replication**：
+
+一旦可用副本的数量低于用户指定的目标，主服务器就会重新复制块。
+
+主机选择最高优先级的块，并通过指示某些块服务器直接从现有有效副本中复制块数据来对其进行“克隆”。
+
+放置新副本的目标类似于创建副本的目标：均衡磁盘空间利用率，限制任何单个块服务器上的活动克隆操作，以及将副本分布在机架上。
+
+**Rebalancing**：
+
+主服务器会定期重新平衡副本：它检查当前副本分发，并移动副本以获得更好的磁盘空间和负载平衡。
 
 ## Fault Tolerance And Diagnosis
 
@@ -169,10 +200,14 @@ Master 不保留有关哪个块服务器具有给定块副本的持久记录。
 
 **Distributed File System History**：
 
-![分布式文件系统发展历史](https://static1.juicefs.com/images/distributed-filesystem-timeline.original.png)
+![dfs_history](https://static1.juicefs.com/images/distributed-filesystem-timeline.original.png)
+
+**Distributed File System Comparasion**：
+
+![dfs_comparasion](https://segmentfault.com/img/remote/1460000040129381)
 
 ## References
 
-[分布式文件系统的对比](https://juicefs.com/zh-cn/blog/engineering/distributed-filesystem-comparison)
-[GFS 论文阅读笔记](https://spongecaptain.cool/post/paper/googlefilesystem/)
-[GFS 论文](https://juejin.cn/post/6964671364745658376#1-introduction)
+- [分布式文件系统的对比](https://juicefs.com/zh-cn/blog/engineering/distributed-filesystem-comparison)
+- [GFS 论文阅读笔记](https://spongecaptain.cool/post/paper/googlefilesystem/)
+- [GFS 论文](https://juejin.cn/post/6964671364745658376#1-introduction)
