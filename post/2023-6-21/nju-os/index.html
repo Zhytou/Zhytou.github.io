@@ -1,0 +1,103 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><title>南大OS-Lab总结 | Zhytou</title><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=generator content="Hugo 0.114.1"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=/favicon.ico><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css media=screen href=/css/all.css><meta property="og:title" content="南大OS-Lab总结"><meta property="og:description" content="M1：实现打印进程树状信息的工具 pstree M2：实现协程库 libco 协程 理解协程：
+在开始做本实验之前，我认为可以先阅读一些材料来认识进程、线程和协程之间的关系，比如这一篇Process , Thread and Coroutines。当我们能够认识到协程其实就是调度由用户管理的轻量级线程，即：用户态线程时，实验说明中的大部分内容就很好理解了。
+至于协程结构体，则可以直接使用实验讲义中给出的，具体如下：
+// 协程状态 enum co_status { CO_NEW = 1, // 新创建，还未执行过 CO_RUNNING, // 已经执行过 CO_WAITING, // 在 co_wait 上等待 CO_DEAD, // 已经结束，但还未释放资源 }; // 协程 struct __attribute__((aligned(16))) co { char *name; void (*func)(void *); // co_start 指定的入口地址和参数 void *arg; enum co_status status; // 协程的状态 struct co *waiter; // 是否有其他协程在等待当前协程 jmp_buf context; // 寄存器现场 (setjmp.h) unsigned char stack[STACK_SIZE]; // 协程的堆栈 }; 管理协程："><meta property="og:type" content="article"><meta property="og:url" content="https://zhytou.github.io/post/2023-6-21/nju-os/"><meta property="article:section" content="post"><meta property="article:published_time" content="2023-06-21T16:42:31+08:00"><meta property="article:modified_time" content="2023-06-21T16:42:31+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="南大OS-Lab总结"><meta name=twitter:description content="M1：实现打印进程树状信息的工具 pstree M2：实现协程库 libco 协程 理解协程：
+在开始做本实验之前，我认为可以先阅读一些材料来认识进程、线程和协程之间的关系，比如这一篇Process , Thread and Coroutines。当我们能够认识到协程其实就是调度由用户管理的轻量级线程，即：用户态线程时，实验说明中的大部分内容就很好理解了。
+至于协程结构体，则可以直接使用实验讲义中给出的，具体如下：
+// 协程状态 enum co_status { CO_NEW = 1, // 新创建，还未执行过 CO_RUNNING, // 已经执行过 CO_WAITING, // 在 co_wait 上等待 CO_DEAD, // 已经结束，但还未释放资源 }; // 协程 struct __attribute__((aligned(16))) co { char *name; void (*func)(void *); // co_start 指定的入口地址和参数 void *arg; enum co_status status; // 协程的状态 struct co *waiter; // 是否有其他协程在等待当前协程 jmp_buf context; // 寄存器现场 (setjmp.h) unsigned char stack[STACK_SIZE]; // 协程的堆栈 }; 管理协程："><meta itemprop=name content="南大OS-Lab总结"><meta itemprop=description content="M1：实现打印进程树状信息的工具 pstree M2：实现协程库 libco 协程 理解协程：
+在开始做本实验之前，我认为可以先阅读一些材料来认识进程、线程和协程之间的关系，比如这一篇Process , Thread and Coroutines。当我们能够认识到协程其实就是调度由用户管理的轻量级线程，即：用户态线程时，实验说明中的大部分内容就很好理解了。
+至于协程结构体，则可以直接使用实验讲义中给出的，具体如下：
+// 协程状态 enum co_status { CO_NEW = 1, // 新创建，还未执行过 CO_RUNNING, // 已经执行过 CO_WAITING, // 在 co_wait 上等待 CO_DEAD, // 已经结束，但还未释放资源 }; // 协程 struct __attribute__((aligned(16))) co { char *name; void (*func)(void *); // co_start 指定的入口地址和参数 void *arg; enum co_status status; // 协程的状态 struct co *waiter; // 是否有其他协程在等待当前协程 jmp_buf context; // 寄存器现场 (setjmp.h) unsigned char stack[STACK_SIZE]; // 协程的堆栈 }; 管理协程："><meta itemprop=datePublished content="2023-06-21T16:42:31+08:00"><meta itemprop=dateModified content="2023-06-21T16:42:31+08:00"><meta itemprop=wordCount content="296"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>21</span>
+<span class=rest>Jun 2023</span></div></div><div class=matter><h1 class=title>南大OS-Lab总结</h1><p class=post-meta><span class=post-meta></span></p></div></div><div class=markdown><h2 id=m1实现打印进程树状信息的工具-pstree>M1：实现打印进程树状信息的工具 pstree</h2><h2 id=m2实现协程库-libco>M2：实现协程库 libco</h2><h3 id=协程>协程</h3><p><strong>理解协程</strong>：</p><p>在开始做本实验之前，我认为可以先阅读一些材料来认识进程、线程和协程之间的关系，比如这一篇<a href=https://www.linkedin.com/pulse/process-thread-coroutines-amit-nadiger/ target=_blank>Process , Thread and Coroutines</a>。当我们能够认识到协程其实就是调度由用户管理的轻量级线程，即：用户态线程时，实验说明中的大部分内容就很好理解了。</p><p>至于协程结构体，则可以直接使用实验讲义中给出的，具体如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#888>// 协程状态
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>enum</span> co_status {
+</span></span><span style=display:flex><span>  CO_NEW <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>,  <span style=color:#888>// 新创建，还未执行过
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  CO_RUNNING,  <span style=color:#888>// 已经执行过
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  CO_WAITING,  <span style=color:#888>// 在 co_wait 上等待
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  CO_DEAD,     <span style=color:#888>// 已经结束，但还未释放资源
+</span></span></span><span style=display:flex><span><span style=color:#888></span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#888>// 协程
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>struct</span> <span style=color:#06b;font-weight:700>__attribute__</span>((<span style=color:#06b;font-weight:700>aligned</span>(<span style=color:#00d;font-weight:700>16</span>))) co {
+</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>name;
+</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>void</span> (<span style=color:#333>*</span>func)(<span style=color:#339;font-weight:700>void</span> <span style=color:#333>*</span>);  <span style=color:#888>// co_start 指定的入口地址和参数
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>void</span> <span style=color:#333>*</span>arg;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>enum</span> co_status status;  <span style=color:#888>// 协程的状态
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>struct</span> co <span style=color:#333>*</span>waiter;      <span style=color:#888>// 是否有其他协程在等待当前协程
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  jmp_buf context;        <span style=color:#888>// 寄存器现场 (setjmp.h)
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>unsigned</span> <span style=color:#339;font-weight:700>char</span> stack[STACK_SIZE];  <span style=color:#888>// 协程的堆栈
+</span></span></span><span style=display:flex><span><span style=color:#888></span>};
+</span></span></code></pre></div><p><strong>管理协程</strong>：</p><p>libco中应该记录当前执行协程以及当前所有协程，以便选择协程切换和保存当前协程状态。其中，我用来记录所有协程的数据结构是链表，实现如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#888>// 当前运行协程，默认是main
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>struct</span> co <span style=color:#333>*</span>current <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#888>// 当前所有协程表
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>struct</span> co_mgr_node <span style=color:#333>*</span>co_mgr_head <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#888>// 协程管理，用链表存储当前上下文所有协程
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>struct</span> co_mgr_node {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>struct</span> co <span style=color:#333>*</span>val;
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>struct</span> co_mgr_node <span style=color:#333>*</span>next;
+</span></span><span style=display:flex><span>};
+</span></span></code></pre></div><p><strong>资源初始化和释放</strong>：</p><p>定义<code>__attribute__((constructor))</code>属性和<code>__attribute__((destructor))</code>属性的函数，保证在main函数执行之前正确初始化资源，在main函数 结束之后释放资源。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#888>// co_mgr_head和current初始化，main函数执行前调用
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>static</span> <span style=color:#06b;font-weight:700>__attribute__</span>((constructor)) <span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>co_constructor</span>(<span style=color:#339;font-weight:700>void</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#888>// 创建主线程，并将其加入到协程管理表中
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  current <span style=color:#333>=</span> <span style=color:#06b;font-weight:700>co_start</span>(<span style=background-color:#fff0f0>&#34;main&#34;</span>, <span style=color:#007020>NULL</span>, <span style=color:#007020>NULL</span>);
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> (current <span style=color:#333>==</span> <span style=color:#007020>NULL</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#06b;font-weight:700>debug_printf</span>(<span style=background-color:#fff0f0>&#34;co_start main failed</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>return</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  current<span style=color:#333>-&gt;</span>status <span style=color:#333>=</span> CO_RUNNING;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#888>// co_mgr_head和current释放，main函数执行后调用
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>static</span> <span style=color:#06b;font-weight:700>__attribute__</span>((destructor)) <span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>co_destructor</span>(<span style=color:#339;font-weight:700>void</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>struct</span> co_mgr_node <span style=color:#333>*</span>curr <span style=color:#333>=</span> co_mgr_head;
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>while</span> (curr <span style=color:#333>!=</span> <span style=color:#007020>NULL</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>struct</span> co_mgr_node <span style=color:#333>*</span>next <span style=color:#333>=</span> curr<span style=color:#333>-&gt;</span>next;
+</span></span><span style=display:flex><span>    <span style=color:#06b;font-weight:700>free</span>(curr<span style=color:#333>-&gt;</span>val);
+</span></span><span style=display:flex><span>    <span style=color:#06b;font-weight:700>free</span>(curr);
+</span></span><span style=display:flex><span>    curr <span style=color:#333>=</span> next;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  co_mgr_head <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
+</span></span><span style=display:flex><span>  current <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=上下文切换>上下文切换</h3><p><strong>理解setjmp/logjmp</strong>：</p><p><strong>实现co_field</strong>：</p><p>在理解了</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#888>// 切换协程
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>co_yield</span> () {
+</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>int</span> ret <span style=color:#333>=</span> <span style=color:#06b;font-weight:700>setjmp</span>(current<span style=color:#333>-&gt;</span>context);
+</span></span><span style=display:flex><span>  <span style=color:#888>// 若ret为0，即为第一次设置jmp_buf（可以使用longjmp函数恢复寄存器状态），切换到一个新建或运行中的协程执行
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#888>// 否则为longjmp函数调用，直接返回
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> (ret <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 找到一个可以切换的协程
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>struct</span> co <span style=color:#333>*</span>co <span style=color:#333>=</span> <span style=color:#06b;font-weight:700>get_random_available_co</span>(co_mgr_head);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> (co<span style=color:#333>-&gt;</span>status <span style=color:#333>==</span> CO_NEW) {
+</span></span><span style=display:flex><span>      <span style=color:#888>// 切换上下文，执行current-&gt;func
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      ((<span style=color:#080;font-weight:700>volatile</span> <span style=color:#080;font-weight:700>struct</span> co <span style=color:#333>*</span>)co)<span style=color:#333>-&gt;</span>status <span style=color:#333>=</span> CO_RUNNING;
+</span></span><span style=display:flex><span>      <span style=color:#06b;font-weight:700>stack_switch_call</span>(co<span style=color:#333>-&gt;</span>stack <span style=color:#333>+</span> STACK_SIZE, co<span style=color:#333>-&gt;</span>func, co<span style=color:#333>-&gt;</span>arg);
+</span></span><span style=display:flex><span>      <span style=color:#888>// 恢复寄存器状态
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#06b;font-weight:700>restore_registers_call</span>();
+</span></span><span style=display:flex><span>      ((<span style=color:#080;font-weight:700>volatile</span> <span style=color:#080;font-weight:700>struct</span> co <span style=color:#333>*</span>)co)<span style=color:#333>-&gt;</span>status <span style=color:#333>=</span> CO_DEAD;
+</span></span><span style=display:flex><span>      <span style=color:#888>// 修改等待协程的状态
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#080;font-weight:700>if</span> (co<span style=color:#333>-&gt;</span>waiter <span style=color:#333>!=</span> <span style=color:#007020>NULL</span>) {
+</span></span><span style=display:flex><span>        co<span style=color:#333>-&gt;</span>waiter<span style=color:#333>-&gt;</span>status <span style=color:#333>=</span> CO_RUNNING;
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>      <span style=color:#888>//
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#06b;font-weight:700>co_yield</span> ();
+</span></span><span style=display:flex><span>    } <span style=color:#080;font-weight:700>else</span> <span style=color:#080;font-weight:700>if</span> (co<span style=color:#333>-&gt;</span>status <span style=color:#333>==</span> CO_RUNNING) {
+</span></span><span style=display:flex><span>      <span style=color:#06b;font-weight:700>longjmp</span>(co<span style=color:#333>-&gt;</span>context, <span style=color:#00d;font-weight:700>1</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>实现stack_swicth_call与restore_registers_call</strong>：</p><p><figure><img src=https://pic2.zhimg.com/80/v2-bd5a0aa1625c4445ba33e506b91dba29_1440w.webp alt=调用栈></figure></p><h3 id=调试--坑>调试 & 坑</h3><p><strong>调试信息打印函数</strong>：</p><p>为了方便调试，我们可以定义一个debug_printf函数，并利用宏的机制来开启或关闭该信息的显示。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#579>#define DEBUG 0
+</span></span></span><span style=display:flex><span><span style=color:#579></span>
+</span></span><span style=display:flex><span><span style=color:#888>// 调试打印函数
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>debug_printf</span>(<span style=color:#080;font-weight:700>const</span> <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>fmt, ...) {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> (DEBUG) {
+</span></span><span style=display:flex><span>    va_list args;
+</span></span><span style=display:flex><span>    <span style=color:#06b;font-weight:700>va_start</span>(args, fmt);
+</span></span><span style=display:flex><span>    <span style=color:#06b;font-weight:700>vprintf</span>(fmt, args);
+</span></span><span style=display:flex><span>    <span style=color:#06b;font-weight:700>va_end</span>(args);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>GDB</strong>：</p><p>由于这个实验涉及到使用内联汇编代码实现上下文切换，掌握gdb按汇编指令单步运行，来查看stack_swicth_call与restore_registers_call前后，寄存器是否保存正确、栈是否对齐，就显得十分重要。</p><p>关于如何使用gdb调试，具体可以参考我的<a href=https://zhytou.top/post/2023-6-27/gnu-tools/ target=_blank>博客</a>，里面几乎涵盖了这次实验会用到的所有gdb命令。</p><p><strong>我碰到的坑</strong>：</p><ol><li><p>堆栈没有对齐，报错SEGEFV；</p></li><li><p>画蛇添足，在co_wait里若发现协程状态为CO_DEAD就主动释放了该协程内存：</p></li></ol><p>不要在co_wait中释放协程，在destructor中统一释放。</p><h3 id=m2-总结>M2 总结</h3><p>这个实验很好的锻炼</p><h2 id=参考>参考</h2><p><strong>M2</strong>：</p><ul><li><a href=https://www.linkedin.com/pulse/process-thread-coroutines-amit-nadiger/ target=_blank>Process , Thread and Coroutines</a></li><li><a href=https://zhuanlan.zhihu.com/p/27339191 target=_blank>x86系统调用及栈帧原理</a></li></ul></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
