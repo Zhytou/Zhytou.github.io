@@ -150,10 +150,37 @@ print xxx | p xxx
 
 ## Make
 
+**简介**：
+
+Make是一款用于自动化构建程序的工具，可以根据目标文件的依赖关系自动构建出最终的可执行文件或库文件。
+
+### Makefile
+
+Makefile是Make工具使用的配置文件，其包含了一系列规则，用于描述目标文件的依赖关系和构建方法。
+
+Makefile中的规则通常包含以下几个部分：
+
+- 目标(Target)：指定要构建的目标文件的名称。目标可以是可执行文件、库文件或其他文件。
+- 依赖(Prerequisites)：指定构建目标文件所需要的源文件、头文件或其他依赖文件。
+- 命令(Command)：指定构建目标文件的具体命令，通常是编译源文件、链接目标文件等操作。
+
 ## Coreutils
+
+**简介**：
+
+Coreutils是一组基本的Unix工具，包括了大量的命令行工具，用于文件操作、文本处理、进程管理等方面。
+
+在Linux系统中，Coreutils通常是系统中最基本的工具集之一，包含了许多常用的命令，例如：ls、rm、cp、mv、mkdir、cat、echo、grep等等。
 
 ## Binutils
 
+**简介**：
+
+Binutils是GNU项目的一个组成部分，包括了一系列用于操作目标文件的命令行工具，例如：as、ld、objcopy、objdump等等。
+
+Binutils的主要作用是对目标文件进行操作，例如：汇编、链接、转换格式、反汇编等等。
+
 ## References
 
-[GNU Binutils](https://www.gnu.org/software/binutils/)
+- [Debugging Under Unix: gdb Tutorial](https://www.cs.cmu.edu/~gilpin/tutorial/)
+- [GNU Binutils](https://www.gnu.org/software/binutils/)
