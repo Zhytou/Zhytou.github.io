@@ -176,9 +176,10 @@ Coreutils是一组基本的Unix工具，包括了大量的命令行工具，用�
 
 **简介**：
 
-Binutils是GNU项目的一个组成部分，包括了一系列用于操作目标文件的命令行工具，例如：as、ld、objcopy、objdump等等。
+Binutils是GNU项目的一个组成部分，包括了一系列用于操作目标文件的命令行工具。可以按功能将Binutils分成两大部分，分别是
 
-Binutils的主要作用是对目标文件进行操作，例如：汇编、链接、转换格式、反汇编等等。
+- 帮助生成可执行文件的工具，比如：ld (linker), as (assembler), ar (archiver)；
+- 帮助分析可执行文件的工具，比如：objcopy/objdump/readelf。
 
 ## References
 

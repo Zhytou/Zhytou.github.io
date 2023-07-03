@@ -197,7 +197,7 @@ UNIX/Linux:
 
 Binutils是一组开源工具集，用于创建、操作和转换二进制文件。可以按功能将Binutils分成两大部分，分别是
 
-- 帮助生成可执行文件的工具，比如：ld (linker), as (assembler), ar (Archiver)；
+- 帮助生成可执行文件的工具，比如：ld (linker), as (assembler), ar (archiver)；
 - 帮助分析可执行文件的工具，比如：objcopy/objdump/readelf。
 
 ****

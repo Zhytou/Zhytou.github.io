@@ -36,4 +36,5 @@ Also available at:
 
 - [GitHub](https://github.com/Zhytou)
 - [Twitter](https://twitter.com/_ZhoY_)
+- [Zhihu](https://www.zhihu.com/people/hdian-tou)
 - [LinkedIn](https://www.linkedin.com/in/yang-zhong-190072218/)
