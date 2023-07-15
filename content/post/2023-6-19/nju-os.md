@@ -378,6 +378,41 @@ A session can have a controlling terminal.
 
 ## 14 C标准库的实现
 
+### libc
+
+libc是一个C语言标准库，它包括大量的函数和头文件，提供了许多常用的系统调用和库函数，用于编写Unix和类Unix操作系统中的应用程序。
+
+libc是操作系统中最基本的库之一，它为其他库和应用程序提供了基础的支持。
+
+**为什么需要libc**：
+
+libc提供一层基础的封装，使得开发人员更方便了。
+
+> 在C语言标准中，有两种环境：hosted和freestanding。Hosted环境是指在操作系统上使用标准库的环境，这种环境下程序可以使用标准库提供的函数和语言特性。而Freestanding环境则是指在没有操作系统或标准库支持的情况下运行的环境，这种环境下程序必须自行处理底层硬件和系统资源。
+
+### libc组成
+
+**封装1：存粹的计算**：
+
+- string.h: 字符串/数组操作
+- stdlib.h：atoi, atol, atoll, strtoull, rand
+- setjmp.h: 实现跨栈的非局部跳转
+- math.h: ...
+
+**封装2：文件描述符**：
+
+以stdio.h为例，封装了FILE*和vprintf系列
+
+**封装3：更多进程/操作系统功能**：
+
+**封装4：地址空间**：
+
+malloc 和 free
+
+**实现malloc**：
+
+[mimalloc](https://www.microsoft.com/en-us/research/uploads/prod/2019/06/mimalloc-tr-v1.pdf)
+
 ## 15 a fork() in the road
 
 ## 16 可执行文件
