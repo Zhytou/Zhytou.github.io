@@ -260,6 +260,49 @@ execve函数执行成功时，不会返回到调用进程，而是直接将当�
 
 ## 12 进程的地址空间
 
+**进程地址空间的组成**：
+
+- 代码段（text segment）：存放可执行文件的指令，也称为二进制代码或可执行代码。
+- 数据段（data segment）：存放程序中已经初始化的全局变量和静态变量。
+- BSS段（bss segment）：存放程序中未初始化的全局变量和静态变量，通常用0来填充。
+- 堆（heap）：用于动态分配内存，例如使用C/C++中的malloc()函数或是C++中的new运算符申请内存。
+- 栈（stack）：用于存放函数的局部变量、函数的参数以及函数调用时的返回地址等。
+- 其他：还有一些用于存放动态链接库、共享内存、内存映射文件等的内存区域。
+
+### 进程的地址空间管理
+
+- 进程的地址空间 = 内存里若干连续的 “段”
+- 每一段是可访问 (读/写/执行) 的内存
+- 可能映射到某个文件和/或在进程间共享
+
+**管理进程地址空间的系统调用**：
+
+```c++
+// 映射
+void *mmap(void *addr, size_t length, int prot, int flags,
+           int fd, off_t offset);
+// 取消映射
+int munmap(void *addr, size_t length);
+```
+
+**内存映射一致性**：
+
+操作系统通过内存管理单元（MMU）来保证内存映射的一致性。MMU是一种硬件设备，用于将虚拟地址转换为物理地址，并执行访问权限控制。
+
+当进程访问内存时，操作系统会将虚拟地址转换为物理地址，然后访问对应的物理地址。这个过程是由MMU完成的。MMU会通过页表或段表来进行地址转换，这些表会将虚拟地址映射到物理地址，并记录每个内存页或段的权限信息，例如读、写、执行等。
+
+此外，操作系统还会使用一些技术来提高内存映射的一致性。例如，使用缓存（cache）来加速内存访问，并使用缓存一致性协议来确保多个缓存之间的数据一致性；使用TLB（Translation Lookaside Buffer）来缓存页表或段表的部分内容，加速地址转换。这些技术可以提高内存访问的效率，同时保证内存映射的一致性。
+
+### 地址空间的作用
+
+**实现进程隔离**：
+
+实现了操作系统最重要的功能：进程之间的隔离。
+
+**代码注入**：
+
+我们可以改内存，也可以改代码！
+
 ## 13 系统调用和UNIX Shell
 
 ### Shell
@@ -290,6 +333,48 @@ Shell Scripts 是由 Shell Programming Language 编写的脚本文件，它们�
 - [Executable Formal Semantics for the POSIX Shell](https://dl.acm.org/doi/pdf/10.1145/3371111)
 
 ### 终端和Job Control
+
+**终端**：
+
+终端（Terminal）是一种计算机的输入/输出设备，用于与计算机进行交互，输入指令或命令，输出结果或信息。
+
+在早期的计算机系统中，终端通常是一个物理设备，例如打字机或显示器。用户可以通过终端连接到计算机，并通过终端输入指令或命令，操作计算机。
+
+在现代操作系统中，终端通常是软件模拟的。例如，在Unix或Linux系统中，终端通常是一个命令行界面，用户可以通过终端窗口输入命令，并在终端窗口中看到计算机的响应。
+
+**终端与Shell**：
+
+终端和shell是计算机系统中密切相关的两个概念，它们之间有着紧密的关系。
+
+当用户在终端中输入命令时，终端会将用户输入的内容传递给Shell，由Shell对其进行解释和执行，并将结果输出到终端中。
+
+**Session & Process Group**：
+
+会话是一组相互关联的进程的集合。
+
+在一个会话中，每个进程组都有一个唯一的进程组ID（PGID），并且每个进程都会属于一个进程组。进程可以通过setpgid系统调用来将自己或其他进程加入到指定的进程组中，也可以通过getpgid系统调用来获取自己或其他进程所在的进程组ID。
+
+进程组和会话之间的关系如下：
+
+- 一个会话可以包含多个进程组。
+- 每个进程组可以包含多个进程。
+- 一个进程组可以与一个控制终端关联，也可以从控制终端中分离出来。
+
+![process group & session](https://jyywiki.cn/pages/OS/img/process-groups-sessions.png)
+
+**Job Control**：
+
+The PGID (process-group ID) is preserved across an execve(2) and inherited in fork(2)...
+
+Each process group is a member of a session.
+
+![job control](https://jyywiki.cn/pages/OS/img/tty-session.png)
+
+A session can have a controlling terminal.
+
+- At any time, one (and only one) of the process groups in the session can be the foreground process group for the terminal; the remaining process groups are in the background.
+- If a signal is generated from the terminal (e.g., typing the interrupt key to generate SIGINT), that signal is sent to the foreground process group.
+- Only the foreground process group may read(2) from the terminal; if a background process group tries to read(2) from the terminal, then the group is sent a SIGTTIN signal, which suspends it.
 
 ## 14 C标准库的实现
 
