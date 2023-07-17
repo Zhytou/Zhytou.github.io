@@ -704,9 +704,17 @@ Linux驱动一般是以内核模块的形式存在。
   - 对于其他设备，例如硬盘驱动器、光盘驱动器、USB 存储器等，它们通常被分配更高的卷标，例如 C:\、D:\ 等。
 - 对于UNIX/Linux来说，它们只有一个根/，其他目录都是以/为起点。
 
+Linux上的设备基本上都是在/dev目录下,那为什么还要额外挂载到其他目录呢?
+
+/dev目录下的设备节点只提供了访问该设备的接口,但是若要访问设备上的文件系统,还需要使用mount命令将其"注入"到Linux的目录树中。
+
 **目录树的拼接**：
 
 UNIX: 允许任意目录 “挂载 (mount)” 一个设备代表的目录树
+
+> 挂载（mounting）是指由操作系统使一个存储设备（诸如硬盘、CD-ROM或共享资源）上的计算机文件和目录可供用户通过计算机的文件系统访问的一个过程。
+>
+> 换句话说，挂载指的就是将设备文件中的顶级目录连接到主机中根目录下的某一目录，进而达成访问此目录就等同于访问设备文件的目的。
 
 ```c++
 int mount(const char *source, const char *target,
@@ -714,7 +722,17 @@ int mount(const char *source, const char *target,
           const void *data);
 ```
 
-**文件的挂载**：
+**Linux实现文件挂载**：
+
+- 创建挂载点目录
+- 使用 mount 命令直接将设备挂载到该目录
+- 使用 umount 命令卸载设备
+
+某些时候，操作系统会使用回环设备帮助实现挂载。
+
+> 回环设备（loopback device）是Linux内核中一种特殊的设备，它允许将一个普通文件映射为一个块设备，从而可以在该文件上运行文件系统，就像运行在硬盘上一样。
+
+mount命令背后是Linux虚拟文件系统(VFS)机制的工作,它提供了一个统一的接口,使得主机文件系统能够访问到多种不同文件系统。
 
 **Filesystem Hierarchy Standard (FHS)**：
 
@@ -731,14 +749,64 @@ Filesystem Hierarchy Standard (FHS) 是一个定义了 Linux 和其他类 Unix �
 
 ### 目录API
 
-**硬链接 hard link**：
+**目录管理**：
 
-**软链接 symbolic link**：
+- 创建 mkdir：创建一个目录
+- 删除 rmdir：删除一个空目录
+- 遍历 getdents：返回 count 个目录项 (ls, find, tree 都使用这个)
+
+**硬链接 hard link**：允许一个文件被多个目录引用
+
+**软链接 symbolic link**：类似 “快捷方式”
 
 ### 文件API
+
+**文件描述符**：进程访问文件 (操作系统对象) 的 “指针”
+
+- 通过 open/pipe 获得
+- 通过 close 释放
+- 通过 dup/dup2 复制
+- fork 时继承
+
+**偏移量管理**：
+
+文件的读写自带 “游标”，这样就不用每次都指定文件读/写到哪里了
+
+- open 时，获得一个独立的 offset
+- dup 时，两个文件描述符共享 offset
+- fork 时，父子进程共享 offset
+- execve 时文件描述符不变
 
 ## 26 FAT和UNIX文件系统
 
 ### File Allocation Table (FAT)
 
 ### ext2/UNIX文件系统
+
+按对象方式集中存储文件/目录元数据
+
+- 增强局部性 (更易于缓存)
+- 支持链接
+
+为大小文件区分 fast/slow path
+
+- 小的时候应该用数组
+  - 连链表遍历都省了
+- 大的时候应该用树 (B-Tree; Radix-Tree; ...)
+  - 快速的随机访问
+
+## 27 持久数据的可靠性
+
+### Redundant Array of Inexpensive Disks (RAID)
+
+把多个 (不可靠的) 磁盘虚拟成一块非常可靠且性能极高的虚拟磁盘。
+
+### File System Checking
+
+**崩溃一致性**：
+
+### 日志 Journaling
+
+## 28 xv6文件系统的实现
+
+## 29 现代存储系统
