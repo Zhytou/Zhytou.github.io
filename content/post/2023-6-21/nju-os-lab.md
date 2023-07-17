@@ -1,5 +1,5 @@
 ---
-title: "南大OS-Lab总结"
+title: "NJU-OS-Lab总结"
 date: 2023-06-21T16:42:31+08:00
 draft: false
 ---
