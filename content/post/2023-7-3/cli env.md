@@ -4,13 +4,64 @@ date: 2023-07-03T10:01:07+08:00
 draft: true
 ---
 
-这篇博客记录了我对WSL、Docker、Shell、SSH、TMux和Vim等工具的学习和使用笔记，的一些环境配置。
+随着Coding的时间越来越长，我接触到的工具也越来越多，也逐渐有了一套自己的工具包。这篇博客就记录了我对WSL、Docker、Shell、SSH、TMux和Vim等工具的学习和使用笔记以及一些环境配置。
 
-## Virtual Machine
+## Virtual Machine & Containerization
+
+首先，介绍一下最基础也是最常见的虚拟化工具。由于我们的电脑一般是Windows，但课程实验往往要求Unix/Linux的开发环境，此时我们就需要使用虚拟化技术来模拟目标环境。
+
+使用虚拟化技术的好处如下：
+
+- 更高效利用物理服务器资源。一个物理服务器可以运行多个虚拟机,更充分地利用CPU、内存和存储资源。
+- 更高的弹性和可扩展性。通过克隆和删除虚拟机,可以快速实现应用程序的弹性伸缩。
+- 更好的隔离性。虚拟机相互隔离,不会相互影响。如果一个虚拟机宕机,也不会影响其他虚拟机。
+- 更方便的测试和开发。可以快速部署虚拟机用于软件测试和开发。
+
+而虚拟机（Virtual Machine，VM）和容器化（Containerization）是两种重要的虚拟化技术。二者区别如下：
+
+![vm vs container](./vm_vs_container.png)
+
+下面介绍最常用的两种虚拟化工具WSL和Docker。
 
 ### WSL
 
+**Introduction**：
+
+适用于Linux的Windows子系统（Windows Subsystem for Linux，WSL）是一个为了在Windows操作系统上能够原生运行Linux二进制可执行文件（ELF格式）的兼容层。
+
+**功能**：
+
+**Setup**：
+
+简单来说，可以把WSL想象成Windows自带的Linux虚拟机，但是它并不是默认开启的，需要先检测是否支持，然后再将其在设置中打开。具体步骤如下：
+
 ### Docker
+
+**Introduction**：
+
+**Notion**：
+
+镜像 Image：
+
+- Docker 镜像就相当于是一个 root 文件系统。比如官方镜像 ubuntu:16.04 就包含了完整的一套 Ubuntu16.04 最小系统的 root 文件系统。
+
+容器 Container：
+
+- 镜像和容器的关系，就像是面向对象程序设计中的类和实例一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。
+
+仓库 Repository：
+
+- 仓库可看成一个代码控制中心，用来保存镜像。
+
+**Setup**：
+
+### Other Virtualization Tool
+
+除了上面提到的WSL和Docker两种最重要的虚拟化工具，我在这里补充一些其他常用的软件或工具：
+
+**BusyBox**：嵌入式 Linux 的瑞士军刀
+
+**Virtual Box**：虚拟机软件
 
 ## Shell
 
