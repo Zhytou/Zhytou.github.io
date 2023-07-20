@@ -152,7 +152,15 @@ alias new_cmd='cmd'
 
 此外，Shell作为一门编程语言，也类似其他语言一样提供了运算符、参数、变量、函数、流控制等功能。下面介绍一些Shell作为一门编程语言的相关特性。
 
-**变量和参数 Variables & Parameters**：
+**变量 Variables**：
+
+在Shell脚本中，我们可以使用`VARIABLE_NAME=value`来定义变量。此外，我们还可以使用$加变量名来引用变量的值。
+
+**参数 Parameters**：
+
+我们可以在执行Shell脚本时，向脚本传递参数。脚本内获取参数的格式为：$n。其中，n代表一个数字，1为执行脚本的第一个参数，2为执行脚本的第二个参数，以此类推。
+
+此外，还有一些特殊字符代表一些特殊含义。
 
 **操作符 Operators**：
 
@@ -170,16 +178,20 @@ alias new_cmd='cmd'
 
 ```bash
 # if else fi
-if xxx
-then xxx
-elif xxx
-then xxx
-else xxx 
+if condition1
+then 
+    command1
+elif condition1
+then
+    command2
+else 
+    command3
 fi
 
 # while
-while xxx
-do xxx
+while condition
+do 
+    command
 done
 
 # for
