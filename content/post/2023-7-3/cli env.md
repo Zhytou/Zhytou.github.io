@@ -33,6 +33,10 @@ draft: false
 
 简单来说，可以把WSL想象成Windows自带的Linux虚拟机，但是它并不是默认开启的，需要先检测是否支持，然后再将其在设置中打开。具体步骤如下：
 
+- 重启电脑按住F10进入BIOS，确认开启虚拟化功能；
+- 控制面板-程序-启用或关闭Windows功能-开启“适用于Linux的Windows子系统”功能；
+- 前往微软商店，选择Linux发行版安装即可。
+
 ### Docker
 
 **Introduction**：
@@ -152,12 +156,12 @@ alias new_cmd='cmd'
 
 **操作符 Operators**：
 
-```bash
+```txt
 # Control operators:
 & && ( ) ; ;; | || <newline>
 
-           #Redirection operators:
-                 < > >| << >> <& >& <<- <>
+# Redirection operators:
+< > >| << >> <& >& <<- <>
 ```
 
 **函数 Functions**：
@@ -189,16 +193,32 @@ done
 下面我会写一些Shell脚本来演示上述功能。
 
 ```bash
-
 ```
 
 ### Prettifying
 
-作为一个开发者，美观的Shell但传统的Shell不仅功能有限（
+作为一个开发者，一个美观的Shell不仅能提高工作效率，还能让我们保持愉悦的心情，所以Shell的美化是很有必要的。
 
-**Oh-My-Zsh**：
+对于我而言，我主要使用Oh-My-Zsh和Oh-My-Posh这两种插件来分别美化Zsh和Powershell两个最常用的Shell。下面来介绍一下两者的配置方法。
 
-与**Oh-My-Posh**:
+**Setup For Oh-My-Zsh**：
+
+- 首先，使用以下命令`sh -c "$(wget -O- https://gitee.com/pocmon/mirrors/raw/master/tools/install.sh)"`安装Oh-My-Zsh；
+- 接着，修改.zshrc配置文件，更换zsh主题，具体方法如下：`ZSH_THEME="你想要的主题名称"`；
+- 最后，重启终端使设置生效。
+- 推荐一个还不错的主题Powerlevel10k。
+
+**Setup For Oh-My-Posh**：
+
+- 首先，在微软商店中下载Oh-My-Posh；
+- 其次，编辑powershell配置脚本（类似.bashrc或.bash_profile），在该脚本中添加以下指令`oh-my-posh init pwsh | Invoke-Expression`；
+- 接着，保存退出，使用`. $PROFILE`命令执行该脚本；
+  - 若PowerShell报错不允许执行任何脚本，则需要在管理员模式下执行以下命令`set-ExecutionPolicy RemoteSigned`解除紧张执行脚本的设置；
+  - 接着，使用`. $PROFILE`命令再次执行；
+- 然后，使用`Get-PoshThemes`命令，获取Oh-My-Posh支持的所有主题，
+- 选择一个你喜欢的主题，修改$PROFILE为以下内容`oh-my-posh init pwsh --config 'C:\Users\[Your Name]\AppData\Local\Programs\oh-my-posh\themes\[Theme Name].omp.json'| Invoke-Expression`；
+- 最后，再次执行$PROFILE，使配置生效。
+- 此外，可能还需要安装字体（可以前往[这里](https://www.nerdfonts.com/)寻找字体），才能保证显示正常。安装完成后，在终端设置-默认值-外观-字体中选择新下载的字体，即可正常显示。
 
 ### Remote Shell(SSH)
 
