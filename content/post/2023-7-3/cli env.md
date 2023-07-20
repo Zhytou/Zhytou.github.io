@@ -4,7 +4,7 @@ date: 2023-07-03T10:01:07+08:00
 draft: false
 ---
 
-随着Coding的时间越来越长，我接触到的工具也越来越多，也逐渐有了一套自己的工具包。这篇博客就记录了我对WSL、Docker、Shell、SSH、TMux和Vim等工具的学习和使用笔记以及一些环境配置。
+随着Coding的时间越来越长，我接触到的工具也越来越多，也逐渐有了一套自己的工具包。这篇博客就记录了我对WSL、Docker、Shell、SSH、TMux和Vim等工具的学习和使用笔记以及一些环境配置的方法。
 
 ## Virtual Machine & Containerization
 
@@ -59,7 +59,7 @@ Docker 是一种轻量级的虚拟化解决方案，可以将应用程序和其�
 
 ## Shell
 
-Shell是Unix/Linux操作系统下传统的用户和电脑的交互界面，是一种典型的命令行接口（Command Line Interface，CLI）程序。常见的Shell程序有Bourne Shell(sh)、Bourne Again Shell(bash)、Z Shell(zsh)等。
+接着，必须要介绍的工具就是Shell。它是Unix/Linux操作系统下传统的用户和电脑的交互界面，是一种典型的命令行接口（Command Line Interface，CLI）程序。常见的Shell程序有Bourne Shell(sh)、Bourne Again Shell(bash)、Z Shell(zsh)等。
 
 此外，我们有时也以Shell代指Shell编程语言（Shell Programming Language）。它是一门 “能够把用户指令翻译成系统调用” 的编程语言，而由Shell Language所编写的程序则被称为Shell脚本（Shell Scripts）。因此，Shell也可以理解成控制系统的脚本语言的解释器。
 
@@ -148,27 +148,112 @@ alias new_cmd='cmd'
 
 此外，Shell作为一门编程语言，也类似其他语言一样提供了运算符、参数、变量、函数、流控制等功能。下面介绍一些Shell作为一门编程语言的相关特性。
 
+**变量和参数 Variables & Parameters**：
+
 **操作符 Operators**：
+
+```bash
+# Control operators:
+& && ( ) ; ;; | || <newline>
+
+           #Redirection operators:
+                 < > >| << >> <& >& <<- <>
+```
 
 **函数 Functions**：
 
 **流控制 Flow Control**：
 
+```bash
+# if else fi
+if xxx
+then xxx
+elif xxx
+then xxx
+else xxx 
+fi
+
+# while
+while xxx
+do xxx
+done
+
+# for
+
+```
+
 更多更详细的介绍可以使用指令`man sh`来阅读sh的man page。
 
 ### Simple Usage
 
-下面我会介绍一些使用上述Shell功能的命令。
+下面我会写一些Shell脚本来演示上述功能。
+
+```bash
+
+```
 
 ### Prettifying
 
+作为一个开发者，美观的Shell但传统的Shell不仅功能有限（
+
 **Oh-My-Zsh**：
 
-**Oh-My-Posh**:
+与**Oh-My-Posh**:
 
 ### Remote Shell(SSH)
 
-SSH(Secure Shell)一个提供安全的远程登录和命令执行功能的安全协议。
+除了在本地使用Shell进行项目开发和调试，我们还常常需要在远程服务器上进行项目部署和运维。远程Shell（Remote Shell）也应运而生。
+
+而SSH(Secure Shell)正是一种实现安全远程Shell的方式。SSH是一种能够提供安全的远程登录和命令执行功能的安全协议，它的出现代替了Telnet以及其他非安全远程Shell。
+
+**Asymmetric Cryptography**：
+
+SSH使用非对称加密（Asymmetric Cryptography）来保证安全连接，与之相对的则是对称加密（Symmetric Cryptography）。二者的区别在于，前者加密和解密使用的密钥不同，加密使用公钥，解密则使用私钥；而后者则是加密解密使用同一密钥。
+
+除了SSH使用了非对称加密技术之外，还有用于实现互联网的HTTPS和电子邮件的SMTPS等安全协议也基于该加密技术。
+
+**Login Steps**：
+
+- 登录者向主机发送一个登录请求，附带登录者自己的公钥。
+- 主机收到请求后，会检查登录者的公钥是否在主机的authorized_keys文件中。
+- 如果在authorized_keys中，则登录成功；反之，则登录失败。
+
+**Password Login vs Public Key Login**：
+
+使用SSH协议登录远程主机一般分成口令登录（Password Login）和公钥登录（Public Key Login）。其中，前者依靠口令，也就是密码验证登录者的身份；后者则是利用登录者公钥验证身份。
+
+具体来说，公钥登录就是用户将自己的公钥储存在远程主机上。登录的时候，远程主机会向用户发送一段随机字符串，用户用自己的私钥加密后，再发回来。远程主机用事先储存的公钥进行解密，如果成功，就证明用户是可信的，直接允许登录，不再要求密码。
+
+对于口令登录来说，它的麻烦之处就是需要每次输入密码。特别是，当你第一次登录远程主机时，系统甚至会给出下面的提示：
+
+```txt
+　　The authenticity of host 'host (12.18.429.21)' can't be established.
+
+　　RSA key fingerprint is 98:2e:d7:e0:de:9f:ac:67:28:c2:42:2d:37:16:58:4d.
+
+　　Are you sure you want to continue connecting (yes/no)?
+```
+
+这段话的意思是，无法确认host主机的真实性，只知道它的公钥指纹，问你还想继续连接吗？
+
+当你成功连接一次之后，这个警告就不再出现了。因为这台远程主机的信息已经被保存在了文件$HOME/.ssh/known_hosts之中。下次再连接这台主机，系统就会认出它的公钥已经保存在本地了，从而跳过警告部分，直接提示输入密码。
+
+**Simple Usage**：
+
+```bash
+# 生成密钥对
+# -t rsa/dsa 指定要创建的密钥类型。
+# -C comment 提供注释
+ssh-keygen -t rsa -C "xxx@gmail.com"
+
+# 将公钥传送到远程主机上
+ssh-copy-id username@remote_host
+
+# 登录
+ssh username@remote_host
+```
+
+除了可以使用Linux中的ssh命令来实现远程Shell之外，还可以使用一些SSH客户端，比如：PuTTY、WinSCP等。
 
 ## Terminal & Job Control
 
@@ -223,4 +308,11 @@ SSH(Secure Shell)一个提供安全的远程登录和命令执行功能的安全
 ## Reference
 
 - [MIT-The Missing Semester of Your CS Education](https://missing.csail.mit.edu/2020/command-line/)
+
+**Shell**：
+
 - [NJU-OS笔记 13 Shell](https://zhytou.top/post/2023-6-19/nju-os/)
+
+**SSH**：
+
+- [阮一峰 SSH原理与运用](https://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html)
