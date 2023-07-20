@@ -281,6 +281,18 @@ ssh username@remote_host
 
 ### Use Windows Terminal
 
+如果你的电脑是Windows，那么我真的非常建议你使用Windows Terminal作为你的终端应用，因为它真的是好看又好用。
+
+**Introduction**：
+
+Windows Terminal是一个第三方的命令行终端，它是一个现代、可配置的终端应用。它最重要的特点就是，可以兼容多种Shell，包括：Powershell、CMD、WSL以及Azure Cloud Shell等。
+
+此外，它还有丰富的UI界面，支持多种窗体结构、自定义背景、颜色、透明度、调整布局等。
+
+**Setup**：
+
+Windows终端的安装方法非常简单，直接到微软商店下载安装即可。
+
 **Shortcuts**:
 
 ![windows_terminal](https://zhytou.github.io/post/2023-7-3/windows_terminal.png)
@@ -320,6 +332,8 @@ ssh username@remote_host
 我们可以参考这个[网站](https://dotfiles.github.io/)了解如何个性化的配置自己的点文件，也可以参考[他人的配置文档](https://github.com/search?o=desc&q=dotfiles&s=stars&type=Repositories)进行修改。
 
 ## Other
+
+### Package Management
 
 ### Vim
 
