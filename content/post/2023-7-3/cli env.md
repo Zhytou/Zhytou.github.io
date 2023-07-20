@@ -29,8 +29,6 @@ draft: true
 
 适用于Linux的Windows子系统（Windows Subsystem for Linux，WSL）是一个为了在Windows操作系统上能够原生运行Linux二进制可执行文件（ELF格式）的兼容层。
 
-**功能**：
-
 **Setup**：
 
 简单来说，可以把WSL想象成Windows自带的Linux虚拟机，但是它并不是默认开启的，需要先检测是否支持，然后再将其在设置中打开。具体步骤如下：
@@ -39,19 +37,15 @@ draft: true
 
 **Introduction**：
 
+Docker 是一种轻量级的虚拟化解决方案，可以将应用程序和其依赖项打包成一个可移植的容器，然后在不同的环境中运行。Docker 容器包含了运行应用程序所需的所有组件，包括代码、运行时、系统工具、系统库等，因此可以确保应用程序在不同的环境中都能够稳定运行。
+
 **Notion**：
 
-镜像 Image：
+镜像（Image）是一个只读的模板，用于创建 Docker 容器。比如官方镜像 ubuntu:16.04 就包含了完整的一套 Ubuntu16.04 最小系统的 root 文件系统。
 
-- Docker 镜像就相当于是一个 root 文件系统。比如官方镜像 ubuntu:16.04 就包含了完整的一套 Ubuntu16.04 最小系统的 root 文件系统。
+容器（Container）是 Docker 运行时的实例。它和镜像的关系就像是面向对象程序设计中的类和实例一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。
 
-容器 Container：
-
-- 镜像和容器的关系，就像是面向对象程序设计中的类和实例一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。
-
-仓库 Repository：
-
-- 仓库可看成一个代码控制中心，用来保存镜像。
+仓库（Repository）是用于存储 Docker 镜像的地方，可以理解为一个代码库。
 
 **Setup**：
 
@@ -65,11 +59,31 @@ draft: true
 
 ## Shell
 
-Shell是Shell Language的解析器
+Shell是Unix/Linux操作系统下传统的用户和电脑的交互界面，是一种典型的命令行接口（Command Line Interface，CLI）程序。
+
+此外，我们有时也以Shell代指Shell编程语言（Shell Programming Language）。它是一门 “能够把用户指令翻译成系统调用” 的编程语言，而由Shell Language所编写的程序则被称为Shell脚本（Shell Scripts）。因此，Shell也可以理解成控制系统的脚本语言的解释器。
 
 补充：你可以阅读这篇[实验指南](https://jyywiki.cn/OS/2022/labs/M4)来了解如何实现一个类似Python Shell的交互式Shell。
 
+### Basic Functions
+
+Shell提供了很多功能：
+
+**重定向 Redirections**：
+
+**别名 Aliases**：
+
+**管道 Pipeline**：
+
+此外，Shell作为一门编程语言，也类似其他语言一样提供了运算符、参数、变量、函数、流控制等功能。
+
 ### Simple Usage
+
+下面介绍一些Shell最常见的功能和命令。
+
+**GNU Tools**：
+
+更多介绍可以阅读我的另一篇博客[一文了解GNU Tools](https://zhytou.top/post/2023-6-27/gnu-tools/)。
 
 **Hard Link**：
 
