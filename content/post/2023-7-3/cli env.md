@@ -57,9 +57,11 @@ Docker 是一种轻量级的虚拟化解决方案，可以将应用程序和其�
 
 除了上面提到的WSL和Docker两种最重要的虚拟化工具，我在这里补充一些其他常用的软件或工具：
 
-**BusyBox**：嵌入式 Linux 的瑞士军刀
+**BusyBox**：嵌入式Linux的瑞士军刀，提供了大量Unix/Linux命令，但将其都合并在了一个可执行文件中。
 
-**Virtual Box**：虚拟机软件
+**MSYS2**：类似BusyBox提供了很多常用Unix/Linux工具集，但能够运行在Windows。
+
+**Virtual Box**：一款免费的开源虚拟机软件。
 
 ## Shell
 
@@ -160,7 +162,11 @@ alias new_cmd='cmd'
 
 我们可以在执行Shell脚本时，向脚本传递参数。脚本内获取参数的格式为：$n。其中，n代表一个数字，1为执行脚本的第一个参数，2为执行脚本的第二个参数，以此类推。
 
-此外，还有一些特殊字符代表一些特殊含义。
+此外，还有一些特殊字符代表一些特殊含义，具体如下：
+
+- $#
+- $$
+- $!
 
 **操作符 Operators**：
 
@@ -346,6 +352,57 @@ Windows终端的安装方法非常简单，直接到微软商店下载安装即�
 ## Other
 
 ### Package Management
+
+除了上面提到的所有工具和功能之外，我还想特别把包管理工具拎出来介绍一下，因为在WSL或其他虚拟机上安装包是我们经常使用的功能。
+
+以Linux/Unix系统为例，Ubuntu就有apt作为包管理工具，CentOS则有yum作为其默认包管理工具。至于MacOS和Windows也都有比较流行的第三方包管理工具，比如MacOS有homebrew，Windows有Chocolatey、scoop和winget等。
+
+**Advanced Packaging Tool**：
+
+下面重点介绍一下apt。apt（Advanced Packaging Tool）是一款基于dpkg（Debian Package Management）的包管理工具。其中，dpkg只负责管理.deb软件包文件，无法解决软件包之间的依赖性关系。而apt则基于dpkg，通过连接到软件源，可以安装和管理多个软件包以及解决依赖性关系。
+
+```bash
+# 安装软件包
+sudo apt install
+
+# 删除已安装的软件包
+sudo apt remove
+
+# 更新软件列表和索引
+sudo apt update
+
+# 升级所有已安装的包到可用的最新版本
+sudo apt upgrade
+
+# 清理不再使用的依赖和库文件
+sudo apt autoremove
+```
+
+此外，如果使用apt下载软件包速度很慢，可以使用以下命令添加国内镜像源：
+
+```bash
+# 添加源
+sudo apt-add-repository "deb http://mirrors.aliyun.com/ubuntu/ $(lsb_release -sc) main restricted universe multiverse"
+
+# 更新源
+sudo apt update
+```
+
+**Use Wget/Curl To Download File**：
+
+值得注意的是，对于有些无法使用包管理工具进行下载的软件包，我们常常使用wget/curl命令下载相应文件。
+
+事实上，wget和curl均是Linux下常用的文件下载工具。其中，wget更侧重于下载大量文件，所以支持递归和后台下载等功能；而curl 更侧重于发送特定的HTTP请求，所以支持更丰富的选项控制请求。
+
+**Programming Language Package Management**：
+
+此外，很多现代语言也和其包管理工具深度绑定，比如：Rust的cargo、Javascript的npm、Golang的go以及Python的pip等。一些相对老旧的语言也推出了其包管理工具，比如：C++的vcpkg、Java的maven等。这些包管理工具主要有以下几个重要作用：
+
+- 简化依赖管理，开发者不必手动安装和管理所有依赖；
+- 更新依赖，自动查找并升级依赖的新版本；
+- 解决依赖冲突，自动管理依赖关系。
+
+### Regular Expression
 
 ### Vim
 
