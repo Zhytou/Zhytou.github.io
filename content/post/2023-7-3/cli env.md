@@ -349,6 +349,8 @@ Windows终端的安装方法非常简单，直接到微软商店下载安装即�
 
 我们可以参考这个[网站](https://dotfiles.github.io/)了解如何个性化的配置自己的点文件，也可以参考[他人的配置文档](https://github.com/search?o=desc&q=dotfiles&s=stars&type=Repositories)进行修改。
 
+### Other Terminal Tools
+
 ## Other
 
 ### Package Management
@@ -430,6 +432,56 @@ sudo apt update
 
 ### Vim
 
+Vim是一款Unix/Linux系统上默认支持的优秀且可扩展的文本编辑器。尽管有VSCode、Notepad++等众多好用的文本编辑器，但Vim还是具有学习的必要性，因为很多时候一些简单的修改或者查看需求使用其他编辑器有些杀鸡用牛刀了，而且也存在不少情况只能使用Vim进行编辑。
+
+**Vim Mode**：
+
+首先，我们需要了解到Vim的三种模式，如下图。
+
+![vim模式](http://cn.linux.vbird.org/linux_basic/0310vi_files/vi-mode.gif)
+
+**Vim Shortcuts**：
+
+在掌握最基本的编辑输入功能之后，我们还需要了解一些其他常用功能，包括：跳转、复制、剪切、搜索、替换和删除等。
+
+跳转:
+
+- 行开始:0
+- 行结束:$
+- 文件开始:gg
+- 文件结束:G
+- 上一页:ctrl + b
+- 下一页:ctrl + f
+
+复制、剪切、粘贴:
+
+- 复制:yy
+- 剪切:dd
+- 粘贴:p
+
+搜索:
+
+- 搜索关键字: /关键词
+- 上个搜索结果:n
+- 下个搜索结果:N
+
+删除:
+
+- 删除光标处字符:x
+- 删除光标至行尾字符:D
+- 删除整行:dd
+
+退出:
+
+- 保存并退出: wq
+- 不保存直接退出: :q!
+
+**Neovim**：
+
+Neovim是2015年基于Vim 7.4.769版本fork出来的一个独立项目。与Vim相比，它们都使用类似的命令模式，且支持丰富的插件。但Neovim支持多线程执行和GUI，且使用Lua引擎。
+
+总的来说，如果想在Linux系统上获取类似VSCode的编辑体验，可以使用Neovim。
+
 ### RTFM
 
 在学习计算机的过程中，相信大家一定都听说过RTFM（Read The Fucking Manual）或者STFW（ Search The Fucking Web）。那具体该如何阅读系统提供的手册呢？如何快速找到自己希望的信息呢？
@@ -483,6 +535,7 @@ man -k <关键词>
 ## Reference
 
 - [MIT-The Missing Semester of Your CS Education](https://missing.csail.mit.edu/2020/command-line/)
+- [鸟哥Linux私房菜](http://cn.linux.vbird.org/linux_basic/linux_basic.php)
 
 **Shell**：
 
@@ -491,3 +544,7 @@ man -k <关键词>
 **SSH**：
 
 - [阮一峰 SSH原理与运用](https://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html)
+
+**RegEx**：
+
+- [glob wiki](https://en.wikipedia.org/wiki/Glob_(programming))
