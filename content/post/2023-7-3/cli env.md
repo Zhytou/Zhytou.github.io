@@ -108,6 +108,8 @@ Shell环境变量一些可用于Shell脚本和命令执行中的信息。常见�
 
 Shell重定向是Shell的一种强大特性，它可以将一个命令的输出重定向到另一个文件或者另一个命令的输入。
 
+补充一个常用的重定向目的地`/dev/null`。当命令输出被重定向到它，那么所有输出都会被丢弃；而尝试将其作为输入时，则什么都读取不到。
+
 ```bash
 # 将cmd的标准输出写入file.txt
 cmd > file.txt
@@ -156,7 +158,9 @@ alias new_cmd='cmd'
 
 **变量 Variables**：
 
-在Shell脚本中，我们可以使用`VARIABLE_NAME=value`来定义变量。此外，我们还可以使用$加变量名来引用变量的值。
+在Shell脚本中，我们可以使用`VARIABLE_NAME=value`来定义变量。
+
+此外，我们还可以使用$加变量名来引用变量的值。比如，如果执行`for file in $(ls)`，Shell首先将执行ls命令，然后遍历得到的这些返回值。
 
 **参数 Parameters**：
 
@@ -164,45 +168,64 @@ alias new_cmd='cmd'
 
 此外，还有一些特殊字符代表一些特殊含义，具体如下：
 
-- $#
-- $$
-- $!
+- `$#`：参数个数
+- `$$`：当前脚本进程号
+- `$@`：所有参数
 
-**操作符 Operators**：
+**运算符 Operators**：
 
-```txt
-# Control operators:
-& && ( ) ; ;; | || <newline>
+类似其他编程语言，Shell脚本语言也支持多种运算符，包括：
 
-# Redirection operators:
-< > >| << >> <& >& <<- <>
-```
+- 算数运算符
+  - `+`加法
+  - `-`减法
+  - `*`乘法
+  - `/`除法
+  - `%`取余
+  - `=`赋值
 
-**函数 Functions**：
+- 关系运算符
+  - `-eq`判断是否相等
+  - `-ne`判断是否不相等
+  - `-gt`判断是否大于
+  - `-lt`判断是否小于
+  - `-ge`判断是否大于等于
+  - `-le`判断是否小于等于
+
+- 逻辑运算符
+  - `&&`逻辑与
+  - `||`逻辑或
+
+- 字符串运算符
+- 文件测试运算符
 
 **流控制 Flow Control**：
 
 ```bash
 # if else fi
-if condition1
-then 
+if condition1; then {
     command1
-elif condition1
-then
+} elif condition1; then {
     command2
-else 
+}
+else {
     command3
-fi
+} fi
 
 # while
-while condition
-do 
+while condition; do { 
     command
-done
-
-# for
-
+} done
 ```
+
+在此处再补充一下Shell中括号的区别，具体如下：
+
+- `[]` 测试命令退出状态
+- `()` 执行命令，获取输出
+- `[[` 进行字符串和数学测试
+- `((` 进行数学计算
+
+其中，前两者是Shell最基本的测试方法,可以兼容大部分Shell。而后两者则只是Bash的扩展，只在Bash中可用。
 
 更多更详细的介绍可以使用指令`man sh`来阅读sh的man page。
 
@@ -211,6 +234,19 @@ done
 下面我会写一些Shell脚本来演示上述功能。
 
 ```bash
+# 批量压缩文件夹
+for file in /home/username/*; 
+do 
+    zip -r ${file}.zip $file
+done
+
+# 判断数据库是否启动
+ps -ef | grep mysql
+if [ $? -eq 0 ]; then
+    echo "MySQL is running."
+else
+    echo "MySQL is not running!"
+fi
 ```
 
 ### Prettifying
@@ -351,6 +387,10 @@ Windows终端的安装方法非常简单，直接到微软商店下载安装即�
 
 ### Other Terminal Tools
 
+**iTerm**：Mac OS平台上很热门的终端模拟器。功能非常强大，可自定义性很高。支持分屏、标签等。
+
+**Xterm**：终端模拟器开山鼻祖。功能非常基础，但配置简单。
+
 ## Other
 
 ### Package Management
@@ -410,9 +450,9 @@ sudo apt update
 
 目前，很多编程语言都提供了正则表达式支持，用于字符串处理。
 
-**Wildcard**：
+**通配符 Wildcard**：
 
-通配符模式（Wildcard Pattern）指的是包含符“?”、“*”或“[”之一的字符串，它被大量运用于文件名和路径匹配。
+通配符（Wildcard）指的是符号“?”、“*”或“[”之一。在Unix/Linux中，我们常用包含通配符的字符串进行文件名和路径匹配。
 
 与正则表达式相比，它只提供粗粒度的匹配，语法更简单。基本可以算是正则表达式语法的子集，其常见用法包括：
 
@@ -420,13 +460,13 @@ sudo apt update
 - `?` 匹配单个字符
 - `[abc]` 匹配一个列表里的字符
 
-此外，通配符匹配还被运用于点文件中，比如：.gitignore中使用`*.pdf`忽略所有pdf文件，使其不被版本控制。
+此外，通配符还被运用于点文件中，比如：.gitignore中使用`*.pdf`忽略所有pdf文件，使其不被版本控制。
 
-**Globing**：
+**通配 Globbing**：
 
 早期Unix系统中有一个有一个程序/etc/glob可以使用通配符进行模式匹配。之后，这个功能就内置在了Shell中。
 
-换句话说，Globing就是指使用通配符在Shell中进行文件名和路径的匹配，比如：`rm *.txt`命令就会删除当前路径下的所有txt文件。
+换句话说，通配（Globbing）就是指使用含通配符的字符串在Shell中进行文件名和路径的匹配，比如：`rm *.txt`命令就会删除当前路径下的所有txt文件。
 
 如今，libc中还有一个glob函数可以实现类似的功能。
 
