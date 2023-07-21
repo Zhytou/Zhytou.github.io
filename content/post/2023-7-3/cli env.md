@@ -404,7 +404,64 @@ sudo apt update
 
 ### Regular Expression
 
+正则表达式(Regular Expression，RegEx)是一个完整且强大的模式匹配语法。
+
+我们除了可以在Unix/Linux命令行中使用正则表达式之外，还可以在Dotfiles中使用，比如：.gitignore就可以使用正则表达式忽略不想版本控制的文件。
+
+此外，很多编程语言都提供了正则表达式支持，用于字符串处理。
+
+**Globing**：
+
+事实上，我们更频繁使用的模式匹配语法只是正则表达式中的一小部分，也被称为Glob模式。
+
+**Wildcard Matching**：
+
+通配符匹配（Wildcard Matching）
+
+**Fnmatch**：
+
 ### Vim
+
+### RTFM
+
+在学习计算机的过程中，相信大家一定都听说过RTFM（Read The Fucking Manual）或者STFW（ Search The Fucking Web）。那具体该如何阅读系统提供的手册呢？如何快速找到自己希望的信息呢？
+
+事实上，Unix/Linux提供了man、info和help等帮助工具。其中，又以man命令最为常用。man命令用于查看系统手册页，提供了大量命令和函数的使用帮助。
+
+一般来说，标准手册页由以下几个部分组成，我们可以根据需要选择性的阅读。
+
+- NAME: 名称和简要描述
+- SYNOPSIS: 命令格式或函数原型
+- DESCRIPTION: 详细描述
+- OPTIONS: 可选参数
+- FILES:相关文件
+- SEE ALSO: 相关手册页
+- AUTHOR: 作者信息
+
+```bash
+# 查看手册页面
+man <页面名>
+
+# 查看指定段号的页面
+man <段号> <页面名>
+
+# 搜索包含关键词的手册页
+man -k <关键词>
+```
+
+比如，手册中建议`see glob(7)`，那么我们就可以使用`man 7 glob`命令来查看其相应的手册。
+
+其中，参数段号一般是指POSIX定义的手册页面分区，主要包括:
+
+- 1 - 用户命令
+- 2 - 系统调用
+- 3 - 库函数
+- 4 - 特殊文件
+- 5 - 文件格式
+- 6 - 游戏
+- 7 - 宏包和规范
+
+除此之外，手册页支持使用/加关键词搜索页面内容。
 
 ### CI
 
