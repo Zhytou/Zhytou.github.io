@@ -570,7 +570,11 @@ man -k <关键词>
 
 除此之外，手册页支持使用/加关键词搜索页面内容。
 
-### CI
+### CI/CD
+
+CI(Continuous Integration): 持续集成。通过自动构建、测试等方式,持续集成和验证代码。CD(Continuous Delivery): 持续交付。持续构建、测试和将应用软件交付给部署环境。
+
+CI/CD本质上是一种自动化、持续迭代的开发模式。
 
 ## Reference
 
