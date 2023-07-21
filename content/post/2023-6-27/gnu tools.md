@@ -156,13 +156,50 @@ Make是一款用于自动化构建程序的工具，可以根据目标文件的�
 
 ### Makefile
 
-Makefile是Make工具使用的配置文件，其包含了一系列规则，用于描述目标文件的依赖关系和构建方法。
-
-Makefile中的规则通常包含以下几个部分：
+Makefile是Make工具使用的配置文件，其包含了一系列规则，用于描述目标文件的依赖关系和构建方法。它的语法与Shell脚本非常类似。一般来说，一个Makefile文件中的规则会包含以下几个部分：
 
 - 目标(Target)：指定要构建的目标文件的名称。目标可以是可执行文件、库文件或其他文件。
+  - 伪造目标(Phony Target)：与明确的构建目标相比，伪造目标一般并非真实存在的文件。当使用Make命令构建伪造目标时，操作系统只会执行其指定的一些列目标，而忽略该文件，即使它真的存在。这种技术一般用于清理中间文件，比如：设置clean作为伪造目标。当执行`make clean`命令时，即使当前目录真的有一个clean文件存在，系统也会执行clean目标指定的一些规则。
 - 依赖(Prerequisites)：指定构建目标文件所需要的源文件、头文件或其他依赖文件。
 - 命令(Command)：指定构建目标文件的具体命令，通常是编译源文件、链接目标文件等操作。
+
+```Makefile
+# 变量定义
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+
+# 默认目标
+all: myprogram
+
+# 依赖关系和命令
+myprogram: main.o utils.o
+$(CC) $(CFLAGS) -o $@ $^
+
+main.o: main.c utils.h
+$(CC) $(CFLAGS) -c $<
+
+utils.o: utils.c utils.h
+$(CC) $(CFLAGS) -c $<
+
+# 清理目标（伪造目标）
+.PHONY: clean
+clean:
+rm -f myprogram *.o
+```
+
+此处再补充一下上面出现的通配符含义：
+
+- $@：表示当前规则中的目标文件名。
+- $<：表示当前规则中的第一个依赖文件名。
+- $^：表示当前规则中的所有依赖文件名。
+
+### CMake
+
+事实上，在大部分时间我们都不会直接去写Makefile文件，尤其是面对大型项目，我们更习惯于使用另一种工具去帮我们生成MakeFile，再使用Make进行编译。其中，最常用的一种工具就是CMake。
+
+CMake（Cross-platform Make）是一个跨平台的构建自动化工具，可以帮助软件开发者自动生成不同平台下的构建系统文件。此外，CMake不光可以使用Make作为其构建工具，也可以结合Ninja、Visual Studio、QT等使用。
+
+使用CMake，我们可以在一个统一的CMakeLists.txt文件中描述项目的所有构建过程，包括源代码文件、依赖库、编译选项、链接选项等，而不需要为不同的构建系统编写不同的文件。CMake会根据CMakeLists.txt文件自动生成相应的构建系统文件，从而实现跨平台的构建。
 
 ## Coreutils
 
@@ -184,4 +221,5 @@ Binutils是GNU项目的一个组成部分，包括了一系列用于操作目标
 ## References
 
 - [Debugging Under Unix: gdb Tutorial](https://www.cs.cmu.edu/~gilpin/tutorial/)
+- [GNU Make](https://www.gnu.org/software/make/)
 - [GNU Binutils](https://www.gnu.org/software/binutils/)
