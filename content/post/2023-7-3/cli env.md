@@ -527,7 +527,7 @@ Vim是一款Unix/Linux系统上默认支持的优秀且可扩展的文本编辑�
 
 首先，我们需要了解到Vim的三种模式，如下图。
 
-![vim模式](http://cn.linux.vbird.org/linux_basic/0310vi_files/vi-mode.gif)
+![vim模式](https://cs61a.org/articles/vim/assets/vim-modes.png)
 
 **Vim Shortcuts**：
 
