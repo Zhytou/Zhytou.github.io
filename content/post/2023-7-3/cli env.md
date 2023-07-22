@@ -14,9 +14,9 @@ draft: false
 
 首先，一定要介绍的是集成开发环境（Integrated Development Environment，IDE）。这几乎是所有程序员最开始写代码必用的工具之一，甚至是唯一。它是一种辅助程序开发人员开发软件的应用软件，在开发工具内部就可以辅助编写源代码文本、并编译打包成为可用的程序，有些甚至可以设计图形接口。常见的IDE，包括：微软的Visual Studio、JetBrains全家桶等等。
 
-### Virtual Machine & Containerization
+### Virtual Machine & Container
 
-除了使用IDE进行开发之外，随着我们Coding的深入，我们往往会倾向于使用更轻便的工具替代笨重但大而全的IDE工具。比如，在Linux环境中，使用CMake+GCC的开发方法（或者在Windows环境中，使用CMake+MinGW的组合）。此外，由于我们的电脑一般是Windows，但课程实验往往要求Unix/Linux的开发环境，此时我们就需要使用虚拟化技术来模拟目标环境。
+除了使用IDE进行开发之外，随着我们Coding的深入，我们往往会倾向于使用更轻便的工具替代笨重但大而全的IDE工具。比如，在Linux环境中，使用Vim+CMake+GCC的开发方法（或者在Windows环境中，使用VSCode+CMake+MinGW的组合）。此外，由于我们的电脑一般是Windows，但课程实验往往要求Unix/Linux的开发环境，此时我们就需要使用虚拟化技术来模拟目标环境。
 
 除此之外，使用虚拟化技术还有如下好处：
 
@@ -25,7 +25,7 @@ draft: false
 - 更好的隔离性。虚拟机相互隔离,不会相互影响。如果一个虚拟机宕机,也不会影响其他虚拟机。
 - 更方便的测试和开发。可以快速部署虚拟机用于软件测试和开发。
 
-而虚拟机（Virtual Machine，VM）和容器化（Containerization）是两种重要的虚拟化技术。二者区别如下：
+而虚拟机（Virtual Machine，VM）和容器（Container）则是两种重要的虚拟化技术。二者区别如下：
 
 ![vm vs container](https://zhytou.github.io/post/2023-7-3/vm_vs_container.png)
 
@@ -49,7 +49,7 @@ draft: false
 
 **Introduction**：
 
-Docker 是一种轻量级的虚拟化解决方案，可以将应用程序和其依赖项打包成一个可移植的容器，然后在不同的环境中运行。Docker 容器包含了运行应用程序所需的所有组件，包括代码、运行时、系统工具、系统库等，因此可以确保应用程序在不同的环境中都能够稳定运行。
+Docker是一种轻量级的虚拟化解决方案，可以将应用程序和其依赖项打包成一个可移植的容器，然后在不同的环境中运行。Docker容器包含了运行应用程序所需的所有组件，包括系统工具、系统库等，因此可以确保应用程序在不同的环境中都能够稳定运行。
 
 **Notion**：
 
@@ -60,6 +60,8 @@ Docker 是一种轻量级的虚拟化解决方案，可以将应用程序和其�
 仓库（Repository）是用于存储Docker镜像的地方，可以理解为一个代码库。
 
 **Setup**：
+
+对于Windows操作系统，我们可以直接下载Docker Desktop软件。相比Docker命令，它实际上就是带有图形界面的Docker工具。
 
 ### Other Tools
 
@@ -79,9 +81,11 @@ Docker 是一种轻量级的虚拟化解决方案，可以将应用程序和其�
 
 **Implement Your Own Shell Or CLI Tools**：
 
-下面这篇[实验指南](https://jyywiki.cn/OS/2022/labs/M4)描述了如何实现一个类似Python的交互式Shell。此外，也可以使用Golang语言以及其Cobra库实现CLI工具，比如一个[小例子](https://github.com/Zhytou/simple-cli)。
+这里补充一些实现Shell以及CLI工具的参考资料。
 
-### Basic Functions
+首先是这篇南京大学操作系统课程的MiniLab4[实验指南](https://jyywiki.cn/OS/2022/labs/M4)，它描述了如何实现一个类似Python的交互式Shell。此外，也可以使用Golang语言以及其Cobra库实现CLI工具，比如我之前用Cobra写的一个[小玩意](https://github.com/Zhytou/simple-cli)。
+
+### Shell Basic Functions
 
 Shell提供了很多功能和特性，下面将着重介绍其中最重要和常见的几个。
 
@@ -89,11 +93,11 @@ Shell提供了很多功能和特性，下面将着重介绍其中最重要和常
 
 首先，Shell最基础也是最重要的功能——执行命令。一般来说，Shell中可执行命令分成Shell函数、Shell内置命令和普通可执行程序三类。
 
-其中，最常见的就是普通可执行程序，以我们所常用的ls、grep、mv等来自[GNU Coreutils](https://www.gnu.org/software/coreutils/)核心工具集的命令为例，它们实际上就是一组默认安装在Linux系统的程序。更多有关GNU Tools的介绍可以阅读我的另一篇博客[一文了解GNU Tools](https://zhytou.top/post/2023-6-27/gnu-tools/)。
+其中，最常见的就是普通可执行程序，以我们常用的ls、grep、mv等来自[GNU Coreutils](https://www.gnu.org/software/coreutils/)核心工具集的命令为例，它们实际上就是一组默认安装在Linux系统的程序。更多有关GNU Tools的介绍可以阅读我的另一篇博客[一文了解GNU Tools](https://zhytou.top/post/2023-6-27/gnu-tools/)。
 
-除此之外，我们自己编写的可执行程序也可以使用Shell来执行，方法就是使用绝对路径或相对路径调用该程序。此外，以cd、pwd、alias等为代表的Shell内置命令也是非常常见。
+除此之外，我们自己编写的可执行程序也可以使用Shell来执行，方法就是使用绝对路径或相对路径调用该程序。此外，以cd、pwd、alias等为代表的Shell内置命令也能够在Shell中被执行。
 
-值得注意的是，有时候使用Shell执行命令也会出现错误。其中，除了名称或参数调用错误之外，最常见的就是未赋予可执行权限和无法查找到指定命令。前者可以使用chmod命令赋予相应权限，后者则涉及到Shell执行命令的流程。一般来说，Shell执行命令的大致流程是:
+值得注意的是，有时候使用Shell执行命令也会出现错误。其中，除了命令名称或参数调用输入错误之外，最常见的就是未赋予命令可执行权限和无法查找到指定命令。前者可以使用chmod命令赋予相应权限，后者则涉及到Shell执行命令的流程，也就是:
 
 - 将用户输入的命令解析为命令名称和参数。
 - 查找命令名称对应的可执行文件名。
@@ -103,20 +107,17 @@ Shell提供了很多功能和特性，下面将着重介绍其中最重要和常
 
 **环境变量 Environment Variables**：
 
-Shell环境变量一些可用于Shell脚本和命令执行中的信息。常见的Shell环境变量有：
+Shell环境变量是一些可用于Shell脚本和命令执行中的信息。比如，某路径没有添加到PATH中，那么该路径下的命令就必须使用绝对路径或相对路径调用。除了代表可执行文件的搜索路径的PATH之外，常见的Shell环境变量还有：
 
-- PATH:可执行文件的搜索路径
 - HOME:用户主目录
 - SHELL:当前使用的Shell程序
 - USER:当前用户名称
 
-此外，我们可以使用export或env命令查看或设置当前Shell的环境变量。
-
-值得注意的是，使用export设置Shell环境变量只会对当前Shell进程有效。若希望长期修改某环境变量，则应该去修改相应Shell配置文件，或者修改操作系统的环境变量。因为，Shell在初始化时会继承操作系统的所有环境变量。
+此外，我们可以使用export或env命令查看或设置当前Shell的环境变量。值得注意的是，使用export设置Shell环境变量只会对当前Shell进程有效。若希望长期修改某环境变量，则应该去修改相应Shell配置文件，或者修改操作系统的环境变量。因为，Shell在初始化时会继承操作系统的所有环境变量。
 
 **重定向 Redirections**：
 
-Shell重定向是Shell的一种强大特性，它可以将一个命令的输出重定向到另一个文件或者另一个命令的输入。
+Shell重定向是Shell的又一种强大特性，它可以将一个命令的输出重定向到另一个文件或者另一个命令的输入。
 
 补充一个常用的重定向目的地`/dev/null`。当命令输出被重定向到它，那么所有输出都会被丢弃；而尝试将其作为输入时，则什么都读取不到。
 
@@ -153,18 +154,20 @@ cmd1 | cmd2
 
 **别名 Aliases**：
 
-Shell别名允许我们使用更简短或者更容易记忆的命令代替完整的命令。
+Shell别名允许我们使用更简短或者更容易记忆的命令代替完整的命令。比如，在bash中我们可以使用`ll`命令代替`ls -alF`，因为在.bashrc中默认有一行`alias ll='ls -alF'`。
 
 ```bash
 # 将cmd命名为new_cmd
 alias new_cmd='cmd'
 ```
 
-此外，还有两种与Shell别名类似的命令我想特别强调一下。首先是使用mv命令重命名文件，它和alias的不同之处在于mv 真正地改变文件的名字，而alias不会修改原文件。
+此外，还有两种与Shell别名类似的命令我想特别强调一下。首先是使用mv命令重命名文件，它和alias的不同之处在于mv是真正改变文件的名字，而alias不会修改原文件。
 
 其次是使用ln命令符号链接文件，它和alias的不同之处在于ln 创建了一个实际的链接文件，其它程序都可以读取和使用，而alias定义的别名只对Shell有效。
 
-此外，Shell作为一门编程语言，也类似其他语言一样提供了运算符、参数、变量、函数、流控制等功能。下面介绍一些Shell作为一门编程语言的相关特性。
+### Shell Language Syntax
+
+此外，Shell作为一门编程语言，也和其他语言一样提供了运算符、参数、变量、函数、流控制等功能。下面介绍一些Shell作为一门编程语言的相关特性。
 
 **变量 Variables**：
 
@@ -207,6 +210,7 @@ alias new_cmd='cmd'
   - `||`逻辑或
 
 - 字符串运算符
+
 - 文件测试运算符
 
 **流控制 Flow Control**：
@@ -235,9 +239,7 @@ while condition; do {
 - `[[` 进行字符串和数学测试
 - `((` 进行数学计算
 
-其中，前两者是Shell最基本的测试方法,可以兼容大部分Shell。而后两者则只是Bash的扩展，只在Bash中可用。
-
-更多更详细的介绍可以使用指令`man sh`来阅读sh的man page。
+其中，前两者是Shell最基本的测试方法,可以兼容大部分Shell。而后两者则只是Bash的扩展，只在Bash中可用。更多详细介绍可以使用指令`man sh`来阅读相关手册。
 
 ### Simple Usage
 
@@ -270,14 +272,14 @@ fi
 - 首先，使用以下命令`sh -c "$(wget -O- https://gitee.com/pocmon/mirrors/raw/master/tools/install.sh)"`安装Oh-My-Zsh；
 - 接着，修改.zshrc配置文件，更换zsh主题，具体方法如下：`ZSH_THEME="你想要的主题名称"`；
 - 最后，重启终端使设置生效。
-- 推荐一个还不错的主题Powerlevel10k。
+- 此外，再推荐一个还不错的主题[Powerlevel10k](https://github.com/romkatv/powerlevel10k)。
 
 **Setup For Oh-My-Posh**：
 
 - 首先，在微软商店中下载Oh-My-Posh；
-- 其次，编辑powershell配置脚本（类似.bashrc或.bash_profile），在该脚本中添加以下指令`oh-my-posh init pwsh | Invoke-Expression`；
+- 其次，编辑Powershell配置脚本（类似.bashrc或.bash_profile），在该脚本中添加以下指令`oh-my-posh init pwsh | Invoke-Expression`；
 - 接着，保存退出，使用`. $PROFILE`命令执行该脚本；
-  - 若PowerShell报错不允许执行任何脚本，则需要在管理员模式下执行以下命令`set-ExecutionPolicy RemoteSigned`解除紧张执行脚本的设置；
+  - 若Powershell报错不允许执行任何脚本，则需要在管理员模式下执行以下命令`set-ExecutionPolicy RemoteSigned`解除紧张执行脚本的设置；
   - 接着，使用`. $PROFILE`命令再次执行；
 - 然后，使用`Get-PoshThemes`命令，获取Oh-My-Posh支持的所有主题，
 - 选择一个你喜欢的主题，修改$PROFILE为以下内容`oh-my-posh init pwsh --config 'C:\Users\[Your Name]\AppData\Local\Programs\oh-my-posh\themes\[Theme Name].omp.json'| Invoke-Expression`；
@@ -341,9 +343,9 @@ ssh username@remote_host
 
 ## Terminal & Job Control
 
-终端（Terminal）早期是指一种允许工程师向计算机发送指令并观察其运行结果的硬件设备，但现在我们一般所说的终端其实都是终端模拟器（Terminal Emulator），即使用软件模拟文本输入输出的界面。换句话说，现代终端就是人机交互的桥梁。那么，终端和同为交互软件的Shell的区别又是什么呢？
+接着要介绍的就是终端（Terminal）了。它早期是指一种允许工程师向计算机发送指令并观察其运行结果的硬件设备，但现在我们所说的终端其实都是指终端模拟器（Terminal Emulator），即使用软件模拟文本输入输出的界面。换句话说，现代终端就是一种帮助人机交互的软件。那么，终端和同为交互软件的Shell的差别又是什么呢？
 
-事实上，终端作为一个早期代指硬件的概念，现在和Shell已经逐步分不清了。但我们仍可以将终端当作只提供人与计算机之间的文本界面，允许用户输入命令并显示输出的一种软件，而把Shell当作一种命令解析器。当打开一个终端窗口时，默认启动Shell程序，并且将Shell的输入和输出都显示在终端上。总之，两者的区别已经模糊了。
+事实上，终端作为一个早期代指硬件的概念，现在和Shell已经逐步分不清了。但我们仍可以将终端当作只提供人与计算机之间的文本界面，允许用户输入命令并显示输出的一种软件，而把Shell当作一种命令解析器。当打开一个终端窗口时，默认启动Shell程序，并且将Shell的输入和输出都显示在终端上。总之，两者概念上的区别已经模糊了。
 
 ### Job Control
 
@@ -376,11 +378,11 @@ ssh username@remote_host
 
 总结：一个终端对应这一个会话，也就是多个进程组。其中，有且只有一个前台进程组。当使用Ctrl+C或Ctrl+Z快捷键进行任务管理时，终端只会向前台进程组发送信号。这也就是为什么有些时候快捷键会失效的原因了。更详细的解释资料可以使用命令`man 2 setpgid`阅读，它解释了进程组、会话和终端之间的关系。
 
-**多路复用 Multiplexor**：
+**多路复用器 Multiplexor**：
 
 尽管早期一个会话一定对应着一个终端窗口，但随着终端多路复用器如TMux等工具的出现，会话逐渐变得可以和终端分离了。不仅如此，它甚至允许我们分离当前会话并在将来重新连接。
 
-下面，我就会介绍一个Windows平台上好用的终端（Windows Terminal）、一种流行的多路复用工具（TMux）以及配置文件。
+下面，我会逐一介绍一个Windows平台上好用的终端（Windows Terminal）、一种流行的多路复用工具（TMux）以及一些其他流行的终端工具。
 
 ### Use Windows Terminal
 
@@ -414,6 +416,16 @@ Windows终端的安装方法非常简单，直接到微软商店下载安装即�
 
 ### Use TMux to Multliplex
 
+### Other Terminal Tools
+
+最后，再补充一些其他热门的终端工具，供大家参考。
+
+**iTerm**：Mac OS平台上很热门的终端模拟器。功能非常强大，可自定义性很高。支持分屏、标签等。
+
+**Xterm**：终端模拟器开山鼻祖。功能非常基础，但配置简单。
+
+## Other
+
 ### Dotfiles
 
 点文件（Dotfiles）指Unix/Linux系统用户主目录下以点开头的纯文本配置文件。因为它们默认是隐藏文件，所以ls并不会显示它们。
@@ -434,23 +446,15 @@ Windows终端的安装方法非常简单，直接到微软商店下载安装即�
 
 我们可以参考这个[网站](https://dotfiles.github.io/)了解如何个性化的配置自己的点文件，也可以参考[他人的配置文档](https://github.com/search?o=desc&q=dotfiles&s=stars&type=Repositories)进行修改。
 
-### Other Terminal Tools
-
-**iTerm**：Mac OS平台上很热门的终端模拟器。功能非常强大，可自定义性很高。支持分屏、标签等。
-
-**Xterm**：终端模拟器开山鼻祖。功能非常基础，但配置简单。
-
-## Other
-
 ### Package Management
 
-除了上面提到的所有工具和功能之外，我还想特别把包管理工具拎出来介绍一下，因为在WSL或其他虚拟机上安装包是我们经常使用的功能。
+除了上面提到的所有工具和功能之外，我还想在这最后一章中把包管理工具单独拎出来介绍一下，因为我们在WSL或其他虚拟机上会经常使用它们进行软件安装。
 
-以Linux/Unix系统为例，Ubuntu就有apt作为包管理工具，CentOS则有yum作为其默认包管理工具。至于MacOS和Windows也都有比较流行的第三方包管理工具，比如MacOS有homebrew，Windows有Chocolatey、scoop和winget等。
+包管理工具（Package Management Tool）是一个用于安装、卸载和更新软件包的程序。以Linux/Unix系统为例，Ubuntu就有apt作为包管理工具，CentOS则有yum作为其默认包管理工具。至于MacOS和Windows也都有比较流行的第三方包管理工具，比如MacOS有homebrew，Windows有Chocolatey、scoop和winget等。
 
 **Advanced Packaging Tool**：
 
-下面重点介绍一下apt。apt（Advanced Packaging Tool）是一款基于dpkg（Debian Package Management）的包管理工具。其中，dpkg只负责管理.deb软件包文件，无法解决软件包之间的依赖性关系。而apt则基于dpkg，通过连接到软件源，可以安装和管理多个软件包以及解决依赖性关系。
+下面重点介绍一下apt（Advanced Packaging Tool）。它是一款基于dpkg（Debian Package Management）的包管理工具。其中，dpkg只负责管理.deb软件包文件，无法解决软件包之间的依赖性关系。而apt则基于dpkg，通过连接到软件源，可以安装和管理多个软件包并且解决包之间的依赖关系。
 
 ```bash
 # 安装软件包
@@ -469,7 +473,7 @@ sudo apt upgrade
 sudo apt autoremove
 ```
 
-此外，如果使用apt下载软件包速度很慢，可以使用以下命令添加国内镜像源：
+此外，如果在国内使用apt下载软件包速度很慢，可以使用以下命令添加国内镜像源：
 
 ```bash
 # 添加源
@@ -481,13 +485,13 @@ sudo apt update
 
 **Use Wget/Curl To Download File**：
 
-值得注意的是，对于有些无法使用包管理工具进行下载的软件包，我们常常使用wget/curl命令下载相应文件。
+此外，对于有些无法使用包管理工具进行下载的软件包，我们常常使用wget/curl命令下载相应文件。
 
 事实上，wget和curl均是Linux下常用的文件下载工具。其中，wget更侧重于下载大量文件，所以支持递归和后台下载等功能；而curl 更侧重于发送特定的HTTP请求，所以支持更丰富的选项控制请求。
 
 **Programming Language Package Management**：
 
-此外，很多现代语言也和其包管理工具深度绑定，比如：Rust的cargo、Javascript的npm、Golang的go以及Python的pip等。一些相对老旧的语言也推出了其包管理工具，比如：C++的vcpkg、Java的maven等。这些包管理工具主要有以下几个重要作用：
+很多现代语言也和其包管理工具深度绑定，比如：Rust的cargo、Javascript的npm、Golang的go以及Python的pip等。一些相对老旧的语言也推出了其包管理工具，比如：C++的vcpkg、Java的maven等。这些包管理工具主要有以下几个重要作用：
 
 - 简化依赖管理，开发者不必手动安装和管理所有依赖；
 - 更新依赖，自动查找并升级依赖的新版本；
