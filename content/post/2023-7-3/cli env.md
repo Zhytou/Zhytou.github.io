@@ -93,7 +93,7 @@ Shell提供了很多功能和特性，下面将着重介绍其中最重要和常
 
 首先，Shell最基础也是最重要的功能——执行命令。一般来说，Shell中可执行命令分成Shell函数、Shell内置命令和普通可执行程序三类。
 
-其中，最常见的就是普通可执行程序，以我们常用的ls、grep、mv等来自[GNU Coreutils](https://www.gnu.org/software/coreutils/)核心工具集的命令为例，它们实际上就是一组默认安装在Linux系统的程序。更多有关GNU Tools的介绍可以阅读我的另一篇博客[一文了解GNU Tools](https://zhytou.top/post/2023-6-27/gnu-tools/)。
+其中，最常见的就是普通可执行程序，以我们常用的ls、grep、mv等来自[GNU Coreutils](https://www.gnu.org/software/coreutils/)核心工具集的命令为例，它们实际上就是一组默认安装在Linux系统的程序。更多有关GNU Tools的介绍可以阅读我的另一篇博客[一文了解GNU Tools](https://zhytou.github.io/post/2023-6-27/gnu-tools/)。
 
 除此之外，我们自己编写的可执行程序也可以使用Shell来执行，方法就是使用绝对路径或相对路径调用该程序。此外，以cd、pwd、alias等为代表的Shell内置命令也能够在Shell中被执行。
 
@@ -105,7 +105,7 @@ Shell提供了很多功能和特性，下面将着重介绍其中最重要和常
 
 因此，无法查找到指定命令涉及到Shell的又一个重要特点，即：环境变量。
 
-**环境变量 Environment Variables**：
+**环境变量 Environment Variable**：
 
 Shell环境变量是一些可用于Shell脚本和命令执行中的信息。比如，某路径没有添加到PATH中，那么该路径下的命令就必须使用绝对路径或相对路径调用。除了代表可执行文件的搜索路径的PATH之外，常见的Shell环境变量还有：
 
@@ -115,7 +115,7 @@ Shell环境变量是一些可用于Shell脚本和命令执行中的信息。比�
 
 此外，我们可以使用export或env命令查看或设置当前Shell的环境变量。值得注意的是，使用export设置Shell环境变量只会对当前Shell进程有效。若希望长期修改某环境变量，则应该去修改相应Shell配置文件，或者修改操作系统的环境变量。因为，Shell在初始化时会继承操作系统的所有环境变量。
 
-**重定向 Redirections**：
+**重定向 Redirection**：
 
 Shell重定向是Shell的又一种强大特性，它可以将一个命令的输出重定向到另一个文件或者另一个命令的输入。
 
@@ -152,7 +152,7 @@ cmd1 | cmd2
 
 值得注意的是，Shell管道其实就是依靠操作系统中进程通信方式之一的管道实现的。
 
-**别名 Aliases**：
+**别名 Alias**：
 
 Shell别名允许我们使用更简短或者更容易记忆的命令代替完整的命令。比如，在bash中我们可以使用`ll`命令代替`ls -alF`，因为在.bashrc中默认有一行`alias ll='ls -alF'`。
 
@@ -169,13 +169,13 @@ alias new_cmd='cmd'
 
 此外，Shell作为一门编程语言，也和其他语言一样提供了运算符、参数、变量、函数、流控制等功能。下面介绍一些Shell作为一门编程语言的相关特性。
 
-**变量 Variables**：
+**变量 Variable**：
 
 在Shell脚本中，我们可以使用`VARIABLE_NAME=value`来定义变量。
 
 此外，我们还可以使用$加变量名来引用变量的值。比如，如果执行`for file in $(ls)`，Shell首先将执行ls命令，然后遍历得到的这些返回值。
 
-**参数 Parameters**：
+**参数 Parameter**：
 
 我们可以在执行Shell脚本时，向脚本传递参数。脚本内获取参数的格式为：$n。其中，n代表一个数字，1为执行脚本的第一个参数，2为执行脚本的第二个参数，以此类推。
 
@@ -185,7 +185,7 @@ alias new_cmd='cmd'
 - `$$`：当前脚本进程号
 - `$@`：所有参数
 
-**运算符 Operators**：
+**运算符 Operator**：
 
 类似其他编程语言，Shell脚本语言也支持多种运算符，包括：
 
@@ -341,6 +341,8 @@ ssh username@remote_host
 
 除了可以使用Linux中的ssh命令来实现远程Shell之外，还可以使用一些SSH客户端，比如：PuTTY、WinSCP等。
 
+值得一提的是，我们可以使用SSH连接github服务器代替HTTPS连接来进行更快的克隆、推送和拉取分支操作，具体操作可以参考我的另一篇博客[Git Workflow&Tips](https://zhytou.github.io//post/2023-6-4/how-to-use-git/)中`use ssh instead of http`的部分。
+
 ## Terminal & Job Control
 
 接着要介绍的就是终端（Terminal）了。它早期是指一种允许工程师向计算机发送指令并观察其运行结果的硬件设备，但现在我们所说的终端其实都是指终端模拟器（Terminal Emulator），即使用软件模拟文本输入输出的界面。换句话说，现代终端就是一种帮助人机交互的软件。那么，终端和同为交互软件的Shell的差别又是什么呢？
@@ -425,6 +427,10 @@ Windows终端的安装方法非常简单，直接到微软商店下载安装即�
 **Xterm**：终端模拟器开山鼻祖。功能非常基础，但配置简单。
 
 ## Other
+
+### Git
+
+Git是一个版本控制工具（Version Control Tool），主要用于代码管理。关于它的详细介绍可以阅读我的另一篇博客[Git Workflow&Tips](https://zhytou.github.io//post/2023-6-4/how-to-use-git/)。
 
 ### Dotfiles
 
@@ -635,7 +641,7 @@ CI/CD本质上是一种自动化、持续迭代的开发模式。
 
 **Shell**：
 
-- [NJU-OS笔记 13 Shell](https://zhytou.top/post/2023-6-19/nju-os/)
+- [NJU-OS笔记 13 Shell](https://zhytou.github.io/post/2023-6-19/nju-os/)
 
 **SSH**：
 
