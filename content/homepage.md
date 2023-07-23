@@ -4,8 +4,9 @@ title = ""
 
 🎯 Focus on
 
-- Simple render engine using path tracing
-- 6.824
+- NJU-OS Lab
+- Simple Render Engine
+- CS144 Lab
 
 💻 Code for fun
 
@@ -21,10 +22,10 @@ title = ""
 - Attack on Titan
 - Jujutsu Kaisen
 
-🎧 Hippop artists I love
+🎧 Music artists I love
 
-- zh: Ddg Gali Mercy Echo
-- non-zh: PopSmoke Jcole
+- zh: Ddg Echo
+- non-zh: The Weekend Jcole
 
 Check below for more information:
 
