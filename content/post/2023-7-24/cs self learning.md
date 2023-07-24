@@ -1,0 +1,79 @@
+---
+title: "一点学习Coding的感悟"
+date: 2023-07-24T11:11:34+08:00
+draft: true
+---
+
+作为一个练习时长三年半但依旧迷茫的彩笔代码工程师，回顾我的Coding学习之路，可谓是走了非常之多的弯路。这篇博客就以我目前浅薄的认识来对讲一讲我对学习Coding这件事的认识和感悟。
+
+## 选择一门语言开始
+
+毫无疑问，学习Coding首先就需要选择一门编程语言，从hello world开始，了解其各种语法，再使用它完成一些大的项目，从而融会贯通。可能有一些人建议初学者选择Python或者Java作为第一门语言。前者，简单易学同时一直都是[TIOBE编程语言流行度排行榜](https://www.tiobe.com/tiobe-index/)中的翘楚，而后者则是面向就业。
+
+但我个人认为初学者第一门语言的最优选择还是C/C++，有如下几个原因：
+
+- C/C++是后续学习的前置条件。因为大量著名的计算机课程都将C/C++作为其课程实验的指定语言，比如：[CMU15-445 BusTub](https://github.com/cmu-db/bustub)、[CS144 Sponge](https://cs144.github.io/doc/lab0/)、[NJU OS](https://github.com/NJU-ProjectN/os-workbench-2022)等等。如果你不会C/C++，那么你就没法学习这些优秀的课程。
+- C/C++更接近硬件。许多高级语言都屏蔽了硬件设施，相反C/C++更接近底层，它们能够帮助我们理解计算机是如何运作的。事实上，很多高级语言都是依赖于C/C++实现的，比如：Python的一些核心库（如NumPy、SciPy等）是用C/C++编写的；Java虚拟机（JVM）的实现就是用C++编写的。
+- 从C/C++迁移到其他语言非常方便。尽管C/C++是一门历史悠久的语言，但它也随着时代再不断修改，吸取其他语言的长处，所以在把C/C++基础打牢之后，学习新语言也并非难事。
+
+不可否认的是，C/C++由于带着沉重的历史包袱，在诸如：字符串处理、时间处理等方面实在是难以恭维。但它仍不失为一门优秀的编程语言。
+
+### 学习资料
+
+**网课**：
+
+- [浙江大学 C语言 翁恺](https://www.bilibili.com/video/BV1YW411x7eN/?vd_source=1602aa2def0a5452e1d6a6f65ea4da59)：首先必须要推荐一下我们学校翁恺老师开始的这门C语言课程，算是一门很不错的C语言网课。记得我当初上的时候，除了学到了基础的语法：变量、流控制、函数和字符串等等，还有一些关于Linux、终端、Shell、GCC、Make等非常有用的工具介绍。
+- [Standford C++ CS106L](http://web.stanford.edu/class/cs106l/)：斯坦福开设的另一门C++语言课。与它开设的另一门主要关注数据结构的[CS106B](https://web.stanford.edu/class/cs106b/)不同，CS106L主要聚焦于深入讲解C++语言的语法特性，让学生能够写出高质量的C++代码。
+
+**教材**：
+
+- [C++ Primer](https://github.com/applenob/Cpp_Primer_Practice)：没什么好说的，C++的圣经罢了。
+- [Effective Modern C++](https://github.com/CnTransGroup/EffectiveModernCppChinese)：没什么好说的，C++的另一部圣经罢了。
+
+### 练手项目
+
+**基础**：
+
+- [SimpleSTL](https://github.com/Zhytou/SimpleSTL)：模仿STL模板库，实现各种容器，从而进一步熟悉C++类、构造函数、RAII和模板等概念。
+- [Json Paser](https://github.com/Zhytou/MyJsonParser)：类似SimpleSTL项目一样，这个项目的目的也是让我们熟悉C++类、构造函数、RAII和模板等概念，只不过它给出了一个更有意义的场景，让我们感觉不那么像造轮子。关于这个项目的介绍可以看这篇文章[知乎 Milo Yip​ 从零开始的 JSON 库教程](https://zhuanlan.zhihu.com/p/22457315)。
+
+**进阶**：
+
+- [MultiThread Practice In CPP](https://github.com/Zhytou/MultiThreadPracticeInCPP)：利用C++实现无锁队列、生产者-消费者问题、线程库等等，从而让我们熟悉C++的并发编程。进一步认识互斥量、条件变量以及RAII等概念。
+- [Muduo](https://github.com/chenshuo/muduo)：陈硕大佬写的网络库，可以配合着他的书阅读，会让我们对C++的网络编程有很深的认识。看完之后，也可以自己仿照着写一写，不过难度比较大就是了。这里给出一个不错的参考[TinyWebServer](https://github.com/qinguoyi/TinyWebServer)。
+
+## 学习Coding的核心课程
+
+我个人认为，编程的基础其实就是一门编程语言/数据结构+操作系统+计算机网络。甚至再极端一点，只需要学习一门编程语言/数据结构+操作系统，再配合上一些对应岗位的知识，也足以找一份工作了。
+
+### 操作系统
+
+**网课**：
+
+**资料**：
+
+- [CSAPP Computer Systems A Programmer's perspective](https://github.com/iWangMu/Book-CSAPP)：没啥好说的，又一部圣经罢了。
+- [OSTEP Operating Systems: Three Easy Pieces](https://github.com/remzi-arpacidusseau/ostep-translations/tree/master/chinese)：一本很好的操作系统教材，也是NJU-OS的参考教材。
+
+### 计算机网络
+
+## 掌握一些生产工具
+
+相信走到这一步的同学，已经有了一套自己的生产环境以及工具链。不过，这里仍然非常建议你学习这门课程[计算机教育中缺失的一课](https://missing-semester-cn.github.io/)或者阅读我的一篇博客[搭建自己的生产环境](https://zhytou.top/post/2023-7-3/cli-env/)。它会让你对这些工具有全新的认识，从而让你的工作效率翻倍。
+
+## 选择进阶方向
+
+### 一些方向的入门
+
+下面给出一些我觉得不错的入门材料以及它们对应的方向。
+
+- 计算机图形学：Games01
+- 数据库：CMU14-445
+- 分布式系统：6.824
+- 高性能计算：
+- 编译原理：
+- 机器学习：
+
+更多详细的课程入门选择，可以浏览这个网站[CS自学指南](https://csdiy.wiki/)中的信息。
+
+### 实习/开源项目
