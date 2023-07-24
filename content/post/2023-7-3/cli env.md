@@ -341,7 +341,7 @@ ssh username@remote_host
 
 除了可以使用Linux中的ssh命令来实现远程Shell之外，还可以使用一些SSH客户端，比如：PuTTY、WinSCP等。
 
-值得一提的是，我们可以使用SSH连接github服务器代替HTTPS连接来进行更快的克隆、推送和拉取分支操作，具体操作可以参考我的另一篇博客[Git Workflow&Tips](https://zhytou.github.io//post/2023-6-4/how-to-use-git/)中`use ssh instead of http`的部分。
+值得一提的是，我们可以使用SSH连接github服务器代替HTTPS连接来进行更快的克隆、推送和拉取分支操作，具体操作可以参考我的另一篇博客[Git Workflow&Tips](https://zhytou.github.io/post/2023-6-4/how-to-use-git/)中`use ssh instead of http`的部分。
 
 ## Terminal & Job Control
 
@@ -444,7 +444,7 @@ Git是一个版本控制工具（Version Control Tool），主要用于代码管
 
 **Usage**：
 
-关于它的详细介绍可以阅读我的另一篇博客[Git Workflow&Tips](https://zhytou.github.io//post/2023-6-4/how-to-use-git/)。
+关于它的详细介绍可以阅读我的另一篇博客[Git Workflow&Tips](https://zhytou.github.io/post/2023-6-4/how-to-use-git/)。
 
 ### Dotfiles
 
