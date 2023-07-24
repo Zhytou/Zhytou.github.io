@@ -430,18 +430,32 @@ Windows终端的安装方法非常简单，直接到微软商店下载安装即�
 
 ### Git
 
-Git是一个版本控制工具（Version Control Tool），主要用于代码管理。关于它的详细介绍可以阅读我的另一篇博客[Git Workflow&Tips](https://zhytou.github.io//post/2023-6-4/how-to-use-git/)。
+Git是一个版本控制工具（Version Control Tool），主要用于代码管理。
+
+**Function**：
+
+个人认为，Git的主要功能无非分成三大类：
+
+- 回滚修改。Git提供了一种追踪文件+提交修改的机制，它允许使用者查看所有修改历史并回滚到任意一次修改之前。
+- 云端备份。Git允许使用者将它的代码仓库放在云端，并保证用户可以在任意一台新设备上克隆该代码仓库并提交新的修改。常见的Git托管平台，即云服务商有Github、Gitlab和Gitee。其中，Github是最知名、使用者最多的Git托管平台，大量优秀的开源项目汇集于此，但它仅对个人免费。因此，一些小型企业更倾向使用开源Gitlab搭建自己Git服务器。至于Gitee，它则是国内最大代码托管平台，能够避免一些Github或Gitlab被墙、限流的问题。
+- 协同工作。Git允许多位用户基于同一份原始文件，做不同的修改（即形成不同的分支），并且可以轻松地将这些修改合并到一起。这使得团队协作成为可能。此外，Git托管平台中也提供了一些功能来进一步支持这种团队开发的模式。比如，Github中提供了包括：Issue（议题）、PR（合并请求）、Fork（创建副本）和Github Actions（Github自动化工具）在内的功能。
+
+**Usage**：
+
+关于它的详细介绍可以阅读我的另一篇博客[Git Workflow&Tips](https://zhytou.github.io//post/2023-6-4/how-to-use-git/)。
 
 ### Dotfiles
 
-点文件（Dotfiles）指Unix/Linux系统用户主目录下以点开头的纯文本配置文件。因为它们默认是隐藏文件，所以ls并不会显示它们。
+点文件（Dotfiles）指Unix/Linux系统用户主目录下以点开头的纯文本配置文件。因为它们默认是隐藏文件，所以ls并不会显示它们。比如，对于bash来说，们可以通过编辑.bashrc或.bash_profile来进行配置。二者的区别是，bashrc文件是在每次打开一个新的终端时都会被加载的，它通常包含一些针对shell的设置，例如别名、环境变量、函数等，而.bash_profile文件则是在用户登录时被加载的，它通常包含一些需要在登录时执行的命令，例如添加环境变量、启动服务等。
 
-对于bash来说，在大多数系统下，我们可以通过编辑.bashrc或.bash_profile来进行配置。此外，还有一些常见的配置文件如下：
+此外，还有一些常见的配置文件如下：
 
 - git - ~/.gitconfig
 - vim - ~/.vimrc 和 ~/.vim 目录
 - ssh - ~/.ssh/config
 - tmux - ~/.tmux.conf
+
+**Dotfile Management Advantages**：
 
 非常建议在点文件所在的文件夹下使用版本控制系统进行管理，然后通过脚本将其符号链接到需要的地方。这么做有如下好处：
 
