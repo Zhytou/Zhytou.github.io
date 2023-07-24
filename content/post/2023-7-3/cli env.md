@@ -4,7 +4,7 @@ date: 2023-07-03T10:01:07+08:00
 draft: false
 ---
 
-随着Coding的时间越来越长，我接触到的工具也越来越多，也逐渐有了一套自己的工具包。这篇博客就记录了我对WSL、Docker、Shell、SSH、TMux和Vim等工具的学习和使用笔记以及一些环境配置的方法。
+随着Coding的时间越来越长，我接触到的工具也越来越多，也逐渐有了一套自己的工具包。这篇博客就记录了我对WSL、Docker、Shell、SSH、Tmux和Vim等工具的学习和使用笔记以及一些环境配置的方法。
 
 ## Programming Environment
 
@@ -382,9 +382,9 @@ ssh username@remote_host
 
 **多路复用器 Multiplexor**：
 
-尽管早期一个会话一定对应着一个终端窗口，但随着终端多路复用器如TMux等工具的出现，会话逐渐变得可以和终端分离了。不仅如此，它甚至允许我们分离当前会话并在将来重新连接。
+尽管早期一个会话一定对应着一个终端窗口，但随着终端多路复用器如Tmux等工具的出现，会话逐渐变得可以和终端分离了。不仅如此，它甚至允许我们分离当前会话并在将来重新连接。
 
-下面，我会逐一介绍一个Windows平台上好用的终端（Windows Terminal）、一种流行的多路复用工具（TMux）以及一些其他流行的终端工具。
+下面，我会逐一介绍一个Windows平台上好用的终端（Windows Terminal）、一种流行的多路复用工具（Tmux）以及一些其他流行的终端工具。
 
 ### Use Windows Terminal
 
@@ -416,7 +416,9 @@ Windows终端的安装方法非常简单，直接到微软商店下载安装即�
 - 改变字体大小：Ctrl+鼠标滚轮
 - 以管理员身份运行当前终端：Ctrl+Shift+Enter
 
-### Use TMux to Multliplex
+### Use Tmux to Multliplex
+
+这一部分可以直接阅读我的另一篇笔记[Tmux](https://github.com/Zhytou/CS-Notes/blob/main/tool/tmux/tmux.md)。
 
 ### Other Terminal Tools
 
