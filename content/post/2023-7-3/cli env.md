@@ -279,7 +279,7 @@ fi
 - 首先，在微软商店中下载Oh-My-Posh；
 - 其次，编辑Powershell配置脚本（类似.bashrc或.bash_profile），在该脚本中添加以下指令`oh-my-posh init pwsh | Invoke-Expression`；
 - 接着，保存退出，使用`. $PROFILE`命令执行该脚本；
-  - 若Powershell报错不允许执行任何脚本，则需要在管理员模式下执行以下命令`set-ExecutionPolicy RemoteSigned`解除紧张执行脚本的设置；
+  - 若Powershell报错不允许执行任何脚本，则需要在管理员模式下执行以下命令`set-ExecutionPolicy RemoteSigned`解除禁止执行脚本的设置；
   - 接着，使用`. $PROFILE`命令再次执行；
 - 然后，使用`Get-PoshThemes`命令，获取Oh-My-Posh支持的所有主题，
 - 选择一个你喜欢的主题，修改$PROFILE为以下内容`oh-my-posh init pwsh --config 'C:\Users\[Your Name]\AppData\Local\Programs\oh-my-posh\themes\[Theme Name].omp.json'| Invoke-Expression`；
