@@ -1,5 +1,5 @@
 ---
-title: "一点学习Coding的感悟"
+title: "一点的感悟：关于Coding和读研"
 date: 2023-07-24T11:11:34+08:00
 draft: true
 ---
@@ -77,13 +77,17 @@ draft: true
 
 下面给出一些我觉得不错的入门材料以及它们对应的方向。
 
-- 计算机图形学：Games01
-- 数据库：CMU14-445
-- 分布式系统：6.824
+- 计算机图形学：[Games101](http://games-cn.org/intro-graphics/)
+- 数据库：[CMU14-445](https://15445.courses.cs.cmu.edu/fall2022/schedule.html)
+- 分布式系统：[MIT6.824](https://pdos.csail.mit.edu/6.824/)
 - 高性能计算：
-- 编译原理：
-- 机器学习：
+- 编译原理：[Build a JIT in LLVM](https://llvm.org/docs/tutorial/#building-a-jit-in-llvm)
+- 机器学习系统：[智能计算系统](https://novel.ict.ac.cn/aics/)
 
 更多详细的课程入门选择，可以浏览这个网站[CS自学指南](https://csdiy.wiki/)中的信息。
 
 ### 实习/开源项目
+
+作为一个20年就在面试互联网公司的人，我觉得我对于实习的经验还是可以分享一下的。
+
+尽管我几乎没有什么开源经历，但我真的尝试去加入一些社区了。可能是我准备不够充分，也可能是我选择的一些社区
