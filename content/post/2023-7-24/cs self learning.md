@@ -23,6 +23,7 @@ draft: false
 **网课**：
 
 - [浙江大学 C语言 翁恺](https://www.bilibili.com/video/BV1YW411x7eN/?vd_source=1602aa2def0a5452e1d6a6f65ea4da59)：首先必须要推荐一下我们学校翁恺老师开设的这门C语言课程。总体来说，它算是一门很不错的C语言入门课程。记得我当初上的时候，除了学到了变量、流控制、函数和字符串等基础的语法，还了解了Linux、终端、Shell、GCC、Make等非常有用的工具。
+- [南京大学 计算机系统基础](https://nju-projectn.github.io/ics-pa-gitbook/ics2020/#%E5%AE%9E%E9%AA%8C%E6%96%B9%E6%A1%88)
 - [Standford C++ CS106L](http://web.stanford.edu/class/cs106l/)：斯坦福开设的另一门C++语言课。与它开设的另一门主要关注数据结构的[CS106B](https://web.stanford.edu/class/cs106b/)不同，CS106L主要聚焦于深入讲解C++语言的语法特性，让学生能够写出高质量的C++代码。
 
 **教材**：
@@ -36,10 +37,11 @@ draft: false
 
 - [SimpleSTL](https://github.com/Zhytou/SimpleSTL)：模仿STL模板库，实现各种容器，从而进一步熟悉C++类、构造函数、RAII和模板等概念。
 - [Json Paser](https://github.com/Zhytou/MyJsonParser)：类似SimpleSTL，这个项目的目的也是让我们熟悉C++类、构造函数、RAII和模板等概念，只不过它给出了一个更有意义的场景，让我们感觉不那么像造轮子。关于这个项目的介绍可以看这篇文章[知乎 Milo Yip​ 从零开始的 JSON 库教程](https://zhuanlan.zhihu.com/p/22457315)。
+- [MultiThread Practice In CPP](https://github.com/Zhytou/MultiThreadPracticeInCPP)：利用C++实现无锁队列、生产者-消费者问题、线程库等等，从而让我们熟悉C++的并发编程。进一步认识互斥量、条件变量以及RAII等概念。
 
 **进阶**：
 
-- [MultiThread Practice In CPP](https://github.com/Zhytou/MultiThreadPracticeInCPP)：利用C++实现无锁队列、生产者-消费者问题、线程库等等，从而让我们熟悉C++的并发编程。进一步认识互斥量、条件变量以及RAII等概念。
+- [NEMU](https://nju-projectn.github.io/ics-pa-gitbook/ics2020/#%E5%AE%9E%E9%AA%8C%E6%96%B9%E6%A1%88)：南京大学计算机系统基础的课程实验，一款经过简化的全系统模拟器。
 - [Muduo](https://github.com/chenshuo/muduo)：陈硕大佬写的网络库，可以配合着他的书阅读，会让我们对C++的网络编程有很深的认识。看完之后，也可以自己仿照着写一写，不过难度比较大就是了。这里给出一个不错的参考[TinyWebServer](https://github.com/qinguoyi/TinyWebServer)。
 
 ## 学习编程的核心课程
