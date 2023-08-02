@@ -466,7 +466,33 @@ Git是一个版本控制工具（Version Control Tool），主要用于代码管
 - 同步: 在一处更新配置文件，可以同步到其他所有地方
 - 变更追踪: 您可能要在整个程序员生涯中持续维护这些配置文件，而对于长期项目而言，版本历史是非常重要的
 
-我们可以参考这个[网站](https://dotfiles.github.io/)了解如何个性化的配置自己的点文件，也可以参考[他人的配置文档](https://github.com/search?o=desc&q=dotfiles&s=stars&type=Repositories)进行修改。
+**Use Git & Symbolic Link To Manage Dotfiles**:
+
+```bash
+# 创建用于存放配置文件的目录
+mkdir ~/dotfiles & cd ~/dotfiles
+# 初始化git仓库
+git init
+# 添加远程管理
+git remote add origin git@github.com:Zhytou/dotfiles.git
+# 使用符号链接将其分配到有需要的地方
+ln -s ~ ~/dotfiles/.bash_profile
+ln -s ~ ~/dotfiles/.zsh_profile
+ln -s ~ ~/dotfiles/.gitconfig
+ln -s ~ ~/dotfiles/.wakatime.cfg
+```
+
+以自定义别名为例，我们将其写在~/dotfiles目录中的Shell配置文件中。
+
+```bash
+alias l="ls -la"       # List in long format, include dotfiles
+alias ld="ls -ld */"   # List in long format, only directories
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+```
+
+此外，我们可以参考这个[网站](https://dotfiles.github.io/)了解如何个性化的配置自己的点文件，也可以参考[他人的配置文档](https://github.com/search?o=desc&q=dotfiles&s=stars&type=Repositories)进行修改。
 
 ### Package Management
 
