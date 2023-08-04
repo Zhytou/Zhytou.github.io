@@ -201,6 +201,52 @@ CMake（Cross-platform Make）是一个跨平台的构建自动化工具，可�
 
 使用CMake，我们可以在一个统一的CMakeLists.txt文件中描述项目的所有构建过程，包括源代码文件、依赖库、编译选项、链接选项等，而不需要为不同的构建系统编写不同的文件。CMake会根据CMakeLists.txt文件自动生成相应的构建系统文件，从而实现跨平台的构建。
 
+**构建目录**：
+
+为了方便与源代码目录分离，CMake一般会在项目文件夹下新建一个build子文件夹，作为构建目录，用于存放CMake的输出（Makefile，.cmake等配置文件）和可执行文件及中间文件。
+
+**CMakeLists.txt**：
+
+CMakeLists.txt是CMake项目的配置文件，包含了项目的设置和指令。CMake读取这个文件来生成相应的构建系统文件，下面展示了一个最简单的CMakeLists.txt。
+
+``` txt
+cmake_minimum_required(VERSION 3.0) 
+
+project(Demo)  
+
+add_executable(main main.cpp)
+```
+
+**使用CMake**：
+
+由于CMake最主要的目的其实是生成Makefile，所以我们可以先使用CMake生成构建目录中的Makefile文件，再使用make命令编译构建我们想要的目标。比如：
+
+```bash
+# 新建构建目录，并且进入该目录
+mkdir build; cd build
+# 使用cmake生成Makefile
+cmake ../
+# 使用make构建目标
+make all
+make main
+make clean
+```
+
+这种方法比较原始，对于一些简单的项目适用。当项目变得复杂，尤其是包含多个子目录时，采用这种方法还必须进入到构建目录的子目录中执行make，就会变得相对麻烦。此时，我们就会使用cmake提供的一些方法在build根目录中直接构建目标。
+
+```bash
+# 初始化构建目录
+# -S指定源文件目录
+# -B指定构建目录
+cmake -S . -B build
+# 进入构建目录，并罗列可构建目标
+cd build; make help
+# 构建目标
+# --build指定已经存在的CMake构建目录（与-B不同，-B是选择初始化位置）
+# --target指定需要构建的目标名称
+cmake --build . --target xxx
+```
+
 ## Coreutils
 
 **简介**：
