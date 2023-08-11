@@ -95,6 +95,20 @@ void get_URL( const string& host, const string& path )
 
 **测试结果**：
 
+```bash
+zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check_webget
+Test project /home/zhytou/minnow/build
+    Start 1: compile with bug-checkers
+1/2 Test #1: compile with bug-checkers ........   Passed    0.17 sec
+    Start 2: t_webget
+2/2 Test #2: t_webget .........................   Passed    1.21 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   1.38 sec
+Built target check_webget
+```
+
 ### An in-memory reliable byte stream
 
 这个部分要求我们在`src/byte_stream.hh`和`src/byte_stream.cc`文件中，完成`ByteStream`以及其派生类接口，实现可以读写的字节流。
@@ -105,9 +119,137 @@ void get_URL( const string& host, const string& path )
 
 因为，如果使用队列作为实际存储数据的结构，在实现`peek`时必然会使用一个临时字符串存储队列中数据，并使用这个字符串构造`string_view`返回。这样一定会报错，因为，`string_view`一种只读的字符串视图，它并没有这段内存的所有权，所以在返回后临时字符串被销毁，那么就会有`string_view`悬空引用和访问无效内存的问题。
 
+``` c++
+class ByteStream
+{
+protected:
+  uint64_t capacity_;
+  std::string buffer_;
+  bool is_closed_;
+  bool has_error_;
+  uint64_t bytes_pushed_;
+  uint64_t bytes_popped_;
+
+public:
+  explicit ByteStream( uint64_t capacity );
+  // Helper functions (provided) to access the ByteStream's Reader and Writer interfaces
+  Reader& reader();
+  const Reader& reader() const;
+  Writer& writer();
+  const Writer& writer() const;
+};
+```
+
+**测试结果**：
+
+```bash
+zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check0
+Test project /home/zhytou/minnow/build
+      Start  1: compile with bug-checkers
+ 1/10 Test  #1: compile with bug-checkers ........   Passed    0.17 sec
+      Start  2: t_webget
+ 2/10 Test  #2: t_webget .........................   Passed    1.21 sec
+      Start  3: byte_stream_basics
+ 3/10 Test  #3: byte_stream_basics ...............   Passed    0.01 sec
+      Start  4: byte_stream_capacity
+ 4/10 Test  #4: byte_stream_capacity .............   Passed    0.01 sec
+      Start  5: byte_stream_one_write
+ 5/10 Test  #5: byte_stream_one_write ............   Passed    0.01 sec
+      Start  6: byte_stream_two_writes
+ 6/10 Test  #6: byte_stream_two_writes ...........   Passed    0.01 sec
+      Start  7: byte_stream_many_writes
+ 7/10 Test  #7: byte_stream_many_writes ..........   Passed    0.03 sec
+      Start  8: byte_stream_stress_test
+ 8/10 Test  #8: byte_stream_stress_test ..........   Passed    0.01 sec
+      Start 37: compile with optimization
+ 9/10 Test #37: compile with optimization ........   Passed    3.98 sec
+      Start 38: byte_stream_speed_test
+             ByteStream throughput: 6.56 Gbit/s
+10/10 Test #38: byte_stream_speed_test ...........   Passed    0.07 sec
+
+100% tests passed, 0 tests failed out of 10
+
+Total Test time (real) =   5.49 sec
+Built target check0
+```
+
 ## 1 Stitching Substrings Into A Byte Stream
 
-一开始使用`map<uint64_t, char>`来表示滑动窗口，但后面发现这样虽然逻辑上没有问题，但是针对test13特别容易超时。于是后面还是将滑动窗口的数据结构修改成`map<uint64_t, string>`，维护待写入字符串，避免一个一个位置处理。
+**Reassembler数据结构**：
+
+`Reassembler`中最关键的一点就是如何临时存储可能重叠的子字符串。我选择的是使用`map<uint64_t, char>`来存储，有一点滑动窗口的思想。可能更常规的做法是用`map<uint64_t, string>`来存储，但我考虑到传入substr重叠可能会导致维护这个map变得比较复杂，索性直接存索引到字符的映射，但会导致效率严重下降（test13有可能超时）。具体如下：
+
+``` c++
+class Reassembler
+{
+private:
+  // Bytes stored temorarily in ther Reassembler whose indexes are in the available capacity
+  std::map<uint64_t, char> sliding_window_;
+  // The index of next byte expected to write in the outbounded stream
+  uint64_t expected_index_;
+  // The index of last byte expected to write in the outbounded stream
+  uint64_t expected_last_index_;
+
+public:
+  Reassembler();
+  void insert( uint64_t first_index, std::string data, bool is_last_substring, Writer& output );
+
+  // The number of bytes stored in the Reassembler itself
+  uint64_t bytes_pending() const;
+  // The index of next byte epected
+  uint64_t index_expected() const;
+  // The index of last byte expected
+  uint64_t last_index_expected() const;
+};
+```
+
+**测试结果**：
+
+```bash
+zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check1
+Test project /home/zhytou/minnow/build
+      Start  1: compile with bug-checkers
+ 1/17 Test  #1: compile with bug-checkers ........   Passed    0.22 sec
+      Start  3: byte_stream_basics
+ 2/17 Test  #3: byte_stream_basics ...............   Passed    0.01 sec
+      Start  4: byte_stream_capacity
+ 3/17 Test  #4: byte_stream_capacity .............   Passed    0.01 sec
+      Start  5: byte_stream_one_write
+ 4/17 Test  #5: byte_stream_one_write ............   Passed    0.01 sec
+      Start  6: byte_stream_two_writes
+ 5/17 Test  #6: byte_stream_two_writes ...........   Passed    0.01 sec
+      Start  7: byte_stream_many_writes
+ 6/17 Test  #7: byte_stream_many_writes ..........   Passed    0.03 sec
+      Start  8: byte_stream_stress_test
+ 7/17 Test  #8: byte_stream_stress_test ..........   Passed    0.01 sec
+      Start  9: reassembler_single
+ 8/17 Test  #9: reassembler_single ...............   Passed    0.01 sec
+      Start 10: reassembler_cap
+ 9/17 Test #10: reassembler_cap ..................   Passed    0.01 sec
+      Start 11: reassembler_seq
+10/17 Test #11: reassembler_seq ..................   Passed    0.01 sec
+      Start 12: reassembler_dup
+11/17 Test #12: reassembler_dup ..................   Passed    0.02 sec
+      Start 13: reassembler_holes
+12/17 Test #13: reassembler_holes ................   Passed    0.01 sec
+      Start 14: reassembler_overlapping
+13/17 Test #14: reassembler_overlapping ..........   Passed    0.01 sec
+      Start 15: reassembler_win
+14/17 Test #15: reassembler_win ..................   Passed    5.64 sec
+      Start 37: compile with optimization
+15/17 Test #37: compile with optimization ........   Passed    0.08 sec
+      Start 38: byte_stream_speed_test
+             ByteStream throughput: 6.30 Gbit/s
+16/17 Test #38: byte_stream_speed_test ...........   Passed    0.07 sec
+      Start 39: reassembler_speed_test
+             Reassembler throughput: 14.16 Gbit/s
+17/17 Test #39: reassembler_speed_test ...........   Passed    0.11 sec
+
+100% tests passed, 0 tests failed out of 17
+
+Total Test time (real) =   6.26 sec
+Built target check1
+```
 
 ## 2 The TCP Receiver
 
