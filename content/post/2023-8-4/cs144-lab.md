@@ -14,7 +14,7 @@ draft: false
 
 实验0的前几个部分主要以使用命令进行发Http请求或邮件并观察响应为主，只有最后两个部分需要写代码。下面介绍一下我的环境以及配置方法。
 
-**WSL安装**：
+**WSL Install**：
 
 首先，在确保虚拟化以及WSL功能正确开启后，前往微软商店下载Windows Subsystem For Linux。我使用的发行版是Ubuntu 22.04.2 LTS。更详细的下载方法，可以查看我的另一篇博客[搭建自己的生产环境]中的WSL部分。
 
@@ -24,13 +24,13 @@ draft: false
 sudo apt install cmake make git clang-format
 ```
 
-**远程仓库**：
+**Remote Repository**：
 
 首先，在github中创建一个名为`minnow`的空仓库，作为我们的远程备份仓库。注意，为了遵守课程规定，我们需要将该仓库设为私有。
 
 其次，克隆课程项目，并将其推送到自己的远程仓库上，完成仓库的初始化。具体方法如下：
 
-``` bash
+```bash
 # clone the bare git proj
 git clone --bare https://github.com/cs144/minnow
 
@@ -44,7 +44,7 @@ rm -rf minnow.git
 git clone git@github.com:Zhytou/minnow.git
 ```
 
-**编译运行**：
+**Compile & Run**：
 
 CS144课程实验使用cmake构架和编译，方法如下：
 
@@ -60,7 +60,7 @@ cmake --build build --target check_Webget
 
 这部分要求我们在`apps/webget.cc`里面实现`void get_URL( const string& host, const string& path )`函数，最终完成抓取网页并写入到标准输出的功能。
 
-**Socket编程**：
+**Socket**：
 
 这个任务在理解了套接字的通信流程之后就会变得非常简单。一个常见的客户端使用套接字向服务器发送信息的API调用顺序如下：
 
@@ -93,7 +93,7 @@ void get_URL( const string& host, const string& path )
 }
 ```
 
-**测试结果**：
+**Test Results**：
 
 ```bash
 zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check_webget
@@ -113,13 +113,13 @@ Built target check_webget
 
 这个部分要求我们在`src/byte_stream.hh`和`src/byte_stream.cc`文件中，完成`ByteStream`以及其派生类接口，实现可以读写的字节流。
 
-**string_view Reader::peek()**：
+**ByteStream Data Structure**：
 
 我一开始想到使用队列作为底层数据结构来实现这个类，但后面考虑到其派生类`Reader`中的`peek`接口要求返回string_view类型，于是便使用字符串作为底层结构实现。
 
 因为，如果使用队列作为实际存储数据的结构，在实现`peek`时必然会使用一个临时字符串存储队列中数据，并使用这个字符串构造`string_view`返回。这样一定会报错，因为，`string_view`一种只读的字符串视图，它并没有这段内存的所有权，所以在返回后临时字符串被销毁，那么就会有`string_view`悬空引用和访问无效内存的问题。
 
-``` c++
+```c++
 class ByteStream
 {
 protected:
@@ -140,7 +140,7 @@ public:
 };
 ```
 
-**测试结果**：
+**Test Results**：
 
 ```bash
 zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check0
@@ -175,11 +175,17 @@ Built target check0
 
 ## 1 Stitching Substrings Into A Byte Stream
 
-**Reassembler数据结构**：
+实验1要求实验一个名为`Reassembler`的整合器类。它能够将乱序传入且可能重叠的字符串排序并输出到给定的字节流中，其结构如下图：
 
-`Reassembler`中最关键的一点就是如何临时存储可能重叠的子字符串。我选择的是使用`map<uint64_t, char>`来存储，有一点滑动窗口的思想。可能更常规的做法是用`map<uint64_t, string>`来存储，但我考虑到传入substr重叠可能会导致维护这个map变得比较复杂，索性直接存索引到字符的映射，但会导致效率严重下降（test13有可能超时）。具体如下：
+![](https://zhytou.top/post/2023-8-4/)
 
-``` c++
+其中，最重要的一点是`ByteStream`中未读取的部分加上`Reassembler`中无序的部分大小不能超过整个capacity。
+
+**Reassembler Data Structure**：
+
+`Reassembler`中最关键的一点就是如何临时存储可能重叠的字符串。我选择的是使用`map<uint64_t, char>`来存储，有一点滑动窗口的思想。可能更常规的做法是用`map<uint64_t, string>`来存储，但我考虑到重叠的字符串可能会导致维护这个字典的逻辑变得比较复杂，索性直接使用索引到字符的映射，让维护的逻辑变得非常简单。但这样做会导致效率严重下降（test13有可能超时）。`Reassembler`的定义如下：
+
+```c++
 class Reassembler
 {
 private:
@@ -203,7 +209,55 @@ public:
 };
 ```
 
-**测试结果**：
+**Putting Substrings In Sequence**：
+
+按前面的思路，`Reassembler::insert`函数的框架就应该包括：
+
+- 处理传入的字符串
+  - 紧随expected_index_的直接写入输出字节流
+  - 超出容量的直接丢弃
+  - 其余的存入sliding_window_
+- 检测暂存的字符串是否能够写入
+- 判断整合是否结束
+
+```c++
+void Reassembler::insert( uint64_t first_index, string data, bool is_last_substring, Writer& output )
+{
+  if ( first_index <= expected_index_ && first_index + data.size() > expected_index_ ) {
+    // if the part of substr lies just behind the expected index, push it to the output
+    // be careful to update the expected index with the actual written size
+  } else if ( first_index + data.size() > expected_index_
+              && first_index < expected_index_ + output.available_capacity() ) {
+    // if part of the substr lies in the availabe capacity, add it to the sliding window
+    // be careful that the size of sliding window cannot exceed the available capacity of output stream
+    for ( uint64_t i = 0; i < data.size() && first_index + i < expected_index_ + output.available_capacity();
+          i++ ) {
+      // ...
+    }
+  }
+
+  // erase elements which are already written and check if there are any elements which can be written
+  string old_data;
+  for ( auto itr = sliding_window_.begin();
+        itr != sliding_window_.end() && itr->first <= expected_index_ + old_data.size();
+        itr = sliding_window_.erase( itr ) ) {
+    // ...
+  }
+
+  // set the expected last index if the substr is the last one
+  if ( is_last_substring ) {
+    expected_last_index_ = first_index + data.size();
+  }
+  // when the last expected byte is inserted and the sliding window is empty, close the output
+  if ( expected_index_ == expected_last_index_ && sliding_window_.empty() ) {
+    output.close();
+  }
+
+  return;
+}
+```
+
+**Test Results**：
 
 ```bash
 zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check1
@@ -253,8 +307,196 @@ Built target check1
 
 ## 2 The TCP Receiver
 
+**Test Results**：
+
+```bash
+zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check2
+Test project /home/zhytou/minnow/build
+      Start  1: compile with bug-checkers
+ 1/29 Test  #1: compile with bug-checkers ........   Passed    0.21 sec
+      Start  3: byte_stream_basics
+ 2/29 Test  #3: byte_stream_basics ...............   Passed    0.01 sec
+      Start  4: byte_stream_capacity
+ 3/29 Test  #4: byte_stream_capacity .............   Passed    0.01 sec
+      Start  5: byte_stream_one_write
+ 4/29 Test  #5: byte_stream_one_write ............   Passed    0.01 sec
+      Start  6: byte_stream_two_writes
+ 5/29 Test  #6: byte_stream_two_writes ...........   Passed    0.01 sec
+      Start  7: byte_stream_many_writes
+ 6/29 Test  #7: byte_stream_many_writes ..........   Passed    0.03 sec
+      Start  8: byte_stream_stress_test
+ 7/29 Test  #8: byte_stream_stress_test ..........   Passed    0.01 sec
+      Start  9: reassembler_single
+ 8/29 Test  #9: reassembler_single ...............   Passed    0.01 sec
+      Start 10: reassembler_cap
+ 9/29 Test #10: reassembler_cap ..................   Passed    0.01 sec
+      Start 11: reassembler_seq
+10/29 Test #11: reassembler_seq ..................   Passed    0.01 sec
+      Start 12: reassembler_dup
+11/29 Test #12: reassembler_dup ..................   Passed    0.02 sec
+      Start 13: reassembler_holes
+12/29 Test #13: reassembler_holes ................   Passed    0.01 sec
+      Start 14: reassembler_overlapping
+13/29 Test #14: reassembler_overlapping ..........   Passed    0.01 sec
+      Start 15: reassembler_win
+14/29 Test #15: reassembler_win ..................   Passed    5.89 sec
+      Start 16: wrapping_integers_cmp
+15/29 Test #16: wrapping_integers_cmp ............   Passed    0.01 sec
+      Start 17: wrapping_integers_wrap
+16/29 Test #17: wrapping_integers_wrap ...........   Passed    0.01 sec
+      Start 18: wrapping_integers_unwrap
+17/29 Test #18: wrapping_integers_unwrap .........   Passed    0.00 sec
+      Start 19: wrapping_integers_roundtrip
+18/29 Test #19: wrapping_integers_roundtrip ......   Passed    0.29 sec
+      Start 20: wrapping_integers_extra
+19/29 Test #20: wrapping_integers_extra ..........   Passed    0.05 sec
+      Start 21: recv_connect
+20/29 Test #21: recv_connect .....................   Passed    0.01 sec
+      Start 22: recv_transmit
+21/29 Test #22: recv_transmit ....................   Passed    0.17 sec
+      Start 23: recv_window
+22/29 Test #23: recv_window ......................   Passed    0.01 sec
+      Start 24: recv_reorder
+23/29 Test #24: recv_reorder .....................   Passed    0.01 sec
+      Start 25: recv_reorder_more
+24/29 Test #25: recv_reorder_more ................   Passed    9.54 sec
+      Start 26: recv_close
+25/29 Test #26: recv_close .......................   Passed    0.01 sec
+      Start 27: recv_special
+26/29 Test #27: recv_special .....................   Passed    0.01 sec
+      Start 37: compile with optimization
+27/29 Test #37: compile with optimization ........   Passed    0.07 sec
+      Start 38: byte_stream_speed_test
+             ByteStream throughput: 6.51 Gbit/s
+28/29 Test #38: byte_stream_speed_test ...........   Passed    0.07 sec
+      Start 39: reassembler_speed_test
+             Reassembler throughput: 16.55 Gbit/s
+29/29 Test #39: reassembler_speed_test ...........   Passed    0.10 sec
+
+100% tests passed, 0 tests failed out of 29
+
+Total Test time (real) =  16.62 sec
+Built target check2
+```
+
 ## 3 The TCP Sender
+
+```bash
+zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check3
+Test project /home/zhytou/minnow/build
+      Start  1: compile with bug-checkers
+ 1/36 Test  #1: compile with bug-checkers ........   Passed    0.18 sec
+      Start  3: byte_stream_basics
+ 2/36 Test  #3: byte_stream_basics ...............   Passed    0.01 sec
+      Start  4: byte_stream_capacity
+ 3/36 Test  #4: byte_stream_capacity .............   Passed    0.01 sec
+      Start  5: byte_stream_one_write
+ 4/36 Test  #5: byte_stream_one_write ............   Passed    0.01 sec
+      Start  6: byte_stream_two_writes
+ 5/36 Test  #6: byte_stream_two_writes ...........   Passed    0.01 sec
+      Start  7: byte_stream_many_writes
+ 6/36 Test  #7: byte_stream_many_writes ..........   Passed    0.03 sec
+      Start  8: byte_stream_stress_test
+ 7/36 Test  #8: byte_stream_stress_test ..........   Passed    0.01 sec
+      Start  9: reassembler_single
+ 8/36 Test  #9: reassembler_single ...............   Passed    0.01 sec
+      Start 10: reassembler_cap
+ 9/36 Test #10: reassembler_cap ..................   Passed    0.01 sec
+      Start 11: reassembler_seq
+10/36 Test #11: reassembler_seq ..................   Passed    0.01 sec
+      Start 12: reassembler_dup
+11/36 Test #12: reassembler_dup ..................   Passed    0.02 sec
+      Start 13: reassembler_holes
+12/36 Test #13: reassembler_holes ................   Passed    0.01 sec
+      Start 14: reassembler_overlapping
+13/36 Test #14: reassembler_overlapping ..........   Passed    0.01 sec
+      Start 15: reassembler_win
+14/36 Test #15: reassembler_win ..................   Passed    5.61 sec
+      Start 16: wrapping_integers_cmp
+15/36 Test #16: wrapping_integers_cmp ............   Passed    0.01 sec
+      Start 17: wrapping_integers_wrap
+16/36 Test #17: wrapping_integers_wrap ...........   Passed    0.00 sec
+      Start 18: wrapping_integers_unwrap
+17/36 Test #18: wrapping_integers_unwrap .........   Passed    0.00 sec
+      Start 19: wrapping_integers_roundtrip
+18/36 Test #19: wrapping_integers_roundtrip ......   Passed    0.28 sec
+      Start 20: wrapping_integers_extra
+19/36 Test #20: wrapping_integers_extra ..........   Passed    0.05 sec
+      Start 21: recv_connect
+20/36 Test #21: recv_connect .....................   Passed    0.01 sec
+      Start 22: recv_transmit
+21/36 Test #22: recv_transmit ....................   Passed    0.16 sec
+      Start 23: recv_window
+22/36 Test #23: recv_window ......................   Passed    0.01 sec
+      Start 24: recv_reorder
+23/36 Test #24: recv_reorder .....................   Passed    0.01 sec
+      Start 25: recv_reorder_more
+24/36 Test #25: recv_reorder_more ................   Passed    9.01 sec
+      Start 26: recv_close
+25/36 Test #26: recv_close .......................   Passed    0.01 sec
+      Start 27: recv_special
+26/36 Test #27: recv_special .....................   Passed    0.01 sec
+      Start 28: send_connect
+27/36 Test #28: send_connect .....................   Passed    0.01 sec
+      Start 29: send_transmit
+28/36 Test #29: send_transmit ....................   Passed    0.30 sec
+      Start 30: send_retx
+29/36 Test #30: send_retx ........................   Passed    0.01 sec
+      Start 31: send_window
+30/36 Test #31: send_window ......................   Passed    0.06 sec
+      Start 32: send_ack
+31/36 Test #32: send_ack .........................   Passed    0.01 sec
+      Start 33: send_close
+32/36 Test #33: send_close .......................   Passed    0.02 sec
+      Start 34: send_extra
+33/36 Test #34: send_extra .......................   Passed    0.03 sec
+      Start 37: compile with optimization
+34/36 Test #37: compile with optimization ........   Passed    0.07 sec
+      Start 38: byte_stream_speed_test
+             ByteStream throughput: 5.47 Gbit/s
+35/36 Test #38: byte_stream_speed_test ...........   Passed    0.07 sec
+      Start 39: reassembler_speed_test
+             Reassembler throughput: 17.48 Gbit/s
+36/36 Test #39: reassembler_speed_test ...........   Passed    0.11 sec
+
+100% tests passed, 0 tests failed out of 36
+
+Total Test time (real) =  16.17 sec
+Built target check3
+```
 
 ## 4 The Network Interface
 
+**Test Results**：
+
+```bash
+zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check4
+Test project /home/zhytou/minnow/build
+    Start  1: compile with bug-checkers
+1/2 Test  #1: compile with bug-checkers ........   Passed    0.17 sec
+    Start 35: net_interface
+2/2 Test #35: net_interface ....................   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.20 sec
+Built target check4
+```
+
 ## 5 The IP Router
+
+**Test Results**：
+
+```bash
+zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check4
+Test project /home/zhytou/minnow/build
+    Start  1: compile with bug-checkers
+1/2 Test  #1: compile with bug-checkers ........   Passed    0.17 sec
+    Start 35: net_interface
+2/2 Test #35: net_interface ....................   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.20 sec
+Built target check4
+```
