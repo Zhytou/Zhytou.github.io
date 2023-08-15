@@ -475,6 +475,183 @@ Built target check2
 
 ## 3 The TCP Sender
 
+lab3要求实现一个名为`TCPSender`的类，尽可能的向接收者发送字节，并通过超时重传保证可靠性。
+
+**Sending Bytes**：
+
+关于发送数据必须要说明的是，在lab3中，发送包是通过测试者调用`TCPSender::maybe_send`函数，而非发送者主动发送。换句话说，只需要将需要发送的包存储在一个队列，每次调用`TCPSender::maybe_send`时，弹出队首即可。
+
+**Recording Time**：
+
+此外，lab3中也不允许，使用其他计时器记录时间，而是依靠`TCPSender::tick`函数，由测试者告诉发送者已经过去的时间长短。因此，`TCPSender`只需要使用一个变量存储传入的时间即可。
+
+**Keep Track Of Outstanding Segments and Resend Them After RTO**：
+
+TCP是一种面向流的可靠协议。为了保证其可靠传输，设计者在TCP中添加了许多机制，比如：校验和、滑动窗口和超时重传等等。lab3要求追踪未承认段（Outstanding Segments），并在超出重传时间（Retrasmission Time，RTO）后将RTO翻倍后，再次发送。因此，`TCPSender`需要一个记录未承认段的表以及一个记录当前重传时间的变量。
+
+**TCPSender Data Structure**：
+
+```c++
+class TCPSender
+{
+  // initial SYN sequence number.
+  Wrap32 isn_;
+  // initial RTO. It stays the same all the time
+  uint64_t initial_RTO_ms_;
+  // current RTO. When retransmission fails, double it
+  uint64_t RTO_ms_;
+  // retransmission timer which records how long it has been since last retransmission happened.
+  uint64_t timer_;
+  // consecutive retransmission times.
+  uint64_t crt_times_;
+  // receiver's acknowledged absolute sequence number.
+  uint64_t ackno_;
+  // receiver's window size.
+  uint64_t wind_size_;
+  // sender's absolute sequence number
+  uint64_t seqno_;
+  // segments which are waiting to be sent.
+  std::queue<TCPSenderMessage> segments_;
+  // sender's sliding window shows all segments which haven't been acknowledged yet.
+  std::map<uint64_t, TCPSenderMessage> outstanding_segments_;
+  // sender's working mode
+  bool running_;
+
+public:
+  // ...
+};
+```
+
+**Push Bytes To Outbound Stream**：
+
+在完成了`TCPSender`的数据结构之后，就需要实现其最核心的接口，也就是发送数据的`TCPSender::push`函数。其实，这个函数的核心就是根据收到接收者的`ackno_`和`wind_size`来构造发送请求，并将这个包放入`segments_`和`outstanding_segments_`。只不过，它还需要考虑一些边界情况，包括：
+
+- 对于非发送者初始化而是接收者明确指出的`wind_size`为0时，将`wind_size`当作1。
+- 何时将FIN置为真？仅当输出流结束，且接收者滑动窗口还有空间才写入（因为FIN要占序号）。
+
+总的来说，其大致流程如下：
+
+```c++
+void TCPSender::push( Reader& outbound_stream )
+{
+  while ( ( ( wind_size_ == 0 && seqno_ == ackno_ ) || seqno_ < ackno_ + wind_size_ ) && running_ ) {
+    // construct sender message
+    TCPSenderMessage msg;
+    string data;
+    uint64_t data_len = 0;
+
+    if ( seqno_ == 0 ) {
+      // SYN
+      msg.SYN = true;
+    }
+    msg.seqno = Wrap32::wrap( seqno_, isn_ );
+
+    // use [ackno_, ackno_ + wind_size_) to calculate data_len
+    if ( ackno_ + wind_size_ > seqno_ ) {
+      // the actual length of seqno for payload has to minus 1, if SYN = true
+      data_len = ackno_ + wind_size_ - seqno_ - msg.SYN;
+    }
+    // make sure data len is in this range [1, MAX_PAYLOAD_SIZE), even if the receiver's window size is 0
+    data_len = max( 1UL, min( data_len, TCPConfig::MAX_PAYLOAD_SIZE ) );
+    read( outbound_stream, data_len, data );
+    msg.payload = Buffer( std::move( data ) );
+
+    // if stream is finished and there is also space in receiver's window, set the FIN flag
+    // or if stream is finished and the window size is 0 and the data is empty and SYN flag is false, set the FIN
+    // flag otherwise put FIN in another separate message
+    if ( outbound_stream.is_finished()
+         && ( seqno_ + msg.sequence_length() < ackno_ + wind_size_
+              || ( wind_size_ == 0 && msg.sequence_length() == 0 ) ) ) {
+      // FIN
+      msg.FIN = true;
+    }
+
+    // quit sending if msg is empty
+    if ( msg.sequence_length() == 0 ) {
+      return;
+    }
+
+    // add it to the waiting queue. When maybe_send() is called, sender will send the first segment in the queue.
+    segments_.push( msg );
+    // keep track of the segment
+    outstanding_segments_.emplace( seqno_, msg );
+
+    // update sender's seqno
+    seqno_ += msg.sequence_length();
+
+    // only allow to send 1 byte by pretending window size equals to 1, when the actual size is 0
+    if ( wind_size_ == 0 ) {
+      break;
+    }
+
+    // no more segments
+    if ( msg.FIN ) {
+      running_ = false;
+      break;
+    }
+  }
+  return;
+}
+```
+
+**Receive ACK Message**：
+
+完成发送接口之后，就需要实现接收接口了。事实上，`TCPSender::receive`与`TCPSender::push`重要性相同。因为它决定了`ackno_`和`wind_size`的更新，并且还囊括了超时重发的逻辑。其核心功能包括：
+
+- 更新`ackno_`和`wind_size`；
+- 更新`outstanding_segments_`；
+- 如果发送了重发，将`RTO_ms_`翻倍，并更新`crt_times_`；
+- 反之，则重置`RTO_ms_`、`crt_times_`以及`timer_`。
+
+总之，我的实现如下：
+
+```c++
+void TCPSender::receive( const TCPReceiverMessage& msg )
+{
+  uint64_t new_ackno = ackno_;
+  if ( msg.ackno.has_value() ) {
+    // extract receiver's ackno
+    new_ackno = msg.ackno.value().unwrap( isn_, ackno_ );
+    // avoid invalid ackno which is smaller
+    if ( ackno_ > new_ackno ) {
+      return;
+    }
+  }
+  // set receiver's window size, even if new_ackno equals to ackno
+  wind_size_ = msg.window_size;
+  // update outstanding segments, remove those acknowledged by receiver
+  bool reset_flag = false;
+  for ( auto itr = outstanding_segments_.begin(); itr != outstanding_segments_.end(); itr++ ) {
+    if ( itr->first + itr->second.sequence_length() == new_ackno ) {
+      reset_flag = true;
+      outstanding_segments_.erase( outstanding_segments_.begin(), ++itr );
+      break;
+    }
+  }
+  // make sure the new ackno is valid
+  if ( !reset_flag ) {
+    return;
+  }
+  // update ackno
+  ackno_ = new_ackno;
+
+  // the test system will call push again to send the rest bytes after calling receive
+  // treat a 0 window size as equal to 1 but don't back off RTO
+  if ( wind_size_ == 0 ) {
+    return;
+  }
+
+  // reset RTO
+  RTO_ms_ = initial_RTO_ms_;
+  // reset retransmission timer
+  timer_ = 0;
+  // reset times of consecutive retransmissions
+  crt_times_ = 0;
+}
+```
+
+**Test Results**：
+
 ```bash
 zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check3
 Test project /home/zhytou/minnow/build
