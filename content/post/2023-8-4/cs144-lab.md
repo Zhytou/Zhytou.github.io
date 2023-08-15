@@ -12,7 +12,7 @@ draft: false
 
 ## 0 Networking Warmup
 
-实验0的前几个部分主要以使用命令进行发Http请求或邮件并观察响应为主，只有最后两个部分需要写代码。下面介绍一下我的环境以及配置方法。
+lab0的前几个部分主要以使用命令进行发Http请求或邮件并观察响应为主，只有最后两个部分需要写代码。下面介绍一下我的环境以及配置方法。
 
 **WSL Install**：
 
@@ -131,12 +131,7 @@ protected:
   uint64_t bytes_popped_;
 
 public:
-  explicit ByteStream( uint64_t capacity );
-  // Helper functions (provided) to access the ByteStream's Reader and Writer interfaces
-  Reader& reader();
-  const Reader& reader() const;
-  Writer& writer();
-  const Writer& writer() const;
+  // ...
 };
 ```
 
@@ -175,9 +170,9 @@ Built target check0
 
 ## 1 Stitching Substrings Into A Byte Stream
 
-实验1要求实验一个名为`Reassembler`的整合器类。它能够将乱序传入且可能重叠的字符串排序并输出到给定的字节流中，其结构如下图：
+lab1要求实现一个名为`Reassembler`的整合器类。它能够将乱序传入且可能重叠的字符串排序并输出到给定的字节流中，其结构如下图：
 
-![](https://zhytou.top/post/2023-8-4/)
+![整合器](https://zhytou.top/post/2023-8-4/reassembler.png)
 
 其中，最重要的一点是`ByteStream`中未读取的部分加上`Reassembler`中无序的部分大小不能超过整个capacity。
 
@@ -197,15 +192,7 @@ private:
   uint64_t expected_last_index_;
 
 public:
-  Reassembler();
-  void insert( uint64_t first_index, std::string data, bool is_last_substring, Writer& output );
-
-  // The number of bytes stored in the Reassembler itself
-  uint64_t bytes_pending() const;
-  // The index of next byte epected
-  uint64_t index_expected() const;
-  // The index of last byte expected
-  uint64_t last_index_expected() const;
+  // ...
 };
 ```
 
@@ -306,6 +293,113 @@ Built target check1
 ```
 
 ## 2 The TCP Receiver
+
+**Translating Between 64-bit Indexes And 32-bit Seqnos**：
+
+在TCP报文中只能够提供一个32位的区域用于存储报文序号。当报文序号超过这个范围时，序号字段将循环回零重新计数。换句话说，TCP报文中的序号只是一个相对序号。
+
+在实际通信中，发送者会随机初始化一个32位的起始报文序号（Initial Sequence Number，ISN），并告知接收者。此时，接收者就可以通过将报文中的相对序号（Sequence Number，seqno）与起始序号相加的方式获取实际的绝对序号（Absolute Sequence Number）。这三者的关系如下：
+
+![报文序号](https://zhytou.top/post/2023-8-4/seqno.png)
+
+lab2在第一部分中，假设报文的绝对序号不会超过64位数表示范围，并要求实现一个用于32位数和64位数转换的一个`Wrap32`类。
+
+这部分个人认为比较简单，对于`wrap`函数来说，直接将64位数截断就好了；对于`unwrap`函数来说，将相对序号不断加1 << 32直到接近检查点就好了。不过要注意一些特殊情况，比如检查点特别小等。
+
+**Receiving Bytes**：
+
+lab2第二部分要求实现`TCPReceiver`类，完成其中`receive`和`send·`接口。我觉得其中最大的难点就是维护下一次希望发送的序号。尤其是要针对一些边界情况，比如，收到多个SYN或收到FIN但不能关闭等等。
+
+因此，我在`TCPReceiver`类中添加了`ack_seqno_`用于记录下一次希望发送的序号（如果使用`inbound_stream.bytes_pushed()`，则面对SYN未发送或第一次发送的逻辑会比较复杂）、`is_connected_`用于记录是否开启连接（避免重复SYN）以及`isn_`记录第一个报文序号。具体如下：
+
+```c++
+class TCPReceiver
+{
+private:
+  // The flag indicating whether the receiver is connected
+  bool is_connected_;
+  // The next sequence number expected from the sender
+  uint64_t ack_seqno_;
+  // The initial sequence number of the sender
+  Wrap32 isn_;
+
+public:
+   // ...
+};
+```
+
+有了`ack_seqno_`记录的下一次希望发送的序号，`send`函数就非常简单了，只需要将其放入`Wrap32`中返回即可。
+
+```c++
+TCPReceiverMessage TCPReceiver::send( const Writer& inbound_stream ) const
+{
+  TCPReceiverMessage message;
+  // get the window size
+  if ( inbound_stream.available_capacity() > UINT16_MAX ) {
+    message.window_size = UINT16_MAX;
+  } else {
+    message.window_size = inbound_stream.available_capacity();
+  }
+  // get the ackno, only if receiver is connected
+  if ( is_connected_ ) {
+    message.ackno = Wrap32::wrap( ack_seqno_, isn_ );
+  }
+  return message;
+}
+```
+
+至于`receive`函数，它要考虑的就多一些了，主要还是一些特殊情况，其框架如下：
+
+```c++
+void TCPReceiver::receive( TCPSenderMessage message, Reassembler& reassembler, Writer& inbound_stream )
+{
+  if ( message.SYN ) {
+    if ( is_connected_ ) {
+      // avoid duplicate connections
+      return;
+    }
+    // beginning of the byte stream
+    is_connected_ = true;
+    // keep track of initial sequence number
+    isn_ = message.seqno;
+    // ack seqno must be at least 1, because receiving SYN
+    ack_seqno_ = 1;
+  }
+
+  // transmission doesn't begin, do nothing
+  if ( is_connected_ == false ) {
+    return;
+  }
+
+  // convert relative seqno to absolute seqno, checkpoint is the bytes written to the stream
+  uint64_t absolute_seqno = message.seqno.unwrap( isn_, inbound_stream.bytes_pushed() );
+  // extract the data from the tcp payload, be careful to use Buffer::release()
+  string data( message.payload );
+
+  // absolute seqno begin at 0 when SYN comes, so the actual starting index of data has to minus 1
+  if ( absolute_seqno == 0 ) {
+    if ( !message.SYN ) {
+      // avoid invalid absolute seqno which equals to 0 but not SYN
+      return;
+    }
+    reassembler.insert( 0, data, message.FIN, inbound_stream );
+  } else {
+    reassembler.insert( absolute_seqno - 1, data, message.FIN, inbound_stream );
+  }
+
+  // update ack seqno
+  // ack seqno is the next expected byte, because SYN has to occupy 0
+  if ( reassembler.index_expected() > 0 ) {
+    ack_seqno_ = reassembler.index_expected() + 1;
+  }
+  // if the last byte is received, ack seqno should be added by 1 because FIN is not counted
+  if ( reassembler.last_index_expected() == reassembler.index_expected() ) {
+    ack_seqno_ += 1;
+  }
+
+  return;
+}
+```
 
 **Test Results**：
 
