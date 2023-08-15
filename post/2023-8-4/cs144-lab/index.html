@@ -25,7 +25,7 @@ WSL Install：
 sudo apt install cmake make git clang-format Remote Repository：
 首先，在github中创建一个名为minnow的空仓库，作为我们的远程备份仓库。注意，为了遵守课程规定，我们需要将该仓库设为私有。
 其次，克隆课程项目，并将其推送到自己的远程仓库上，完成仓库的初始化。具体方法如下：
-# clone the bare git proj git clone --bare https://github.com/cs144/minnow # cd the bare git directory and push everything to your own repo cd minnow.git; git remote add mine git@github."><meta itemprop=datePublished content="2023-08-04T22:18:06+08:00"><meta itemprop=dateModified content="2023-08-04T22:18:06+08:00"><meta itemprop=wordCount content="2262"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>04</span>
+# clone the bare git proj git clone --bare https://github.com/cs144/minnow # cd the bare git directory and push everything to your own repo cd minnow.git; git remote add mine git@github."><meta itemprop=datePublished content="2023-08-04T22:18:06+08:00"><meta itemprop=dateModified content="2023-08-04T22:18:06+08:00"><meta itemprop=wordCount content="2928"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>04</span>
 <span class=rest>Aug 2023</span></div></div><div class=matter><h1 class=title>CS144-Minnow Lab总结</h1><p class=post-meta><span class=post-meta></span></p></div></div><div class=markdown><blockquote><p>课程地址<a href=https://cs144.github.io/ target=_blank>CS144: Introduction to Computer Networking</a></p></blockquote><p><a href=https://wakatime.com/badge/user/a7b329b7-d489-40d2-9239-8be7cf83b65e/project/b892df03-90fb-40ca-a3a3-f14a57f9a941 target=_blank><figure><img src=https://wakatime.com/badge/user/a7b329b7-d489-40d2-9239-8be7cf83b65e/project/b892df03-90fb-40ca-a3a3-f14a57f9a941.svg alt=wakatime></figure></a></p><p>个人感觉，虽然整个CS144的Lab难度不算特别大（认认真真做一周时间应该是够了），但还是非常有收获的。反正我做完就感觉死去的计网记忆在攻击我:(。难度排序的话，应该是 TCP Sender > TCP receiver ≈Network Interface > IP router > Webget & ByteStream。</p><h2 id=0-networking-warmup>0 Networking Warmup</h2><p>lab0的前几个部分主要以使用命令进行发Http请求或邮件并观察响应为主，只有最后两个部分需要写代码。下面介绍一下我的环境以及配置方法。</p><p><strong>WSL Install</strong>：</p><p>首先，在确保虚拟化以及WSL功能正确开启后，前往微软商店下载Windows Subsystem For Linux。我使用的发行版是Ubuntu 22.04.2 LTS。更详细的下载方法，可以查看我的另一篇博客[搭建自己的生产环境]中的WSL部分。</p><p>接着，在WSL下载cmake、make、git和clang-format。其中，cmake和make是用于项目构建和编译的；git则是用于版本管理；clang-format则是一个格式化工具。它都会在后续使用到。具体下载方法如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sudo apt install cmake make git clang-format
 </span></span></code></pre></div><p><strong>Remote Repository</strong>：</p><p>首先，在github中创建一个名为<code>minnow</code>的空仓库，作为我们的远程备份仓库。注意，为了遵守课程规定，我们需要将该仓库设为私有。</p><p>其次，克隆课程项目，并将其推送到自己的远程仓库上，完成仓库的初始化。具体方法如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># clone the bare git proj</span>
 </span></span><span style=display:flex><span>git clone --bare https://github.com/cs144/minnow
@@ -346,7 +346,137 @@ sudo apt install cmake make git clang-format Remote Repository：
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>  16.62 sec
 </span></span><span style=display:flex><span>Built target check2
-</span></span></code></pre></div><h2 id=3-the-tcp-sender>3 The TCP Sender</h2><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check3
+</span></span></code></pre></div><h2 id=3-the-tcp-sender>3 The TCP Sender</h2><p>lab3要求实现一个名为<code>TCPSender</code>的类，尽可能的向接收者发送字节，并通过超时重传保证可靠性。</p><p><strong>Sending Bytes</strong>：</p><p>关于发送数据必须要说明的是，在lab3中，发送包是通过测试者调用<code>TCPSender::maybe_send</code>函数，而非发送者主动发送。换句话说，只需要将需要发送的包存储在一个队列，每次调用<code>TCPSender::maybe_send</code>时，弹出队首即可。</p><p><strong>Recording Time</strong>：</p><p>此外，lab3中也不允许，使用其他计时器记录时间，而是依靠<code>TCPSender::tick</code>函数，由测试者告诉发送者已经过去的时间长短。因此，<code>TCPSender</code>只需要使用一个变量存储传入的时间即可。</p><p><strong>Keep Track Of Outstanding Segments and Resend Them After RTO</strong>：</p><p>TCP是一种面向流的可靠协议。为了保证其可靠传输，设计者在TCP中添加了许多机制，比如：校验和、滑动窗口和超时重传等等。lab3要求追踪未承认段（Outstanding Segments），并在超出重传时间（Retrasmission Time，RTO）后将RTO翻倍后，再次发送。因此，<code>TCPSender</code>需要一个记录未承认段的表以及一个记录当前重传时间的变量。</p><p><strong>TCPSender Data Structure</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>TCPSender</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#888>// initial SYN sequence number.
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  Wrap32 isn_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// initial RTO. It stays the same all the time
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> initial_RTO_ms_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// current RTO. When retransmission fails, double it
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> RTO_ms_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// retransmission timer which records how long it has been since last retransmission happened.
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> timer_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// consecutive retransmission times.
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> crt_times_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// receiver&#39;s acknowledged absolute sequence number.
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> ackno_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// receiver&#39;s window size.
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> wind_size_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// sender&#39;s absolute sequence number
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> seqno_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// segments which are waiting to be sent.
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>queue<span style=color:#333>&lt;</span>TCPSenderMessage<span style=color:#333>&gt;</span> segments_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// sender&#39;s sliding window shows all segments which haven&#39;t been acknowledged yet.
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>map<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint64_t</span>, TCPSenderMessage<span style=color:#333>&gt;</span> outstanding_segments_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// sender&#39;s working mode
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>bool</span> running_;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
+</span></span><span style=display:flex><span>  <span style=color:#888>// ...
+</span></span></span><span style=display:flex><span><span style=color:#888></span>};
+</span></span></code></pre></div><p><strong>Push Bytes To Outbound Stream</strong>：</p><p>在完成了<code>TCPSender</code>的数据结构之后，就需要实现其最核心的接口，也就是发送数据的<code>TCPSender::push</code>函数。其实，这个函数的核心就是根据收到接收者的<code>ackno_</code>和<code>wind_size</code>来构造发送请求，并将这个包放入<code>segments_</code>和<code>outstanding_segments_</code>。只不过，它还需要考虑一些边界情况，包括：</p><ul><li>对于非发送者初始化而是接收者明确指出的<code>wind_size</code>为0时，将<code>wind_size</code>当作1。</li><li>何时将FIN置为真？仅当输出流结束，且接收者滑动窗口还有空间才写入（因为FIN要占序号）。</li></ul><p>总的来说，其大致流程如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>void</span> TCPSender<span style=color:#333>::</span>push( Reader<span style=color:#333>&amp;</span> outbound_stream )
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>while</span> ( ( ( wind_size_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> <span style=color:#333>&amp;&amp;</span> seqno_ <span style=color:#333>==</span> ackno_ ) <span style=color:#333>||</span> seqno_ <span style=color:#333>&lt;</span> ackno_ <span style=color:#333>+</span> wind_size_ ) <span style=color:#333>&amp;&amp;</span> running_ ) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// construct sender message
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    TCPSenderMessage msg;
+</span></span><span style=display:flex><span>    string data;
+</span></span><span style=display:flex><span>    <span style=color:#339;font-weight:700>uint64_t</span> data_len <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> ( seqno_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
+</span></span><span style=display:flex><span>      <span style=color:#888>// SYN
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      msg.SYN <span style=color:#333>=</span> <span style=color:#007020>true</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    msg.seqno <span style=color:#333>=</span> Wrap32<span style=color:#333>::</span>wrap( seqno_, isn_ );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#888>// use [ackno_, ackno_ + wind_size_) to calculate data_len
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( ackno_ <span style=color:#333>+</span> wind_size_ <span style=color:#333>&gt;</span> seqno_ ) {
+</span></span><span style=display:flex><span>      <span style=color:#888>// the actual length of seqno for payload has to minus 1, if SYN = true
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      data_len <span style=color:#333>=</span> ackno_ <span style=color:#333>+</span> wind_size_ <span style=color:#333>-</span> seqno_ <span style=color:#333>-</span> msg.SYN;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#888>// make sure data len is in this range [1, MAX_PAYLOAD_SIZE), even if the receiver&#39;s window size is 0
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    data_len <span style=color:#333>=</span> max( <span style=color:#00d;font-weight:700>1UL</span>, min( data_len, TCPConfig<span style=color:#333>::</span>MAX_PAYLOAD_SIZE ) );
+</span></span><span style=display:flex><span>    read( outbound_stream, data_len, data );
+</span></span><span style=display:flex><span>    msg.payload <span style=color:#333>=</span> Buffer( std<span style=color:#333>::</span>move( data ) );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#888>// if stream is finished and there is also space in receiver&#39;s window, set the FIN flag
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#888>// or if stream is finished and the window size is 0 and the data is empty and SYN flag is false, set the FIN
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#888>// flag otherwise put FIN in another separate message
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( outbound_stream.is_finished()
+</span></span><span style=display:flex><span>         <span style=color:#333>&amp;&amp;</span> ( seqno_ <span style=color:#333>+</span> msg.sequence_length() <span style=color:#333>&lt;</span> ackno_ <span style=color:#333>+</span> wind_size_
+</span></span><span style=display:flex><span>              <span style=color:#333>||</span> ( wind_size_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> <span style=color:#333>&amp;&amp;</span> msg.sequence_length() <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) ) ) {
+</span></span><span style=display:flex><span>      <span style=color:#888>// FIN
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      msg.FIN <span style=color:#333>=</span> <span style=color:#007020>true</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#888>// quit sending if msg is empty
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( msg.sequence_length() <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>return</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#888>// add it to the waiting queue. When maybe_send() is called, sender will send the first segment in the queue.
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    segments_.push( msg );
+</span></span><span style=display:flex><span>    <span style=color:#888>// keep track of the segment
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    outstanding_segments_.emplace( seqno_, msg );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#888>// update sender&#39;s seqno
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    seqno_ <span style=color:#333>+=</span> msg.sequence_length();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#888>// only allow to send 1 byte by pretending window size equals to 1, when the actual size is 0
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( wind_size_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#888>// no more segments
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( msg.FIN ) {
+</span></span><span style=display:flex><span>      running_ <span style=color:#333>=</span> <span style=color:#007020>false</span>;
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>Receive ACK Message</strong>：</p><p>完成发送接口之后，就需要实现接收接口了。事实上，<code>TCPSender::receive</code>与<code>TCPSender::push</code>重要性相同。因为它决定了<code>ackno_</code>和<code>wind_size</code>的更新，并且还囊括了超时重发的逻辑。其核心功能包括：</p><ul><li>更新<code>ackno_</code>和<code>wind_size</code>；</li><li>更新<code>outstanding_segments_</code>；</li><li>如果发送了重发，将<code>RTO_ms_</code>翻倍，并更新<code>crt_times_</code>；</li><li>反之，则重置<code>RTO_ms_</code>、<code>crt_times_</code>以及<code>timer_</code>。</li></ul><p>总之，我的实现如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>void</span> TCPSender<span style=color:#333>::</span>receive( <span style=color:#080;font-weight:700>const</span> TCPReceiverMessage<span style=color:#333>&amp;</span> msg )
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>uint64_t</span> new_ackno <span style=color:#333>=</span> ackno_;
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> ( msg.ackno.has_value() ) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// extract receiver&#39;s ackno
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    new_ackno <span style=color:#333>=</span> msg.ackno.value().unwrap( isn_, ackno_ );
+</span></span><span style=display:flex><span>    <span style=color:#888>// avoid invalid ackno which is smaller
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( ackno_ <span style=color:#333>&gt;</span> new_ackno ) {
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>return</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#888>// set receiver&#39;s window size, even if new_ackno equals to ackno
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  wind_size_ <span style=color:#333>=</span> msg.window_size;
+</span></span><span style=display:flex><span>  <span style=color:#888>// update outstanding segments, remove those acknowledged by receiver
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>bool</span> reset_flag <span style=color:#333>=</span> <span style=color:#007020>false</span>;
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>for</span> ( <span style=color:#080;font-weight:700>auto</span> itr <span style=color:#333>=</span> outstanding_segments_.begin(); itr <span style=color:#333>!=</span> outstanding_segments_.end(); itr<span style=color:#333>++</span> ) {
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> ( itr<span style=color:#333>-&gt;</span>first <span style=color:#333>+</span> itr<span style=color:#333>-&gt;</span>second.sequence_length() <span style=color:#333>==</span> new_ackno ) {
+</span></span><span style=display:flex><span>      reset_flag <span style=color:#333>=</span> <span style=color:#007020>true</span>;
+</span></span><span style=display:flex><span>      outstanding_segments_.erase( outstanding_segments_.begin(), <span style=color:#333>++</span>itr );
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#888>// make sure the new ackno is valid
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( <span style=color:#333>!</span>reset_flag ) {
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>return</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#888>// update ackno
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  ackno_ <span style=color:#333>=</span> new_ackno;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#888>// the test system will call push again to send the rest bytes after calling receive
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#888>// treat a 0 window size as equal to 1 but don&#39;t back off RTO
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( wind_size_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>return</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#888>// reset RTO
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  RTO_ms_ <span style=color:#333>=</span> initial_RTO_ms_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// reset retransmission timer
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  timer_ <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>  <span style=color:#888>// reset times of consecutive retransmissions
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  crt_times_ <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>Test Results</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check3
 </span></span><span style=display:flex><span>Test project /home/zhytou/minnow/build
 </span></span><span style=display:flex><span>      Start  1: compile with bug-checkers
 </span></span><span style=display:flex><span> 1/36 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.18 sec</span>
