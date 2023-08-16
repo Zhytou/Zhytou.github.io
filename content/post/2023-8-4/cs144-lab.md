@@ -738,6 +738,167 @@ Built target check3
 
 ## 4 The Network Interface
 
+lab4要求实现一个名为`NetworkInterface`的类，即：链路层接口。其主要工作就是发送和接受数据帧。具体来在lab4中，其发送流程为将IP协议数据包封装为Ethernet数据帧，并根据IP地址找到对应的Ethernet接口；而接受流程则为接收Ethernet数据帧并根据帧内容回复。
+
+**The Address Resolution Protocol**：
+
+由于`NetworkInterface`需要根据IP地址找到对应的Ethernet地址，这就表明它必须依靠某种机制获取未知设备的物理地址，并在内部存储该映射。
+
+而这个根据IP地址获取MAC地址的机制被称作地址解析协议（Address Resolution Protocol，ARP）。它的原理是，设备向网络中的其他设备发送ARP请求，询问某个IP地址对应的MAC地址。收到请求的设备检查自己的ARP缓存表，如果有对应的条目，则返回已知的MAC地址；如果没有对应条目，则广播ARP请求到局域网上的所有设备。拥有被请求IP地址的设备收到请求后，会向请求设备回复一个ARP响应，包含自己的MAC地址。请求设备收到响应后，将收到的MAC地址与目标IP地址建立映射关系，并将映射结果存储在ARP缓存表中，以便后续使用。
+
+除此之外，lab4对ARP缓存提出了有效时间限制，并且利用超时重发机制保证其可靠性。
+
+**Network Interface**：
+
+在理解了ARP协议的工作原理之后，`NetworkInterface`的实现就变得比较清晰了，其结构实现如下：
+
+```c++
+class NetworkInterface
+{
+private:
+  // Ethernet (known as hardware, network-access, or link-layer) address of the interface
+  EthernetAddress ethernet_address_;
+  // IP (known as Internet-layer or network-layer) address of the interface
+  Address ip_address_;
+  // ARP (Address Resolution Protocol) 30-second-valid cache recording a mapping from IP addresses to Ethernet
+  // addresses
+  std::unordered_map<uint32_t, std::pair<uint64_t, EthernetAddress>> arp_cache_;
+  // Ethernet frames ready to be sent, including ARP and IP datagrams
+  std::queue<EthernetFrame> frames_;
+  // Ethernet frames waiting for the ARP respond
+  std::list<std::pair<uint32_t, EthernetFrame>> waiting_frames_;
+  // ARP timer recording how long it has been since last request was sent
+  std::unordered_map<uint32_t, uint64_t> arp_timer_;
+
+public:
+  // ...    
+};
+```
+
+**Sending Datagram**：
+
+对于发送接口来说，其工作流程应该如下：
+
+- 检测ARP缓存是否包含目标IP地址且有效；
+- 若存在，则直接发送。
+- 反之，检测该ARP请求是否近期发送过；
+  - 若近期发送过，则直接返回，避免网络堵塞；
+  - 反之，发送ARP请求并重置ARP计时器，最后将该IP数据包暂存。
+
+```c++
+void NetworkInterface::send_datagram( const InternetDatagram& dgram, const Address& next_hop )
+{
+  uint32_t next_hop_ip = next_hop.ipv4_numeric();
+  // construct Ethernet frame
+  EthernetFrame frame;
+  frame.header.src = ethernet_address_;
+  frame.header.type = EthernetHeader::TYPE_IPv4;
+  frame.payload = serialize( dgram );
+
+  if ( arp_cache_.find( next_hop_ip ) == arp_cache_.end()
+       || arp_cache_.at( next_hop_ip ).first >= ARP_CACHE_TIMEOUT ) {
+    // queue the datagram until knowning the Ethernet address
+    waiting_frames_.emplace_back( next_hop_ip, frame );
+
+    // avoid flooding the network with ARP requests
+    if ( arp_timer_.find( next_hop_ip ) != arp_timer_.end()
+         && arp_timer_.at( next_hop_ip ) <= ARP_REQUEST_TIMEOUT ) {
+      return;
+    }
+
+    // construct ARP frame
+    EthernetFrame arp_frame;
+    // ...
+    // send the ARP request
+    frames_.emplace( arp_frame );
+    // update ARP timer
+    arp_timer_.emplace( next_hop_ip, 0 );
+  } else {
+    // send directly if destination is known
+    frame.header.dst = arp_cache_.at( next_hop_ip ).second;
+    frames_.emplace( frame );
+  }
+  return;
+}
+```
+
+**Receiving Frames**：
+
+对于接收接口来说，其工作流程应该如下：
+
+- 检测数据帧协议；
+- 若为IP，直接解析返回。
+- 若为ARP，则检查为ARP请求还是ARP回复；
+  - 若为ARP请求，则更新ARP缓存，仅当存在查询地址才返回；
+  - 若为ARP回复，则更新ARP缓存，并`waiting_frames_`中已知地址的帧发送。
+
+``` c++
+// frame: the incoming Ethernet frame
+optional<InternetDatagram> NetworkInterface::recv_frame( const EthernetFrame& frame )
+{
+  optional<InternetDatagram> recv_dgram = nullopt;
+  switch ( frame.header.type ) {
+    case EthernetHeader::TYPE_IPv4: {
+      // parse the recv datagram
+      // ... 
+      recv_dgram = dgram;
+      break;
+    }
+    case EthernetHeader::TYPE_ARP: {
+      // costruct ARP message
+      ARPMessage arp_msg;
+      if ( !parse( arp_msg, frame.payload ) ) {
+        break;
+      }
+      switch ( arp_msg.opcode ) {
+        // reply ARP request and update ARP cache
+        case ARPMessage::OPCODE_REQUEST: {
+          // the destination has to be the broadcast address
+          if ( frame.header.dst != ETHERNET_BROADCAST ) {
+            break;
+          }
+          // update ARP cache
+          arp_cache_.emplace( arp_msg.sender_ip_address, make_pair( 0, arp_msg.sender_ethernet_address ) );
+
+          // reply only if the target IP address is known
+          if ( arp_msg.target_ip_address != ip_address_.ipv4_numeric()
+               && ( arp_cache_.find( arp_msg.target_ip_address ) == arp_cache_.end()
+                    || arp_cache_.at( arp_msg.target_ip_address ).first >= ARP_CACHE_TIMEOUT ) ) {
+            break;
+          }
+          // construct ARP frame
+          // ... 
+          // send the ARP reply
+          frames_.emplace( arp_frame );
+
+          break;
+        }
+        // update ARP cache, ARP timer and waiting frames
+        case ARPMessage::OPCODE_REPLY: {
+          // the destination has to be the receiver's address
+          if ( frame.header.dst != ethernet_address_ ) {
+            break;
+          }
+          arp_cache_.emplace( arp_msg.sender_ip_address, make_pair( 0UL, arp_msg.sender_ethernet_address ) );
+          arp_timer_.erase( arp_msg.sender_ip_address );
+
+          // update the waiting frames
+          // send the frames in the waiting list, when address is known and valid
+          // ...
+        }
+        default:
+          break;
+      }
+      break;
+    }
+    default:
+      break;
+  }
+
+  return recv_dgram;
+}
+```
+
 **Test Results**：
 
 ```bash
