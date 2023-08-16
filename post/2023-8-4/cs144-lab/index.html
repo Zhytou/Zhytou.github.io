@@ -25,7 +25,7 @@ WSL Install：
 sudo apt install cmake make git clang-format Remote Repository：
 首先，在github中创建一个名为minnow的空仓库，作为我们的远程备份仓库。注意，为了遵守课程规定，我们需要将该仓库设为私有。
 其次，克隆课程项目，并将其推送到自己的远程仓库上，完成仓库的初始化。具体方法如下：
-# clone the bare git proj git clone --bare https://github.com/cs144/minnow # cd the bare git directory and push everything to your own repo cd minnow.git; git remote add mine git@github."><meta itemprop=datePublished content="2023-08-04T22:18:06+08:00"><meta itemprop=dateModified content="2023-08-04T22:18:06+08:00"><meta itemprop=wordCount content="2928"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>04</span>
+# clone the bare git proj git clone --bare https://github.com/cs144/minnow # cd the bare git directory and push everything to your own repo cd minnow.git; git remote add mine git@github."><meta itemprop=datePublished content="2023-08-04T22:18:06+08:00"><meta itemprop=dateModified content="2023-08-04T22:18:06+08:00"><meta itemprop=wordCount content="3407"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>04</span>
 <span class=rest>Aug 2023</span></div></div><div class=matter><h1 class=title>CS144-Minnow Lab总结</h1><p class=post-meta><span class=post-meta></span></p></div></div><div class=markdown><blockquote><p>课程地址<a href=https://cs144.github.io/ target=_blank>CS144: Introduction to Computer Networking</a></p></blockquote><p><a href=https://wakatime.com/badge/user/a7b329b7-d489-40d2-9239-8be7cf83b65e/project/b892df03-90fb-40ca-a3a3-f14a57f9a941 target=_blank><figure><img src=https://wakatime.com/badge/user/a7b329b7-d489-40d2-9239-8be7cf83b65e/project/b892df03-90fb-40ca-a3a3-f14a57f9a941.svg alt=wakatime></figure></a></p><p>个人感觉，虽然整个CS144的Lab难度不算特别大（认认真真做一周时间应该是够了），但还是非常有收获的。反正我做完就感觉死去的计网记忆在攻击我:(。难度排序的话，应该是 TCP Sender > TCP receiver ≈Network Interface > IP router > Webget & ByteStream。</p><h2 id=0-networking-warmup>0 Networking Warmup</h2><p>lab0的前几个部分主要以使用命令进行发Http请求或邮件并观察响应为主，只有最后两个部分需要写代码。下面介绍一下我的环境以及配置方法。</p><p><strong>WSL Install</strong>：</p><p>首先，在确保虚拟化以及WSL功能正确开启后，前往微软商店下载Windows Subsystem For Linux。我使用的发行版是Ubuntu 22.04.2 LTS。更详细的下载方法，可以查看我的另一篇博客[搭建自己的生产环境]中的WSL部分。</p><p>接着，在WSL下载cmake、make、git和clang-format。其中，cmake和make是用于项目构建和编译的；git则是用于版本管理；clang-format则是一个格式化工具。它都会在后续使用到。具体下载方法如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sudo apt install cmake make git clang-format
 </span></span></code></pre></div><p><strong>Remote Repository</strong>：</p><p>首先，在github中创建一个名为<code>minnow</code>的空仓库，作为我们的远程备份仓库。注意，为了遵守课程规定，我们需要将该仓库设为私有。</p><p>其次，克隆课程项目，并将其推送到自己的远程仓库上，完成仓库的初始化。具体方法如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># clone the bare git proj</span>
 </span></span><span style=display:flex><span>git clone --bare https://github.com/cs144/minnow
@@ -557,7 +557,125 @@ sudo apt install cmake make git clang-format Remote Repository：
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>  16.17 sec
 </span></span><span style=display:flex><span>Built target check3
-</span></span></code></pre></div><h2 id=4-the-network-interface>4 The Network Interface</h2><p><strong>Test Results</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check4
+</span></span></code></pre></div><h2 id=4-the-network-interface>4 The Network Interface</h2><p>lab4要求实现一个名为<code>NetworkInterface</code>的类，即：链路层接口。其主要工作就是发送和接受数据帧。具体来在lab4中，其发送流程为将IP协议数据包封装为Ethernet数据帧，并根据IP地址找到对应的Ethernet接口；而接受流程则为接收Ethernet数据帧并根据帧内容回复。</p><p><strong>The Address Resolution Protocol</strong>：</p><p>由于<code>NetworkInterface</code>需要根据IP地址找到对应的Ethernet地址，这就表明它必须依靠某种机制获取未知设备的物理地址，并在内部存储该映射。</p><p>而这个根据IP地址获取MAC地址的机制被称作地址解析协议（Address Resolution Protocol，ARP）。它的原理是，设备向网络中的其他设备发送ARP请求，询问某个IP地址对应的MAC地址。收到请求的设备检查自己的ARP缓存表，如果有对应的条目，则返回已知的MAC地址；如果没有对应条目，则广播ARP请求到局域网上的所有设备。拥有被请求IP地址的设备收到请求后，会向请求设备回复一个ARP响应，包含自己的MAC地址。请求设备收到响应后，将收到的MAC地址与目标IP地址建立映射关系，并将映射结果存储在ARP缓存表中，以便后续使用。</p><p>除此之外，lab4对ARP缓存提出了有效时间限制，并且利用超时重发机制保证其可靠性。</p><p><strong>Network Interface</strong>：</p><p>在理解了ARP协议的工作原理之后，<code>NetworkInterface</code>的实现就变得比较清晰了，其结构实现如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>NetworkInterface</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>private</span><span style=color:#333>:</span>
+</span></span><span style=display:flex><span>  <span style=color:#888>// Ethernet (known as hardware, network-access, or link-layer) address of the interface
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  EthernetAddress ethernet_address_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// IP (known as Internet-layer or network-layer) address of the interface
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  Address ip_address_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// ARP (Address Resolution Protocol) 30-second-valid cache recording a mapping from IP addresses to Ethernet
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#888>// addresses
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>unordered_map<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint32_t</span>, std<span style=color:#333>::</span>pair<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint64_t</span>, EthernetAddress<span style=color:#333>&gt;&gt;</span> arp_cache_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// Ethernet frames ready to be sent, including ARP and IP datagrams
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>queue<span style=color:#333>&lt;</span>EthernetFrame<span style=color:#333>&gt;</span> frames_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// Ethernet frames waiting for the ARP respond
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>list<span style=color:#333>&lt;</span>std<span style=color:#333>::</span>pair<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint32_t</span>, EthernetFrame<span style=color:#333>&gt;&gt;</span> waiting_frames_;
+</span></span><span style=display:flex><span>  <span style=color:#888>// ARP timer recording how long it has been since last request was sent
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>unordered_map<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint32_t</span>, <span style=color:#339;font-weight:700>uint64_t</span><span style=color:#333>&gt;</span> arp_timer_;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
+</span></span><span style=display:flex><span>  <span style=color:#888>// ...    
+</span></span></span><span style=display:flex><span><span style=color:#888></span>};
+</span></span></code></pre></div><p><strong>Sending Datagram</strong>：</p><p>对于发送接口来说，其工作流程应该如下：</p><ul><li>检测ARP缓存是否包含目标IP地址且有效；</li><li>若存在，则直接发送。</li><li>反之，检测该ARP请求是否近期发送过；<ul><li>若近期发送过，则直接返回，避免网络堵塞；</li><li>反之，发送ARP请求并重置ARP计时器，最后将该IP数据包暂存。</li></ul></li></ul><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>void</span> NetworkInterface<span style=color:#333>::</span>send_datagram( <span style=color:#080;font-weight:700>const</span> InternetDatagram<span style=color:#333>&amp;</span> dgram, <span style=color:#080;font-weight:700>const</span> Address<span style=color:#333>&amp;</span> next_hop )
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>uint32_t</span> next_hop_ip <span style=color:#333>=</span> next_hop.ipv4_numeric();
+</span></span><span style=display:flex><span>  <span style=color:#888>// construct Ethernet frame
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  EthernetFrame frame;
+</span></span><span style=display:flex><span>  frame.header.src <span style=color:#333>=</span> ethernet_address_;
+</span></span><span style=display:flex><span>  frame.header.type <span style=color:#333>=</span> EthernetHeader<span style=color:#333>::</span>TYPE_IPv4;
+</span></span><span style=display:flex><span>  frame.payload <span style=color:#333>=</span> serialize( dgram );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> ( arp_cache_.find( next_hop_ip ) <span style=color:#333>==</span> arp_cache_.end()
+</span></span><span style=display:flex><span>       <span style=color:#333>||</span> arp_cache_.at( next_hop_ip ).first <span style=color:#333>&gt;=</span> ARP_CACHE_TIMEOUT ) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// queue the datagram until knowning the Ethernet address
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    waiting_frames_.emplace_back( next_hop_ip, frame );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#888>// avoid flooding the network with ARP requests
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( arp_timer_.find( next_hop_ip ) <span style=color:#333>!=</span> arp_timer_.end()
+</span></span><span style=display:flex><span>         <span style=color:#333>&amp;&amp;</span> arp_timer_.at( next_hop_ip ) <span style=color:#333>&lt;=</span> ARP_REQUEST_TIMEOUT ) {
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>return</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#888>// construct ARP frame
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    EthernetFrame arp_frame;
+</span></span><span style=display:flex><span>    <span style=color:#888>// ...
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#888>// send the ARP request
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    frames_.emplace( arp_frame );
+</span></span><span style=display:flex><span>    <span style=color:#888>// update ARP timer
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    arp_timer_.emplace( next_hop_ip, <span style=color:#00d;font-weight:700>0</span> );
+</span></span><span style=display:flex><span>  } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>    <span style=color:#888>// send directly if destination is known
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    frame.header.dst <span style=color:#333>=</span> arp_cache_.at( next_hop_ip ).second;
+</span></span><span style=display:flex><span>    frames_.emplace( frame );
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>Receiving Frames</strong>：</p><p>对于接收接口来说，其工作流程应该如下：</p><ul><li>检测数据帧协议；</li><li>若为IP，直接解析返回。</li><li>若为ARP，则检查为ARP请求还是ARP回复；<ul><li>若为ARP请求，则更新ARP缓存，仅当存在查询地址才返回；</li><li>若为ARP回复，则更新ARP缓存，并<code>waiting_frames_</code>中已知地址的帧发送。</li></ul></li></ul><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#888>// frame: the incoming Ethernet frame
+</span></span></span><span style=display:flex><span><span style=color:#888></span>optional<span style=color:#333>&lt;</span>InternetDatagram<span style=color:#333>&gt;</span> NetworkInterface<span style=color:#333>::</span>recv_frame( <span style=color:#080;font-weight:700>const</span> EthernetFrame<span style=color:#333>&amp;</span> frame )
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  optional<span style=color:#333>&lt;</span>InternetDatagram<span style=color:#333>&gt;</span> recv_dgram <span style=color:#333>=</span> nullopt;
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>switch</span> ( frame.header.type ) {
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>case</span> EthernetHeader<span style=color:#333>::</span><span style=color:#970;font-weight:700>TYPE_IPv4</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#888>// parse the recv datagram
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#888>// ... 
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      recv_dgram <span style=color:#333>=</span> dgram;
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>case</span> EthernetHeader<span style=color:#333>::</span><span style=color:#970;font-weight:700>TYPE_ARP</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#888>// costruct ARP message
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      ARPMessage arp_msg;
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>if</span> ( <span style=color:#333>!</span>parse( arp_msg, frame.payload ) ) {
+</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>switch</span> ( arp_msg.opcode ) {
+</span></span><span style=display:flex><span>        <span style=color:#888>// reply ARP request and update ARP cache
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        <span style=color:#080;font-weight:700>case</span> ARPMessage<span style=color:#333>::</span><span style=color:#970;font-weight:700>OPCODE_REQUEST</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#888>// the destination has to be the broadcast address
+</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#080;font-weight:700>if</span> ( frame.header.dst <span style=color:#333>!=</span> ETHERNET_BROADCAST ) {
+</span></span><span style=display:flex><span>            <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>          <span style=color:#888>// update ARP cache
+</span></span></span><span style=display:flex><span><span style=color:#888></span>          arp_cache_.emplace( arp_msg.sender_ip_address, make_pair( <span style=color:#00d;font-weight:700>0</span>, arp_msg.sender_ethernet_address ) );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>          <span style=color:#888>// reply only if the target IP address is known
+</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#080;font-weight:700>if</span> ( arp_msg.target_ip_address <span style=color:#333>!=</span> ip_address_.ipv4_numeric()
+</span></span><span style=display:flex><span>               <span style=color:#333>&amp;&amp;</span> ( arp_cache_.find( arp_msg.target_ip_address ) <span style=color:#333>==</span> arp_cache_.end()
+</span></span><span style=display:flex><span>                    <span style=color:#333>||</span> arp_cache_.at( arp_msg.target_ip_address ).first <span style=color:#333>&gt;=</span> ARP_CACHE_TIMEOUT ) ) {
+</span></span><span style=display:flex><span>            <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>          <span style=color:#888>// construct ARP frame
+</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#888>// ... 
+</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#888>// send the ARP reply
+</span></span></span><span style=display:flex><span><span style=color:#888></span>          frames_.emplace( arp_frame );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>          <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#888>// update ARP cache, ARP timer and waiting frames
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        <span style=color:#080;font-weight:700>case</span> ARPMessage<span style=color:#333>::</span><span style=color:#970;font-weight:700>OPCODE_REPLY</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#888>// the destination has to be the receiver&#39;s address
+</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#080;font-weight:700>if</span> ( frame.header.dst <span style=color:#333>!=</span> ethernet_address_ ) {
+</span></span><span style=display:flex><span>            <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>          arp_cache_.emplace( arp_msg.sender_ip_address, make_pair( <span style=color:#00d;font-weight:700>0UL</span>, arp_msg.sender_ethernet_address ) );
+</span></span><span style=display:flex><span>          arp_timer_.erase( arp_msg.sender_ip_address );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>          <span style=color:#888>// update the waiting frames
+</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#888>// send the frames in the waiting list, when address is known and valid
+</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#888>// ...
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        }
+</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>default</span><span style=color:#333>:</span>
+</span></span><span style=display:flex><span>          <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>default</span><span style=color:#333>:</span>
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span> recv_dgram;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>Test Results</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check4
 </span></span><span style=display:flex><span>Test project /home/zhytou/minnow/build
 </span></span><span style=display:flex><span>    Start  1: compile with bug-checkers
 </span></span><span style=display:flex><span>1/2 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.17 sec</span>
