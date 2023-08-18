@@ -917,18 +917,92 @@ Built target check4
 
 ## 5 The IP Router
 
+**Router Data Structure**：
+
+lab5要求在lab4`NetworkInterface`的基础之上实现一个名为`Router`的路由器类。其中，一个`Router`管理着一组`NetworkInterface`接口，每一个接口管理着一个子网，即：和这个子网内的所有设备接口进行通信，且每个接口可以使用不同数据链路层技术，比如、以太网、WIFI和蓝牙等。
+
+此外，`Router`内部还存储着一组名为路由的跳转规则。它其实是一个IP地址到MAC地址的映射。当路由器接收到需要转发的数据包时，会查询该数据包的目的IP地址，在路由表中找到相应的下一跳地址。
+
+> 路由表和ARP缓存有什么区别？
+>
+> 第一，路由表映射的是整个网络中的IP地址与下一跳路由器/接口的映射关系，而ARP缓存只映射局域网内主机的IP与MAC地址关系。
+> 第二，路由表主要靠静态设置和路由协议动态学习获得，而ARP缓存通过ARP请求响应在本地网络内学习获得。
+
+因此，`Router`结构体如下：
+
+```c++
+class Router
+{
+  // The router's collection of network interfaces
+  std::vector<AsyncNetworkInterface> interfaces_ {};
+  // The router's collection of forwarding rules
+  std::vector<std::tuple<uint32_t, uint8_t, std::optional<Address>, uint64_t>> routes_ {};
+public:
+  // ...
+};
+```
+
+**Forward**：
+
+在理解了路由器的工作原理之后，实现转发`route`函数就很简单了。只需要注意修改TTL和Checksum。
+
+```c++
+void Router::route()
+{
+  for ( auto& interface : interfaces_ ) {
+    while ( 1 ) {
+      optional<InternetDatagram> opt_dgram = interface.maybe_receive();
+      // no more datagrams
+      if ( !opt_dgram.has_value() ) {
+        break;
+      }
+
+      InternetDatagram dgram = opt_dgram.value();
+      uint32_t dst_addr = dgram.header.dst;
+      uint64_t match_idx = routes_.size();
+      // iterate through all routes to find the longest prefix match
+      for ( uint64_t i = 0; i < routes_.size(); i++ ) {
+        uint32_t route_prefix = get<0>( routes_[i] );
+        uint8_t prefix_length = get<1>( routes_[i] );
+        uint32_t mask = prefix_length == 0 ? 0 : ~( ( 1U << ( 32 - prefix_length ) ) - 1 );
+        // ...
+      }
+
+      // drop the datagram in the following 2 cases:
+      // no matched route
+      if ( match_idx == routes_.size() ) {
+        continue;
+      }
+      // TTL is arleady 0 or 0 after derecementing
+      if ( dgram.header.ttl == 0 || dgram.header.ttl - 1 == 0 ) {
+        continue;
+      }
+      // decrement the TTL
+      dgram.header.ttl -= 1;
+      // compute checksum
+      dgram.header.compute_checksum();
+      // send it to the next hop
+      // ... 
+    }
+  }
+}
+
+```
+
 **Test Results**：
 
 ```bash
-zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check4
+zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check5
 Test project /home/zhytou/minnow/build
     Start  1: compile with bug-checkers
-1/2 Test  #1: compile with bug-checkers ........   Passed    0.17 sec
+1/3 Test  #1: compile with bug-checkers ........   Passed    2.36 sec
     Start 35: net_interface
-2/2 Test #35: net_interface ....................   Passed    0.02 sec
+2/3 Test #35: net_interface ....................   Passed    0.01 sec
+    Start 36: router
+3/3 Test #36: router ...........................   Passed    0.03 sec
 
-100% tests passed, 0 tests failed out of 2
+100% tests passed, 0 tests failed out of 3
 
-Total Test time (real) =   0.20 sec
-Built target check4
+Total Test time (real) =   2.40 sec
+Built target check5
 ```
