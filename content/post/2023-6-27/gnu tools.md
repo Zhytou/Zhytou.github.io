@@ -247,6 +247,8 @@ cd build; make help
 cmake --build . --target xxx
 ```
 
+总的来说，cmake命令主要有cmake和cmake --build两个核心子命令。其中，前者仅执行配置，产生交叉平台项目文件，而后者则执行实际的编译和链接过程。
+
 ## Coreutils
 
 **简介**：
