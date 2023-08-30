@@ -61,6 +61,8 @@ draft: false
 
 ### 计算机网络
 
+计网的话，我是选择了[Standford CS144](https://cs144.github.io/)作为我的学习资料。在完成了它所有的实验，再辅以一些博客、wiki等面向细节的材料，你会对计算机网络有更深的认识的。
+
 ## 掌握一些生产工具
 
 相信走到这一步的同学，已经有了一套自己的生产环境以及工具链。不过，这里仍然非常建议你学习这门课程[计算机教育中缺失的一课](https://missing-semester-cn.github.io/)或者阅读我的另一篇博客[搭建自己的生产环境](https://zhytou.top/post/2023-7-3/cli-env/)。它会让你对这些工具有全新的认识，从而让你的工作效率翻倍。
@@ -89,6 +91,8 @@ draft: false
 - 机器学习系统：[智能计算系统](https://novel.ict.ac.cn/aics/)
 
 更多详细的课程入门选择，可以浏览这个网站[CS自学指南](https://csdiy.wiki/)中的信息。除此之外，还有一些非常优秀的教科书、论文或者博客可以参考[这个回答](https://www.zhihu.com/question/37647788/answer/2466804512)。
+
+除此之外，还有一个名为[Developer Roadmaps](https://roadmap.sh/)网站也挺不错的，不过相对来说材料基础一些。
 
 ### 读研
 
