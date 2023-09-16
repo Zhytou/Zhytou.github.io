@@ -4,9 +4,8 @@ title = ""
 
 🎯 Focus on
 
-- NJU-OS Lab
 - Simple Render Engine
-- CS144 Lab
+- Networking Basis
 
 💻 Code for fun
 
@@ -22,10 +21,16 @@ title = ""
 - Attack on Titan
 - Jujutsu Kaisen
 
-🎧 Music artists I love
+🎧 Music I love
 
-- zh: Ddg Echo
-- non-zh: The Weekend Jcole
+- Money Trees
+- All My Life
+- Laugh Now Cry Later
+- EARTHQUAKE
+- Die For You
+- Wouldn't leave
+- 5AM Mansions
+- ....
 
 Check below for more information:
 
