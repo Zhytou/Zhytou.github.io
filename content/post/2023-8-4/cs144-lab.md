@@ -172,7 +172,7 @@ Built target check0
 
 lab1要求实现一个名为`Reassembler`的整合器类。它能够将乱序传入且可能重叠的字符串排序并输出到给定的字节流中，其结构如下图：
 
-![整合器](https://zhytou.top/post/2023-8-4/reassembler.png)
+![整合器](https://zhytou.github.io/post/2023-8-4/reassembler.png)
 
 其中，最重要的一点是`ByteStream`中未读取的部分加上`Reassembler`中无序的部分大小不能超过整个capacity。
 
@@ -300,7 +300,7 @@ Built target check1
 
 在实际通信中，发送者会随机初始化一个32位的起始报文序号（Initial Sequence Number，ISN），并告知接收者。此时，接收者就可以通过将报文中的相对序号（Sequence Number，seqno）与起始序号相加的方式获取实际的绝对序号（Absolute Sequence Number）。这三者的关系如下：
 
-![报文序号](https://zhytou.top/post/2023-8-4/seqno.png)
+![报文序号](https://zhytou.github.io/post/2023-8-4/seqno.png)
 
 lab2在第一部分中，假设报文的绝对序号不会超过64位数表示范围，并要求实现一个用于32位数和64位数转换的一个`Wrap32`类。
 

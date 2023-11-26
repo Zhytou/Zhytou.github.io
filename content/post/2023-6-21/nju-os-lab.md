@@ -153,7 +153,7 @@ void debug_printf(const char *fmt, ...) {
 
 由于这个实验涉及到使用内联汇编代码实现上下文切换，掌握gdb按汇编指令单步运行，来查看stack_swicth_call与restore_registers_call前后，寄存器是否保存正确、栈是否对齐，就显得十分重要。
 
-关于如何使用gdb调试，具体可以参考我的[博客](https://zhytou.top/post/2023-6-27/gnu-tools/)，里面几乎涵盖了这次实验会用到的所有gdb命令。
+关于如何使用gdb调试，具体可以参考我的[博客](https://zhytou.github.io/post/2023-6-27/gnu-tools/)，里面几乎涵盖了这次实验会用到的所有gdb命令。
 
 **我碰到的坑**：
 
