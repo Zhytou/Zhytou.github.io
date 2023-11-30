@@ -32,6 +32,53 @@ SIMD(Single Instruction Multiple Data)即单指令流多数据流，是一种采
 
 **Intel Intrinsics**：
 
-## 宏
+Intel Intrinsics是内置在Intel编译器中的特殊函数，它们可以直接调用处理器的SIMD指令集，比如AVX、SSE等。换句话说，它的主要目的就是简化SIMD编程，帮助开发者充分利用现代CPU的并行计算能力。
 
-**Intrusive Programming**：
+**OpenMP**：
+
+除了Intrinsics这种偏向底层的技术之外，我们还可以使用OpenMP这类库来更容易的实现并行，比如：
+
+```c++
+#include <omp.h>
+
+int main() {
+  #pragma omp parallel for
+  for(int i=0; i<100; i++) {
+    // parallel loop body
+  }
+
+  return 0;
+}
+```
+
+## 编译期运算
+
+**宏**：
+
+**模板**：
+
+在我们的印象中，模板可能大部分时候都是用于函数或者类，保证一份代码可针对多种类型复用。复杂一点的可能配合萃取技术进行类型运算，实现SFINAE，比如：enable_if、is_same等等。
+
+但实际上，模板还可以用于编译期计算，可以将运行时消耗转移到编译期消耗，比如：
+
+```c++
+template <size_t N> 
+struct Fibonacci {  
+    constexpr static size_t value = 
+        Fibonacci<N - 1>::value +
+        Fibonacci<N - 2>::value;
+};
+
+template <> struct Fibonacci<0> {   
+    constexpr static size_t value = 0;
+};
+
+template <> struct Fibonacci<1> {   
+    constexpr static size_t value = 1;
+}
+
+template<size_t N>
+constexpr size_t Fibonacci_v = Fibonacci<N>::value; 
+```
+
+**constexpr**：
