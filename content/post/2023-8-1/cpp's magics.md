@@ -1,7 +1,7 @@
 ---
 title: "C/C++奇技淫巧"
 date: 2023-08-01T22:16:58+08:00
-draft: true
+draft: false
 ---
 
 ## GCC魔法
@@ -82,3 +82,59 @@ constexpr size_t Fibonacci_v = Fibonacci<N>::value;
 ```
 
 **constexpr**：
+
+constexpr作为新关键字在C++11引入，它的作用是修饰能在编译期确定或完成计算变量或函数。随着C++20的普及，constexpr的含义越来越丰富，引入了包括if constexpr、constexpr容器等新特性，"constexpr all the things!"也作为元编程的一种新流派出现。常见的constexpr用法包括：
+
+- 编译期计算常量；
+
+```c++
+template<size_t N>
+constexpr size_t fibonacci = fibonacci<N - 1> + fibonacci<N - 2>;
+template<>
+constexpr size_t fibonacci<0> = 0;
+template<>
+constexpr size_t fibonacci<1> = 1;
+
+static_assert(fibonacci<10> == 55);
+```
+
+- if constexpr配合类型萃取或约束（C++20特性）实现类似SFINAE；
+
+```c++
+template<typename T, typename Tag>
+void process(T t, Tag tag) {
+  if constexpr(std::is_same_v<Tag, int>) {
+    // 处理int标签版本
+  } else {
+    // 其他标签版本 
+  }
+}
+```
+
+- C++17起，lambda默认为constexpr，比如：
+
+```c++
+// constexpr int fibonacci(int n);
+auto fibonacci = [](int n) {
+    int a = 0, b = 1;
+    for (int c = 0; c < n; ++ c) {
+        int t = a + b;
+        a = b;
+        b = t;
+    }
+    return a;
+};
+
+- constexpr容器；
+
+```c++
+constexpr std::array<int, 5> array = {1, 2, 3, 4, 5}; 
+
+constexpr int sum() {
+  int total = 0;
+  for (const auto& element : array) {
+    total += element; 
+  }
+  return total;
+}
+```
