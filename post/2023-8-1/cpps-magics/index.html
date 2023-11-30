@@ -1,0 +1,114 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><title>C/C++奇技淫巧 | Zhytou</title>
+<meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=generator content="Hugo 0.120.4"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=/favicon.ico><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css media=screen href=/css/all.css><meta property="og:title" content="C/C++奇技淫巧"><meta property="og:description" content="GCC魔法 Attribute：
+属性说明符用于描述函数，变量和类型的属性。GCC可以根据这些指定属性做出相应的优化。它的形式为__attribute__ ((attribute-list))，其中属性列表是一个可能为空的以逗号分隔的属性序列。最常见的属性包括：
+packed：类内存紧凑排列。 aligned(n)：所有类成员按n字节对齐。 constructor：函数先于main函数执行，一般用于共享库加载的初始化。 此外，C++11时推出了属性语法，来保证在不同的编译环境如：GNU GCC和Microsoft MSVC下效果统一。具体语法可以参考C++手册
+Inline Assembly：
+GCC中提供了C语言和汇编混合编译的功能，具体可以参考手册。
+通过这个功能，结合着co_yield和co_wait可以实现一个简单的协程库，具体可以参考NJU-OS M2。
+SIMD SIMD(Single Instruction Multiple Data)即单指令流多数据流，是一种采用一个控制器来控制多个处理器，同时对一组数据（又称“数据向量”）中的每一个分别执行相同的操作从而实现空间上的并行性的技术。简单来说就是一个指令能够同时处理多个数据。
+Intel Intrinsics：
+Intel Intrinsics是内置在Intel编译器中的特殊函数，它们可以直接调用处理器的SIMD指令集，比如AVX、SSE等。换句话说，它的主要目的就是简化SIMD编程，帮助开发者充分利用现代CPU的并行计算能力。
+OpenMP：
+除了Intrinsics这种偏向底层的技术之外，我们还可以使用OpenMP这类库来更容易的实现并行，比如：
+#include <omp.h> int main() { #pragma omp parallel for for(int i=0; i<100; i++) { // parallel loop body } return 0; } 编译期运算 宏：
+模板：
+在我们的印象中，模板可能大部分时候都是用于函数或者类，保证一份代码可针对多种类型复用。复杂一点的可能配合萃取技术进行类型运算，实现SFINAE，比如：enable_if、is_same等等。
+但实际上，模板还可以用于编译期计算，可以将运行时消耗转移到编译期消耗，比如：
+template <size_t N> struct Fibonacci { constexpr static size_t value = Fibonacci<N - 1>::value + Fibonacci<N - 2>::value; }; template <> struct Fibonacci<0> { constexpr static size_t value = 0; }; template <> struct Fibonacci<1> { constexpr static size_t value = 1; } template<size_t N> constexpr size_t Fibonacci_v = Fibonacci<N>::value; constexpr："><meta property="og:type" content="article"><meta property="og:url" content="https://zhytou.github.io/post/2023-8-1/cpps-magics/"><meta property="article:section" content="post"><meta property="article:published_time" content="2023-08-01T22:16:58+08:00"><meta property="article:modified_time" content="2023-08-01T22:16:58+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="C/C++奇技淫巧"><meta name=twitter:description content="GCC魔法 Attribute：
+属性说明符用于描述函数，变量和类型的属性。GCC可以根据这些指定属性做出相应的优化。它的形式为__attribute__ ((attribute-list))，其中属性列表是一个可能为空的以逗号分隔的属性序列。最常见的属性包括：
+packed：类内存紧凑排列。 aligned(n)：所有类成员按n字节对齐。 constructor：函数先于main函数执行，一般用于共享库加载的初始化。 此外，C++11时推出了属性语法，来保证在不同的编译环境如：GNU GCC和Microsoft MSVC下效果统一。具体语法可以参考C++手册
+Inline Assembly：
+GCC中提供了C语言和汇编混合编译的功能，具体可以参考手册。
+通过这个功能，结合着co_yield和co_wait可以实现一个简单的协程库，具体可以参考NJU-OS M2。
+SIMD SIMD(Single Instruction Multiple Data)即单指令流多数据流，是一种采用一个控制器来控制多个处理器，同时对一组数据（又称“数据向量”）中的每一个分别执行相同的操作从而实现空间上的并行性的技术。简单来说就是一个指令能够同时处理多个数据。
+Intel Intrinsics：
+Intel Intrinsics是内置在Intel编译器中的特殊函数，它们可以直接调用处理器的SIMD指令集，比如AVX、SSE等。换句话说，它的主要目的就是简化SIMD编程，帮助开发者充分利用现代CPU的并行计算能力。
+OpenMP：
+除了Intrinsics这种偏向底层的技术之外，我们还可以使用OpenMP这类库来更容易的实现并行，比如：
+#include <omp.h> int main() { #pragma omp parallel for for(int i=0; i<100; i++) { // parallel loop body } return 0; } 编译期运算 宏：
+模板：
+在我们的印象中，模板可能大部分时候都是用于函数或者类，保证一份代码可针对多种类型复用。复杂一点的可能配合萃取技术进行类型运算，实现SFINAE，比如：enable_if、is_same等等。
+但实际上，模板还可以用于编译期计算，可以将运行时消耗转移到编译期消耗，比如：
+template <size_t N> struct Fibonacci { constexpr static size_t value = Fibonacci<N - 1>::value + Fibonacci<N - 2>::value; }; template <> struct Fibonacci<0> { constexpr static size_t value = 0; }; template <> struct Fibonacci<1> { constexpr static size_t value = 1; } template<size_t N> constexpr size_t Fibonacci_v = Fibonacci<N>::value; constexpr："><meta itemprop=name content="C/C++奇技淫巧"><meta itemprop=description content="GCC魔法 Attribute：
+属性说明符用于描述函数，变量和类型的属性。GCC可以根据这些指定属性做出相应的优化。它的形式为__attribute__ ((attribute-list))，其中属性列表是一个可能为空的以逗号分隔的属性序列。最常见的属性包括：
+packed：类内存紧凑排列。 aligned(n)：所有类成员按n字节对齐。 constructor：函数先于main函数执行，一般用于共享库加载的初始化。 此外，C++11时推出了属性语法，来保证在不同的编译环境如：GNU GCC和Microsoft MSVC下效果统一。具体语法可以参考C++手册
+Inline Assembly：
+GCC中提供了C语言和汇编混合编译的功能，具体可以参考手册。
+通过这个功能，结合着co_yield和co_wait可以实现一个简单的协程库，具体可以参考NJU-OS M2。
+SIMD SIMD(Single Instruction Multiple Data)即单指令流多数据流，是一种采用一个控制器来控制多个处理器，同时对一组数据（又称“数据向量”）中的每一个分别执行相同的操作从而实现空间上的并行性的技术。简单来说就是一个指令能够同时处理多个数据。
+Intel Intrinsics：
+Intel Intrinsics是内置在Intel编译器中的特殊函数，它们可以直接调用处理器的SIMD指令集，比如AVX、SSE等。换句话说，它的主要目的就是简化SIMD编程，帮助开发者充分利用现代CPU的并行计算能力。
+OpenMP：
+除了Intrinsics这种偏向底层的技术之外，我们还可以使用OpenMP这类库来更容易的实现并行，比如：
+#include <omp.h> int main() { #pragma omp parallel for for(int i=0; i<100; i++) { // parallel loop body } return 0; } 编译期运算 宏：
+模板：
+在我们的印象中，模板可能大部分时候都是用于函数或者类，保证一份代码可针对多种类型复用。复杂一点的可能配合萃取技术进行类型运算，实现SFINAE，比如：enable_if、is_same等等。
+但实际上，模板还可以用于编译期计算，可以将运行时消耗转移到编译期消耗，比如：
+template <size_t N> struct Fibonacci { constexpr static size_t value = Fibonacci<N - 1>::value + Fibonacci<N - 2>::value; }; template <> struct Fibonacci<0> { constexpr static size_t value = 0; }; template <> struct Fibonacci<1> { constexpr static size_t value = 1; } template<size_t N> constexpr size_t Fibonacci_v = Fibonacci<N>::value; constexpr："><meta itemprop=datePublished content="2023-08-01T22:16:58+08:00"><meta itemprop=dateModified content="2023-08-01T22:16:58+08:00"><meta itemprop=wordCount content="244"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>01</span>
+<span class=rest>Aug 2023</span></div></div><div class=matter><h1 class=title>C/C++奇技淫巧</h1><p class=post-meta><span class=post-meta></span></p></div></div><div class=markdown><h2 id=gcc魔法>GCC魔法</h2><p><strong>Attribute</strong>：</p><p>属性说明符用于描述函数，变量和类型的属性。GCC可以根据这些指定属性做出相应的优化。它的形式为<code>__attribute__ ((attribute-list))</code>，其中属性列表是一个可能为空的以逗号分隔的属性序列。最常见的属性包括：</p><ul><li>packed：类内存紧凑排列。</li><li>aligned(n)：所有类成员按n字节对齐。</li><li>constructor：函数先于main函数执行，一般用于共享库加载的初始化。</li></ul><p>此外，C++11时推出了属性语法，来保证在不同的编译环境如：GNU GCC和Microsoft MSVC下效果统一。具体语法可以参考<a href=https://en.cppreference.com/w/cpp/language/attributes target=_blank>C++手册</a></p><p><strong>Inline Assembly</strong>：</p><p>GCC中提供了C语言和汇编混合编译的功能，具体可以参考<a href=https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html target=_blank>手册</a>。</p><p>通过这个功能，结合着co_yield和co_wait可以实现一个简单的协程库，具体可以参考<a href=https://jyywiki.cn/OS/2022/labs/M2.html target=_blank>NJU-OS M2</a>。</p><h2 id=simd>SIMD</h2><p>SIMD(Single Instruction Multiple Data)即单指令流多数据流，是一种采用一个控制器来控制多个处理器，同时对一组数据（又称“数据向量”）中的每一个分别执行相同的操作从而实现空间上的并行性的技术。简单来说就是一个指令能够同时处理多个数据。</p><p><figure><img src=https://pic3.zhimg.com/80/v2-42f84e676fb838f1e2aa2632d4ab0246_720w.webp alt=处理器对SIMD的支持></figure></p><p><figure><img src=https://pic2.zhimg.com/80/v2-a1490b3ffd4a96a09ed17e342d279635_720w.webp alt=使用SIMD></figure></p><p><strong>Intel Intrinsics</strong>：</p><p>Intel Intrinsics是内置在Intel编译器中的特殊函数，它们可以直接调用处理器的SIMD指令集，比如AVX、SSE等。换句话说，它的主要目的就是简化SIMD编程，帮助开发者充分利用现代CPU的并行计算能力。</p><p><strong>OpenMP</strong>：</p><p>除了Intrinsics这种偏向底层的技术之外，我们还可以使用OpenMP这类库来更容易的实现并行，比如：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#579>#include</span> <span style=color:#579>&lt;omp.h&gt;</span><span style=color:#579>
+</span></span></span><span style=display:flex><span><span style=color:#579></span>
+</span></span><span style=display:flex><span><span style=color:#339;font-weight:700>int</span> <span style=color:#06b;font-weight:700>main</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#579>#pragma omp parallel for
+</span></span></span><span style=display:flex><span><span style=color:#579></span>  <span style=color:#080;font-weight:700>for</span>(<span style=color:#339;font-weight:700>int</span> i<span style=color:#333>=</span><span style=color:#00d;font-weight:700>0</span>; i<span style=color:#333>&lt;</span><span style=color:#00d;font-weight:700>100</span>; i<span style=color:#333>++</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// parallel loop body
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=编译期运算>编译期运算</h2><p><strong>宏</strong>：</p><p><strong>模板</strong>：</p><p>在我们的印象中，模板可能大部分时候都是用于函数或者类，保证一份代码可针对多种类型复用。复杂一点的可能配合萃取技术进行类型运算，实现SFINAE，比如：enable_if、is_same等等。</p><p>但实际上，模板还可以用于编译期计算，可以将运行时消耗转移到编译期消耗，比如：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#080;font-weight:700>template</span> <span style=color:#333>&lt;</span>size_t N<span style=color:#333>&gt;</span> 
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>struct</span> <span style=color:#b06;font-weight:700>Fibonacci</span> {  
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>constexpr</span> <span style=color:#080;font-weight:700>static</span> size_t value <span style=color:#333>=</span> 
+</span></span><span style=display:flex><span>        Fibonacci<span style=color:#333>&lt;</span>N <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>1</span><span style=color:#333>&gt;::</span>value <span style=color:#333>+</span>
+</span></span><span style=display:flex><span>        Fibonacci<span style=color:#333>&lt;</span>N <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>2</span><span style=color:#333>&gt;::</span>value;
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>template</span> <span style=color:#333>&lt;&gt;</span> <span style=color:#080;font-weight:700>struct</span> <span style=color:#b06;font-weight:700>Fibonacci</span><span style=color:#333>&lt;</span><span style=color:#00d;font-weight:700>0</span><span style=color:#333>&gt;</span> {   
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>constexpr</span> <span style=color:#080;font-weight:700>static</span> size_t value <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>template</span> <span style=color:#333>&lt;&gt;</span> <span style=color:#080;font-weight:700>struct</span> <span style=color:#b06;font-weight:700>Fibonacci</span><span style=color:#333>&lt;</span><span style=color:#00d;font-weight:700>1</span><span style=color:#333>&gt;</span> {   
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>constexpr</span> <span style=color:#080;font-weight:700>static</span> size_t value <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>template</span><span style=color:#333>&lt;</span>size_t N<span style=color:#333>&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>constexpr</span> size_t Fibonacci_v <span style=color:#333>=</span> Fibonacci<span style=color:#333>&lt;</span>N<span style=color:#333>&gt;::</span>value; 
+</span></span></code></pre></div><p><strong>constexpr</strong>：</p><p>constexpr作为新关键字在C++11引入，它的作用是修饰能在编译期确定或完成计算变量或函数。随着C++20的普及，constexpr的含义越来越丰富，引入了包括if constexpr、constexpr容器等新特性，&ldquo;constexpr all the things!&ldquo;也作为元编程的一种新流派出现。常见的constexpr用法包括：</p><ul><li>编译期计算常量；</li></ul><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#080;font-weight:700>template</span><span style=color:#333>&lt;</span>size_t N<span style=color:#333>&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>constexpr</span> size_t fibonacci <span style=color:#333>=</span> fibonacci<span style=color:#333>&lt;</span>N <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>1</span><span style=color:#333>&gt;</span> <span style=color:#333>+</span> fibonacci<span style=color:#333>&lt;</span>N <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>2</span><span style=color:#333>&gt;</span>;
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>template</span><span style=color:#333>&lt;&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>constexpr</span> size_t fibonacci<span style=color:#333>&lt;</span><span style=color:#00d;font-weight:700>0</span><span style=color:#333>&gt;</span> <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>template</span><span style=color:#333>&lt;&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>constexpr</span> size_t fibonacci<span style=color:#333>&lt;</span><span style=color:#00d;font-weight:700>1</span><span style=color:#333>&gt;</span> <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>static_assert</span>(fibonacci<span style=color:#333>&lt;</span><span style=color:#00d;font-weight:700>10</span><span style=color:#333>&gt;</span> <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>55</span>);
+</span></span></code></pre></div><ul><li>if constexpr配合类型萃取或约束（C++20特性）实现类似SFINAE；</li></ul><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#080;font-weight:700>template</span><span style=color:#333>&lt;</span><span style=color:#080;font-weight:700>typename</span> T, <span style=color:#080;font-weight:700>typename</span> Tag<span style=color:#333>&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#339;font-weight:700>void</span> process(T t, Tag tag) {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> <span style=color:#06b;font-weight:700>constexpr</span>(std<span style=color:#333>::</span>is_same_v<span style=color:#333>&lt;</span>Tag, <span style=color:#339;font-weight:700>int</span><span style=color:#333>&gt;</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 处理int标签版本
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 其他标签版本 
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><ul><li>C++17起，lambda默认为constexpr，比如：</li></ul><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#888>// constexpr int fibonacci(int n);
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>auto</span> fibonacci <span style=color:#333>=</span> [](<span style=color:#339;font-weight:700>int</span> n) {
+</span></span><span style=display:flex><span>    <span style=color:#339;font-weight:700>int</span> a <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>, b <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>;
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>for</span> (<span style=color:#339;font-weight:700>int</span> c <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>; c <span style=color:#333>&lt;</span> n; <span style=color:#333>++</span> c) {
+</span></span><span style=display:flex><span>        <span style=color:#339;font-weight:700>int</span> t <span style=color:#333>=</span> a <span style=color:#333>+</span> b;
+</span></span><span style=display:flex><span>        a <span style=color:#333>=</span> b;
+</span></span><span style=display:flex><span>        b <span style=color:#333>=</span> t;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>return</span> a;
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#333>-</span> constexpr容器<span style=color:red;background-color:#faa>；</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:red;background-color:#faa>```</span>c<span style=color:#333>++</span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>constexpr</span> std<span style=color:#333>::</span>array<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>int</span>, <span style=color:#00d;font-weight:700>5</span><span style=color:#333>&gt;</span> array <span style=color:#333>=</span> {<span style=color:#00d;font-weight:700>1</span>, <span style=color:#00d;font-weight:700>2</span>, <span style=color:#00d;font-weight:700>3</span>, <span style=color:#00d;font-weight:700>4</span>, <span style=color:#00d;font-weight:700>5</span>}; 
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>constexpr</span> <span style=color:#339;font-weight:700>int</span> <span style=color:#06b;font-weight:700>sum</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>int</span> total <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>for</span> (<span style=color:#080;font-weight:700>const</span> <span style=color:#080;font-weight:700>auto</span><span style=color:#333>&amp;</span> <span style=color:#970;font-weight:700>element</span> : array) {
+</span></span><span style=display:flex><span>    total <span style=color:#333>+=</span> element; 
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span> total;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
