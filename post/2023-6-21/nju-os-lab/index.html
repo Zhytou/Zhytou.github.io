@@ -8,7 +8,7 @@
 // 协程状态 enum co_status { CO_NEW = 1, // 新创建，还未执行过 CO_RUNNING, // 已经执行过 CO_WAITING, // 在 co_wait 上等待 CO_DEAD, // 已经结束，但还未释放资源 }; // 协程 struct __attribute__((aligned(16))) co { char *name; void (*func)(void *); // co_start 指定的入口地址和参数 void *arg; enum co_status status; // 协程的状态 struct co *waiter; // 是否有其他协程在等待当前协程 jmp_buf context; // 寄存器现场 (setjmp.h) unsigned char stack[STACK_SIZE]; // 协程的堆栈 }; 管理协程："><meta itemprop=name content="NJU-OS-Lab总结"><meta itemprop=description content="M1：实现打印进程树状信息的工具 pstree M2：实现协程库 libco 协程 理解协程：
 在开始做本实验之前，我认为可以先阅读一些材料来认识进程、线程和协程之间的关系，比如这一篇Process , Thread and Coroutines。当我们能够认识到协程其实就是调度由用户管理的轻量级线程，即：用户态线程时，实验说明中的大部分内容就很好理解了。
 至于协程结构体，则可以直接使用实验讲义中给出的，具体如下：
-// 协程状态 enum co_status { CO_NEW = 1, // 新创建，还未执行过 CO_RUNNING, // 已经执行过 CO_WAITING, // 在 co_wait 上等待 CO_DEAD, // 已经结束，但还未释放资源 }; // 协程 struct __attribute__((aligned(16))) co { char *name; void (*func)(void *); // co_start 指定的入口地址和参数 void *arg; enum co_status status; // 协程的状态 struct co *waiter; // 是否有其他协程在等待当前协程 jmp_buf context; // 寄存器现场 (setjmp.h) unsigned char stack[STACK_SIZE]; // 协程的堆栈 }; 管理协程："><meta itemprop=datePublished content="2023-06-21T16:42:31+08:00"><meta itemprop=dateModified content="2023-06-21T16:42:31+08:00"><meta itemprop=wordCount content="298"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>21</span>
+// 协程状态 enum co_status { CO_NEW = 1, // 新创建，还未执行过 CO_RUNNING, // 已经执行过 CO_WAITING, // 在 co_wait 上等待 CO_DEAD, // 已经结束，但还未释放资源 }; // 协程 struct __attribute__((aligned(16))) co { char *name; void (*func)(void *); // co_start 指定的入口地址和参数 void *arg; enum co_status status; // 协程的状态 struct co *waiter; // 是否有其他协程在等待当前协程 jmp_buf context; // 寄存器现场 (setjmp.h) unsigned char stack[STACK_SIZE]; // 协程的堆栈 }; 管理协程："><meta itemprop=datePublished content="2023-06-21T16:42:31+08:00"><meta itemprop=dateModified content="2023-06-21T16:42:31+08:00"><meta itemprop=wordCount content="1045"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>21</span>
 <span class=rest>Jun 2023</span></div></div><div class=matter><h1 class=title>NJU-OS-Lab总结</h1><p class=post-meta><span class=post-meta></span></p></div></div><div class=markdown><h2 id=m1实现打印进程树状信息的工具-pstree>M1：实现打印进程树状信息的工具 pstree</h2><h2 id=m2实现协程库-libco>M2：实现协程库 libco</h2><h3 id=协程>协程</h3><p><strong>理解协程</strong>：</p><p>在开始做本实验之前，我认为可以先阅读一些材料来认识进程、线程和协程之间的关系，比如这一篇<a href=https://www.linkedin.com/pulse/process-thread-coroutines-amit-nadiger/ target=_blank>Process , Thread and Coroutines</a>。当我们能够认识到协程其实就是调度由用户管理的轻量级线程，即：用户态线程时，实验说明中的大部分内容就很好理解了。</p><p>至于协程结构体，则可以直接使用实验讲义中给出的，具体如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#888>// 协程状态
 </span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>enum</span> co_status {
 </span></span><span style=display:flex><span>  CO_NEW <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>,  <span style=color:#888>// 新创建，还未执行过
@@ -62,7 +62,9 @@
 </span></span><span style=display:flex><span>  co_mgr_head <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
 </span></span><span style=display:flex><span>  current <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=上下文切换>上下文切换</h3><p><strong>理解setjmp/logjmp</strong>：</p><p><strong>实现co_field</strong>：</p><p>在理解了</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#888>// 切换协程
+</span></span></code></pre></div><h3 id=上下文切换>上下文切换</h3><p><strong>理解setjmp/logjmp</strong>：</p><p>setjmp和longjmp是C语言中的非局部跳转函数，它可以实现函数间的非顺序调用。其中，setjmp的功能是:</p><ul><li>保存当前函数的执行环境/寄存器状态到jmp_buf结构体数据类型变量中</li><li>函数返回值为0
+longjmp的功能是:</li></ul><p>根据jmp_buf结构体数据跳到之前使用setjmp保存的函数环境中
+参数决定返回值是否为0</p><p><strong>实现co_field</strong>：</p><p>在理解了setjmp/logjmp的作用之后实现上下文切换就很容易了，</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#888>// 切换协程
 </span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>co_yield</span> () {
 </span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>int</span> ret <span style=color:#333>=</span> <span style=color:#06b;font-weight:700>setjmp</span>(current<span style=color:#333>-&gt;</span>context);
 </span></span><span style=display:flex><span>  <span style=color:#888>// 若ret为0，即为第一次设置jmp_buf（可以使用longjmp函数恢复寄存器状态），切换到一个新建或运行中的协程执行
@@ -101,4 +103,236 @@
 </span></span><span style=display:flex><span>    <span style=color:#06b;font-weight:700>va_end</span>(args);
 </span></span><span style=display:flex><span>  }
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>GDB</strong>：</p><p>由于这个实验涉及到使用内联汇编代码实现上下文切换，掌握gdb按汇编指令单步运行，来查看stack_swicth_call与restore_registers_call前后，寄存器是否保存正确、栈是否对齐，就显得十分重要。</p><p>关于如何使用gdb调试，具体可以参考我的<a href=https://zhytou.github.io/post/2023-6-27/gnu-tools/ target=_blank>博客</a>，里面几乎涵盖了这次实验会用到的所有gdb命令。</p><p><strong>我碰到的坑</strong>：</p><ol><li><p>堆栈没有对齐，报错SEGEFV；</p></li><li><p>画蛇添足，在co_wait里若发现协程状态为CO_DEAD就主动释放了该协程内存：</p></li></ol><p>不要在co_wait中释放协程，在destructor中统一释放。</p><h3 id=m2-总结>M2 总结</h3><p>这个实验很好的锻炼</p><h2 id=m5实现文件恢复工具-frecov>M5：实现文件恢复工具 frecov</h2><h2 id=参考>参考</h2><p><strong>M2</strong>：</p><ul><li><a href=https://www.linkedin.com/pulse/process-thread-coroutines-amit-nadiger/ target=_blank>Process , Thread and Coroutines</a></li><li><a href=https://zhuanlan.zhihu.com/p/27339191 target=_blank>x86系统调用及栈帧原理</a></li></ul></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
+</span></span></code></pre></div><p><strong>GDB</strong>：</p><p>由于这个实验涉及到使用内联汇编代码实现上下文切换，掌握gdb按汇编指令单步运行，来查看stack_swicth_call与restore_registers_call前后，寄存器是否保存正确、栈是否对齐，就显得十分重要。</p><p>关于如何使用gdb调试，具体可以参考我的<a href=https://zhytou.github.io/post/2023-6-27/gnu-tools/ target=_blank>博客</a>，里面几乎涵盖了这次实验会用到的所有gdb命令。</p><p><strong>我碰到的坑</strong>：</p><ol><li><p>堆栈没有对齐，报错SEGEFV；</p></li><li><p>画蛇添足，在co_wait里若发现协程状态为CO_DEAD就主动释放了该协程内存：</p></li></ol><p>不要在co_wait中释放协程，在destructor中统一释放。</p><h2 id=m3系统调用-profiler-sperf>M3：系统调用 Profiler (sperf)</h2><p>在这个实验中，我们需要实现命令行工具sperf：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sperf COMMAND <span style=color:#333>[</span>ARG<span style=color:#333>]</span>...
+</span></span></code></pre></div><p>它会在系统中执行COMMAND命令，并为COMMAND传入ARG参数(列表)，然后统计命令执行的系统调用所占的时间。</p><h3 id=显示系统调用序列>显示系统调用序列</h3><p>根据实验说明，strace可以得到系统调用。它会 “重置” 某个进程的状态机，通过exceve使 “程序从头开始执行” 的系统调用。为了进一步使其显示相应调用的时间，我们可以使用-T参数，比如：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>&gt; strace -T ls .
+</span></span><span style=display:flex><span>execve<span style=color:#333>(</span><span style=background-color:#fff0f0>&#34;/usr/bin/ls&#34;</span>, <span style=color:#333>[</span><span style=background-color:#fff0f0>&#34;ls&#34;</span>, <span style=background-color:#fff0f0>&#34;.&#34;</span><span style=color:#333>]</span>, 0x7ffc449974d0 /* <span style=color:#60e;font-weight:700>36</span> vars */<span style=color:#333>)</span> <span style=color:#333>=</span> <span style=color:#60e;font-weight:700>0</span> &lt;0.000147&gt;
+</span></span><span style=display:flex><span>brk<span style=color:#333>(</span>NULL<span style=color:#333>)</span>                               <span style=color:#333>=</span> 0x557441898000 &lt;0.000075&gt;
+</span></span><span style=display:flex><span>arch_prctl<span style=color:#333>(</span>0x3001 /* ARCH_??? */, 0x7ffef498a610<span style=color:#333>)</span> <span style=color:#333>=</span> -1 EINVAL <span style=color:#333>(</span>Invalid argument<span style=color:#333>)</span> &lt;0.000032&gt;
+</span></span><span style=display:flex><span>mmap<span style=color:#333>(</span>NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0<span style=color:#333>)</span> <span style=color:#333>=</span> 0x7f4df563c000 &lt;0.000031&gt;
+</span></span><span style=display:flex><span>access<span style=color:#333>(</span><span style=background-color:#fff0f0>&#34;/etc/ld.so.preload&#34;</span>, R_OK<span style=color:#333>)</span>      <span style=color:#333>=</span> -1 ENOENT <span style=color:#333>(</span>No such file or directory<span style=color:#333>)</span> &lt;0.000033&gt;
+</span></span><span style=display:flex><span><span style=color:#888># 省略很多行</span>
+</span></span><span style=display:flex><span>newfstatat<span style=color:#333>(</span>1, <span style=background-color:#fff0f0>&#34;&#34;</span>, <span style=color:#333>{</span><span style=color:#963>st_mode</span><span style=color:#333>=</span>S_IFCHR|0620, <span style=color:#963>st_rdev</span><span style=color:#333>=</span>makedev<span style=color:#333>(</span>0x88, 0x9<span style=color:#333>)</span>, ...<span style=color:#333>}</span>, AT_EMPTY_PATH<span style=color:#333>)</span> <span style=color:#333>=</span> <span style=color:#60e;font-weight:700>0</span> &lt;0.000030&gt;
+</span></span><span style=display:flex><span>write<span style=color:#333>(</span>1, <span style=background-color:#fff0f0>&#34;Makefile  sperf-64  sperf.c\n&#34;</span>, 28Makefile  sperf-64  sperf.c
+</span></span><span style=display:flex><span><span style=color:#333>)</span> <span style=color:#333>=</span> <span style=color:#60e;font-weight:700>28</span> &lt;0.000090&gt;
+</span></span><span style=display:flex><span>close<span style=color:#333>(</span>1<span style=color:#333>)</span>                                <span style=color:#333>=</span> <span style=color:#60e;font-weight:700>0</span> &lt;0.000032&gt;
+</span></span><span style=display:flex><span>close<span style=color:#333>(</span>2<span style=color:#333>)</span>                                <span style=color:#333>=</span> <span style=color:#60e;font-weight:700>0</span> &lt;0.000029&gt;
+</span></span><span style=display:flex><span>exit_group<span style=color:#333>(</span>0<span style=color:#333>)</span>                           <span style=color:#333>=</span> ?
+</span></span><span style=display:flex><span>+++ exited with <span style=color:#60e;font-weight:700>0</span> +++
+</span></span></code></pre></div><p>为了从strace的输出中提取到每个系统调用的名称和执行时间，我们可以使用正则表达式进行匹配。</p><h3 id=实现sperf>实现sperf</h3><p>根据实验说明，我们可以得到sperf程序的整体结构如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>int</span> <span style=color:#06b;font-weight:700>main</span>(<span style=color:#339;font-weight:700>int</span> argc, <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>argv[]) {
+</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>int</span> fd[<span style=color:#00d;font-weight:700>2</span>];
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> (pipe(fd) <span style=color:#333>==</span> <span style=color:#333>-</span><span style=color:#00d;font-weight:700>1</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 创建管道失败
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  }
+</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>int</span> pid <span style=color:#333>=</span> fork();
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> (pid <span style=color:#333>==</span> <span style=color:#333>-</span><span style=color:#00d;font-weight:700>1</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 子进程创建失败
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  }<span style=color:#080;font-weight:700>else</span> <span style=color:#080;font-weight:700>if</span> (pid <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 子进程，执行strace命令
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    execve(...);
+</span></span><span style=display:flex><span>    <span style=color:#888>// 不应该执行此处代码，否则execve失败，出错处理
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 父进程，读取strace输出并统计
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>实现子进程</strong>：</p><p>对于子进程来说，只需要将管道写入端重定向到标准输出并且向execve传入正确的参数即可：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>int</span> <span style=color:#06b;font-weight:700>main</span>(<span style=color:#339;font-weight:700>int</span> argc, <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>argv[])  {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> (pid <span style=color:#333>==</span> <span style=color:#333>-</span><span style=color:#00d;font-weight:700>1</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 子进程创建失败
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    debug_printf(<span style=background-color:#fff0f0>&#34;fork failed</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>);
+</span></span><span style=display:flex><span>    exit(EXIT_FAILURE);
+</span></span><span style=display:flex><span>  } <span style=color:#080;font-weight:700>else</span> <span style=color:#080;font-weight:700>if</span> (pid <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 关闭管道读取端，并将管道写入端重定向到标准输出
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    close(fd[<span style=color:#00d;font-weight:700>0</span>]);
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> (dup2(fd[<span style=color:#00d;font-weight:700>1</span>], STDERR_FILENO) <span style=color:#333>==</span> <span style=color:#333>-</span><span style=color:#00d;font-weight:700>1</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#888>// 重定向失败
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      debug_printf(<span style=background-color:#fff0f0>&#34;dup2 failed!</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>);
+</span></span><span style=display:flex><span>      close(fd[<span style=color:#00d;font-weight:700>1</span>]);
+</span></span><span style=display:flex><span>      exit(EXIT_FAILURE);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#888>// 执行strace
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>exec_argv[argc <span style=color:#333>+</span> <span style=color:#00d;font-weight:700>2</span>];
+</span></span><span style=display:flex><span>    exec_argv[<span style=color:#00d;font-weight:700>0</span>] <span style=color:#333>=</span> <span style=background-color:#fff0f0>&#34;strace&#34;</span>;
+</span></span><span style=display:flex><span>    exec_argv[<span style=color:#00d;font-weight:700>1</span>] <span style=color:#333>=</span> <span style=background-color:#fff0f0>&#34;-T&#34;</span>;
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>for</span> (<span style=color:#339;font-weight:700>int</span> i <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>; i <span style=color:#333>&lt;</span> argc; i<span style=color:#333>++</span>) {
+</span></span><span style=display:flex><span>      exec_argv[i <span style=color:#333>+</span> <span style=color:#00d;font-weight:700>1</span>] <span style=color:#333>=</span> argv[i];
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    exec_argv[argc <span style=color:#333>+</span> <span style=color:#00d;font-weight:700>1</span>] <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>exec_envp[] <span style=color:#333>=</span> {
+</span></span><span style=display:flex><span>        <span style=background-color:#fff0f0>&#34;PATH=/bin&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#007020>NULL</span>,
+</span></span><span style=display:flex><span>    };
+</span></span><span style=display:flex><span>    execve(<span style=background-color:#fff0f0>&#34;strace&#34;</span>, exec_argv, exec_envp);
+</span></span><span style=display:flex><span>    execve(<span style=background-color:#fff0f0>&#34;/bin/strace&#34;</span>, exec_argv, exec_envp);
+</span></span><span style=display:flex><span>    execve(<span style=background-color:#fff0f0>&#34;/usr/bin/strace&#34;</span>, exec_argv, exec_envp);
+</span></span><span style=display:flex><span>    perror(argv[<span style=color:#00d;font-weight:700>0</span>]);
+</span></span><span style=display:flex><span>    close(fd[<span style=color:#00d;font-weight:700>1</span>]);
+</span></span><span style=display:flex><span>    exit(EXIT_FAILURE);
+</span></span><span style=display:flex><span>  } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 父进程，读取strace输出并统计
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#888>// ...
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>父进程实现</strong>：</p><p>对于父进程而言，除了使用正则表达式是从strace的输出提取所需信息之外，我们还要考虑如何存储这些信息。这里我使用的是链表，具体实现如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#888>// 链表
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>typedef</span> <span style=color:#080;font-weight:700>struct</span> <span style=color:#b06;font-weight:700>list_node</span> {
+</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>name;
+</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>double</span> time;
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>struct</span> <span style=color:#b06;font-weight:700>list_node</span> <span style=color:#333>*</span>next;
+</span></span><span style=display:flex><span>} list_node;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#888>// 链表插入节点，同时保证时间始终从大到小排序
+</span></span></span><span style=display:flex><span><span style=color:#888></span>list_node <span style=color:#333>*</span><span style=color:#06b;font-weight:700>insert_list_node</span>(list_node <span style=color:#333>*</span>head, list_node <span style=color:#333>*</span>node) {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> (node <span style=color:#333>==</span> <span style=color:#007020>NULL</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>return</span> head;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> (head <span style=color:#333>==</span> <span style=color:#007020>NULL</span> <span style=color:#333>||</span> head<span style=color:#333>-&gt;</span>time <span style=color:#333>&lt;</span> node<span style=color:#333>-&gt;</span>time) {
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> (head <span style=color:#333>!=</span> <span style=color:#007020>NULL</span>) {
+</span></span><span style=display:flex><span>      node<span style=color:#333>-&gt;</span>next <span style=color:#333>=</span> head;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>return</span> node;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  list_node <span style=color:#333>*</span>prev <span style=color:#333>=</span> head;
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>for</span> (list_node <span style=color:#333>*</span>curr <span style=color:#333>=</span> head<span style=color:#333>-&gt;</span>next; curr <span style=color:#333>!=</span> <span style=color:#007020>NULL</span>; curr <span style=color:#333>=</span> curr<span style=color:#333>-&gt;</span>next) {
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> (curr<span style=color:#333>-&gt;</span>time <span style=color:#333>&lt;</span> node<span style=color:#333>-&gt;</span>time) {
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    prev <span style=color:#333>=</span> curr;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  node<span style=color:#333>-&gt;</span>next <span style=color:#333>=</span> prev<span style=color:#333>-&gt;</span>next;
+</span></span><span style=display:flex><span>  prev<span style=color:#333>-&gt;</span>next <span style=color:#333>=</span> node;
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span> head;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#888>// 释放链表内存
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>free_list</span>(list_node <span style=color:#333>*</span>head) {
+</span></span><span style=display:flex><span>  list_node <span style=color:#333>*</span>curr <span style=color:#333>=</span> head;
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>while</span> (curr <span style=color:#333>!=</span> <span style=color:#007020>NULL</span>) {
+</span></span><span style=display:flex><span>    list_node <span style=color:#333>*</span>next <span style=color:#333>=</span> curr<span style=color:#333>-&gt;</span>next;
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> (curr<span style=color:#333>-&gt;</span>name <span style=color:#333>!=</span> <span style=color:#007020>NULL</span>) {
+</span></span><span style=display:flex><span>      free(curr<span style=color:#333>-&gt;</span>name);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    curr<span style=color:#333>-&gt;</span>name <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
+</span></span><span style=display:flex><span>    free(curr);
+</span></span><span style=display:flex><span>    curr <span style=color:#333>=</span> next;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>有了这个链表之后，再去实现父进程的逻辑就比较简单了。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>int</span> <span style=color:#06b;font-weight:700>main</span>(<span style=color:#339;font-weight:700>int</span> argc, <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>argv[])  {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> (pid <span style=color:#333>==</span> <span style=color:#333>-</span><span style=color:#00d;font-weight:700>1</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 子进程创建失败
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    debug_printf(<span style=background-color:#fff0f0>&#34;fork failed</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>);
+</span></span><span style=display:flex><span>    exit(EXIT_FAILURE);
+</span></span><span style=display:flex><span>  } <span style=color:#080;font-weight:700>else</span> <span style=color:#080;font-weight:700>if</span> (pid <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 子进程，执行strace
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#888>// ...
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>        <span style=color:#888>// 定义正则表达式
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    regex_t reg1, reg2;
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> (regcomp(<span style=color:#333>&amp;</span>reg1, <span style=background-color:#fff0f0>&#34;[^</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\\</span><span style=background-color:#fff0f0>(</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n\r\b\t</span><span style=background-color:#fff0f0>]*</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\\</span><span style=background-color:#fff0f0>(&#34;</span>, REG_EXTENDED) <span style=color:#333>||</span>
+</span></span><span style=display:flex><span>        regcomp(<span style=color:#333>&amp;</span>reg2, <span style=background-color:#fff0f0>&#34;&lt;.*&gt;&#34;</span>, REG_EXTENDED)) {
+</span></span><span style=display:flex><span>      debug_printf(<span style=background-color:#fff0f0>&#34;regcomp failed!</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>);
+</span></span><span style=display:flex><span>      exit(EXIT_FAILURE);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#888>// 链表记录各项调用时间信息
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    list_node <span style=color:#333>*</span>head <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
+</span></span><span style=display:flex><span>    <span style=color:#888>// 调用总时间
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#339;font-weight:700>double</span> total_time <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>    <span style=color:#888>// 管道读取缓存
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#339;font-weight:700>char</span> buffer[BUFFER_SIZE];
+</span></span><span style=display:flex><span>    <span style=color:#888>// 关闭管道写入端，并从管道中读取数据
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    close(fd[<span style=color:#00d;font-weight:700>1</span>]);
+</span></span><span style=display:flex><span>    FILE <span style=color:#333>*</span>fp <span style=color:#333>=</span> fdopen(fd[<span style=color:#00d;font-weight:700>0</span>], <span style=background-color:#fff0f0>&#34;r&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#888>// 当前时间
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#339;font-weight:700>int</span> curr_time <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>;
+</span></span><span style=display:flex><span>    <span style=color:#888>// 运行标志
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#339;font-weight:700>int</span> run_flag <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>;
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>while</span> (run_flag) {
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>while</span> (fgets(buffer, BUFFER_SIZE, fp) <span style=color:#333>&gt;</span> <span style=color:#00d;font-weight:700>0</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#888>// 读取到 +++ exited with 1/0 +++ 退出
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        <span style=color:#080;font-weight:700>if</span> (strstr(buffer, <span style=background-color:#fff0f0>&#34;+++ exited with 0 +++&#34;</span>) <span style=color:#333>!=</span> <span style=color:#007020>NULL</span> <span style=color:#333>||</span>
+</span></span><span style=display:flex><span>            strstr(buffer, <span style=background-color:#fff0f0>&#34;+++ exited with 1 +++&#34;</span>) <span style=color:#333>!=</span> <span style=color:#007020>NULL</span>) {
+</span></span><span style=display:flex><span>          run_flag <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>          <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#888>// 使用正则表达式获取信息
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        regmatch_t regmat1, regmat2;
+</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>if</span> (regexec(<span style=color:#333>&amp;</span>reg1, buffer, <span style=color:#00d;font-weight:700>1</span>, <span style=color:#333>&amp;</span>regmat1, <span style=color:#00d;font-weight:700>0</span>) <span style=color:#333>||</span>
+</span></span><span style=display:flex><span>            regexec(<span style=color:#333>&amp;</span>reg2, buffer, <span style=color:#00d;font-weight:700>1</span>, <span style=color:#333>&amp;</span>regmat2, <span style=color:#00d;font-weight:700>0</span>)) {
+</span></span><span style=display:flex><span>          <span style=color:#080;font-weight:700>continue</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#888>// 读取调用名称信息
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        <span style=color:#339;font-weight:700>int</span> len <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>        len <span style=color:#333>=</span> regmat1.rm_eo <span style=color:#333>-</span> regmat1.rm_so;
+</span></span><span style=display:flex><span>        <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>name <span style=color:#333>=</span> (<span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>)malloc(<span style=color:#080;font-weight:700>sizeof</span>(<span style=color:#339;font-weight:700>char</span>) <span style=color:#333>*</span> len);
+</span></span><span style=display:flex><span>        strncpy(name, buffer <span style=color:#333>+</span> regmat1.rm_so, len);
+</span></span><span style=display:flex><span>        name[len <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>1</span>] <span style=color:#333>=</span> <span style=color:#04d;background-color:#fff0f0>&#39;\0&#39;</span>;
+</span></span><span style=display:flex><span>        <span style=color:#888>// 读取时间信息
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        len <span style=color:#333>=</span> regmat2.rm_eo <span style=color:#333>-</span> regmat2.rm_so <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>2</span>;
+</span></span><span style=display:flex><span>        <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>value <span style=color:#333>=</span> (<span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>)malloc(<span style=color:#080;font-weight:700>sizeof</span>(<span style=color:#339;font-weight:700>char</span>) <span style=color:#333>*</span> len);
+</span></span><span style=display:flex><span>        strncpy(value, buffer <span style=color:#333>+</span> regmat2.rm_so <span style=color:#333>+</span> <span style=color:#00d;font-weight:700>1</span>, len);
+</span></span><span style=display:flex><span>        <span style=color:#339;font-weight:700>double</span> spent_time <span style=color:#333>=</span> atof(value);
+</span></span><span style=display:flex><span>        <span style=color:#888>// 及时释放value内存
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        free(value);
+</span></span><span style=display:flex><span>        value <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
+</span></span><span style=display:flex><span>        <span style=color:#888>// 更新总时间
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        total_time <span style=color:#333>+=</span> spent_time;
+</span></span><span style=display:flex><span>        <span style=color:#888>// 将信息保存到链表中
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        list_node <span style=color:#333>*</span>node <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
+</span></span><span style=display:flex><span>        <span style=color:#339;font-weight:700>int</span> find_flag <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>        list_node <span style=color:#333>*</span>prev <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
+</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>for</span> (list_node <span style=color:#333>*</span>curr <span style=color:#333>=</span> head; curr <span style=color:#333>!=</span> <span style=color:#007020>NULL</span>; curr <span style=color:#333>=</span> curr<span style=color:#333>-&gt;</span>next) {
+</span></span><span style=display:flex><span>          <span style=color:#888>// 若信息已存在，则将其更新后，重新插入
+</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#080;font-weight:700>if</span> (strcmp(curr<span style=color:#333>-&gt;</span>name, name) <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span>) {
+</span></span><span style=display:flex><span>            find_flag <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>;
+</span></span><span style=display:flex><span>            <span style=color:#080;font-weight:700>if</span> (prev <span style=color:#333>==</span> <span style=color:#007020>NULL</span>) {
+</span></span><span style=display:flex><span>              head <span style=color:#333>=</span> curr<span style=color:#333>-&gt;</span>next;
+</span></span><span style=display:flex><span>            } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>              prev<span style=color:#333>-&gt;</span>next <span style=color:#333>=</span> curr<span style=color:#333>-&gt;</span>next;
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>            node <span style=color:#333>=</span> curr;
+</span></span><span style=display:flex><span>            <span style=color:#888>// 信息存在，及时释放name内存
+</span></span></span><span style=display:flex><span><span style=color:#888></span>            free(name);
+</span></span><span style=display:flex><span>            name <span style=color:#333>=</span> <span style=color:#007020>NULL</span>;
+</span></span><span style=display:flex><span>            <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>          prev <span style=color:#333>=</span> curr;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>if</span> (find_flag) {
+</span></span><span style=display:flex><span>          <span style=color:#888>// 更新信息
+</span></span></span><span style=display:flex><span><span style=color:#888></span>          node<span style=color:#333>-&gt;</span>time <span style=color:#333>+=</span> spent_time;
+</span></span><span style=display:flex><span>        } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>          <span style=color:#888>// 新建节点，初始化信息
+</span></span></span><span style=display:flex><span><span style=color:#888></span>          node <span style=color:#333>=</span> (list_node <span style=color:#333>*</span>)malloc(<span style=color:#080;font-weight:700>sizeof</span>(list_node));
+</span></span><span style=display:flex><span>          node<span style=color:#333>-&gt;</span>name <span style=color:#333>=</span> name;
+</span></span><span style=display:flex><span>          node<span style=color:#333>-&gt;</span>time <span style=color:#333>=</span> spent_time;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#888>// 插入链表
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        head <span style=color:#333>=</span> insert_list_node(head, node);
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#888>// 格式化打印前五占比调用信息
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      printf(<span style=background-color:#fff0f0>&#34;Time: %ds</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>, curr_time);
+</span></span><span style=display:flex><span>      <span style=color:#339;font-weight:700>int</span> k <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>for</span> (list_node <span style=color:#333>*</span>node <span style=color:#333>=</span> head; node <span style=color:#333>!=</span> <span style=color:#007020>NULL</span>; node <span style=color:#333>=</span> node<span style=color:#333>-&gt;</span>next) {
+</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>if</span> (k<span style=color:#333>++</span> <span style=color:#333>&gt;=</span> PRINT_NUM) {
+</span></span><span style=display:flex><span>          <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        printf(<span style=background-color:#fff0f0>&#34;%s (%0.1f%%)</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>, node<span style=color:#333>-&gt;</span>name, node<span style=color:#333>-&gt;</span>time <span style=color:#333>/</span> total_time <span style=color:#333>*</span> <span style=color:#00d;font-weight:700>100</span>);
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>      printf(<span style=background-color:#fff0f0>&#34;=============</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>);
+</span></span><span style=display:flex><span>      curr_time <span style=color:#333>+=</span> TIME_INTERVAL_SEC;
+</span></span><span style=display:flex><span>      sleep(TIME_INTERVAL_SEC);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#888>// 关闭管道读取端，释放相关资源
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    regfree(<span style=color:#333>&amp;</span>reg1);
+</span></span><span style=display:flex><span>    regfree(<span style=color:#333>&amp;</span>reg2);
+</span></span><span style=display:flex><span>    fclose(fp);
+</span></span><span style=display:flex><span>    close(fd[<span style=color:#00d;font-weight:700>0</span>]);
+</span></span><span style=display:flex><span>    free_list(head);
+</span></span><span style=display:flex><span>    exit(EXIT_SUCCESS);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=m5实现文件恢复工具-frecov>M5：实现文件恢复工具 frecov</h2><h2 id=参考>参考</h2><p><strong>M2</strong>：</p><ul><li><a href=https://www.linkedin.com/pulse/process-thread-coroutines-amit-nadiger/ target=_blank>Process , Thread and Coroutines</a></li><li><a href=https://zhuanlan.zhihu.com/p/27339191 target=_blank>x86系统调用及栈帧原理</a></li></ul></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
