@@ -90,9 +90,18 @@ static __attribute__((destructor)) void co_destructor(void) {
 
 **理解setjmp/logjmp**：
 
+setjmp和longjmp是C语言中的非局部跳转函数，它可以实现函数间的非顺序调用。其中，setjmp的功能是:
+
+- 保存当前函数的执行环境/寄存器状态到jmp_buf结构体数据类型变量中
+- 函数返回值为0
+longjmp的功能是:
+
+根据jmp_buf结构体数据跳到之前使用setjmp保存的函数环境中
+参数决定返回值是否为0
+
 **实现co_field**：
 
-在理解了
+在理解了setjmp/logjmp的作用之后实现上下文切换就很容易了，
 
 ``` c
 // 切换协程
@@ -163,9 +172,281 @@ void debug_printf(const char *fmt, ...) {
 
 不要在co_wait中释放协程，在destructor中统一释放。
 
-### M2 总结
+## M3：系统调用 Profiler (sperf)
 
-这个实验很好的锻炼
+在这个实验中，我们需要实现命令行工具sperf：
+
+``` bash
+sperf COMMAND [ARG]...
+```
+
+它会在系统中执行COMMAND命令，并为COMMAND传入ARG参数(列表)，然后统计命令执行的系统调用所占的时间。
+
+### 显示系统调用序列
+
+根据实验说明，strace可以得到系统调用。它会 “重置” 某个进程的状态机，通过exceve使 “程序从头开始执行” 的系统调用。为了进一步使其显示相应调用的时间，我们可以使用-T参数，比如：
+
+```bash
+> strace -T ls .
+execve("/usr/bin/ls", ["ls", "."], 0x7ffc449974d0 /* 36 vars */) = 0 <0.000147>
+brk(NULL)                               = 0x557441898000 <0.000075>
+arch_prctl(0x3001 /* ARCH_??? */, 0x7ffef498a610) = -1 EINVAL (Invalid argument) <0.000032>
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f4df563c000 <0.000031>
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory) <0.000033>
+# 省略很多行
+newfstatat(1, "", {st_mode=S_IFCHR|0620, st_rdev=makedev(0x88, 0x9), ...}, AT_EMPTY_PATH) = 0 <0.000030>
+write(1, "Makefile  sperf-64  sperf.c\n", 28Makefile  sperf-64  sperf.c
+) = 28 <0.000090>
+close(1)                                = 0 <0.000032>
+close(2)                                = 0 <0.000029>
+exit_group(0)                           = ?
++++ exited with 0 +++
+```
+
+为了从strace的输出中提取到每个系统调用的名称和执行时间，我们可以使用正则表达式进行匹配。
+
+### 实现sperf
+
+根据实验说明，我们可以得到sperf程序的整体结构如下：
+
+```c++
+int main(int argc, char *argv[]) {
+  int fd[2];
+  if (pipe(fd) == -1) {
+    // 创建管道失败
+  }
+  int pid = fork();
+  if (pid == -1) {
+    // 子进程创建失败
+  }else if (pid == 0) {
+    // 子进程，执行strace命令
+    execve(...);
+    // 不应该执行此处代码，否则execve失败，出错处理
+  } else {
+    // 父进程，读取strace输出并统计
+  }
+}
+```
+
+**实现子进程**：
+
+对于子进程来说，只需要将管道写入端重定向到标准输出并且向execve传入正确的参数即可：
+
+```c++
+int main(int argc, char *argv[])  {
+  if (pid == -1) {
+    // 子进程创建失败
+    debug_printf("fork failed\n");
+    exit(EXIT_FAILURE);
+  } else if (pid == 0) {
+    // 关闭管道读取端，并将管道写入端重定向到标准输出
+    close(fd[0]);
+    if (dup2(fd[1], STDERR_FILENO) == -1) {
+      // 重定向失败
+      debug_printf("dup2 failed!\n");
+      close(fd[1]);
+      exit(EXIT_FAILURE);
+    }
+    // 执行strace
+    char *exec_argv[argc + 2];
+    exec_argv[0] = "strace";
+    exec_argv[1] = "-T";
+    for (int i = 1; i < argc; i++) {
+      exec_argv[i + 1] = argv[i];
+    }
+    exec_argv[argc + 1] = NULL;
+
+    char *exec_envp[] = {
+        "PATH=/bin",
+        NULL,
+    };
+    execve("strace", exec_argv, exec_envp);
+    execve("/bin/strace", exec_argv, exec_envp);
+    execve("/usr/bin/strace", exec_argv, exec_envp);
+    perror(argv[0]);
+    close(fd[1]);
+    exit(EXIT_FAILURE);
+  } else {
+    // 父进程，读取strace输出并统计
+    // ...
+  }
+}
+```
+
+**父进程实现**：
+
+对于父进程而言，除了使用正则表达式是从strace的输出提取所需信息之外，我们还要考虑如何存储这些信息。这里我使用的是链表，具体实现如下：
+
+```c++
+// 链表
+typedef struct list_node {
+  char *name;
+  double time;
+  struct list_node *next;
+} list_node;
+
+// 链表插入节点，同时保证时间始终从大到小排序
+list_node *insert_list_node(list_node *head, list_node *node) {
+  if (node == NULL) {
+    return head;
+  }
+
+  if (head == NULL || head->time < node->time) {
+    if (head != NULL) {
+      node->next = head;
+    }
+    return node;
+  }
+
+  list_node *prev = head;
+  for (list_node *curr = head->next; curr != NULL; curr = curr->next) {
+    if (curr->time < node->time) {
+      break;
+    }
+    prev = curr;
+  }
+
+  node->next = prev->next;
+  prev->next = node;
+  return head;
+}
+
+// 释放链表内存
+void free_list(list_node *head) {
+  list_node *curr = head;
+  while (curr != NULL) {
+    list_node *next = curr->next;
+    if (curr->name != NULL) {
+      free(curr->name);
+    }
+    curr->name = NULL;
+    free(curr);
+    curr = next;
+  }
+  return;
+}
+```
+
+有了这个链表之后，再去实现父进程的逻辑就比较简单了。
+
+```c++
+int main(int argc, char *argv[])  {
+  if (pid == -1) {
+    // 子进程创建失败
+    debug_printf("fork failed\n");
+    exit(EXIT_FAILURE);
+  } else if (pid == 0) {
+    // 子进程，执行strace
+    // ...
+  } else {
+        // 定义正则表达式
+    regex_t reg1, reg2;
+    if (regcomp(&reg1, "[^\\(\n\r\b\t]*\\(", REG_EXTENDED) ||
+        regcomp(&reg2, "<.*>", REG_EXTENDED)) {
+      debug_printf("regcomp failed!\n");
+      exit(EXIT_FAILURE);
+    }
+    // 链表记录各项调用时间信息
+    list_node *head = NULL;
+    // 调用总时间
+    double total_time = 0;
+    // 管道读取缓存
+    char buffer[BUFFER_SIZE];
+    // 关闭管道写入端，并从管道中读取数据
+    close(fd[1]);
+    FILE *fp = fdopen(fd[0], "r");
+    // 当前时间
+    int curr_time = 1;
+    // 运行标志
+    int run_flag = 1;
+    while (run_flag) {
+      while (fgets(buffer, BUFFER_SIZE, fp) > 0) {
+        // 读取到 +++ exited with 1/0 +++ 退出
+        if (strstr(buffer, "+++ exited with 0 +++") != NULL ||
+            strstr(buffer, "+++ exited with 1 +++") != NULL) {
+          run_flag = 0;
+          break;
+        }
+        // 使用正则表达式获取信息
+        regmatch_t regmat1, regmat2;
+        if (regexec(&reg1, buffer, 1, &regmat1, 0) ||
+            regexec(&reg2, buffer, 1, &regmat2, 0)) {
+          continue;
+        }
+        // 读取调用名称信息
+        int len = 0;
+        len = regmat1.rm_eo - regmat1.rm_so;
+        char *name = (char *)malloc(sizeof(char) * len);
+        strncpy(name, buffer + regmat1.rm_so, len);
+        name[len - 1] = '\0';
+        // 读取时间信息
+        len = regmat2.rm_eo - regmat2.rm_so - 2;
+        char *value = (char *)malloc(sizeof(char) * len);
+        strncpy(value, buffer + regmat2.rm_so + 1, len);
+        double spent_time = atof(value);
+        // 及时释放value内存
+        free(value);
+        value = NULL;
+        // 更新总时间
+        total_time += spent_time;
+        // 将信息保存到链表中
+        list_node *node = NULL;
+        int find_flag = 0;
+        list_node *prev = NULL;
+        for (list_node *curr = head; curr != NULL; curr = curr->next) {
+          // 若信息已存在，则将其更新后，重新插入
+          if (strcmp(curr->name, name) == 0) {
+            find_flag = 1;
+            if (prev == NULL) {
+              head = curr->next;
+            } else {
+              prev->next = curr->next;
+            }
+            node = curr;
+            // 信息存在，及时释放name内存
+            free(name);
+            name = NULL;
+            break;
+          }
+          prev = curr;
+        }
+
+        if (find_flag) {
+          // 更新信息
+          node->time += spent_time;
+        } else {
+          // 新建节点，初始化信息
+          node = (list_node *)malloc(sizeof(list_node));
+          node->name = name;
+          node->time = spent_time;
+        }
+        // 插入链表
+        head = insert_list_node(head, node);
+      }
+
+      // 格式化打印前五占比调用信息
+      printf("Time: %ds\n", curr_time);
+      int k = 0;
+      for (list_node *node = head; node != NULL; node = node->next) {
+        if (k++ >= PRINT_NUM) {
+          break;
+        }
+        printf("%s (%0.1f%%)\n", node->name, node->time / total_time * 100);
+      }
+      printf("=============\n");
+      curr_time += TIME_INTERVAL_SEC;
+      sleep(TIME_INTERVAL_SEC);
+    }
+    // 关闭管道读取端，释放相关资源
+    regfree(&reg1);
+    regfree(&reg2);
+    fclose(fp);
+    close(fd[0]);
+    free_list(head);
+    exit(EXIT_SUCCESS);
+  }
+}
+```
 
 ## M5：实现文件恢复工具 frecov
 
