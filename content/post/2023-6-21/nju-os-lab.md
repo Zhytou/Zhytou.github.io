@@ -172,7 +172,7 @@ void debug_printf(const char *fmt, ...) {
 
 不要在co_wait中释放协程，在destructor中统一释放。
 
-## M3：系统调用 Profiler (sperf)
+## M3：系统调用 Profiler sperf
 
 在这个实验中，我们需要实现命令行工具sperf：
 
@@ -228,7 +228,7 @@ int main(int argc, char *argv[]) {
 }
 ```
 
-**实现子进程**：
+**子进程**：
 
 对于子进程来说，只需要将管道写入端重定向到标准输出并且向execve传入正确的参数即可：
 
@@ -273,7 +273,7 @@ int main(int argc, char *argv[])  {
 }
 ```
 
-**父进程实现**：
+**父进程**：
 
 对于父进程而言，除了使用正则表达式是从strace的输出提取所需信息之外，我们还要考虑如何存储这些信息。这里我使用的是链表，具体实现如下：
 
@@ -447,6 +447,158 @@ int main(int argc, char *argv[])  {
   }
 }
 ```
+
+## M4：C Real-Eval-Print-Loop crepl
+
+M4要求我们实现一个类似Python Shell的“交互式Shell”程序crepl。具体来说，crepl逐行读取标准输入，根据内容进行处理：
+
+- 如果输入的一行定义了一个函数，则把函数编译并加载到进程的地址空间中；
+- 如果输入是一个表达式，则把它的值输出。
+
+为了简化问题，实验还额外添加了两条限制：
+
+- 函数总是以int开头，即：函数返回类型始终为int。
+- 如果一行不是以int开头，我们就认为这一行是一个C语言的表达式。
+
+这个实验也是比较有趣的一个，做完之后会对动态加载有更好的理解。
+
+### 解释器
+
+**表达式wrapper**：
+
+每当我们收到一个表达式，例如：gcd(256, 144) 的时候，我们都可以 “人工生成” 一段 C 代码，即生成一个wrapper函数。
+
+```c++
+int main() {
+  static char line[4096];
+  while (1) {
+    printf("crepl> ");
+    fflush(stdout);
+    if (!fgets(line, sizeof(line), stdin)) {
+      break;
+    }
+
+    // 除去空白
+    actual_line = strip(line);
+    // 打开文件
+    FILE *fp = fopen("/tmp/a.c", "a+");
+    if (fp == NULL) {
+      fprintf(stderr, "fopen error: %s\n", strerror(errno));
+      exit(EXIT_FAILURE);
+    }
+
+    if (strncmp(actual_line, "int ", 4) == 0) {
+      // int开头为函数，函数直接写入文件，等待后续编译即可
+      fputs(actual_line, fp);
+    } else {
+      // 非函数（表达式），使用包装器写入文件，同样等待后续编译即可
+      is_expr = 1;
+      fprintf(fp, "int __expr_wrapper_%d() { return %s; }", expr_count++,
+              actual_line);
+    }
+    // 关闭文件
+    fclose(fp);
+
+    // ...
+  }
+}
+```
+
+**编译和加载**：
+
+为了增加实验难度，禁止使用C标准库system和popen函数。因此，我们使用类似M2中的方法，即fork配合exec family的系统调用，将传入的函数编译为共享库。其中，子进程负责编译；父进程根据传入内容，计算出输出结果。
+
+```c++
+int main() {
+  while(1) {
+    // 写入文件
+    // ...
+    int pid = fork();
+    if (pid == -1) {
+      // 子进程创建失败
+      fprintf(stderr, "fork error: %s\n", strerror(errno));
+      exit(EXIT_FAILURE);
+    } else if (pid == 0) {
+      // 子进程使用execve执行gcc
+      char *exec_argv[] = {
+        "gcc",
+        "-fPIC", 
+        "-shared", 
+        "/tmp/a.c",
+        "-o",
+        "liba.so",
+        NULL,
+      };
+      execve("/usr/bin/gcc", exec_argv, NULL);
+      // execve()仅执行失败返回
+      perror("execve");   
+      exit(EXIT_FAILURE);
+    } else {
+      // 父进程等待子进程结束
+      int status;
+      if (waitpid(pid, &status, 0) == -1) {
+        fprintf(stderr, "waitpid error: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+      }
+      if (WEXITSTATUS(status) != 0) {
+        // 子进程编译失败
+        printf("compile error\n");
+        continue;
+      }
+
+      // 如果是表达式，则需要加载库，并计算输出结果
+      if (is_expr) {
+        // 加载库
+        void *handle = dlopen("/tmp/liba.so", RTLD_LAZY);
+        if (handle == NULL) {
+          fprintf(stderr, "dlopen error: %s\n", dlerror());
+          exit(EXIT_FAILURE);
+        }
+
+        // 获取表达式wrapper名称
+        int expr_count_len = 0;
+        for (int i = expr_count; i > 0; i /= 10) {
+          expr_count_len++;
+        }
+        char expr_name[expr_prefix_len + expr_count_len];
+        sprintf(expr_name, "__expr_wrapper_%d", expr_count - 1);
+
+        // 获取表达式wrapper的函数指针
+        int (*func)() = dlsym(handle, expr_name);
+        if (func == NULL) {
+          fprintf(stderr, "dlsym error: %s\n", dlerror());
+          dlclose(handle);
+          exit(EXIT_FAILURE);
+        }
+
+        // 运行表达式wrapper
+        int result = func();
+        printf("%d\n", result);
+
+        // 关闭库
+        dlclose(handle);
+
+        // 重置is_expr
+        is_expr = 0;
+      } else {
+        // 定义函数成功
+        printf("ok\n");
+      }
+    }
+  }
+}
+```
+
+**坑**：
+
+这个实验整体来说比较简单，但我还是碰到一个坑，就是通过execve使用gcc时始终报错`gcc: fatal error: cannot execute 'cc1': execvp: No such file or directory`。起初，我判断是，execve函数的envp参数没设置对，补加了cc1所在的路径到环境变量PATH中去，但仍然报错。后续查阅资料，根据StackOverflow的这个[帖子](https://stackoverflow.com/questions/11912878/gcc-error-gcc-error-trying-to-exec-cc1-execvp-no-such-file-or-directory)，又尝试了在gcc所在目录添加一个cc1的软链接，这时候报错信息变成了`gcc: fatal error: '-fuse-linker-plugin', but liblto_plugin.so not found`，仍然不能正常运行。最后我尝试了以下命令去重新安装gcc。
+
+```bash
+sudo apt-get update
+sudo apt-get install --reinstall build-essential
+```
+
+在apt进行update的时候始终报错`E: Release file for http://archive.ubuntu.com/ubuntu/dists/jammy-updates/InRelease is not valid yet (invalid for another 2h 54min 29s). Updates for this repository will not be applied.`。查阅资料后，发现这是因为wsl的时间不正确，可以使用`sudo hwclock --hctosys `命令进行校准。在校准后，再去重新安装gcc之后，问题就解决了。
 
 ## M5：实现文件恢复工具 frecov
 
