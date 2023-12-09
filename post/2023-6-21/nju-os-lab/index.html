@@ -1,5 +1,5 @@
 <!doctype html><html lang=en><head><meta charset=UTF-8><title>NJU-OS-Lab总结 | Zhytou</title>
-<meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=generator content="Hugo 0.121.0"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=/favicon.ico><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css media=screen href=/css/all.css><meta property="og:title" content="NJU-OS-Lab总结"><meta property="og:description" content="M1：实现打印进程树状信息的工具 pstree M2：实现协程库 libco 协程 理解协程：
+<meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=generator content="Hugo 0.121.1"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=/favicon.ico><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css media=screen href=/css/all.css><meta property="og:title" content="NJU-OS-Lab总结"><meta property="og:description" content="M1：实现打印进程树状信息的工具 pstree M2：实现协程库 libco 协程 理解协程：
 在开始做本实验之前，我认为可以先阅读一些材料来认识进程、线程和协程之间的关系，比如这一篇Process , Thread and Coroutines。当我们能够认识到协程其实就是调度由用户管理的轻量级线程，即：用户态线程时，实验说明中的大部分内容就很好理解了。
 至于协程结构体，则可以直接使用实验讲义中给出的，具体如下：
 // 协程状态 enum co_status { CO_NEW = 1, // 新创建，还未执行过 CO_RUNNING, // 已经执行过 CO_WAITING, // 在 co_wait 上等待 CO_DEAD, // 已经结束，但还未释放资源 }; // 协程 struct __attribute__((aligned(16))) co { char *name; void (*func)(void *); // co_start 指定的入口地址和参数 void *arg; enum co_status status; // 协程的状态 struct co *waiter; // 是否有其他协程在等待当前协程 jmp_buf context; // 寄存器现场 (setjmp.h) unsigned char stack[STACK_SIZE]; // 协程的堆栈 }; 管理协程："><meta property="og:type" content="article"><meta property="og:url" content="https://zhytou.github.io/post/2023-6-21/nju-os-lab/"><meta property="article:section" content="post"><meta property="article:published_time" content="2023-06-21T16:42:31+08:00"><meta property="article:modified_time" content="2023-06-21T16:42:31+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="NJU-OS-Lab总结"><meta name=twitter:description content="M1：实现打印进程树状信息的工具 pstree M2：实现协程库 libco 协程 理解协程：
@@ -8,7 +8,7 @@
 // 协程状态 enum co_status { CO_NEW = 1, // 新创建，还未执行过 CO_RUNNING, // 已经执行过 CO_WAITING, // 在 co_wait 上等待 CO_DEAD, // 已经结束，但还未释放资源 }; // 协程 struct __attribute__((aligned(16))) co { char *name; void (*func)(void *); // co_start 指定的入口地址和参数 void *arg; enum co_status status; // 协程的状态 struct co *waiter; // 是否有其他协程在等待当前协程 jmp_buf context; // 寄存器现场 (setjmp.h) unsigned char stack[STACK_SIZE]; // 协程的堆栈 }; 管理协程："><meta itemprop=name content="NJU-OS-Lab总结"><meta itemprop=description content="M1：实现打印进程树状信息的工具 pstree M2：实现协程库 libco 协程 理解协程：
 在开始做本实验之前，我认为可以先阅读一些材料来认识进程、线程和协程之间的关系，比如这一篇Process , Thread and Coroutines。当我们能够认识到协程其实就是调度由用户管理的轻量级线程，即：用户态线程时，实验说明中的大部分内容就很好理解了。
 至于协程结构体，则可以直接使用实验讲义中给出的，具体如下：
-// 协程状态 enum co_status { CO_NEW = 1, // 新创建，还未执行过 CO_RUNNING, // 已经执行过 CO_WAITING, // 在 co_wait 上等待 CO_DEAD, // 已经结束，但还未释放资源 }; // 协程 struct __attribute__((aligned(16))) co { char *name; void (*func)(void *); // co_start 指定的入口地址和参数 void *arg; enum co_status status; // 协程的状态 struct co *waiter; // 是否有其他协程在等待当前协程 jmp_buf context; // 寄存器现场 (setjmp.h) unsigned char stack[STACK_SIZE]; // 协程的堆栈 }; 管理协程："><meta itemprop=datePublished content="2023-06-21T16:42:31+08:00"><meta itemprop=dateModified content="2023-06-21T16:42:31+08:00"><meta itemprop=wordCount content="1045"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>21</span>
+// 协程状态 enum co_status { CO_NEW = 1, // 新创建，还未执行过 CO_RUNNING, // 已经执行过 CO_WAITING, // 在 co_wait 上等待 CO_DEAD, // 已经结束，但还未释放资源 }; // 协程 struct __attribute__((aligned(16))) co { char *name; void (*func)(void *); // co_start 指定的入口地址和参数 void *arg; enum co_status status; // 协程的状态 struct co *waiter; // 是否有其他协程在等待当前协程 jmp_buf context; // 寄存器现场 (setjmp.h) unsigned char stack[STACK_SIZE]; // 协程的堆栈 }; 管理协程："><meta itemprop=datePublished content="2023-06-21T16:42:31+08:00"><meta itemprop=dateModified content="2023-06-21T16:42:31+08:00"><meta itemprop=wordCount content="1515"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>21</span>
 <span class=rest>Jun 2023</span></div></div><div class=matter><h1 class=title>NJU-OS-Lab总结</h1><p class=post-meta><span class=post-meta></span></p></div></div><div class=markdown><h2 id=m1实现打印进程树状信息的工具-pstree>M1：实现打印进程树状信息的工具 pstree</h2><h2 id=m2实现协程库-libco>M2：实现协程库 libco</h2><h3 id=协程>协程</h3><p><strong>理解协程</strong>：</p><p>在开始做本实验之前，我认为可以先阅读一些材料来认识进程、线程和协程之间的关系，比如这一篇<a href=https://www.linkedin.com/pulse/process-thread-coroutines-amit-nadiger/ target=_blank>Process , Thread and Coroutines</a>。当我们能够认识到协程其实就是调度由用户管理的轻量级线程，即：用户态线程时，实验说明中的大部分内容就很好理解了。</p><p>至于协程结构体，则可以直接使用实验讲义中给出的，具体如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#888>// 协程状态
 </span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>enum</span> co_status {
 </span></span><span style=display:flex><span>  CO_NEW <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>,  <span style=color:#888>// 新创建，还未执行过
@@ -64,7 +64,7 @@
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><h3 id=上下文切换>上下文切换</h3><p><strong>理解setjmp/logjmp</strong>：</p><p>setjmp和longjmp是C语言中的非局部跳转函数，它可以实现函数间的非顺序调用。其中，setjmp的功能是:</p><ul><li>保存当前函数的执行环境/寄存器状态到jmp_buf结构体数据类型变量中</li><li>函数返回值为0
 longjmp的功能是:</li></ul><p>根据jmp_buf结构体数据跳到之前使用setjmp保存的函数环境中
-参数决定返回值是否为0</p><p><strong>实现co_field</strong>：</p><p>在理解了setjmp/logjmp的作用之后实现上下文切换就很容易了，</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#888>// 切换协程
+参数决定返回值是否为0</p><p><strong>实现co_field</strong>：</p><p>setjmp和longjmp是C语言提供的非局部跳转机制。一般来说，使用它们实现跳转的方法如下：</p><ul><li>使用setjmp保存当前执行环境到jmp_buf，然后默认返回0。</li><li>程序继续执行，到某个地方调用longjmp，传入上面保存的jmp_buf，以及另一个值。</li><li>此时执行点又回到调用setjmp的返回处，且返回值变成longjmp设置的值。</li></ul><p>在理解了setjmp/logjmp的作用之后实现上下文切换就很容易了，具体实现如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#888>// 切换协程
 </span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>co_yield</span> () {
 </span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>int</span> ret <span style=color:#333>=</span> <span style=color:#06b;font-weight:700>setjmp</span>(current<span style=color:#333>-&gt;</span>context);
 </span></span><span style=display:flex><span>  <span style=color:#888>// 若ret为0，即为第一次设置jmp_buf（可以使用longjmp函数恢复寄存器状态），切换到一个新建或运行中的协程执行
@@ -92,7 +92,57 @@ longjmp的功能是:</li></ul><p>根据jmp_buf结构体数据跳到之前使用s
 </span></span><span style=display:flex><span>  }
 </span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>;
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>实现stack_swicth_call与restore_registers_call</strong>：</p><p><figure><img src=https://pic2.zhimg.com/80/v2-bd5a0aa1625c4445ba33e506b91dba29_1440w.webp alt=调用栈></figure></p><h3 id=调试--坑>调试 & 坑</h3><p><strong>调试信息打印函数</strong>：</p><p>为了方便调试，我们可以定义一个debug_printf函数，并利用宏的机制来开启或关闭该信息的显示。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#579>#define DEBUG 0
+</span></span></code></pre></div><p><strong>实现stack_swicth_call与restore_registers_call</strong>：</p><p><figure><img src=https://pic2.zhimg.com/80/v2-bd5a0aa1625c4445ba33e506b91dba29_1440w.webp alt=调用栈></figure></p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#888>// 首先将call preserved registers保存下来
+</span></span></span><span style=display:flex><span><span style=color:#888>// 接着将堆栈寄存器和参数寄存器的值设为sp和arg，并跳转到entry处，从而实现上下文切换
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>static</span> <span style=color:#080;font-weight:700>inline</span> <span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>stack_switch_call</span>(<span style=color:#339;font-weight:700>void</span> <span style=color:#333>*</span>sp, <span style=color:#339;font-weight:700>void</span> <span style=color:#333>*</span>entry, <span style=color:#339;font-weight:700>void</span> <span style=color:#333>*</span>arg) {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>asm</span> <span style=color:#080;font-weight:700>volatile</span>(
+</span></span><span style=display:flex><span><span style=color:#579>#if __x86_64__
+</span></span></span><span style=display:flex><span><span style=color:#579></span>      <span style=background-color:#fff0f0>&#34;mov %%rsp, %%r8;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;mov %0, %%rsp;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;push %%rbx;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;push %%r8;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;push %%rbp;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;push %%r12;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;push %%r13;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;push %%r14;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;push %%r15;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;mov %%rsp, %%rbp;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;sub $0x100, %%rsp;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;mov %2, %%rdi;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;call *%1&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:#333>:</span>
+</span></span><span style=display:flex><span>      <span style=color:#333>:</span> <span style=background-color:#fff0f0>&#34;c&#34;</span>((uintptr_t)sp <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>8</span>), <span style=background-color:#fff0f0>&#34;d&#34;</span>((uintptr_t)entry), <span style=background-color:#fff0f0>&#34;a&#34;</span>((uintptr_t)arg)
+</span></span><span style=display:flex><span><span style=color:#579>#else
+</span></span></span><span style=display:flex><span><span style=color:#579></span>      <span style=background-color:#fff0f0>&#34;movl %%ecx, 4(%0); movl %0, %%esp; movl %2, 0(%0); call *%1&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:#333>:</span>
+</span></span><span style=display:flex><span>      <span style=color:#333>:</span> <span style=background-color:#fff0f0>&#34;b&#34;</span>((uintptr_t)sp <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>8</span>), <span style=background-color:#fff0f0>&#34;d&#34;</span>((uintptr_t)entry), <span style=background-color:#fff0f0>&#34;a&#34;</span>((uintptr_t)arg)
+</span></span><span style=display:flex><span><span style=color:#579>#endif
+</span></span></span><span style=display:flex><span><span style=color:#579></span>  );
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#888>// 将call preserved registers的值恢复到切换上下文之前
+</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>static</span> <span style=color:#080;font-weight:700>inline</span> <span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>restore_registers_call</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>asm</span> <span style=color:#080;font-weight:700>volatile</span>(
+</span></span><span style=display:flex><span><span style=color:#579>#if __x86_64__
+</span></span></span><span style=display:flex><span><span style=color:#579></span>      <span style=background-color:#fff0f0>&#34;add $0x100, %%rsp;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;pop %%r15;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;pop %%r14;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;pop %%r13;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;pop %%r12;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;pop %%rbp;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;pop %%r8;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;pop %%rbx;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=background-color:#fff0f0>&#34;mov %%r8, %%rsp;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:#333>:</span>
+</span></span><span style=display:flex><span>      <span style=color:#333>:</span>
+</span></span><span style=display:flex><span><span style=color:#579>#else
+</span></span></span><span style=display:flex><span><span style=color:#579></span>      <span style=background-color:#fff0f0>&#34;movl 4(%%esp), %%ecx&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:#333>:</span>
+</span></span><span style=display:flex><span>      <span style=color:#333>:</span>
+</span></span><span style=display:flex><span><span style=color:#579>#endif
+</span></span></span><span style=display:flex><span><span style=color:#579></span>  );
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=调试--坑>调试 & 坑</h3><p><strong>调试信息打印函数</strong>：</p><p>为了方便调试，我们可以定义一个debug_printf函数，并利用宏的机制来开启或关闭该信息的显示。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#579>#define DEBUG 0
 </span></span></span><span style=display:flex><span><span style=color:#579></span>
 </span></span><span style=display:flex><span><span style=color:#888>// 调试打印函数
 </span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>debug_printf</span>(<span style=color:#080;font-weight:700>const</span> <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>fmt, ...) {
@@ -103,7 +153,7 @@ longjmp的功能是:</li></ul><p>根据jmp_buf结构体数据跳到之前使用s
 </span></span><span style=display:flex><span>    <span style=color:#06b;font-weight:700>va_end</span>(args);
 </span></span><span style=display:flex><span>  }
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>GDB</strong>：</p><p>由于这个实验涉及到使用内联汇编代码实现上下文切换，掌握gdb按汇编指令单步运行，来查看stack_swicth_call与restore_registers_call前后，寄存器是否保存正确、栈是否对齐，就显得十分重要。</p><p>关于如何使用gdb调试，具体可以参考我的<a href=https://zhytou.github.io/post/2023-6-27/gnu-tools/ target=_blank>博客</a>，里面几乎涵盖了这次实验会用到的所有gdb命令。</p><p><strong>我碰到的坑</strong>：</p><ol><li><p>堆栈没有对齐，报错SEGEFV；</p></li><li><p>画蛇添足，在co_wait里若发现协程状态为CO_DEAD就主动释放了该协程内存：</p></li></ol><p>不要在co_wait中释放协程，在destructor中统一释放。</p><h2 id=m3系统调用-profiler-sperf>M3：系统调用 Profiler (sperf)</h2><p>在这个实验中，我们需要实现命令行工具sperf：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sperf COMMAND <span style=color:#333>[</span>ARG<span style=color:#333>]</span>...
+</span></span></code></pre></div><p><strong>GDB</strong>：</p><p>由于这个实验涉及到使用内联汇编代码实现上下文切换，掌握gdb按汇编指令单步运行，来查看stack_swicth_call与restore_registers_call前后，寄存器是否保存正确、栈是否对齐，就显得十分重要。</p><p>关于如何使用gdb调试，具体可以参考我的<a href=https://zhytou.github.io/post/2023-6-27/gnu-tools/ target=_blank>博客</a>，里面几乎涵盖了这次实验会用到的所有gdb命令。</p><p><strong>我碰到的坑</strong>：</p><ol><li><p>堆栈没有对齐，报错SEGEFV；</p></li><li><p>画蛇添足，在co_wait里若发现协程状态为CO_DEAD就主动释放了该协程内存：</p></li></ol><p>不要在co_wait中释放协程，在destructor中统一释放。</p><h2 id=m3系统调用-profiler-sperf>M3：系统调用 Profiler sperf</h2><p>在这个实验中，我们需要实现命令行工具sperf：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sperf COMMAND <span style=color:#333>[</span>ARG<span style=color:#333>]</span>...
 </span></span></code></pre></div><p>它会在系统中执行COMMAND命令，并为COMMAND传入ARG参数(列表)，然后统计命令执行的系统调用所占的时间。</p><h3 id=显示系统调用序列>显示系统调用序列</h3><p>根据实验说明，strace可以得到系统调用。它会 “重置” 某个进程的状态机，通过exceve使 “程序从头开始执行” 的系统调用。为了进一步使其显示相应调用的时间，我们可以使用-T参数，比如：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>&gt; strace -T ls .
 </span></span><span style=display:flex><span>execve<span style=color:#333>(</span><span style=background-color:#fff0f0>&#34;/usr/bin/ls&#34;</span>, <span style=color:#333>[</span><span style=background-color:#fff0f0>&#34;ls&#34;</span>, <span style=background-color:#fff0f0>&#34;.&#34;</span><span style=color:#333>]</span>, 0x7ffc449974d0 /* <span style=color:#60e;font-weight:700>36</span> vars */<span style=color:#333>)</span> <span style=color:#333>=</span> <span style=color:#60e;font-weight:700>0</span> &lt;0.000147&gt;
 </span></span><span style=display:flex><span>brk<span style=color:#333>(</span>NULL<span style=color:#333>)</span>                               <span style=color:#333>=</span> 0x557441898000 &lt;0.000075&gt;
@@ -134,7 +184,7 @@ longjmp的功能是:</li></ul><p>根据jmp_buf结构体数据跳到之前使用s
 </span></span><span style=display:flex><span>    <span style=color:#888>// 父进程，读取strace输出并统计
 </span></span></span><span style=display:flex><span><span style=color:#888></span>  }
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>实现子进程</strong>：</p><p>对于子进程来说，只需要将管道写入端重定向到标准输出并且向execve传入正确的参数即可：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>int</span> <span style=color:#06b;font-weight:700>main</span>(<span style=color:#339;font-weight:700>int</span> argc, <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>argv[])  {
+</span></span></code></pre></div><p><strong>子进程</strong>：</p><p>对于子进程来说，只需要将管道写入端重定向到标准输出并且向execve传入正确的参数即可：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>int</span> <span style=color:#06b;font-weight:700>main</span>(<span style=color:#339;font-weight:700>int</span> argc, <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>argv[])  {
 </span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> (pid <span style=color:#333>==</span> <span style=color:#333>-</span><span style=color:#00d;font-weight:700>1</span>) {
 </span></span><span style=display:flex><span>    <span style=color:#888>// 子进程创建失败
 </span></span></span><span style=display:flex><span><span style=color:#888></span>    debug_printf(<span style=background-color:#fff0f0>&#34;fork failed</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>);
@@ -172,7 +222,7 @@ longjmp的功能是:</li></ul><p>根据jmp_buf结构体数据跳到之前使用s
 </span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#888>// ...
 </span></span></span><span style=display:flex><span><span style=color:#888></span>  }
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>父进程实现</strong>：</p><p>对于父进程而言，除了使用正则表达式是从strace的输出提取所需信息之外，我们还要考虑如何存储这些信息。这里我使用的是链表，具体实现如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#888>// 链表
+</span></span></code></pre></div><p><strong>父进程</strong>：</p><p>对于父进程而言，除了使用正则表达式是从strace的输出提取所需信息之外，我们还要考虑如何存储这些信息。这里我使用的是链表，具体实现如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#888>// 链表
 </span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#080;font-weight:700>typedef</span> <span style=color:#080;font-weight:700>struct</span> <span style=color:#b06;font-weight:700>list_node</span> {
 </span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>name;
 </span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>double</span> time;
@@ -335,4 +385,117 @@ longjmp的功能是:</li></ul><p>根据jmp_buf结构体数据跳到之前使用s
 </span></span><span style=display:flex><span>    exit(EXIT_SUCCESS);
 </span></span><span style=display:flex><span>  }
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h2 id=m5实现文件恢复工具-frecov>M5：实现文件恢复工具 frecov</h2><h2 id=参考>参考</h2><p><strong>M2</strong>：</p><ul><li><a href=https://www.linkedin.com/pulse/process-thread-coroutines-amit-nadiger/ target=_blank>Process , Thread and Coroutines</a></li><li><a href=https://zhuanlan.zhihu.com/p/27339191 target=_blank>x86系统调用及栈帧原理</a></li></ul></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
+</span></span></code></pre></div><h2 id=m4c-real-eval-print-loop-crepl>M4：C Real-Eval-Print-Loop crepl</h2><p>M4要求我们实现一个类似Python Shell的“交互式Shell”程序crepl。具体来说，crepl逐行读取标准输入，根据内容进行处理：</p><ul><li>如果输入的一行定义了一个函数，则把函数编译并加载到进程的地址空间中；</li><li>如果输入是一个表达式，则把它的值输出。</li></ul><p>为了简化问题，实验还额外添加了两条限制：</p><ul><li>函数总是以int开头，即：函数返回类型始终为int。</li><li>如果一行不是以int开头，我们就认为这一行是一个C语言的表达式。</li></ul><p>这个实验也是比较有趣的一个，做完之后会对动态加载有更好的理解。</p><h3 id=解释器>解释器</h3><p><strong>表达式wrapper</strong>：</p><p>每当我们收到一个表达式，例如：gcd(256, 144) 的时候，我们都可以 “人工生成” 一段 C 代码，即生成一个wrapper函数。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>int</span> <span style=color:#06b;font-weight:700>main</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>static</span> <span style=color:#339;font-weight:700>char</span> line[<span style=color:#00d;font-weight:700>4096</span>];
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>while</span> (<span style=color:#00d;font-weight:700>1</span>) {
+</span></span><span style=display:flex><span>    printf(<span style=background-color:#fff0f0>&#34;crepl&gt; &#34;</span>);
+</span></span><span style=display:flex><span>    fflush(stdout);
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> (<span style=color:#333>!</span>fgets(line, <span style=color:#080;font-weight:700>sizeof</span>(line), stdin)) {
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#888>// 除去空白
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    actual_line <span style=color:#333>=</span> strip(line);
+</span></span><span style=display:flex><span>    <span style=color:#888>// 打开文件
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    FILE <span style=color:#333>*</span>fp <span style=color:#333>=</span> fopen(<span style=background-color:#fff0f0>&#34;/tmp/a.c&#34;</span>, <span style=background-color:#fff0f0>&#34;a+&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> (fp <span style=color:#333>==</span> <span style=color:#007020>NULL</span>) {
+</span></span><span style=display:flex><span>      fprintf(stderr, <span style=background-color:#fff0f0>&#34;fopen error: %s</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>, strerror(errno));
+</span></span><span style=display:flex><span>      exit(EXIT_FAILURE);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> (strncmp(actual_line, <span style=background-color:#fff0f0>&#34;int &#34;</span>, <span style=color:#00d;font-weight:700>4</span>) <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#888>// int开头为函数，函数直接写入文件，等待后续编译即可
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      fputs(actual_line, fp);
+</span></span><span style=display:flex><span>    } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>      <span style=color:#888>// 非函数（表达式），使用包装器写入文件，同样等待后续编译即可
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      is_expr <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>;
+</span></span><span style=display:flex><span>      fprintf(fp, <span style=background-color:#fff0f0>&#34;int __expr_wrapper_%d() { return %s; }&#34;</span>, expr_count<span style=color:#333>++</span>,
+</span></span><span style=display:flex><span>              actual_line);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#888>// 关闭文件
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    fclose(fp);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#888>// ...
+</span></span></span><span style=display:flex><span><span style=color:#888></span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>编译和加载</strong>：</p><p>为了增加实验难度，禁止使用C标准库system和popen函数。因此，我们使用类似M2中的方法，即fork配合exec family的系统调用，将传入的函数编译为共享库。其中，子进程负责编译；父进程根据传入内容，计算出输出结果。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>int</span> <span style=color:#06b;font-weight:700>main</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>while</span>(<span style=color:#00d;font-weight:700>1</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#888>// 写入文件
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#888>// ...
+</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#339;font-weight:700>int</span> pid <span style=color:#333>=</span> fork();
+</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> (pid <span style=color:#333>==</span> <span style=color:#333>-</span><span style=color:#00d;font-weight:700>1</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#888>// 子进程创建失败
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      fprintf(stderr, <span style=background-color:#fff0f0>&#34;fork error: %s</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>, strerror(errno));
+</span></span><span style=display:flex><span>      exit(EXIT_FAILURE);
+</span></span><span style=display:flex><span>    } <span style=color:#080;font-weight:700>else</span> <span style=color:#080;font-weight:700>if</span> (pid <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#888>// 子进程使用execve执行gcc
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#339;font-weight:700>char</span> <span style=color:#333>*</span>exec_argv[] <span style=color:#333>=</span> {
+</span></span><span style=display:flex><span>        <span style=background-color:#fff0f0>&#34;gcc&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=background-color:#fff0f0>&#34;-fPIC&#34;</span>, 
+</span></span><span style=display:flex><span>        <span style=background-color:#fff0f0>&#34;-shared&#34;</span>, 
+</span></span><span style=display:flex><span>        <span style=background-color:#fff0f0>&#34;/tmp/a.c&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=background-color:#fff0f0>&#34;-o&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=background-color:#fff0f0>&#34;liba.so&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#007020>NULL</span>,
+</span></span><span style=display:flex><span>      };
+</span></span><span style=display:flex><span>      execve(<span style=background-color:#fff0f0>&#34;/usr/bin/gcc&#34;</span>, exec_argv, <span style=color:#007020>NULL</span>);
+</span></span><span style=display:flex><span>      <span style=color:#888>// execve()仅执行失败返回
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      perror(<span style=background-color:#fff0f0>&#34;execve&#34;</span>);   
+</span></span><span style=display:flex><span>      exit(EXIT_FAILURE);
+</span></span><span style=display:flex><span>    } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>      <span style=color:#888>// 父进程等待子进程结束
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#339;font-weight:700>int</span> status;
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>if</span> (waitpid(pid, <span style=color:#333>&amp;</span>status, <span style=color:#00d;font-weight:700>0</span>) <span style=color:#333>==</span> <span style=color:#333>-</span><span style=color:#00d;font-weight:700>1</span>) {
+</span></span><span style=display:flex><span>        fprintf(stderr, <span style=background-color:#fff0f0>&#34;waitpid error: %s</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>, strerror(errno));
+</span></span><span style=display:flex><span>        exit(EXIT_FAILURE);
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>if</span> (WEXITSTATUS(status) <span style=color:#333>!=</span> <span style=color:#00d;font-weight:700>0</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#888>// 子进程编译失败
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        printf(<span style=background-color:#fff0f0>&#34;compile error</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>);
+</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>continue</span>;
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#888>// 如果是表达式，则需要加载库，并计算输出结果
+</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#080;font-weight:700>if</span> (is_expr) {
+</span></span><span style=display:flex><span>        <span style=color:#888>// 加载库
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        <span style=color:#339;font-weight:700>void</span> <span style=color:#333>*</span>handle <span style=color:#333>=</span> dlopen(<span style=background-color:#fff0f0>&#34;/tmp/liba.so&#34;</span>, RTLD_LAZY);
+</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>if</span> (handle <span style=color:#333>==</span> <span style=color:#007020>NULL</span>) {
+</span></span><span style=display:flex><span>          fprintf(stderr, <span style=background-color:#fff0f0>&#34;dlopen error: %s</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>, dlerror());
+</span></span><span style=display:flex><span>          exit(EXIT_FAILURE);
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#888>// 获取表达式wrapper名称
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        <span style=color:#339;font-weight:700>int</span> expr_count_len <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>for</span> (<span style=color:#339;font-weight:700>int</span> i <span style=color:#333>=</span> expr_count; i <span style=color:#333>&gt;</span> <span style=color:#00d;font-weight:700>0</span>; i <span style=color:#333>/=</span> <span style=color:#00d;font-weight:700>10</span>) {
+</span></span><span style=display:flex><span>          expr_count_len<span style=color:#333>++</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#339;font-weight:700>char</span> expr_name[expr_prefix_len <span style=color:#333>+</span> expr_count_len];
+</span></span><span style=display:flex><span>        sprintf(expr_name, <span style=background-color:#fff0f0>&#34;__expr_wrapper_%d&#34;</span>, expr_count <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>1</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#888>// 获取表达式wrapper的函数指针
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        <span style=color:#339;font-weight:700>int</span> (<span style=color:#333>*</span>func)() <span style=color:#333>=</span> dlsym(handle, expr_name);
+</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>if</span> (func <span style=color:#333>==</span> <span style=color:#007020>NULL</span>) {
+</span></span><span style=display:flex><span>          fprintf(stderr, <span style=background-color:#fff0f0>&#34;dlsym error: %s</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>, dlerror());
+</span></span><span style=display:flex><span>          dlclose(handle);
+</span></span><span style=display:flex><span>          exit(EXIT_FAILURE);
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#888>// 运行表达式wrapper
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        <span style=color:#339;font-weight:700>int</span> result <span style=color:#333>=</span> func();
+</span></span><span style=display:flex><span>        printf(<span style=background-color:#fff0f0>&#34;%d</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>, result);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#888>// 关闭库
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        dlclose(handle);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#888>// 重置is_expr
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        is_expr <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+</span></span><span style=display:flex><span>      } <span style=color:#080;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>        <span style=color:#888>// 定义函数成功
+</span></span></span><span style=display:flex><span><span style=color:#888></span>        printf(<span style=background-color:#fff0f0>&#34;ok</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\n</span><span style=background-color:#fff0f0>&#34;</span>);
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>坑</strong>：</p><p>这个实验整体来说比较简单，但我还是碰到一个坑，就是通过execve使用gcc时始终报错<code>gcc: fatal error: cannot execute 'cc1': execvp: No such file or directory</code>。起初，我判断是，execve函数的envp参数没设置对，补加了cc1所在的路径到环境变量PATH中去，但仍然报错。后续查阅资料，根据StackOverflow的这个<a href=https://stackoverflow.com/questions/11912878/gcc-error-gcc-error-trying-to-exec-cc1-execvp-no-such-file-or-directory target=_blank>帖子</a>，又尝试了在gcc所在目录添加一个cc1的软链接，这时候报错信息变成了<code>gcc: fatal error: '-fuse-linker-plugin', but liblto_plugin.so not found</code>，仍然不能正常运行。最后我尝试了以下命令去重新安装gcc。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sudo apt-get update
+</span></span><span style=display:flex><span>sudo apt-get install --reinstall build-essential
+</span></span></code></pre></div><p>在apt进行update的时候始终报错<code>E: Release file for http://archive.ubuntu.com/ubuntu/dists/jammy-updates/InRelease is not valid yet (invalid for another 2h 54min 29s). Updates for this repository will not be applied.</code>。查阅资料后，发现这是因为wsl的时间不正确，可以使用<code>sudo hwclock --hctosys </code>命令进行校准。在校准后，再去重新安装gcc之后，问题就解决了。</p><h2 id=m5实现文件恢复工具-frecov>M5：实现文件恢复工具 frecov</h2><h2 id=参考>参考</h2><p><strong>M2</strong>：</p><ul><li><a href=https://www.linkedin.com/pulse/process-thread-coroutines-amit-nadiger/ target=_blank>Process , Thread and Coroutines</a></li><li><a href=https://zhuanlan.zhihu.com/p/27339191 target=_blank>x86系统调用及栈帧原理</a></li></ul></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
