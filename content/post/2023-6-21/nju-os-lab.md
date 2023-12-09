@@ -101,7 +101,13 @@ longjmp的功能是:
 
 **实现co_field**：
 
-在理解了setjmp/logjmp的作用之后实现上下文切换就很容易了，
+setjmp和longjmp是C语言提供的非局部跳转机制。一般来说，使用它们实现跳转的方法如下：
+
+- 使用setjmp保存当前执行环境到jmp_buf，然后默认返回0。
+- 程序继续执行，到某个地方调用longjmp，传入上面保存的jmp_buf，以及另一个值。
+- 此时执行点又回到调用setjmp的返回处，且返回值变成longjmp设置的值。
+
+在理解了setjmp/logjmp的作用之后实现上下文切换就很容易了，具体实现如下：
 
 ``` c
 // 切换协程
@@ -137,6 +143,59 @@ void co_yield () {
 **实现stack_swicth_call与restore_registers_call**：
 
 ![调用栈](https://pic2.zhimg.com/80/v2-bd5a0aa1625c4445ba33e506b91dba29_1440w.webp)
+
+```c++
+// 首先将call preserved registers保存下来
+// 接着将堆栈寄存器和参数寄存器的值设为sp和arg，并跳转到entry处，从而实现上下文切换
+static inline void stack_switch_call(void *sp, void *entry, void *arg) {
+  asm volatile(
+#if __x86_64__
+      "mov %%rsp, %%r8;"
+      "mov %0, %%rsp;"
+      "push %%rbx;"
+      "push %%r8;"
+      "push %%rbp;"
+      "push %%r12;"
+      "push %%r13;"
+      "push %%r14;"
+      "push %%r15;"
+      "mov %%rsp, %%rbp;"
+      "sub $0x100, %%rsp;"
+      "mov %2, %%rdi;"
+      "call *%1"
+      :
+      : "c"((uintptr_t)sp - 8), "d"((uintptr_t)entry), "a"((uintptr_t)arg)
+#else
+      "movl %%ecx, 4(%0); movl %0, %%esp; movl %2, 0(%0); call *%1"
+      :
+      : "b"((uintptr_t)sp - 8), "d"((uintptr_t)entry), "a"((uintptr_t)arg)
+#endif
+  );
+}
+
+// 将call preserved registers的值恢复到切换上下文之前
+static inline void restore_registers_call() {
+  asm volatile(
+#if __x86_64__
+      "add $0x100, %%rsp;"
+      "pop %%r15;"
+      "pop %%r14;"
+      "pop %%r13;"
+      "pop %%r12;"
+      "pop %%rbp;"
+      "pop %%r8;"
+      "pop %%rbx;"
+      "mov %%r8, %%rsp;"
+      :
+      :
+#else
+      "movl 4(%%esp), %%ecx"
+      :
+      :
+#endif
+  );
+}
+```
 
 ### 调试 & 坑
 
