@@ -1,5 +1,4 @@
 +++
-title = "" 
 +++
 
 Hi, I'm **Zhytou(ZHONG Yang)**. I obtained my Bachelor’s degree in Information Engineering from [Zhejiang University](https://webplus.zju.edu.cn/_s358/main.psp). Currently, I am continuing my graduate studies at the same university, pursuing a degree in Computer Engineering.
@@ -10,6 +9,8 @@ Luckily, I got an internship of being a back-end developer at [Meituan](https://
 
 During my internship at [Arcsoft](https://www.arcsoft.com/) from 2023.02 to 2023.05, I worked on a variety of tasks. My primary responsibility was to develop a simple image annotation tool using Qt and OpenGL. The tool was designed to replace the existing tool named MarkTool used by the team, which aimed to generate datasets for training AI models. Additionally, I developed a rendering module for a QLinux-based car testing system using OpenGL and cross-compilation techniques. I also optimized the software decoding, video frame extraction, and playback components of the team's video annotation tool, utilizing double buffering for software optimization and modifying the original FFmpeg decoding logic. In addition to these tasks, I also worked on various miscellaneous projects using Qt and OpenGL.
 
-These days, I have been focusing on respected foreign universities’ courses including NJU-OS and CS144(thanks to the self-learning [repo](https://csdiy.wiki/)). Also, I look forward to putting my acquisitions into practice and becoming part of the open-source community by joining GoSC or OSPP this summer.
+I have just finished my third internship at [Egret Quant](https://www.egretquant.com/), which provided a totally different experience from my previous two internships. Egret Quant specializes in quantitative trading, which gave me a new perspective in understanding financial markets. Not only did I learn about basic concepts of financial products like stocks and futures and their trading processes, but I also understood how institutions make profits through algorithmic trading and data analysis. Additionally, this internship greatly enhanced my Python skills, especially in data analysis, data mining, and data visualization. Aside from the work itself, I was also influenced by the company culture. Egret Quant emphasizes work-life balance and employee wellbeing. Benefits such as international trip subsidies and regular team building activities are nice perks. Overall, this internship was a very rewarding experience that broadened my horizons.
 
 With respect to my career goals, I desire to be an engineer in software and hardware development at leading IT companies in the short run, not merely creating and optimizing the function modules of main products and systems, but building things that excite me and impact people.
+
+*last updated on 2023.12.10*

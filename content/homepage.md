@@ -1,5 +1,5 @@
 +++
-title = "" 
+title = "Home" 
 +++
 
 🎯 Focus on
