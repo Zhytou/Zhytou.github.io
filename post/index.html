@@ -16,8 +16,8 @@ GNU 简介：
 GNU是一个自由软件、开源软件项目，旨在创建一个完全自由的操作系统。
 GNU这个名字是"Gnu’s Not Unix"的递归缩写。这表明GNU是一个类Unix系统，但不是Unix系统本身。
 成 …</span></article></div></div></li><li class=post><div class=post-header><div class=meta><div class=date><span class=day>21</span>
-<span class=rest>Jun 2023</span></div></div><div class=matter><article><h3 class="title small"><a href=/post/2023-6-21/nju-os-lab/>NJU-OS-Lab总结</a></h3><p class=post-meta><span class=post-meta></span></p><span class=description>M1：实现打印进程树状信息的工具 pstree M2：实现协程库 libco 协程 理解协程：
-在开始做本实验之前，我认为可以先阅读一些材料来认识进程、线程和协程之间的关系，比如这一篇Process , Thread and Coroutines。当我们能够认识到协程其实就是调度 …</span></article></div></div></li><li class=post><div class=post-header><div class=meta><div class=date><span class=day>19</span>
+<span class=rest>Jun 2023</span></div></div><div class=matter><article><h3 class="title small"><a href=/post/2023-6-21/nju-os-lab/>NJU-OS-Lab总结</a></h3><p class=post-meta><span class=post-meta></span></p><span class=description>M1：实现打印进程树状信息的工具 pstree 这个实验整体比较简单，就是去遍历/proc目录下所有数字开头的子目录，通过读取其中的status文件获取它们的进程号、父进程号和名称。我是先将这些信息存在链表中，读取完之后再将链表转换为树，进而格式化打印。
+唯一可能要注意的是，得给 …</span></article></div></div></li><li class=post><div class=post-header><div class=meta><div class=date><span class=day>19</span>
 <span class=rest>Jun 2023</span></div></div><div class=matter><article><h3 class="title small"><a href=/post/2023-6-19/nju-os/>NJU-OS笔记</a></h3><p class=post-meta><span class=post-meta></span></p><span class=description>这篇博客流水线的记录一下自己学习NJU-OS的笔记。
 1 操作系统概述 本课程讨论狭义的操作系统，即：对单一计算机硬件系统作出抽象、支撑程序执行的软件系统。
 计算机历史 理解操作系统 理解操作系统，就是回答下面三个问题：
