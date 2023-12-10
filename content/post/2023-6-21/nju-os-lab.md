@@ -6,6 +6,370 @@ draft: false
 
 ## M1：实现打印进程树状信息的工具 pstree
 
+这个实验整体比较简单，就是去遍历/proc目录下所有数字开头的子目录，通过读取其中的status文件获取它们的进程号、父进程号和名称。我是先将这些信息存在链表中，读取完之后再将链表转换为树，进而格式化打印。
+
+唯一可能要注意的是，得给存放进程名称的char数组长度给够，否则容易出错。
+
+```c++
+#include <assert.h>
+#include <dirent.h>
+#include <memory.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+
+// 树状节点用于存储进程信息
+typedef struct TreeNode {
+  int id;
+  char name[64];
+  struct TreeNode **children;
+  int num;
+} TreeNode;
+
+// 释放树节点内存
+void freeTreeNode(TreeNode *node, int recursive_flag) {
+  if (node != NULL) {
+    // 由于所有的树节点实际是连续存放在一起的，因此只需要递归的释放存储子节点地址的children指针即可。
+    for (int i = 0; i < node->num; i++) {
+      freeTreeNode(node->children[i], recursive_flag);
+    }
+    free(node->children);
+    node->children = NULL;
+  }
+}
+
+// 查找数组中ID为id的元素序号
+int findId(TreeNode *arr, int len, int id) {
+  for (int i = 0; i < len; i++) {
+    if (arr[i].id == id) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+// 按Id从小到大排序子树节点
+void sortTreeNode(TreeNode *node, int recursive_flag) {
+  if (node != NULL) {
+    if (recursive_flag) {
+      for (int i = 0; i < node->num; i++) {
+        sortTreeNode(node->children[i], recursive_flag);
+      }
+    }
+
+    for (int i = 0; i < node->num; i++) {
+      for (int j = i + 1; j < node->num; j++) {
+        if (node->children[i]->id > node->children[j]->id) {
+          TreeNode *tmp = node->children[i];
+          node->children[i] = node->children[j];
+          node->children[j] = tmp;
+        }
+      }
+    }
+  }
+}
+
+// 链表节点用于遍历文件夹是存储信息
+typedef struct ListNode {
+  int pid;
+  int ppid;
+  char name[64];
+  struct ListNode *next;
+} ListNode;
+
+// 构造新链表节点
+ListNode *newListNode(int pid, int ppid, char *name) {
+  ListNode *node = (ListNode *)malloc(sizeof(ListNode));
+  if (node == NULL) {
+    dPrintf("newListNode: malloc failed\n");
+    return NULL;
+  }
+
+  node->pid = pid;
+  node->ppid = ppid;
+  strcpy(node->name, name);
+  node->next = NULL;
+
+  return node;
+}
+
+// 删除链表节点
+void freeListNode(ListNode *node, int recursive_flag) {
+  if (node != NULL) {
+    freeListNode(node->next, recursive_flag);
+    free(node);
+    node = NULL;
+  }
+}
+
+// 遍历/proc文件夹，并返回进程数
+int traverseProc(ListNode *dummy) {
+  DIR *dir;
+  struct dirent *entry;
+  struct stat statbuf;
+
+  // 打开目录
+  if ((dir = opendir("/proc")) == NULL) {
+    fprintf(stderr, "Cannot open directory: %s\n", "/proc");
+    return -1;
+  }
+
+  int ret = 0;
+  // 读取目录内容
+  while ((entry = readdir(dir)) != NULL) {
+    // 获取文件或目录的信息
+    lstat(entry->d_name, &statbuf);
+    if (S_ISDIR(statbuf.st_mode)) {
+      // 子目录为.或..直接跳过
+      if (strcmp(".", entry->d_name) == 0 || strcmp("..", entry->d_name) == 0) {
+        continue;
+      }
+      // 判断子目录是否为数字目录
+      int is_num = 1;
+      for (int i = 0; i < 256 && entry->d_name[i] != '\0'; i++) {
+        if (entry->d_name[i] < '0' || entry->d_name[i] > '9') {
+          is_num = 0;
+          break;
+        }
+      }
+      if (is_num != 1) {
+        continue;
+      }
+      // 如果是数字目录，则读取/proc/pid/status文件
+      char path[256];
+      strcpy(path, "/proc/");
+      strcat(path, entry->d_name);
+      strcat(path, "/status");
+
+      FILE *fp = fopen(path, "r");
+      if (!fp) {
+        // 错误处理
+        dPrintf("traverseProc: cannot open file: %s\n", path);
+        continue;
+      }
+      // 读取Name和PPid
+      char buf[256];
+      ListNode *node = newListNode(atoi(entry->d_name), 0, "");
+      while (fgets(buf, sizeof(buf), fp)) {
+        if (strncmp(buf, "Name:", 5) == 0) {
+          int pos = 5;
+          // 去除Name开头可能的\b或\t
+          while (pos < sizeof(buf) && (buf[pos] == ' ' || buf[pos] == '\t')) {
+            pos += 1;
+          }
+          strcpy(node->name, buf + pos);
+
+          // 去除Name末尾可能的\n或\r
+          for (int i = 0; i < sizeof(node->name); i++) {
+            if (node->name[i] == '\n' || node->name[i] == '\r') {
+              node->name[i] = '\0';
+              break;
+            }
+          }
+        } else if (strncmp(buf, "PPid:", 5) == 0) {
+          int pos = 5;
+          while (pos < sizeof(buf) && buf[pos] == ' ') {
+            pos += 1;
+          }
+          node->ppid = atoi(buf + pos);
+        }
+      }
+
+      // 将新节点插入链表中
+      if (dummy->next != NULL) {
+        node->next = dummy->next;
+      }
+      dummy->next = node;
+      ret += 1;
+      fclose(fp);
+    }
+  }
+
+  // 关闭目录
+  closedir(dir);
+
+  // 返回进程数量
+  return ret;
+}
+
+// 根据链表构造树
+TreeNode *constructTree(int len, TreeNode *treeArr, ListNode *head,
+                        int numeric_sort) {
+  if (len <= 0 || treeArr == NULL || head == NULL) {
+    dPrintf("constructTree: invalid arguments\n");
+    return NULL;
+  }
+  // Info用于储存每个树节点有几个子节点
+  typedef struct Info {
+    int id;
+    int num;
+  } Info;
+  // 初始化 infoArr
+  Info *infoArr = (Info *)malloc(sizeof(Info) * (len + 1));
+  if (infoArr == NULL) {
+    return NULL;
+  }
+  memset(infoArr, 0, sizeof(Info) * (1 + len));
+
+  // 遍历链表，初始化树节点
+  int t = 0;
+  ListNode *p = head;
+  while (t < len && p != NULL) {
+    treeArr[t].id = p->pid;
+    strcpy(treeArr[t].name, p->name);
+
+    for (int i = 0; i <= len; i++) {
+      if (infoArr[i].id == p->ppid) {
+        infoArr[i].num += 1;
+        break;
+      }
+      if (infoArr[i].id == 0 && infoArr[i].num == 0) {
+        infoArr[i].id = p->ppid;
+        infoArr[i].num = 1;
+        break;
+      }
+    }
+
+    p = p->next;
+    t += 1;
+  }
+
+  // 根据infoArr，给每个树节点children分配内存
+  for (int i = 0; i <= len; i++) {
+    if (infoArr[i].id == 0) {
+      continue;
+    }
+    for (int t = 0; t < len; t++) {
+      if (infoArr[i].id == treeArr[t].id) {
+        treeArr[t].num = infoArr[i].num;
+        treeArr[t].children =
+            (TreeNode **)malloc(sizeof(TreeNode *) * infoArr[i].num);
+        memset(treeArr[t].children, 0, sizeof(TreeNode *) * infoArr[i].num);
+      }
+    }
+  }
+
+  // 按父子关系，构造树
+  p = head;
+  while (p != NULL) {
+    if (p->ppid == 0) {
+      p = p->next;
+      continue;
+    }
+
+    int parent_idx = findId(treeArr, len, p->ppid);
+    int child_idx = findId(treeArr, len, p->pid);
+    if (parent_idx == -1 || child_idx == -1) {
+      dPrintf(
+          "findId: fail to find a node,{ppid: %d, parent_idx: %d, pid: %d, "
+          "child_idx: %d}\n",
+          p->ppid, parent_idx, p->pid, child_idx);
+      return NULL;
+    }
+    for (int i = 0; i < treeArr[parent_idx].num; i++) {
+      if (treeArr[parent_idx].children[i] == NULL) {
+        treeArr[parent_idx].children[i] = treeArr + child_idx;
+        break;
+      }
+    }
+
+    p = p->next;
+  }
+
+  // 找到根节点并返回
+  TreeNode *root = NULL;
+  if (findId(treeArr, len, 1) != -1) {
+    root = treeArr + findId(treeArr, len, 1);
+  }
+
+  // 若numeric_sort为真，则需要每个树节点中子节点按id排序
+  if (numeric_sort) {
+    sortTreeNode(root, 1);
+  }
+
+  return root;
+}
+
+// 打印树状进程信息
+void printInfo(TreeNode *root, int level, int show_pids) {
+  if (root == NULL) {
+    dPrintf("printInfo: root is NULL!\n");
+    return;
+  }
+
+  for (int i = 0; i < level; i++) {
+    printf("\t");
+  }
+  if (show_pids) {
+    printf("%s(%d)", root->name, root->id);
+  } else {
+    printf("%s", root->name);
+  }
+
+  for (int i = 0; i < root->num; i++) {
+    printf("\r\n");
+    printInfo(root->children[i], level + 1, show_pids);
+  }
+
+  return;
+}
+
+int main(int argc, char *argv[]) {
+  // 获取命令行参数
+  int show_pids = 0, numeric_sort = 0, version = 0;
+  for (int i = 0; i < argc; i++) {
+    assert(argv[i]);
+    dPrintf("argv[%d] = %s\n", i, argv[i]);
+    if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--show-pids") == 0) {
+      show_pids = 1;
+    }
+    if (strcmp(argv[i], "-n") == 0 || strcmp(argv[i], "--numeric-sort") == 0) {
+      numeric_sort = 1;
+    }
+    if (strcmp(argv[i], "-V") == 0 || strcmp(argv[i], "--version") == 0) {
+      version = 1;
+    }
+  }
+  assert(!argv[argc]);
+  // 若打印版本信息，则打印完版本信息后直接返回
+  // 反之，则显示当前线程信息
+  if (version == 1) {
+    printf(
+        "NanJing University Operating System Mini Lab1 1.0.0 \
+         Copyright (C) 1993-2020  Zhytou\n");
+    return 0;
+  }
+
+  ListNode *dummy = newListNode(-1, -1, "");
+  // 遍历/proc获取进程信息
+  int len = traverseProc(dummy);
+
+  // 初始化 treeArr
+  TreeNode *treeArr = (TreeNode *)malloc(sizeof(TreeNode) * len);
+  if (treeArr == NULL) {
+    dPrintf("main: fail to malloc treeArr!\n");
+    return 0;
+  }
+  memset(treeArr, 0, sizeof(TreeNode) * len);
+
+  // 构造树状进程信息
+  TreeNode *root = constructTree(len, treeArr, dummy->next, numeric_sort);
+
+  // 格式化打印信息
+  printInfo(root, 0, show_pids);
+
+  // 释放内存
+  freeListNode(dummy, 1);
+  freeTreeNode(root, 1);
+  free(treeArr);
+  treeArr = NULL;
+
+  return 0;
+}
+```
+
 ## M2：实现协程库 libco
 
 ### 协程
