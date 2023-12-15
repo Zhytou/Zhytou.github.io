@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Zhytou</title><link>https://zhytou.github.io/</link><description>Recent content on zhytou.github.io</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>© Copyright Zhytou | Vitae theme for Hugo</copyright><lastBuildDate>Tue, 14 Nov 2023 09:58:05 +0800</lastBuildDate><atom:link href="https://zhytou.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>CS231n笔记</title><link>https://zhytou.github.io/post/2023-11-14/cs231n/</link><pubDate>Tue, 14 Nov 2023 09:58:05 +0800</pubDate><guid>https://zhytou.github.io/post/2023-11-14/cs231n/</guid><description>
 这篇博客流水线的记录一下自己学习CS231n的笔记。
-1 Computer Vision Overview 2 Image Classification with Linear Classifiers The image classification 图像分类是CV领域中最核心任 …</description></item><item><title>C++实现反射</title><link>https://zhytou.github.io/post/2023-10-27/cpp-reflect/</link><pubDate>Fri, 27 Oct 2023 15:17:54 +0800</pubDate><guid>https://zhytou.github.io/post/2023-10-27/cpp-reflect/</guid><description>
+Image Classification 图像分类是CV领域中最核心任务之一。它指的是，给定一些标签并将图片预测为一个或多个预定义类别中的过程。
+一些潜在的挑战包括：
+Viewpoint variation …</description></item><item><title>C++实现反射</title><link>https://zhytou.github.io/post/2023-10-27/cpp-reflect/</link><pubDate>Fri, 27 Oct 2023 15:17:54 +0800</pubDate><guid>https://zhytou.github.io/post/2023-10-27/cpp-reflect/</guid><description>
 最近在实习的过程中，老板要求写一个回测系统。其大致工作模式就是hft-sys写死，会动态链接加载不同model，通过model类名实例化对象并调用内部函数。因此，整个的难点其实就是动态链接+反射。这篇博客就记录一下自己在网上查到的资料以及相关实践。
 总的来说，C++实现发射的方法 …</description></item><item><title>CS144-Minnow Lab总结</title><link>https://zhytou.github.io/post/2023-8-4/cs144-lab/</link><pubDate>Fri, 04 Aug 2023 22:18:06 +0800</pubDate><guid>https://zhytou.github.io/post/2023-8-4/cs144-lab/</guid><description>
 课程地址CS144: Introduction to Computer Networking
