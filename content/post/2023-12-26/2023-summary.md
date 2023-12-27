@@ -43,9 +43,13 @@ draft: false
 
 **摆烂的5、6月**：
 
-结束Arcsoft的实习之后，摆烂休息了两周。接着就是忙着处理一些乱七八糟的事，什么补交党政资料、OSPP项目申请
+结束Arcsoft的实习之后，摆烂休息了两周。接着就是忙着处理一些乱七八糟的事，什么补交党政资料、OSPP项目申请之类的。在了解和选择OSPP项目期间，我也尝试了去加入一个开源社区CubeFS。虽然也仔细看了文档尝试去部署并且试着提了两个[issue](https://github.com/cubefs/cubefs/issues/2024)，但因为实在是有点远离自己平时的应用而且我联系相关导师的时间有点晚，所以也没能顺利参与OSPP。
+
+在这里之后，我也把去年没写完的6.824的项目捡起来继续完成，期间也看了一些课程推荐的论文，最终形成了三篇博客：[基于Raft搭建一个简单KV存储服务](https://zhytou.github.io/post/2023-6-3/build-a-kvstore-on-raft/)、[数据库概念总结](https://zhytou.github.io/post/2023-6-11/introduction-to-database/)和[从GFS论文了解分布式文件系统](https://zhytou.github.io/post/2023-6-17/gfs/)。
 
 **实验室任务、学习新内容和准备下一次实习**：
+
+![图4 玉泉北门](http://zhytou.github.io/post/2023-12-26/yuquan-beimen.jpg)
 
 **量化实习**：
 
@@ -63,7 +67,11 @@ draft: false
 
 ## Coding
 
+**课程**：
+
 今年还是又上了一些不错的课程，包括：NJU-OS，CS144，去年没上完的6.824、CS231n和WorldQuant的Data Science Lab
+
+**语言**：
 
 ## Music & Book
 
