@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Zhytou</title><link>https://zhytou.github.io/post/</link><description>Recent content in Posts on zhytou.github.io</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>© Copyright Zhytou | Vitae theme for Hugo</copyright><lastBuildDate>Tue, 26 Dec 2023 14:19:14 +0800</lastBuildDate><atom:link href="https://zhytou.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>2023年总结</title><link>https://zhytou.github.io/post/2023-12-26/2023-summary/</link><pubDate>Tue, 26 Dec 2023 14:19:14 +0800</pubDate><guid>https://zhytou.github.io/post/2023-12-26/2023-summary/</guid><description>
-Timeline Workout Coding Entertainment TODO-List Outro Timeline CG大作业：
-22年学校因为疫情很早就安排学生回家了，我大概是12月19号到的家。接着一个月都在写那一学期课程的大作业，其中耗费我最多精力的就是图形学的 …</description></item><item><title>CS231n笔记</title><link>https://zhytou.github.io/post/2023-11-14/cs231n/</link><pubDate>Tue, 14 Nov 2023 09:58:05 +0800</pubDate><guid>https://zhytou.github.io/post/2023-11-14/cs231n/</guid><description>
+Timeline Workout Coding TODO-List Outro Timeline CG大作业：
+22年学校因为疫情很早就安排学生回家了，我大概是12月19号到的家。接着一个月都在写那一学期课程的大作业，其中耗费我最多精力的就是图形学的大作 …</description></item><item><title>CS231n笔记</title><link>https://zhytou.github.io/post/2023-11-14/cs231n/</link><pubDate>Tue, 14 Nov 2023 09:58:05 +0800</pubDate><guid>https://zhytou.github.io/post/2023-11-14/cs231n/</guid><description>
 这篇博客流水线的记录一下自己学习CS231n的笔记。
 Image Classification 图像分类是CV领域中最核心任务之一。它指的是，给定一些标签并将图片预测为一个或多个预定义类别中的过程。
 一些潜在的挑战包括：
