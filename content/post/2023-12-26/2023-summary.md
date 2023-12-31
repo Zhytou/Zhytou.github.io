@@ -7,7 +7,6 @@ draft: false
 - [Timeline](#timeline)
 - [Workout](#workout)
 - [Coding](#coding)
-- [Entertainment](#entertainment)
 - [TODO-List](#todo-list)
 - [Outro](#outro)
 
@@ -92,9 +91,11 @@ draft: false
 
 **课程**：
 
-今年还是又上了一些不错的课程，包括：NJU-OS、CS144、CS231n、WorldQuant的Data Science Lab以及去年没上完的6.824。
+今年还是又上了一些不错的课程，包括：NJU-OS、CS144、CS231n、WorldQuant的Data Science Lab以及去年没上完的6.824。其中，NJU-OS、CS144和6.824都是6、7月比较闲的时候学的，而WorldQuant的Data Science Lab则是在白鹭资管实习上班抽空看的（主要是为了它可以放在[Linkin展示的证书](https://www.linkedin.com/in/yang-zhong-190072218/)），CS231n则是12月火急火燎看完的。总的来说，NJU-OS和CS144对我的提升最大，算是很好的帮我重构了操作系统和计算机网络的体系，理解了很多之前死记硬背的八股知识点，避免面试一问深入就单纯的像一张白纸的情况出现。
 
 **语言**：
+
+今年语言使用最多的还是C++，其次则是Python，然后也写了一点Golang和Javascript。其中，Python是最令我惊喜的，虽然一直被誉为最简单的语言，但我之前因为语法记不清，总是要Google查，现在写多了之后，尤其是量化实习写的比较多，现在也算是能写一点简单的东西了。希望之后写毕业论文的时候，这里学到的东西能够帮上我吧。
 
 **面试**：
 
@@ -102,16 +103,14 @@ draft: false
 
 | 公司名称 | 面试时间 | 感受 & 总结 |
 | ------- | -------- | -----------|
-
-**其他**：
-
-## Entertainment
-
-**音乐**：
-
-上半年的时候沉迷K-dot的歌，在Arcsoft实习的时候直接天天听他的专辑。
-
-**书籍**：
+| DolphinDB | 1.5 | |
+| Arcsoft | 1.12 | |
+| 阿里云存储 | 2.11 | |
+| 同花顺 | 6.19 | |
+| 飞步科技 | 7.4 ||
+| 凌迪科技 Style3D | 7.12 ||
+| Momenta | 7.26 ||
+| 白鹭资管 | 8.5 ||
 
 ## TODO-List
 
