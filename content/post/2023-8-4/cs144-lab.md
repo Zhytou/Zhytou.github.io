@@ -117,7 +117,7 @@ Built target check_webget
 
 我一开始想到使用队列作为底层数据结构来实现这个类，但后面考虑到其派生类`Reader`中的`peek`接口要求返回string_view类型，于是便使用字符串作为底层结构实现。
 
-因为，如果使用队列作为实际存储数据的结构，在实现`peek`时必然会使用一个临时字符串存储队列中数据，并使用这个字符串构造`string_view`返回。这样一定会报错，因为，`string_view`一种只读的字符串视图，它并没有这段内存的所有权，所以在返回后临时字符串被销毁，那么就会有`string_view`悬空引用和访问无效内存的问题。
+因为，如果使用队列作为实际存储数据的结构，在实现`peek`时必然会使用一个临时字符串存储队列中数据，并使用这个字符串构造`string_view`返回。这样一定会报错，因为`string_view`只是一种只读的字符串视图，它并没有这段内存的所有权，所以在返回后临时字符串被销毁，那么就会有`string_view`悬空引用和访问无效内存的问题。
 
 ```c++
 class ByteStream
@@ -308,7 +308,7 @@ lab2在第一部分中，假设报文的绝对序号不会超过64位数表示�
 
 **Receiving Bytes**：
 
-lab2第二部分要求实现`TCPReceiver`类，完成其中`receive`和`send·`接口。我觉得其中最大的难点就是维护下一次希望发送的序号。尤其是要针对一些边界情况，比如，收到多个SYN或收到FIN但不能关闭等等。
+lab2第二部分要求实现`TCPReceiver`类，完成其中`receive`和`send`接口。我觉得其中最大的难点就是维护下一次希望发送的序号。尤其是要针对一些边界情况，比如，收到多个SYN或收到FIN但不能关闭等等。
 
 因此，我在`TCPReceiver`类中添加了`ack_seqno_`用于记录下一次希望发送的序号（如果使用`inbound_stream.bytes_pushed()`，则面对SYN未发送或第一次发送的逻辑会比较复杂）、`is_connected_`用于记录是否开启连接（避免重复SYN）以及`isn_`记录第一个报文序号。具体如下：
 
@@ -479,15 +479,15 @@ lab3要求实现一个名为`TCPSender`的类，尽可能的向接收者发送�
 
 **Sending Bytes**：
 
-关于发送数据必须要说明的是，在lab3中，发送包是通过测试者调用`TCPSender::maybe_send`函数，而非发送者主动发送。换句话说，只需要将需要发送的包存储在一个队列，每次调用`TCPSender::maybe_send`时，弹出队首即可。
+关于发送数据必须要说明的是，在lab3中，发送包是通过测试者调用`TCPSender::maybe_send`函数，而非发送者主动发送。换句话说，只需要将需要发送的包存储在一个队列，每次调用`TCPSender::maybe_send`时，弹出队首的包即可。
 
 **Recording Time**：
 
-此外，lab3中也不允许，使用其他计时器记录时间，而是依靠`TCPSender::tick`函数，由测试者告诉发送者已经过去的时间长短。因此，`TCPSender`只需要使用一个变量存储传入的时间即可。
+此外，lab3中也不允许使用其他计时器记录时间，而是依靠`TCPSender::tick`函数，由测试者告诉发送者已经过去的时间长短。因此，`TCPSender`只需要使用一个变量存储传入的时间即可。
 
 **Keep Track Of Outstanding Segments and Resend Them After RTO**：
 
-TCP是一种面向流的可靠协议。为了保证其可靠传输，设计者在TCP中添加了许多机制，比如：校验和、滑动窗口和超时重传等等。lab3要求追踪未承认段（Outstanding Segments），并在超出重传时间（Retrasmission Time，RTO）后将RTO翻倍后，再次发送。因此，`TCPSender`需要一个记录未承认段的表以及一个记录当前重传时间的变量。
+TCP是一种面向流的可靠协议。为了保证其可靠传输，设计者在TCP中添加了许多机制，比如：校验和、滑动窗口和超时重传等等。lab3要求追踪未承认段（Outstanding Segments），并在超出重传时间（Retrasmission Timeout，RTO）后将RTO翻倍后，再次发送。因此，`TCPSender`需要一个记录未承认段的表以及一个记录当前重传时间的变量。
 
 **TCPSender Data Structure**：
 
