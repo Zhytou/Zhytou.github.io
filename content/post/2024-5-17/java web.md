@@ -1,5 +1,5 @@
 ---
-title: "Post"
+title: "Java Web开发技术"
 date: 2024-05-17T20:36:27+08:00
 draft: false
 ---
@@ -97,7 +97,7 @@ public class HelloServlet extends HttpServlet {
 
 最终，我们可以得到图2所示效果。
 
-![图2 HelloServlet效果](../img/hello_servlet.png)
+![图2 HelloServlet效果](https://zhytou.github.io/post/2024-5-17/hello_servlet.png)
 
 ### Servlet Basis
 
@@ -198,7 +198,7 @@ public class AppListener implements ServletContextListener {
 
 接着，访问[http://localhost:9090/welcome.jsp?name=Zhytou](http://localhost:9090/welcome.jsp?name=Zhytou)这个链接，即可得到如图4所示效果。
 
-![图4 Welcome.jsp](../img/welcome_jsp.png)
+![图4 Welcome.jsp](https://zhytou.github.io/post/2024-5-17/welcome_jsp.png)
 
 ### JSP Workflow
 
@@ -321,7 +321,7 @@ Maven 有一个 tomcat 插件，可以让我们运行嵌入式 tomcat 实例，�
 
 JDBC(Java Database Connectivity)是一套Java应用访问数据库的接口规范，主要由java.sql和javax.sql两个包组成。当Java程序尝试访问数据库时，实际上是通过使用该数据库公司提供的JDBC驱动进行访问的，其流程如图5所示。换句话说，第三方提供的JDBC驱动实现了JDBC接口，向上层Java应用隐藏了访问逻辑，从而简化了Java程序员的工作量。
 
-![图5 JDBC工作流程](../img/jdbc_workflow.png)
+![图5 JDBC工作流程](https://zhytou.github.io/post/2024-5-17/jdbc_workflow.png)
 
 **JDBC Driver**：
 
