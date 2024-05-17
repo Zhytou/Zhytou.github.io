@@ -1,5 +1,5 @@
 ---
-title: "大话Web后端开发：从Web1.0到Web2.0"
+title: "大话Web开发技术：从Web1.0到Web2.0"
 date: 2024-05-06T12:49:18+08:00
 draft: true
 ---
@@ -40,19 +40,29 @@ J2EE 中除了 Servlet 外，另一重量级规范就是 EJB(Enterprise JavaBean
 
 此阶段，Web 开发逐步走向组件化、面向服务的架构模式，同时也为后期框架的出现做了铺垫。
 
+## JS/CSS的诞生
+
+在最初的几年里，网页是纯静态的，没有任何交互行为。随着JavaScript和CSS的出现，网页开始具备动态效果和美化功能。尤其是JavaScript，通过操作DOM，可以实现各种丰富的交互体验。
+
+## AJAX
+
+即使有了JavaScript，网页与服务器的通信仍然是通过页面刷新的方式。2005年，AJAX(Asynchronous JavaScript and XML)技术问世，让JavaScript可以在不刷新页面的情况下，异步地向服务器发送请求和获取数据，大大增强了网页的交互性能力。
+
 ## MV* Framework
 
 虽然上述技术为 Web 应用开发提供了支持，但也暴露出一些痛点，比如前后端代码耦合、可维护性差等。为解决这些问题，Web 开发框架应运而生，遵循 MVC(模型-视图-控制器)设计模式，系统分为数据持久层(Model)、控制器(Controller)和视图(View)三层，有利于代码复用和团队分工协作。
 
 在 Java 阵营，Spring MVC、Struts 等框架广为使用，而 ASP.NET MVC 则是 .NET 世界的主流选择。MVC 框架的出现，推动了 Web 开发的模块化、工程化进程。
 
-## JS/CSS的诞生
-
-## AJAX
-
 ## Vue/React
 
+单页面应用(SPA)和前后端分离的架构模式日益流行，催生了Vue、React等现代前端框架的兴起。这些框架支持组件化开发、虚拟DOM等特性，进一步提高了前端开发效率。
+
 ## Node.js
+
+长期以来，JavaScript仅运行在浏览器中，不能直接操作服务器。Node.js的出现，让JavaScript可以在服务器端运行，开发Web服务端程序。
+
+Node.js天生非阻塞、事件驱动的特点，使其高度适用于I/O密集型的Web开发场景，性能卓越。许多著名网站和服务都基于Node.js构建。
 
 ## Reference
 
