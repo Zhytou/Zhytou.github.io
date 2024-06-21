@@ -1,181 +1,347 @@
-<!doctype html><html lang=en><head><meta charset=UTF-8><title>一文了解GNU Tools | Zhytou</title>
-<meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=generator content="Hugo 0.123.8"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=/favicon.ico><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css media=screen href=/css/all.css><meta property="og:title" content="一文了解GNU Tools"><meta property="og:description" content='写这篇博客主要是为了记录和总结我学习和使用GNU Tools的经验。
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>一文了解GNU Tools | Zhytou</title>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=generator content="Hugo 0.91.2">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel="shortcut icon" href=/favicon.ico>
+<link rel=stylesheet type=text/css media=screen href=/css/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=/css/main.css>
+<link rel=stylesheet type=text/css media=screen href=/css/all.css>
+<meta property="og:title" content="一文了解GNU Tools">
+<meta property="og:description" content="写这篇博客主要是为了记录和总结我学习和使用GNU Tools的经验。
 GNU 简介：
 GNU是一个自由软件、开源软件项目，旨在创建一个完全自由的操作系统。
-GNU这个名字是"Gnu&rsquo;s Not Unix"的递归缩写。这表明GNU是一个类Unix系统，但不是Unix系统本身。
+GNU这个名字是&#34;Gnu&rsquo;s Not Unix&#34;的递归缩写。这表明GNU是一个类Unix系统，但不是Unix系统本身。
 成果：
 尽管GNU项目没有完全实现自己的操作系统，但它对自由软件和开源软件的发展做出了巨大的贡献，推广了自由软件的概念和实践，鼓励了开源软件的发展。
 事实上，由于GNU Hurd内核的开发进展缓慢，GNU项目在1992年宣布计划使用Linux内核作为GNU操作系统的内核，这导致了Linux和GNU的混淆。Linux内核和GNU项目中的系统工具和库结合起来，形成了现代Linux操作系统。
 换句话说，GNU项目深刻的影响和改变了Linux操作系统，我们使用的很多Linux命令，例如：ls、cp、rm，其实都是来自GNU项目。因此，仔细了解常用的GNU Tools就显得很有必要了。
 总的来说，GNU项目的成果包括两大部分：
-以GPL开源协议为代表的自由和开源软件实践； 以GNU Tools为代表的操作系统工具。 下面，我将会介绍包含GCC、GDB、Make、Coreutils和Bitutils等一众工具的GNU Tools。
+ 以GPL开源协议为代表的自由和开源软件实践； 以GNU Tools为代表的操作系统工具。  下面，我将会介绍包含GCC、GDB、Make、Coreutils和Bitutils等一众工具的GNU Tools。
 GCC 简介：
 GCC（GNU Compiler Collection）是一套由GNU项目开发的、支持多种编程语言、多种目标文件和优化选项、具有很高的可移植性和跨平台性的编译器套件。
 具体来说，它可以编译多种编程语言的代码，包括C、C++、Objective-C、Fortran、Ada等等，并且可以生成可执行文件、共享库和静态库等多种形式的目标文件。此外，它也支持多种操作系统和硬件平台，包括Linux、Unix、Windows、macOS、ARM、MIPS等等。它还支持多种优化选项，可以生成高效的目标代码，优化程序的性能和大小。
 使用GCC前你需要知道 在具体介绍gcc的使用方法之前，我想先补充说明一些编译相关概念和流程，以帮助理解gcc的使用方法以及gcc、gas和gld的关系。
 编译流程：
 一般来说，将源文件生成目标文件的流程通常包括以下四个步骤：
-预处理：在这个阶段，主要是处理头文件包含、宏替换、条件编译等预处理指令，生成一个新的临时文件，通常以.i或者.ii作为扩展名，这个文件包含了所有的预处理结果。 编译：在这个阶段，编译器会将预处理后的代码进行编译，生成汇编代码，通常以.s作为扩展名。 汇编：在这个阶段，汇编器会将汇编代码转换为机器码，生成目标文件，通常以.o作为扩展名，这个目标文件包含了可执行代码、符号表、调试信息等。 链接：在这个阶段，链接器会将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。链接器会将不同的目标文件组合起来，解决符号引用、重定位等问题，生成最终的可执行程序或共享库。 编译器：
+ 预处理：在这个阶段，主要是处理头文件包含、宏替换、条件编译等预处理指令，生成一个新的临时文件，通常以.i或者.ii作为扩展名，这个文件包含了所有的预处理结果。 编译：在这个阶段，编译器会将预处理后的代码进行编译，生成汇编代码，通常以.s作为扩展名。 汇编：在这个阶段，汇编器会将汇编代码转换为机器码，生成目标文件，通常以.o作为扩展名，这个目标文件包含了可执行代码、符号表、调试信息等。 链接：在这个阶段，链接器会将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。链接器会将不同的目标文件组合起来，解决符号引用、重定位等问题，生成最终的可执行程序或共享库。  编译器：
 编译器是一种将高级语言源代码转换为目标机器可执行代码的程序。编译器通常由两个主要组件组成：前端和后端。其中，前端主要负责将高级语言源代码进行词法分析、语法分析、语义分析等操作，生成中间代码或汇编语言代码；而后端负责将中间代码或汇编语言代码翻译为目标机器的机器代码。
 对于gcc来说，它针对每种语言都有相应的前端，例如：C预处理器：cpp、C编译器：cc1、C++预处理器：cpp、C++编译器：cc1plus，但它在默认情况下，只使用gas（GNU Assembler）作为后端，将中间代码转换为机器码。最后使用gld（GNU Linker）将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。
 GCC常见参数 此处只简单介绍一下gcc常用的一些参数，详细的gcc用法可以参考它的man page或官方手册。
-# 默认执行编译链接操作，生成可执行文件a.out。 gcc [source files] gcc test.c # -o 指定输出文件名 gcc [source files] -o [output files] gcc test.c -o test # -E 只执行预处理操作，将源代码转换为预处理后的代码输出到标准输出流中。 gcc -E [source files] # -S 只执行编译操作，将源代码编译为汇编代码输出到文件中。 gcc -S [source files] # -c 只执行汇编操作，将源代码编译为目标文件输出。 gcc -c [source files] # -g 生成调试信息，以便后续使用调试器进行调试。 gcc -g [source files] gcc -g test.'><meta property="og:type" content="article"><meta property="og:url" content="https://zhytou.github.io/post/2023-6-27/gnu-tools/"><meta property="article:section" content="post"><meta property="article:published_time" content="2023-06-27T10:15:12+08:00"><meta property="article:modified_time" content="2023-06-27T10:15:12+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="一文了解GNU Tools"><meta name=twitter:description content='写这篇博客主要是为了记录和总结我学习和使用GNU Tools的经验。
+# 默认执行编译链接操作，生成可执行文件a.out。 gcc [source files] gcc test.c # -o 指定输出文件名 gcc [source files] -o [output files] gcc test.c -o test # -E 只执行预处理操作，将源代码转换为预处理后的代码输出到标准输出流中。 gcc -E [source files] # -S 只执行编译操作，将源代码编译为汇编代码输出到文件中。 gcc -S [source files] # -c 只执行汇编操作，将源代码编译为目标文件输出。 gcc -c [source files] # -g 生成调试信息，以便后续使用调试器进行调试。 gcc -g [source files] gcc -g test.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://zhytou.github.io/post/2023-6-27/gnu-tools/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2023-06-27T10:15:12+08:00">
+<meta property="article:modified_time" content="2023-06-27T10:15:12+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="一文了解GNU Tools">
+<meta name=twitter:description content="写这篇博客主要是为了记录和总结我学习和使用GNU Tools的经验。
 GNU 简介：
 GNU是一个自由软件、开源软件项目，旨在创建一个完全自由的操作系统。
-GNU这个名字是"Gnu&rsquo;s Not Unix"的递归缩写。这表明GNU是一个类Unix系统，但不是Unix系统本身。
+GNU这个名字是&#34;Gnu&rsquo;s Not Unix&#34;的递归缩写。这表明GNU是一个类Unix系统，但不是Unix系统本身。
 成果：
 尽管GNU项目没有完全实现自己的操作系统，但它对自由软件和开源软件的发展做出了巨大的贡献，推广了自由软件的概念和实践，鼓励了开源软件的发展。
 事实上，由于GNU Hurd内核的开发进展缓慢，GNU项目在1992年宣布计划使用Linux内核作为GNU操作系统的内核，这导致了Linux和GNU的混淆。Linux内核和GNU项目中的系统工具和库结合起来，形成了现代Linux操作系统。
 换句话说，GNU项目深刻的影响和改变了Linux操作系统，我们使用的很多Linux命令，例如：ls、cp、rm，其实都是来自GNU项目。因此，仔细了解常用的GNU Tools就显得很有必要了。
 总的来说，GNU项目的成果包括两大部分：
-以GPL开源协议为代表的自由和开源软件实践； 以GNU Tools为代表的操作系统工具。 下面，我将会介绍包含GCC、GDB、Make、Coreutils和Bitutils等一众工具的GNU Tools。
+ 以GPL开源协议为代表的自由和开源软件实践； 以GNU Tools为代表的操作系统工具。  下面，我将会介绍包含GCC、GDB、Make、Coreutils和Bitutils等一众工具的GNU Tools。
 GCC 简介：
 GCC（GNU Compiler Collection）是一套由GNU项目开发的、支持多种编程语言、多种目标文件和优化选项、具有很高的可移植性和跨平台性的编译器套件。
 具体来说，它可以编译多种编程语言的代码，包括C、C++、Objective-C、Fortran、Ada等等，并且可以生成可执行文件、共享库和静态库等多种形式的目标文件。此外，它也支持多种操作系统和硬件平台，包括Linux、Unix、Windows、macOS、ARM、MIPS等等。它还支持多种优化选项，可以生成高效的目标代码，优化程序的性能和大小。
 使用GCC前你需要知道 在具体介绍gcc的使用方法之前，我想先补充说明一些编译相关概念和流程，以帮助理解gcc的使用方法以及gcc、gas和gld的关系。
 编译流程：
 一般来说，将源文件生成目标文件的流程通常包括以下四个步骤：
-预处理：在这个阶段，主要是处理头文件包含、宏替换、条件编译等预处理指令，生成一个新的临时文件，通常以.i或者.ii作为扩展名，这个文件包含了所有的预处理结果。 编译：在这个阶段，编译器会将预处理后的代码进行编译，生成汇编代码，通常以.s作为扩展名。 汇编：在这个阶段，汇编器会将汇编代码转换为机器码，生成目标文件，通常以.o作为扩展名，这个目标文件包含了可执行代码、符号表、调试信息等。 链接：在这个阶段，链接器会将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。链接器会将不同的目标文件组合起来，解决符号引用、重定位等问题，生成最终的可执行程序或共享库。 编译器：
+ 预处理：在这个阶段，主要是处理头文件包含、宏替换、条件编译等预处理指令，生成一个新的临时文件，通常以.i或者.ii作为扩展名，这个文件包含了所有的预处理结果。 编译：在这个阶段，编译器会将预处理后的代码进行编译，生成汇编代码，通常以.s作为扩展名。 汇编：在这个阶段，汇编器会将汇编代码转换为机器码，生成目标文件，通常以.o作为扩展名，这个目标文件包含了可执行代码、符号表、调试信息等。 链接：在这个阶段，链接器会将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。链接器会将不同的目标文件组合起来，解决符号引用、重定位等问题，生成最终的可执行程序或共享库。  编译器：
 编译器是一种将高级语言源代码转换为目标机器可执行代码的程序。编译器通常由两个主要组件组成：前端和后端。其中，前端主要负责将高级语言源代码进行词法分析、语法分析、语义分析等操作，生成中间代码或汇编语言代码；而后端负责将中间代码或汇编语言代码翻译为目标机器的机器代码。
 对于gcc来说，它针对每种语言都有相应的前端，例如：C预处理器：cpp、C编译器：cc1、C++预处理器：cpp、C++编译器：cc1plus，但它在默认情况下，只使用gas（GNU Assembler）作为后端，将中间代码转换为机器码。最后使用gld（GNU Linker）将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。
 GCC常见参数 此处只简单介绍一下gcc常用的一些参数，详细的gcc用法可以参考它的man page或官方手册。
-# 默认执行编译链接操作，生成可执行文件a.out。 gcc [source files] gcc test.c # -o 指定输出文件名 gcc [source files] -o [output files] gcc test.c -o test # -E 只执行预处理操作，将源代码转换为预处理后的代码输出到标准输出流中。 gcc -E [source files] # -S 只执行编译操作，将源代码编译为汇编代码输出到文件中。 gcc -S [source files] # -c 只执行汇编操作，将源代码编译为目标文件输出。 gcc -c [source files] # -g 生成调试信息，以便后续使用调试器进行调试。 gcc -g [source files] gcc -g test.'><meta itemprop=name content="一文了解GNU Tools"><meta itemprop=description content='写这篇博客主要是为了记录和总结我学习和使用GNU Tools的经验。
+# 默认执行编译链接操作，生成可执行文件a.out。 gcc [source files] gcc test.c # -o 指定输出文件名 gcc [source files] -o [output files] gcc test.c -o test # -E 只执行预处理操作，将源代码转换为预处理后的代码输出到标准输出流中。 gcc -E [source files] # -S 只执行编译操作，将源代码编译为汇编代码输出到文件中。 gcc -S [source files] # -c 只执行汇编操作，将源代码编译为目标文件输出。 gcc -c [source files] # -g 生成调试信息，以便后续使用调试器进行调试。 gcc -g [source files] gcc -g test.">
+<meta itemprop=name content="一文了解GNU Tools">
+<meta itemprop=description content="写这篇博客主要是为了记录和总结我学习和使用GNU Tools的经验。
 GNU 简介：
 GNU是一个自由软件、开源软件项目，旨在创建一个完全自由的操作系统。
-GNU这个名字是"Gnu&rsquo;s Not Unix"的递归缩写。这表明GNU是一个类Unix系统，但不是Unix系统本身。
+GNU这个名字是&#34;Gnu&rsquo;s Not Unix&#34;的递归缩写。这表明GNU是一个类Unix系统，但不是Unix系统本身。
 成果：
 尽管GNU项目没有完全实现自己的操作系统，但它对自由软件和开源软件的发展做出了巨大的贡献，推广了自由软件的概念和实践，鼓励了开源软件的发展。
 事实上，由于GNU Hurd内核的开发进展缓慢，GNU项目在1992年宣布计划使用Linux内核作为GNU操作系统的内核，这导致了Linux和GNU的混淆。Linux内核和GNU项目中的系统工具和库结合起来，形成了现代Linux操作系统。
 换句话说，GNU项目深刻的影响和改变了Linux操作系统，我们使用的很多Linux命令，例如：ls、cp、rm，其实都是来自GNU项目。因此，仔细了解常用的GNU Tools就显得很有必要了。
 总的来说，GNU项目的成果包括两大部分：
-以GPL开源协议为代表的自由和开源软件实践； 以GNU Tools为代表的操作系统工具。 下面，我将会介绍包含GCC、GDB、Make、Coreutils和Bitutils等一众工具的GNU Tools。
+ 以GPL开源协议为代表的自由和开源软件实践； 以GNU Tools为代表的操作系统工具。  下面，我将会介绍包含GCC、GDB、Make、Coreutils和Bitutils等一众工具的GNU Tools。
 GCC 简介：
 GCC（GNU Compiler Collection）是一套由GNU项目开发的、支持多种编程语言、多种目标文件和优化选项、具有很高的可移植性和跨平台性的编译器套件。
 具体来说，它可以编译多种编程语言的代码，包括C、C++、Objective-C、Fortran、Ada等等，并且可以生成可执行文件、共享库和静态库等多种形式的目标文件。此外，它也支持多种操作系统和硬件平台，包括Linux、Unix、Windows、macOS、ARM、MIPS等等。它还支持多种优化选项，可以生成高效的目标代码，优化程序的性能和大小。
 使用GCC前你需要知道 在具体介绍gcc的使用方法之前，我想先补充说明一些编译相关概念和流程，以帮助理解gcc的使用方法以及gcc、gas和gld的关系。
 编译流程：
 一般来说，将源文件生成目标文件的流程通常包括以下四个步骤：
-预处理：在这个阶段，主要是处理头文件包含、宏替换、条件编译等预处理指令，生成一个新的临时文件，通常以.i或者.ii作为扩展名，这个文件包含了所有的预处理结果。 编译：在这个阶段，编译器会将预处理后的代码进行编译，生成汇编代码，通常以.s作为扩展名。 汇编：在这个阶段，汇编器会将汇编代码转换为机器码，生成目标文件，通常以.o作为扩展名，这个目标文件包含了可执行代码、符号表、调试信息等。 链接：在这个阶段，链接器会将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。链接器会将不同的目标文件组合起来，解决符号引用、重定位等问题，生成最终的可执行程序或共享库。 编译器：
+ 预处理：在这个阶段，主要是处理头文件包含、宏替换、条件编译等预处理指令，生成一个新的临时文件，通常以.i或者.ii作为扩展名，这个文件包含了所有的预处理结果。 编译：在这个阶段，编译器会将预处理后的代码进行编译，生成汇编代码，通常以.s作为扩展名。 汇编：在这个阶段，汇编器会将汇编代码转换为机器码，生成目标文件，通常以.o作为扩展名，这个目标文件包含了可执行代码、符号表、调试信息等。 链接：在这个阶段，链接器会将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。链接器会将不同的目标文件组合起来，解决符号引用、重定位等问题，生成最终的可执行程序或共享库。  编译器：
 编译器是一种将高级语言源代码转换为目标机器可执行代码的程序。编译器通常由两个主要组件组成：前端和后端。其中，前端主要负责将高级语言源代码进行词法分析、语法分析、语义分析等操作，生成中间代码或汇编语言代码；而后端负责将中间代码或汇编语言代码翻译为目标机器的机器代码。
 对于gcc来说，它针对每种语言都有相应的前端，例如：C预处理器：cpp、C编译器：cc1、C++预处理器：cpp、C++编译器：cc1plus，但它在默认情况下，只使用gas（GNU Assembler）作为后端，将中间代码转换为机器码。最后使用gld（GNU Linker）将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。
 GCC常见参数 此处只简单介绍一下gcc常用的一些参数，详细的gcc用法可以参考它的man page或官方手册。
-# 默认执行编译链接操作，生成可执行文件a.out。 gcc [source files] gcc test.c # -o 指定输出文件名 gcc [source files] -o [output files] gcc test.c -o test # -E 只执行预处理操作，将源代码转换为预处理后的代码输出到标准输出流中。 gcc -E [source files] # -S 只执行编译操作，将源代码编译为汇编代码输出到文件中。 gcc -S [source files] # -c 只执行汇编操作，将源代码编译为目标文件输出。 gcc -c [source files] # -g 生成调试信息，以便后续使用调试器进行调试。 gcc -g [source files] gcc -g test.'><meta itemprop=datePublished content="2023-06-27T10:15:12+08:00"><meta itemprop=dateModified content="2023-06-27T10:15:12+08:00"><meta itemprop=wordCount content="386"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>27</span>
-<span class=rest>Jun 2023</span></div></div><div class=matter><h1 class=title>一文了解GNU Tools</h1><p class=post-meta><span class=post-meta></span></p></div></div><div class=markdown><p>写这篇博客主要是为了记录和总结我学习和使用GNU Tools的经验。</p><h2 id=gnu>GNU</h2><p><strong>简介</strong>：</p><p>GNU是一个自由软件、开源软件项目，旨在创建一个完全自由的操作系统。</p><p>GNU这个名字是"Gnu&rsquo;s Not Unix"的递归缩写。这表明GNU是一个类Unix系统，但不是Unix系统本身。</p><p><strong>成果</strong>：</p><p>尽管GNU项目没有完全实现自己的操作系统，但它对自由软件和开源软件的发展做出了巨大的贡献，推广了自由软件的概念和实践，鼓励了开源软件的发展。</p><p>事实上，由于GNU Hurd内核的开发进展缓慢，GNU项目在1992年宣布计划使用Linux内核作为GNU操作系统的内核，这导致了Linux和GNU的混淆。Linux内核和GNU项目中的系统工具和库结合起来，形成了现代Linux操作系统。</p><p>换句话说，GNU项目深刻的影响和改变了Linux操作系统，我们使用的很多Linux命令，例如：ls、cp、rm，其实都是来自GNU项目。因此，仔细了解常用的GNU Tools就显得很有必要了。</p><p>总的来说，GNU项目的成果包括两大部分：</p><ul><li>以GPL开源协议为代表的自由和开源软件实践；</li><li>以GNU Tools为代表的操作系统工具。</li></ul><p>下面，我将会介绍包含GCC、GDB、Make、Coreutils和Bitutils等一众工具的GNU Tools。</p><h2 id=gcc>GCC</h2><p><strong>简介</strong>：</p><p>GCC（GNU Compiler Collection）是一套由GNU项目开发的、支持多种编程语言、多种目标文件和优化选项、具有很高的可移植性和跨平台性的编译器套件。</p><p>具体来说，它可以编译多种编程语言的代码，包括C、C++、Objective-C、Fortran、Ada等等，并且可以生成可执行文件、共享库和静态库等多种形式的目标文件。此外，它也支持多种操作系统和硬件平台，包括Linux、Unix、Windows、macOS、ARM、MIPS等等。它还支持多种优化选项，可以生成高效的目标代码，优化程序的性能和大小。</p><h3 id=使用gcc前你需要知道>使用GCC前你需要知道</h3><p>在具体介绍gcc的使用方法之前，我想先补充说明一些编译相关概念和流程，以帮助理解gcc的使用方法以及gcc、gas和gld的关系。</p><p><strong>编译流程</strong>：</p><p>一般来说，将源文件生成目标文件的流程通常包括以下四个步骤：</p><ul><li>预处理：在这个阶段，主要是处理头文件包含、宏替换、条件编译等预处理指令，生成一个新的临时文件，通常以.i或者.ii作为扩展名，这个文件包含了所有的预处理结果。</li><li>编译：在这个阶段，编译器会将预处理后的代码进行编译，生成汇编代码，通常以.s作为扩展名。</li><li>汇编：在这个阶段，汇编器会将汇编代码转换为机器码，生成目标文件，通常以.o作为扩展名，这个目标文件包含了可执行代码、符号表、调试信息等。</li><li>链接：在这个阶段，链接器会将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。链接器会将不同的目标文件组合起来，解决符号引用、重定位等问题，生成最终的可执行程序或共享库。</li></ul><p><strong>编译器</strong>：</p><p>编译器是一种将高级语言源代码转换为目标机器可执行代码的程序。编译器通常由两个主要组件组成：前端和后端。其中，前端主要负责将高级语言源代码进行词法分析、语法分析、语义分析等操作，生成中间代码或汇编语言代码；而后端负责将中间代码或汇编语言代码翻译为目标机器的机器代码。</p><p>对于gcc来说，它针对每种语言都有相应的前端，例如：C预处理器：cpp、C编译器：cc1、C++预处理器：cpp、C++编译器：cc1plus，但它在默认情况下，只使用gas（GNU Assembler）作为后端，将中间代码转换为机器码。最后使用gld（GNU Linker）将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。</p><h3 id=gcc常见参数>GCC常见参数</h3><p>此处只简单介绍一下gcc常用的一些参数，详细的gcc用法可以参考它的man page或官方手册。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># 默认执行编译链接操作，生成可执行文件a.out。</span>
-</span></span><span style=display:flex><span>gcc <span style=color:#333>[</span><span style=color:#007020>source</span> files<span style=color:#333>]</span>
-</span></span><span style=display:flex><span>gcc test.c
-</span></span><span style=display:flex><span><span style=color:#888># -o 指定输出文件名</span>
-</span></span><span style=display:flex><span>gcc <span style=color:#333>[</span><span style=color:#007020>source</span> files<span style=color:#333>]</span> -o <span style=color:#333>[</span>output files<span style=color:#333>]</span>
-</span></span><span style=display:flex><span>gcc test.c -o <span style=color:#007020>test</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># -E 只执行预处理操作，将源代码转换为预处理后的代码输出到标准输出流中。</span>
-</span></span><span style=display:flex><span>gcc -E <span style=color:#333>[</span><span style=color:#007020>source</span> files<span style=color:#333>]</span>
-</span></span><span style=display:flex><span><span style=color:#888># -S 只执行编译操作，将源代码编译为汇编代码输出到文件中。</span>
-</span></span><span style=display:flex><span>gcc -S <span style=color:#333>[</span><span style=color:#007020>source</span> files<span style=color:#333>]</span>
-</span></span><span style=display:flex><span><span style=color:#888># -c 只执行汇编操作，将源代码编译为目标文件输出。</span>
-</span></span><span style=display:flex><span>gcc -c <span style=color:#333>[</span><span style=color:#007020>source</span> files<span style=color:#333>]</span> 
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># -g 生成调试信息，以便后续使用调试器进行调试。</span>
-</span></span><span style=display:flex><span>gcc -g <span style=color:#333>[</span><span style=color:#007020>source</span> files<span style=color:#333>]</span>
-</span></span><span style=display:flex><span>gcc -g test.c -o <span style=color:#007020>test</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># -w 选项表示关闭所有警告信息的输出。</span>
-</span></span><span style=display:flex><span><span style=color:#888># -Wall 选项表示开启所有警告信息的输出。</span>
-</span></span><span style=display:flex><span><span style=color:#888># -Werror选项表示将所有警告信息视为错误.</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># -static 选项表示静态链接，即将所有的库文件都链接进可执行文件中。</span>
-</span></span><span style=display:flex><span><span style=color:#888># -shared 选项表示动态链接，即将库文件链接为共享库。</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># -I 指定头文件搜索路径，可以指定多个。</span>
-</span></span><span style=display:flex><span>gcc -I <span style=color:#333>[</span>include path<span style=color:#333>]</span> 
-</span></span><span style=display:flex><span>gcc -I/usr/include/xxx test.c -o <span style=color:#007020>test</span>
-</span></span><span style=display:flex><span><span style=color:#888># -L 指定库文件搜索路径，可以指定多个。</span>
-</span></span><span style=display:flex><span>gcc -L <span style=color:#333>[</span>library path<span style=color:#333>]</span> 
-</span></span><span style=display:flex><span>gcc -L/usr/lib/xxx test.c -o <span style=color:#007020>test</span>
-</span></span></code></pre></div><h2 id=gdb>GDB</h2><p><strong>简介</strong>：</p><p>GDB（GNU Debugger）是一款由GNU项目开发的、功能强大的调试工具。</p><h3 id=gdb常用命令>GDB常用命令</h3><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># 导入需要调试的可执行程序</span>
-</span></span><span style=display:flex><span>file xxx
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># 运行</span>
-</span></span><span style=display:flex><span>run | r
-</span></span><span style=display:flex><span><span style=color:#888># 单步步过执行</span>
-</span></span><span style=display:flex><span>next | n
-</span></span><span style=display:flex><span><span style=color:#888># 单步步入执行</span>
-</span></span><span style=display:flex><span>step | s
-</span></span><span style=display:flex><span><span style=color:#888># 单步汇编指令执行</span>
-</span></span><span style=display:flex><span>step instruction | si
-</span></span><span style=display:flex><span><span style=color:#888># 运行到下一断点</span>
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>continue</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># 添加断点</span>
-</span></span><span style=display:flex><span><span style=color:#007020>break</span> func1 | <span style=color:#007020>break</span> main.c:10
-</span></span><span style=display:flex><span>b func1 | b main.c:10
-</span></span><span style=display:flex><span><span style=color:#888># 删除断点</span>
-</span></span><span style=display:flex><span>delete <span style=color:#60e;font-weight:700>3</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># 查看当前执行位置代码</span>
-</span></span><span style=display:flex><span>list
-</span></span><span style=display:flex><span><span style=color:#888># 查看当前执行位置汇编指令</span>
-</span></span><span style=display:flex><span>disassemble | disas
-</span></span><span style=display:flex><span><span style=color:#888># 查看当前调用链</span>
-</span></span><span style=display:flex><span>backtrace | bt
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># 查看所有断点信息</span>
-</span></span><span style=display:flex><span>info <span style=color:#007020>break</span>
-</span></span><span style=display:flex><span><span style=color:#888># 查看当前寄存器信息</span>
-</span></span><span style=display:flex><span>info registers
-</span></span><span style=display:flex><span><span style=color:#888># 查看当前堆栈</span>
-</span></span><span style=display:flex><span>info stack
-</span></span><span style=display:flex><span><span style=color:#888># 查看当前调用堆栈帧帧</span>
-</span></span><span style=display:flex><span>info frame
-</span></span><span style=display:flex><span><span style=color:#888># 查看当前局部变量</span>
-</span></span><span style=display:flex><span>info locals
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># 打印某地址值</span>
-</span></span><span style=display:flex><span>examine /<span style=color:#333>[</span>length<span style=color:#333>][</span>format<span style=color:#333>]</span> <span style=color:#333>[</span>address<span style=color:#333>]</span> | x /<span style=color:#333>[</span>length<span style=color:#333>][</span>format<span style=color:#333>]</span> <span style=color:#333>[</span>address<span style=color:#333>]</span>
-</span></span><span style=display:flex><span>x /1c  0x7ffff7d44060
-</span></span><span style=display:flex><span><span style=color:#888># 打印某变量值</span>
-</span></span><span style=display:flex><span>print xxx | p xxx
-</span></span></code></pre></div><h2 id=make>Make</h2><p><strong>简介</strong>：</p><p>Make是一款用于自动化构建程序的工具，可以根据目标文件的依赖关系自动构建出最终的可执行文件或库文件。</p><h3 id=makefile>Makefile</h3><p>Makefile是Make工具使用的配置文件，其包含了一系列规则，用于描述目标文件的依赖关系和构建方法。它的语法与Shell脚本非常类似。一般来说，一个Makefile文件中的规则会包含以下几个部分：</p><ul><li>目标(Target)：指定要构建的目标文件的名称。目标可以是可执行文件、库文件或其他文件。<ul><li>伪造目标(Phony Target)：与明确的构建目标相比，伪造目标一般并非真实存在的文件。当使用Make命令构建伪造目标时，操作系统只会执行其指定的一些列目标，而忽略该文件，即使它真的存在。这种技术一般用于清理中间文件，比如：设置clean作为伪造目标。当执行<code>make clean</code>命令时，即使当前目录真的有一个clean文件存在，系统也会执行clean目标指定的一些规则。</li></ul></li><li>依赖(Prerequisites)：指定构建目标文件所需要的源文件、头文件或其他依赖文件。</li><li>命令(Command)：指定构建目标文件的具体命令，通常是编译源文件、链接目标文件等操作。</li></ul><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Makefile data-lang=Makefile><span style=display:flex><span><span style=color:#888># 变量定义
-</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#963>CC</span> <span style=color:#333>=</span> gcc
-</span></span><span style=display:flex><span><span style=color:#963>CFLAGS</span> <span style=color:#333>=</span> -Wall -Wextra -Werror
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># 默认目标
-</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#06b;font-weight:700>all</span><span style=color:#333>:</span> myprogram
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># 依赖关系和命令
-</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#06b;font-weight:700>myprogram</span><span style=color:#333>:</span> main.o utils.o
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>$(</span><span style=color:#963>CC</span><span style=color:#080;font-weight:700>)</span> <span style=color:#080;font-weight:700>$(</span><span style=color:#963>CFLAGS</span><span style=color:#080;font-weight:700>)</span> <span style=color:red;background-color:#faa>-o</span> <span style=color:#080;font-weight:700>$@</span> <span style=color:red;background-color:#faa>$^</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#06b;font-weight:700>main.o</span><span style=color:#333>:</span> main.c utils.h
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>$(</span><span style=color:#963>CC</span><span style=color:#080;font-weight:700>)</span> <span style=color:#080;font-weight:700>$(</span><span style=color:#963>CFLAGS</span><span style=color:#080;font-weight:700>)</span> <span style=color:red;background-color:#faa>-c</span> <span style=color:#080;font-weight:700>$&lt;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#06b;font-weight:700>utils.o</span><span style=color:#333>:</span> utils.c utils.h
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>$(</span><span style=color:#963>CC</span><span style=color:#080;font-weight:700>)</span> <span style=color:#080;font-weight:700>$(</span><span style=color:#963>CFLAGS</span><span style=color:#080;font-weight:700>)</span> <span style=color:red;background-color:#faa>-c</span> <span style=color:#080;font-weight:700>$&lt;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># 清理目标（伪造目标）
-</span></span></span><span style=display:flex><span><span style=color:#888></span><span style=color:#06b;font-weight:700>.PHONY</span><span style=color:#333>:</span> clean
-</span></span><span style=display:flex><span><span style=color:#06b;font-weight:700>clean</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span><span style=color:red;background-color:#faa>rm</span> <span style=color:red;background-color:#faa>-f</span> <span style=color:red;background-color:#faa>myprogram</span> <span style=color:red;background-color:#faa>*.o</span>
-</span></span></code></pre></div><p>此处再补充一下上面出现的通配符含义：</p><ul><li>$@：表示当前规则中的目标文件名。</li><li>$&lt;：表示当前规则中的第一个依赖文件名。</li><li>$^：表示当前规则中的所有依赖文件名。</li></ul><h3 id=cmake>CMake</h3><p>事实上，在大部分时间我们都不会直接去写Makefile文件，尤其是面对大型项目，我们更习惯于使用另一种工具去帮我们生成MakeFile，再使用Make进行编译。其中，最常用的一种工具就是CMake。</p><p>CMake（Cross-platform Make）是一个跨平台的构建自动化工具，可以帮助软件开发者自动生成不同平台下的构建系统文件。此外，CMake不光可以使用Make作为其构建工具，也可以结合Ninja、Visual Studio、QT等使用。</p><p>使用CMake，我们可以在一个统一的CMakeLists.txt文件中描述项目的所有构建过程，包括源代码文件、依赖库、编译选项、链接选项等，而不需要为不同的构建系统编写不同的文件。CMake会根据CMakeLists.txt文件自动生成相应的构建系统文件，从而实现跨平台的构建。</p><p><strong>构建目录</strong>：</p><p>为了方便与源代码目录分离，CMake一般会在项目文件夹下新建一个build子文件夹，作为构建目录，用于存放CMake的输出（Makefile，.cmake等配置文件）和可执行文件及中间文件。</p><p><strong>CMakeLists.txt</strong>：</p><p>CMakeLists.txt是CMake项目的配置文件，包含了项目的设置和指令。CMake读取这个文件来生成相应的构建系统文件，下面展示了一个最简单的CMakeLists.txt。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>cmake_minimum_required(VERSION 3.0) 
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>project(Demo)  
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>add_executable(main main.cpp)
-</span></span></code></pre></div><p><strong>使用CMake</strong>：</p><p>由于CMake最主要的目的其实是生成Makefile，所以我们可以先使用CMake生成构建目录中的Makefile文件，再使用make命令编译构建我们想要的目标。比如：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># 新建构建目录，并且进入该目录</span>
-</span></span><span style=display:flex><span>mkdir build; <span style=color:#007020>cd</span> build
-</span></span><span style=display:flex><span><span style=color:#888># 使用cmake生成Makefile</span>
-</span></span><span style=display:flex><span>cmake ../
-</span></span><span style=display:flex><span><span style=color:#888># 使用make构建目标</span>
-</span></span><span style=display:flex><span>make all
-</span></span><span style=display:flex><span>make main
-</span></span><span style=display:flex><span>make clean
-</span></span></code></pre></div><p>这种方法比较原始，对于一些简单的项目适用。当项目变得复杂，尤其是包含多个子目录时，采用这种方法还必须进入到构建目录的子目录中执行make，就会变得相对麻烦。此时，我们就会使用cmake提供的一些方法在build根目录中直接构建目标。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># 初始化构建目录</span>
-</span></span><span style=display:flex><span><span style=color:#888># -S指定源文件目录</span>
-</span></span><span style=display:flex><span><span style=color:#888># -B指定构建目录</span>
-</span></span><span style=display:flex><span>cmake -S . -B build
-</span></span><span style=display:flex><span><span style=color:#888># 进入构建目录，并罗列可构建目标</span>
-</span></span><span style=display:flex><span><span style=color:#007020>cd</span> build; make <span style=color:#007020>help</span>
-</span></span><span style=display:flex><span><span style=color:#888># 构建目标</span>
-</span></span><span style=display:flex><span><span style=color:#888># --build指定已经存在的CMake构建目录（与-B不同，-B是选择初始化位置）</span>
-</span></span><span style=display:flex><span><span style=color:#888># --target指定需要构建的目标名称</span>
-</span></span><span style=display:flex><span>cmake --build . --target xxx
-</span></span></code></pre></div><p>总的来说，cmake命令主要有cmake和cmake &ndash;build两个核心子命令。其中，前者仅执行配置，产生交叉平台项目文件，而后者则执行实际的编译和链接过程。</p><h2 id=coreutils>Coreutils</h2><p><strong>简介</strong>：</p><p>Coreutils是一组基本的Unix工具，包括了大量的命令行工具，用于文件操作、文本处理、进程管理等方面。</p><p>在Linux系统中，Coreutils通常是系统中最基本的工具集之一，包含了许多常用的命令，例如：ls、rm、cp、mv、mkdir、cat、echo、grep等等。</p><h2 id=binutils>Binutils</h2><p><strong>简介</strong>：</p><p>Binutils是GNU项目的一个组成部分，包括了一系列用于操作目标文件的命令行工具。可以按功能将Binutils分成两大部分，分别是</p><ul><li>帮助生成可执行文件的工具，比如：ld (linker), as (assembler), ar (archiver)；</li><li>帮助分析可执行文件的工具，比如：objcopy/objdump/readelf。</li></ul><h2 id=references>References</h2><ul><li><a href=https://www.cs.cmu.edu/~gilpin/tutorial/ target=_blank>Debugging Under Unix: gdb Tutorial</a></li><li><a href=https://www.gnu.org/software/make/ target=_blank>GNU Make</a></li><li><a href=https://www.gnu.org/software/binutils/ target=_blank>GNU Binutils</a></li></ul></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
+# 默认执行编译链接操作，生成可执行文件a.out。 gcc [source files] gcc test.c # -o 指定输出文件名 gcc [source files] -o [output files] gcc test.c -o test # -E 只执行预处理操作，将源代码转换为预处理后的代码输出到标准输出流中。 gcc -E [source files] # -S 只执行编译操作，将源代码编译为汇编代码输出到文件中。 gcc -S [source files] # -c 只执行汇编操作，将源代码编译为目标文件输出。 gcc -c [source files] # -g 生成调试信息，以便后续使用调试器进行调试。 gcc -g [source files] gcc -g test."><meta itemprop=datePublished content="2023-06-27T10:15:12+08:00">
+<meta itemprop=dateModified content="2023-06-27T10:15:12+08:00">
+<meta itemprop=wordCount content="386">
+<meta itemprop=keywords content>
+</head>
+<body>
+<header>
+<div id=avatar>
+<a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a>
+</div>
+<div id=titletext>
+<h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2>
+</div>
+<div id=title-description>
+<p id=subtitle>May the force be with me.</p>
+<div id=social>
+<nav><ul>
+<li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li>
+<li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li>
+</ul></nav>
+</div>
+</div>
+<div id=mainmenu>
+<nav>
+<ul>
+<li><a href=/>Home</a></li>
+<li><a href=/post>Posts</a></li>
+<li><a href=/about>About</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<main>
+<div class=post>
+<article>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>27</span>
+<span class=rest>Jun 2023</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>一文了解GNU Tools</h1>
+<p class=post-meta>
+<span class=post-meta>
+</span>
+</p>
+</div>
+</div>
+<div class=markdown>
+<p>写这篇博客主要是为了记录和总结我学习和使用GNU Tools的经验。</p>
+<h2 id=gnu>GNU</h2>
+<p><strong>简介</strong>：</p>
+<p>GNU是一个自由软件、开源软件项目，旨在创建一个完全自由的操作系统。</p>
+<p>GNU这个名字是"Gnu&rsquo;s Not Unix"的递归缩写。这表明GNU是一个类Unix系统，但不是Unix系统本身。</p>
+<p><strong>成果</strong>：</p>
+<p>尽管GNU项目没有完全实现自己的操作系统，但它对自由软件和开源软件的发展做出了巨大的贡献，推广了自由软件的概念和实践，鼓励了开源软件的发展。</p>
+<p>事实上，由于GNU Hurd内核的开发进展缓慢，GNU项目在1992年宣布计划使用Linux内核作为GNU操作系统的内核，这导致了Linux和GNU的混淆。Linux内核和GNU项目中的系统工具和库结合起来，形成了现代Linux操作系统。</p>
+<p>换句话说，GNU项目深刻的影响和改变了Linux操作系统，我们使用的很多Linux命令，例如：ls、cp、rm，其实都是来自GNU项目。因此，仔细了解常用的GNU Tools就显得很有必要了。</p>
+<p>总的来说，GNU项目的成果包括两大部分：</p>
+<ul>
+<li>以GPL开源协议为代表的自由和开源软件实践；</li>
+<li>以GNU Tools为代表的操作系统工具。</li>
+</ul>
+<p>下面，我将会介绍包含GCC、GDB、Make、Coreutils和Bitutils等一众工具的GNU Tools。</p>
+<h2 id=gcc>GCC</h2>
+<p><strong>简介</strong>：</p>
+<p>GCC（GNU Compiler Collection）是一套由GNU项目开发的、支持多种编程语言、多种目标文件和优化选项、具有很高的可移植性和跨平台性的编译器套件。</p>
+<p>具体来说，它可以编译多种编程语言的代码，包括C、C++、Objective-C、Fortran、Ada等等，并且可以生成可执行文件、共享库和静态库等多种形式的目标文件。此外，它也支持多种操作系统和硬件平台，包括Linux、Unix、Windows、macOS、ARM、MIPS等等。它还支持多种优化选项，可以生成高效的目标代码，优化程序的性能和大小。</p>
+<h3 id=使用gcc前你需要知道>使用GCC前你需要知道</h3>
+<p>在具体介绍gcc的使用方法之前，我想先补充说明一些编译相关概念和流程，以帮助理解gcc的使用方法以及gcc、gas和gld的关系。</p>
+<p><strong>编译流程</strong>：</p>
+<p>一般来说，将源文件生成目标文件的流程通常包括以下四个步骤：</p>
+<ul>
+<li>预处理：在这个阶段，主要是处理头文件包含、宏替换、条件编译等预处理指令，生成一个新的临时文件，通常以.i或者.ii作为扩展名，这个文件包含了所有的预处理结果。</li>
+<li>编译：在这个阶段，编译器会将预处理后的代码进行编译，生成汇编代码，通常以.s作为扩展名。</li>
+<li>汇编：在这个阶段，汇编器会将汇编代码转换为机器码，生成目标文件，通常以.o作为扩展名，这个目标文件包含了可执行代码、符号表、调试信息等。</li>
+<li>链接：在这个阶段，链接器会将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。链接器会将不同的目标文件组合起来，解决符号引用、重定位等问题，生成最终的可执行程序或共享库。</li>
+</ul>
+<p><strong>编译器</strong>：</p>
+<p>编译器是一种将高级语言源代码转换为目标机器可执行代码的程序。编译器通常由两个主要组件组成：前端和后端。其中，前端主要负责将高级语言源代码进行词法分析、语法分析、语义分析等操作，生成中间代码或汇编语言代码；而后端负责将中间代码或汇编语言代码翻译为目标机器的机器代码。</p>
+<p>对于gcc来说，它针对每种语言都有相应的前端，例如：C预处理器：cpp、C编译器：cc1、C++预处理器：cpp、C++编译器：cc1plus，但它在默认情况下，只使用gas（GNU Assembler）作为后端，将中间代码转换为机器码。最后使用gld（GNU Linker）将目标文件和相关的库文件进行链接，生成可执行程序或者共享库等。</p>
+<h3 id=gcc常见参数>GCC常见参数</h3>
+<p>此处只简单介绍一下gcc常用的一些参数，详细的gcc用法可以参考它的man page或官方手册。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># 默认执行编译链接操作，生成可执行文件a.out。</span>
+gcc <span style=color:#333>[</span><span style=color:#007020>source</span> files<span style=color:#333>]</span>
+gcc test.c
+<span style=color:#888># -o 指定输出文件名</span>
+gcc <span style=color:#333>[</span><span style=color:#007020>source</span> files<span style=color:#333>]</span> -o <span style=color:#333>[</span>output files<span style=color:#333>]</span>
+gcc test.c -o <span style=color:#007020>test</span>
+
+<span style=color:#888># -E 只执行预处理操作，将源代码转换为预处理后的代码输出到标准输出流中。</span>
+gcc -E <span style=color:#333>[</span><span style=color:#007020>source</span> files<span style=color:#333>]</span>
+<span style=color:#888># -S 只执行编译操作，将源代码编译为汇编代码输出到文件中。</span>
+gcc -S <span style=color:#333>[</span><span style=color:#007020>source</span> files<span style=color:#333>]</span>
+<span style=color:#888># -c 只执行汇编操作，将源代码编译为目标文件输出。</span>
+gcc -c <span style=color:#333>[</span><span style=color:#007020>source</span> files<span style=color:#333>]</span> 
+
+<span style=color:#888># -g 生成调试信息，以便后续使用调试器进行调试。</span>
+gcc -g <span style=color:#333>[</span><span style=color:#007020>source</span> files<span style=color:#333>]</span>
+gcc -g test.c -o <span style=color:#007020>test</span>
+
+<span style=color:#888># -w 选项表示关闭所有警告信息的输出。</span>
+<span style=color:#888># -Wall 选项表示开启所有警告信息的输出。</span>
+<span style=color:#888># -Werror选项表示将所有警告信息视为错误.</span>
+
+<span style=color:#888># -static 选项表示静态链接，即将所有的库文件都链接进可执行文件中。</span>
+<span style=color:#888># -shared 选项表示动态链接，即将库文件链接为共享库。</span>
+
+<span style=color:#888># -I 指定头文件搜索路径，可以指定多个。</span>
+gcc -I <span style=color:#333>[</span>include path<span style=color:#333>]</span> 
+gcc -I/usr/include/xxx test.c -o <span style=color:#007020>test</span>
+<span style=color:#888># -L 指定库文件搜索路径，可以指定多个。</span>
+gcc -L <span style=color:#333>[</span>library path<span style=color:#333>]</span> 
+gcc -L/usr/lib/xxx test.c -o <span style=color:#007020>test</span>
+</code></pre></div><h2 id=gdb>GDB</h2>
+<p><strong>简介</strong>：</p>
+<p>GDB（GNU Debugger）是一款由GNU项目开发的、功能强大的调试工具。</p>
+<h3 id=gdb常用命令>GDB常用命令</h3>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># 导入需要调试的可执行程序</span>
+file xxx
+
+<span style=color:#888># 运行</span>
+run | r
+<span style=color:#888># 单步步过执行</span>
+next | n
+<span style=color:#888># 单步步入执行</span>
+step | s
+<span style=color:#888># 单步汇编指令执行</span>
+step instruction | si
+<span style=color:#888># 运行到下一断点</span>
+<span style=color:#080;font-weight:700>continue</span>
+
+<span style=color:#888># 添加断点</span>
+<span style=color:#007020>break</span> func1 | <span style=color:#007020>break</span> main.c:10
+b func1 | b main.c:10
+<span style=color:#888># 删除断点</span>
+delete <span style=color:#60e;font-weight:700>3</span>
+
+<span style=color:#888># 查看当前执行位置代码</span>
+list
+<span style=color:#888># 查看当前执行位置汇编指令</span>
+disassemble | disas
+<span style=color:#888># 查看当前调用链</span>
+backtrace | bt
+
+<span style=color:#888># 查看所有断点信息</span>
+info <span style=color:#007020>break</span>
+<span style=color:#888># 查看当前寄存器信息</span>
+info registers
+<span style=color:#888># 查看当前堆栈</span>
+info stack
+<span style=color:#888># 查看当前调用堆栈帧帧</span>
+info frame
+<span style=color:#888># 查看当前局部变量</span>
+info locals
+
+<span style=color:#888># 打印某地址值</span>
+examine /<span style=color:#333>[</span>length<span style=color:#333>][</span>format<span style=color:#333>]</span> <span style=color:#333>[</span>address<span style=color:#333>]</span> | x /<span style=color:#333>[</span>length<span style=color:#333>][</span>format<span style=color:#333>]</span> <span style=color:#333>[</span>address<span style=color:#333>]</span>
+x /1c  0x7ffff7d44060
+<span style=color:#888># 打印某变量值</span>
+print xxx | p xxx
+</code></pre></div><h2 id=make>Make</h2>
+<p><strong>简介</strong>：</p>
+<p>Make是一款用于自动化构建程序的工具，可以根据目标文件的依赖关系自动构建出最终的可执行文件或库文件。</p>
+<h3 id=makefile>Makefile</h3>
+<p>Makefile是Make工具使用的配置文件，其包含了一系列规则，用于描述目标文件的依赖关系和构建方法。它的语法与Shell脚本非常类似。一般来说，一个Makefile文件中的规则会包含以下几个部分：</p>
+<ul>
+<li>目标(Target)：指定要构建的目标文件的名称。目标可以是可执行文件、库文件或其他文件。
+<ul>
+<li>伪造目标(Phony Target)：与明确的构建目标相比，伪造目标一般并非真实存在的文件。当使用Make命令构建伪造目标时，操作系统只会执行其指定的一些列目标，而忽略该文件，即使它真的存在。这种技术一般用于清理中间文件，比如：设置clean作为伪造目标。当执行<code>make clean</code>命令时，即使当前目录真的有一个clean文件存在，系统也会执行clean目标指定的一些规则。</li>
+</ul>
+</li>
+<li>依赖(Prerequisites)：指定构建目标文件所需要的源文件、头文件或其他依赖文件。</li>
+<li>命令(Command)：指定构建目标文件的具体命令，通常是编译源文件、链接目标文件等操作。</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Makefile data-lang=Makefile><span style=color:#888># 变量定义
+</span><span style=color:#888></span><span style=color:#963>CC</span> <span style=color:#333>=</span> gcc
+<span style=color:#963>CFLAGS</span> <span style=color:#333>=</span> -Wall -Wextra -Werror
+
+<span style=color:#888># 默认目标
+</span><span style=color:#888></span><span style=color:#06b;font-weight:700>all</span><span style=color:#333>:</span> myprogram
+
+<span style=color:#888># 依赖关系和命令
+</span><span style=color:#888></span><span style=color:#06b;font-weight:700>myprogram</span><span style=color:#333>:</span> main.o utils.o
+<span style=color:#080;font-weight:700>$(</span><span style=color:#963>CC</span><span style=color:#080;font-weight:700>)</span> <span style=color:#080;font-weight:700>$(</span><span style=color:#963>CFLAGS</span><span style=color:#080;font-weight:700>)</span> <span style=color:red;background-color:#faa>-o</span> <span style=color:#080;font-weight:700>$@</span> <span style=color:red;background-color:#faa>$^</span>
+
+<span style=color:#06b;font-weight:700>main.o</span><span style=color:#333>:</span> main.c utils.h
+<span style=color:#080;font-weight:700>$(</span><span style=color:#963>CC</span><span style=color:#080;font-weight:700>)</span> <span style=color:#080;font-weight:700>$(</span><span style=color:#963>CFLAGS</span><span style=color:#080;font-weight:700>)</span> <span style=color:red;background-color:#faa>-c</span> <span style=color:#080;font-weight:700>$&lt;</span>
+
+<span style=color:#06b;font-weight:700>utils.o</span><span style=color:#333>:</span> utils.c utils.h
+<span style=color:#080;font-weight:700>$(</span><span style=color:#963>CC</span><span style=color:#080;font-weight:700>)</span> <span style=color:#080;font-weight:700>$(</span><span style=color:#963>CFLAGS</span><span style=color:#080;font-weight:700>)</span> <span style=color:red;background-color:#faa>-c</span> <span style=color:#080;font-weight:700>$&lt;</span>
+
+<span style=color:#888># 清理目标（伪造目标）
+</span><span style=color:#888></span><span style=color:#06b;font-weight:700>.PHONY</span><span style=color:#333>:</span> clean
+<span style=color:#06b;font-weight:700>clean</span><span style=color:#333>:</span>
+<span style=color:red;background-color:#faa>rm</span> <span style=color:red;background-color:#faa>-f</span> <span style=color:red;background-color:#faa>myprogram</span> <span style=color:red;background-color:#faa>*.o</span>
+</code></pre></div><p>此处再补充一下上面出现的通配符含义：</p>
+<ul>
+<li>$@：表示当前规则中的目标文件名。</li>
+<li>$&lt;：表示当前规则中的第一个依赖文件名。</li>
+<li>$^：表示当前规则中的所有依赖文件名。</li>
+</ul>
+<h3 id=cmake>CMake</h3>
+<p>事实上，在大部分时间我们都不会直接去写Makefile文件，尤其是面对大型项目，我们更习惯于使用另一种工具去帮我们生成MakeFile，再使用Make进行编译。其中，最常用的一种工具就是CMake。</p>
+<p>CMake（Cross-platform Make）是一个跨平台的构建自动化工具，可以帮助软件开发者自动生成不同平台下的构建系统文件。此外，CMake不光可以使用Make作为其构建工具，也可以结合Ninja、Visual Studio、QT等使用。</p>
+<p>使用CMake，我们可以在一个统一的CMakeLists.txt文件中描述项目的所有构建过程，包括源代码文件、依赖库、编译选项、链接选项等，而不需要为不同的构建系统编写不同的文件。CMake会根据CMakeLists.txt文件自动生成相应的构建系统文件，从而实现跨平台的构建。</p>
+<p><strong>构建目录</strong>：</p>
+<p>为了方便与源代码目录分离，CMake一般会在项目文件夹下新建一个build子文件夹，作为构建目录，用于存放CMake的输出（Makefile，.cmake等配置文件）和可执行文件及中间文件。</p>
+<p><strong>CMakeLists.txt</strong>：</p>
+<p>CMakeLists.txt是CMake项目的配置文件，包含了项目的设置和指令。CMake读取这个文件来生成相应的构建系统文件，下面展示了一个最简单的CMakeLists.txt。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt>cmake_minimum_required(VERSION 3.0) 
+
+project(Demo)  
+
+add_executable(main main.cpp)
+</code></pre></div><p><strong>使用CMake</strong>：</p>
+<p>由于CMake最主要的目的其实是生成Makefile，所以我们可以先使用CMake生成构建目录中的Makefile文件，再使用make命令编译构建我们想要的目标。比如：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># 新建构建目录，并且进入该目录</span>
+mkdir build; <span style=color:#007020>cd</span> build
+<span style=color:#888># 使用cmake生成Makefile</span>
+cmake ../
+<span style=color:#888># 使用make构建目标</span>
+make all
+make main
+make clean
+</code></pre></div><p>这种方法比较原始，对于一些简单的项目适用。当项目变得复杂，尤其是包含多个子目录时，采用这种方法还必须进入到构建目录的子目录中执行make，就会变得相对麻烦。此时，我们就会使用cmake提供的一些方法在build根目录中直接构建目标。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># 初始化构建目录</span>
+<span style=color:#888># -S指定源文件目录</span>
+<span style=color:#888># -B指定构建目录</span>
+cmake -S . -B build
+<span style=color:#888># 进入构建目录，并罗列可构建目标</span>
+<span style=color:#007020>cd</span> build; make <span style=color:#007020>help</span>
+<span style=color:#888># 构建目标</span>
+<span style=color:#888># --build指定已经存在的CMake构建目录（与-B不同，-B是选择初始化位置）</span>
+<span style=color:#888># --target指定需要构建的目标名称</span>
+cmake --build . --target xxx
+</code></pre></div><p>总的来说，cmake命令主要有cmake和cmake &ndash;build两个核心子命令。其中，前者仅执行配置，产生交叉平台项目文件，而后者则执行实际的编译和链接过程。</p>
+<h2 id=coreutils>Coreutils</h2>
+<p><strong>简介</strong>：</p>
+<p>Coreutils是一组基本的Unix工具，包括了大量的命令行工具，用于文件操作、文本处理、进程管理等方面。</p>
+<p>在Linux系统中，Coreutils通常是系统中最基本的工具集之一，包含了许多常用的命令，例如：ls、rm、cp、mv、mkdir、cat、echo、grep等等。</p>
+<h2 id=binutils>Binutils</h2>
+<p><strong>简介</strong>：</p>
+<p>Binutils是GNU项目的一个组成部分，包括了一系列用于操作目标文件的命令行工具。可以按功能将Binutils分成两大部分，分别是</p>
+<ul>
+<li>帮助生成可执行文件的工具，比如：ld (linker), as (assembler), ar (archiver)；</li>
+<li>帮助分析可执行文件的工具，比如：objcopy/objdump/readelf。</li>
+</ul>
+<h2 id=references>References</h2>
+<ul>
+<li><a href=https://www.cs.cmu.edu/~gilpin/tutorial/ target=_blank>Debugging Under Unix: gdb Tutorial</a></li>
+<li><a href=https://www.gnu.org/software/make/ target=_blank>GNU Make</a></li>
+<li><a href=https://www.gnu.org/software/binutils/ target=_blank>GNU Binutils</a></li>
+</ul>
+</div>
+</div>
+</article>
+</div>
+</main>
+<footer>
+© Copyright <a href=https://github.com/Zhytou>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae>Vitae</a> theme for <a href=https://gohugo.io>Hugo</a>
+</footer><script src=/js/dark-mode.js></script>
+</body>
+</html>

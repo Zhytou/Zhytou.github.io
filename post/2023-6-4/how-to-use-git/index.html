@@ -1,91 +1,213 @@
-<!doctype html><html lang=en><head><meta charset=UTF-8><title>Git Workflow&amp;Tips | Zhytou</title>
-<meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=generator content="Hugo 0.123.8"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=/favicon.ico><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css media=screen href=/css/all.css><meta property="og:title" content="Git Workflow&amp;Tips"><meta property="og:description" content="Git is a version control system that will help you keep track of the changes and history of your project throughout its lifestyle.
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>Git Workflow&Tips | Zhytou</title>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=generator content="Hugo 0.91.2">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel="shortcut icon" href=/favicon.ico>
+<link rel=stylesheet type=text/css media=screen href=/css/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=/css/main.css>
+<link rel=stylesheet type=text/css media=screen href=/css/all.css>
+<meta property="og:title" content="Git Workflow&Tips">
+<meta property="og:description" content="Git is a version control system that will help you keep track of the changes and history of your project throughout its lifestyle.
 Basical Concepts The diagram below most closely represents the flow of a typical group project using git.
+ 
 git branch vs git tag：
-Both tags and branches point to a commit, they are thus aliases for a specific hash and will save you time by not requiring to type in a hash."><meta property="og:type" content="article"><meta property="og:url" content="https://zhytou.github.io/post/2023-6-4/how-to-use-git/"><meta property="article:section" content="post"><meta property="article:published_time" content="2023-06-04T15:31:06+08:00"><meta property="article:modified_time" content="2023-06-04T15:31:06+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Git Workflow&amp;Tips"><meta name=twitter:description content="Git is a version control system that will help you keep track of the changes and history of your project throughout its lifestyle.
+Both tags and branches point to a commit, they are thus aliases for a specific hash and will save you time by not requiring to type in a hash.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://zhytou.github.io/post/2023-6-4/how-to-use-git/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2023-06-04T15:31:06+08:00">
+<meta property="article:modified_time" content="2023-06-04T15:31:06+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Git Workflow&Tips">
+<meta name=twitter:description content="Git is a version control system that will help you keep track of the changes and history of your project throughout its lifestyle.
 Basical Concepts The diagram below most closely represents the flow of a typical group project using git.
+ 
 git branch vs git tag：
-Both tags and branches point to a commit, they are thus aliases for a specific hash and will save you time by not requiring to type in a hash."><meta itemprop=name content="Git Workflow&amp;Tips"><meta itemprop=description content="Git is a version control system that will help you keep track of the changes and history of your project throughout its lifestyle.
+Both tags and branches point to a commit, they are thus aliases for a specific hash and will save you time by not requiring to type in a hash.">
+<meta itemprop=name content="Git Workflow&Tips">
+<meta itemprop=description content="Git is a version control system that will help you keep track of the changes and history of your project throughout its lifestyle.
 Basical Concepts The diagram below most closely represents the flow of a typical group project using git.
+ 
 git branch vs git tag：
-Both tags and branches point to a commit, they are thus aliases for a specific hash and will save you time by not requiring to type in a hash."><meta itemprop=datePublished content="2023-06-04T15:31:06+08:00"><meta itemprop=dateModified content="2023-06-04T15:31:06+08:00"><meta itemprop=wordCount content="787"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>04</span>
-<span class=rest>Jun 2023</span></div></div><div class=matter><h1 class=title>Git Workflow&amp;Tips</h1><p class=post-meta><span class=post-meta></span></p></div></div><div class=markdown><p>Git is a version control system that will help you keep track of the changes and history of your project throughout its lifestyle.</p><h2 id=basical-concepts>Basical Concepts</h2><p>The diagram below most closely represents the flow of a typical group project using git.</p><p><figure><img src=https://res.cloudinary.com/practicaldev/image/fetch/s--M_fHUEqA--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/128hsgntnsu9bww0y8sz.png alt="git workflow"></figure></p><p><strong>git branch vs git tag</strong>：</p><p>Both tags and branches point to a commit, they are thus aliases for a specific hash and will save you time by not requiring to type in a hash.</p><p>The difference between tags and branches are that a branch always points to the top of a development line and will change when a new commit is pushed whereas a tag will not change. Thus tags are more useful to &ldquo;tag&rdquo; a specific version and the tag will then always stay on that version and usually not be changed.</p><p><strong>git add vs git stash</strong>：</p><p>Stash will move your modified files into a stack. So, later in the same or in another branch, you will be able to bring them back and see those modifications in your project.</p><p>Stage is the step before to make a commit, you add modified files to &ldquo;Staged files&rdquo; to create your next commit.</p><h2 id=usage>Usage</h2><h3 id=simple-example-at-a-glance>Simple example at a glance</h3><p><strong>initialize a local git repo and bind it with several remote repo</strong>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># create an empty git repo</span>
-</span></span><span style=display:flex><span>git init
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># add a remote repo and get the existed files from the remote repo</span>
-</span></span><span style=display:flex><span>git remote add public https://github.com/xxx/project.git
-</span></span><span style=display:flex><span>git fecth public
-</span></span><span style=display:flex><span>git merge public/master
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># first commit</span>
-</span></span><span style=display:flex><span>git add .
-</span></span><span style=display:flex><span>git commit -m <span style=background-color:#fff0f0>&#34;first commit&#34;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># add your personal remote repo and set the upstream </span>
-</span></span><span style=display:flex><span>git remote add origin https://github.com/Zhytou/project.git
-</span></span><span style=display:flex><span>git push -u origin master
-</span></span></code></pre></div><p><strong>use .gitignore to omit some files</strong>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># change .git/info/exclude to make .gitignore work</span>
-</span></span><span style=display:flex><span>cat .gitignore &gt; .git/info/exclude
-</span></span></code></pre></div><p><strong>some basic and useful git commands</strong>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># check the files state(untracked or unstaged)</span>
-</span></span><span style=display:flex><span>git status
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># change to another branch</span>
-</span></span><span style=display:flex><span><span style=color:#888># if the branch does not already exist, it will be created.</span>
-</span></span><span style=display:flex><span>git checkout <span style=color:#333>[</span>branch name<span style=color:#333>]</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># add a new branch</span>
-</span></span><span style=display:flex><span>git checkout -b <span style=color:#333>[</span>new-branch-name<span style=color:#333>]</span> | git branch <span style=color:#333>[</span>new-branch-name<span style=color:#333>]</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># delete a branch</span>
-</span></span><span style=display:flex><span>git branch -D <span style=color:#333>[</span>branch-name<span style=color:#333>]</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># show commit history</span>
-</span></span><span style=display:flex><span>git log
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># show differences between two files</span>
-</span></span><span style=display:flex><span>git diff <span style=color:#333>[</span>file name<span style=color:#333>]</span>
-</span></span></code></pre></div><h3 id=advanced-git-tips>Advanced git tips</h3><p><strong>submodule support</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># add a submodule in your git repo</span>
-</span></span><span style=display:flex><span>git submodule add &lt;url&gt; &lt;path&gt;
-</span></span><span style=display:flex><span><span style=color:#888># update submodule</span>
-</span></span><span style=display:flex><span>git submodule update --init
-</span></span></code></pre></div><p><strong>stash temporary changes</strong>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># move your modified files into a stack</span>
-</span></span><span style=display:flex><span>git stash
-</span></span><span style=display:flex><span><span style=color:#888># pop out your modified files into working directory</span>
-</span></span><span style=display:flex><span><span style=color:#888># the first command applies the most recent stash to your working directory and then removes it from the stash list, while the second one applies the most recent stash to your working directory, but does not remove it from the stash list. </span>
-</span></span><span style=display:flex><span>git stash pop | git stash apply
-</span></span></code></pre></div><p><strong>revert commits</strong>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># Hard delete unpublished commits</span>
-</span></span><span style=display:flex><span>git reset --hard <span style=color:#333>[</span>commit number<span style=color:#333>]</span>
-</span></span></code></pre></div><p><strong>set user name and email</strong>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># make sure the email same as your github registered email, it&#39;s important to count your contribution</span>
-</span></span><span style=display:flex><span>git config --global user.name <span style=background-color:#fff0f0>&#34;Zhytou&#34;</span>
-</span></span><span style=display:flex><span>git config --global user.email <span style=background-color:#fff0f0>&#34;zhoytou@gmail.com&#34;</span>
-</span></span></code></pre></div><p><strong>use ssh instead of http</strong>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># generate key</span>
-</span></span><span style=display:flex><span>ssh-keygen -t rsa -C <span style=background-color:#fff0f0>&#34;zhoytou@gmail.com&#34;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># show the public key and add it to your personal account</span>
-</span></span><span style=display:flex><span>cat id_rsa.pub
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># show remote url and change it into ssh</span>
-</span></span><span style=display:flex><span>git remote -v
-</span></span><span style=display:flex><span>git remote set-url origin git@github.com:Zhytou/project.git
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># start ssh-agent(if you are using windows terminal, then skip this step)</span>
-</span></span><span style=display:flex><span><span style=color:#007020>eval</span> <span style=background-color:#fff0f0>`</span>ssh-agent -s<span style=background-color:#fff0f0>`</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># add the private key</span>
-</span></span><span style=display:flex><span>ssh-add ~/.ssh/id_rsa
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># test </span>
-</span></span><span style=display:flex><span>ssh -T git@github.com
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># see something like &#34;Hi Zhytou! You&#39;ve successfully authenticated, but GitHub does not provide shell access&#34;, then you&#39;re ready to go</span>
-</span></span></code></pre></div><h3 id=how-to-write-a-good-git-commit-message>How to write a good git commit message</h3><p><strong>introduction to conventional commits</strong>:</p><p>AngularJS commit message format, also known as conventional commits follows a specific structure:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>&lt;type&gt;(&lt;scope&gt;): subject
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>&lt;body&gt;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>&lt;footer&gt;
-</span></span></code></pre></div><p><strong>label</strong>:</p><ul><li>The type field indicates the type of commits and must be one of the following: feat/fix/docs/style/refactor/test/chore</li><li>The scope field is optional and indicates the scope of the commit, such as the module or file name.</li><li>The subject field is a brief description of the commit, no more than 50 characters, and is used to display in Git log.</li><li>The body field (optional) is a detailed description of the commit, used to explain the reason and impact of the commit and can contain multiple lines of text.</li><li>The footer field (optional) is used to close an issue or add metadata, etc.</li></ul><p><strong>example</strong>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>feat(users): add login feature
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>This commit adds a login feature to the users module. Users can now create accounts and log in to the application using their email address and password. This feature required changes to the user model and the addition of several new routes and templates.
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Closes #123
-</span></span></code></pre></div><h2 id=references>References</h2><ul><li><a href=https://docs.github.com/en/authentication/connecting-to-github-with-ssh target=_blank>conneting to github with ssh</a></li><li><a href=https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging#_undoing_merges target=_blank>git revert handbook</a></li></ul></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
+Both tags and branches point to a commit, they are thus aliases for a specific hash and will save you time by not requiring to type in a hash."><meta itemprop=datePublished content="2023-06-04T15:31:06+08:00">
+<meta itemprop=dateModified content="2023-06-04T15:31:06+08:00">
+<meta itemprop=wordCount content="787">
+<meta itemprop=keywords content>
+</head>
+<body>
+<header>
+<div id=avatar>
+<a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a>
+</div>
+<div id=titletext>
+<h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2>
+</div>
+<div id=title-description>
+<p id=subtitle>May the force be with me.</p>
+<div id=social>
+<nav><ul>
+<li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li>
+<li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li>
+</ul></nav>
+</div>
+</div>
+<div id=mainmenu>
+<nav>
+<ul>
+<li><a href=/>Home</a></li>
+<li><a href=/post>Posts</a></li>
+<li><a href=/about>About</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<main>
+<div class=post>
+<article>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>04</span>
+<span class=rest>Jun 2023</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>Git Workflow&Tips</h1>
+<p class=post-meta>
+<span class=post-meta>
+</span>
+</p>
+</div>
+</div>
+<div class=markdown>
+<p>Git is a version control system that will help you keep track of the changes and history of your project throughout its lifestyle.</p>
+<h2 id=basical-concepts>Basical Concepts</h2>
+<p>The diagram below most closely represents the flow of a typical group project using git.</p>
+<p><figure>
+<img src=https://res.cloudinary.com/practicaldev/image/fetch/s--M_fHUEqA--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/128hsgntnsu9bww0y8sz.png alt="git workflow">
+</figure></p>
+<p><strong>git branch vs git tag</strong>：</p>
+<p>Both tags and branches point to a commit, they are thus aliases for a specific hash and will save you time by not requiring to type in a hash.</p>
+<p>The difference between tags and branches are that a branch always points to the top of a development line and will change when a new commit is pushed whereas a tag will not change. Thus tags are more useful to &ldquo;tag&rdquo; a specific version and the tag will then always stay on that version and usually not be changed.</p>
+<p><strong>git add vs git stash</strong>：</p>
+<p>Stash will move your modified files into a stack. So, later in the same or in another branch, you will be able to bring them back and see those modifications in your project.</p>
+<p>Stage is the step before to make a commit, you add modified files to &ldquo;Staged files&rdquo; to create your next commit.</p>
+<h2 id=usage>Usage</h2>
+<h3 id=simple-example-at-a-glance>Simple example at a glance</h3>
+<p><strong>initialize a local git repo and bind it with several remote repo</strong>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># create an empty git repo</span>
+git init
+
+<span style=color:#888># add a remote repo and get the existed files from the remote repo</span>
+git remote add public https://github.com/xxx/project.git
+git fecth public
+git merge public/master
+
+<span style=color:#888># first commit</span>
+git add .
+git commit -m <span style=background-color:#fff0f0>&#34;first commit&#34;</span>
+
+<span style=color:#888># add your personal remote repo and set the upstream </span>
+git remote add origin https://github.com/Zhytou/project.git
+git push -u origin master
+</code></pre></div><p><strong>use .gitignore to omit some files</strong>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># change .git/info/exclude to make .gitignore work</span>
+cat .gitignore &gt; .git/info/exclude
+</code></pre></div><p><strong>some basic and useful git commands</strong>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># check the files state(untracked or unstaged)</span>
+git status
+
+<span style=color:#888># change to another branch</span>
+<span style=color:#888># if the branch does not already exist, it will be created.</span>
+git checkout <span style=color:#333>[</span>branch name<span style=color:#333>]</span>
+
+<span style=color:#888># add a new branch</span>
+git checkout -b <span style=color:#333>[</span>new-branch-name<span style=color:#333>]</span> | git branch <span style=color:#333>[</span>new-branch-name<span style=color:#333>]</span>
+
+<span style=color:#888># delete a branch</span>
+git branch -D <span style=color:#333>[</span>branch-name<span style=color:#333>]</span>
+
+<span style=color:#888># show commit history</span>
+git log
+
+<span style=color:#888># show differences between two files</span>
+git diff <span style=color:#333>[</span>file name<span style=color:#333>]</span>
+</code></pre></div><h3 id=advanced-git-tips>Advanced git tips</h3>
+<p><strong>submodule support</strong>：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># add a submodule in your git repo</span>
+git submodule add &lt;url&gt; &lt;path&gt;
+<span style=color:#888># update submodule</span>
+git submodule update --init
+</code></pre></div><p><strong>stash temporary changes</strong>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># move your modified files into a stack</span>
+git stash
+<span style=color:#888># pop out your modified files into working directory</span>
+<span style=color:#888># the first command applies the most recent stash to your working directory and then removes it from the stash list, while the second one applies the most recent stash to your working directory, but does not remove it from the stash list. </span>
+git stash pop | git stash apply
+</code></pre></div><p><strong>revert commits</strong>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># Hard delete unpublished commits</span>
+git reset --hard <span style=color:#333>[</span>commit number<span style=color:#333>]</span>
+</code></pre></div><p><strong>set user name and email</strong>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># make sure the email same as your github registered email, it&#39;s important to count your contribution</span>
+git config --global user.name <span style=background-color:#fff0f0>&#34;Zhytou&#34;</span>
+git config --global user.email <span style=background-color:#fff0f0>&#34;zhoytou@gmail.com&#34;</span>
+</code></pre></div><p><strong>use ssh instead of http</strong>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># generate key</span>
+ssh-keygen -t rsa -C <span style=background-color:#fff0f0>&#34;zhoytou@gmail.com&#34;</span>
+
+<span style=color:#888># show the public key and add it to your personal account</span>
+cat id_rsa.pub
+
+<span style=color:#888># show remote url and change it into ssh</span>
+git remote -v
+git remote set-url origin git@github.com:Zhytou/project.git
+
+<span style=color:#888># start ssh-agent(if you are using windows terminal, then skip this step)</span>
+<span style=color:#007020>eval</span> <span style=background-color:#fff0f0>`</span>ssh-agent -s<span style=background-color:#fff0f0>`</span>
+
+<span style=color:#888># add the private key</span>
+ssh-add ~/.ssh/id_rsa
+
+<span style=color:#888># test </span>
+ssh -T git@github.com
+
+<span style=color:#888># see something like &#34;Hi Zhytou! You&#39;ve successfully authenticated, but GitHub does not provide shell access&#34;, then you&#39;re ready to go</span>
+</code></pre></div><h3 id=how-to-write-a-good-git-commit-message>How to write a good git commit message</h3>
+<p><strong>introduction to conventional commits</strong>:</p>
+<p>AngularJS commit message format, also known as conventional commits follows a specific structure:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt>&lt;type&gt;(&lt;scope&gt;): subject
+
+&lt;body&gt;
+
+&lt;footer&gt;
+</code></pre></div><p><strong>label</strong>:</p>
+<ul>
+<li>The type field indicates the type of commits and must be one of the following: feat/fix/docs/style/refactor/test/chore</li>
+<li>The scope field is optional and indicates the scope of the commit, such as the module or file name.</li>
+<li>The subject field is a brief description of the commit, no more than 50 characters, and is used to display in Git log.</li>
+<li>The body field (optional) is a detailed description of the commit, used to explain the reason and impact of the commit and can contain multiple lines of text.</li>
+<li>The footer field (optional) is used to close an issue or add metadata, etc.</li>
+</ul>
+<p><strong>example</strong>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt>feat(users): add login feature
+
+This commit adds a login feature to the users module. Users can now create accounts and log in to the application using their email address and password. This feature required changes to the user model and the addition of several new routes and templates.
+
+Closes #123
+</code></pre></div><h2 id=references>References</h2>
+<ul>
+<li><a href=https://docs.github.com/en/authentication/connecting-to-github-with-ssh target=_blank>conneting to github with ssh</a></li>
+<li><a href=https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging#_undoing_merges target=_blank>git revert handbook</a></li>
+</ul>
+</div>
+</div>
+</article>
+</div>
+</main>
+<footer>
+© Copyright <a href=https://github.com/Zhytou>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae>Vitae</a> theme for <a href=https://gohugo.io>Hugo</a>
+</footer><script src=/js/dark-mode.js></script>
+</body>
+</html>

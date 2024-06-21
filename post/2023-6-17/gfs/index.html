@@ -1,28 +1,264 @@
-<!doctype html><html lang=en><head><meta charset=UTF-8><title>从GFS论文了解分布式文件系统 | Zhytou</title>
-<meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=generator content="Hugo 0.123.8"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=/favicon.ico><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css media=screen href=/css/all.css><meta property="og:title" content="从GFS论文了解分布式文件系统"><meta property="og:description" content="这篇博客主要记录我阅读分布式文件系统开山之作GFS的一些笔记。
-Target & Background Design Overview Interface Architecture Single Master Chunk MetaData Consistency Model System Interactions Leases and Mutation Order Atomic Record Appends Snapshot Master Operation Namespace Management and Locking Replica Placement Creation，Re-replication，Rebalancing Fault Tolerance And Diagnosis Summary References Target & Background 我们必须要注意一个系统的设计背景和目标，是因为一个系统通常是针对于某一个具体的应用领域而设计的。和语言一样，一个系统并不能做到样样精通，我们需要理解设计背后的trade-off。
-Target：
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>从GFS论文了解分布式文件系统 | Zhytou</title>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=generator content="Hugo 0.91.2">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel="shortcut icon" href=/favicon.ico>
+<link rel=stylesheet type=text/css media=screen href=/css/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=/css/main.css>
+<link rel=stylesheet type=text/css media=screen href=/css/all.css>
+<meta property="og:title" content="从GFS论文了解分布式文件系统">
+<meta property="og:description" content="这篇博客主要记录我阅读分布式文件系统开山之作GFS的一些笔记。
+ Target & Background Design Overview  Interface Architecture Single Master Chunk MetaData Consistency Model   System Interactions  Leases and Mutation Order Atomic Record Appends Snapshot   Master Operation  Namespace Management and Locking Replica Placement Creation，Re-replication，Rebalancing   Fault Tolerance And Diagnosis Summary References  Target & Background  我们必须要注意一个系统的设计背景和目标，是因为一个系统通常是针对于某一个具体的应用领域而设计的。和语言一样，一个系统并不能做到样样精通，我们需要理解设计背后的trade-off。
+ Target：
 高性能，可伸缩性，可靠性和可用性
 Background：
 在GFS论文中，作指出 分布式文件系统的四个背景：
-组件故障是正常现象，而不是例外情况; 需要处理的文件通常都很大，而不是小文件; 大多数文件是通过在末尾追加新数据，而不是覆盖现有数据来进行改变的; 应该协同设计应用程序和文件系统，使得整个系统的灵活性更好. Design Overview Interface GFS 作为一个分布式文件系统，对外提供了一个传统的单机文件系统接口。但是出于效率和使用性的角度，并没有实现标准的文件系统 POSIX API。
-POSIX，Portable Operating System Interface，即可移植操作系统接口，其为 UNIX 系统的一个设计标准，很多类 UNIX 系统也在支持兼容这个标准，如 Linux。Windows 则部分支持此协议。
-GFS提供了一个熟悉的文件系统接口，具有创建，删除，打开，关闭，读取和写入文件的常规操作，此外，GFS具有快照和记录附加操作。"><meta property="og:type" content="article"><meta property="og:url" content="https://zhytou.github.io/post/2023-6-17/gfs/"><meta property="article:section" content="post"><meta property="article:published_time" content="2023-06-17T21:04:20+08:00"><meta property="article:modified_time" content="2023-06-17T21:04:20+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="从GFS论文了解分布式文件系统"><meta name=twitter:description content="这篇博客主要记录我阅读分布式文件系统开山之作GFS的一些笔记。
-Target & Background Design Overview Interface Architecture Single Master Chunk MetaData Consistency Model System Interactions Leases and Mutation Order Atomic Record Appends Snapshot Master Operation Namespace Management and Locking Replica Placement Creation，Re-replication，Rebalancing Fault Tolerance And Diagnosis Summary References Target & Background 我们必须要注意一个系统的设计背景和目标，是因为一个系统通常是针对于某一个具体的应用领域而设计的。和语言一样，一个系统并不能做到样样精通，我们需要理解设计背后的trade-off。
-Target：
+ 组件故障是正常现象，而不是例外情况; 需要处理的文件通常都很大，而不是小文件; 大多数文件是通过在末尾追加新数据，而不是覆盖现有数据来进行改变的; 应该协同设计应用程序和文件系统，使得整个系统的灵活性更好.  Design Overview Interface GFS 作为一个分布式文件系统，对外提供了一个传统的单机文件系统接口。但是出于效率和使用性的角度，并没有实现标准的文件系统 POSIX API。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://zhytou.github.io/post/2023-6-17/gfs/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2023-06-17T21:04:20+08:00">
+<meta property="article:modified_time" content="2023-06-17T21:04:20+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="从GFS论文了解分布式文件系统">
+<meta name=twitter:description content="这篇博客主要记录我阅读分布式文件系统开山之作GFS的一些笔记。
+ Target & Background Design Overview  Interface Architecture Single Master Chunk MetaData Consistency Model   System Interactions  Leases and Mutation Order Atomic Record Appends Snapshot   Master Operation  Namespace Management and Locking Replica Placement Creation，Re-replication，Rebalancing   Fault Tolerance And Diagnosis Summary References  Target & Background  我们必须要注意一个系统的设计背景和目标，是因为一个系统通常是针对于某一个具体的应用领域而设计的。和语言一样，一个系统并不能做到样样精通，我们需要理解设计背后的trade-off。
+ Target：
 高性能，可伸缩性，可靠性和可用性
 Background：
 在GFS论文中，作指出 分布式文件系统的四个背景：
-组件故障是正常现象，而不是例外情况; 需要处理的文件通常都很大，而不是小文件; 大多数文件是通过在末尾追加新数据，而不是覆盖现有数据来进行改变的; 应该协同设计应用程序和文件系统，使得整个系统的灵活性更好. Design Overview Interface GFS 作为一个分布式文件系统，对外提供了一个传统的单机文件系统接口。但是出于效率和使用性的角度，并没有实现标准的文件系统 POSIX API。
-POSIX，Portable Operating System Interface，即可移植操作系统接口，其为 UNIX 系统的一个设计标准，很多类 UNIX 系统也在支持兼容这个标准，如 Linux。Windows 则部分支持此协议。
-GFS提供了一个熟悉的文件系统接口，具有创建，删除，打开，关闭，读取和写入文件的常规操作，此外，GFS具有快照和记录附加操作。"><meta itemprop=name content="从GFS论文了解分布式文件系统"><meta itemprop=description content="这篇博客主要记录我阅读分布式文件系统开山之作GFS的一些笔记。
-Target & Background Design Overview Interface Architecture Single Master Chunk MetaData Consistency Model System Interactions Leases and Mutation Order Atomic Record Appends Snapshot Master Operation Namespace Management and Locking Replica Placement Creation，Re-replication，Rebalancing Fault Tolerance And Diagnosis Summary References Target & Background 我们必须要注意一个系统的设计背景和目标，是因为一个系统通常是针对于某一个具体的应用领域而设计的。和语言一样，一个系统并不能做到样样精通，我们需要理解设计背后的trade-off。
-Target：
+ 组件故障是正常现象，而不是例外情况; 需要处理的文件通常都很大，而不是小文件; 大多数文件是通过在末尾追加新数据，而不是覆盖现有数据来进行改变的; 应该协同设计应用程序和文件系统，使得整个系统的灵活性更好.  Design Overview Interface GFS 作为一个分布式文件系统，对外提供了一个传统的单机文件系统接口。但是出于效率和使用性的角度，并没有实现标准的文件系统 POSIX API。">
+<meta itemprop=name content="从GFS论文了解分布式文件系统">
+<meta itemprop=description content="这篇博客主要记录我阅读分布式文件系统开山之作GFS的一些笔记。
+ Target & Background Design Overview  Interface Architecture Single Master Chunk MetaData Consistency Model   System Interactions  Leases and Mutation Order Atomic Record Appends Snapshot   Master Operation  Namespace Management and Locking Replica Placement Creation，Re-replication，Rebalancing   Fault Tolerance And Diagnosis Summary References  Target & Background  我们必须要注意一个系统的设计背景和目标，是因为一个系统通常是针对于某一个具体的应用领域而设计的。和语言一样，一个系统并不能做到样样精通，我们需要理解设计背后的trade-off。
+ Target：
 高性能，可伸缩性，可靠性和可用性
 Background：
 在GFS论文中，作指出 分布式文件系统的四个背景：
-组件故障是正常现象，而不是例外情况; 需要处理的文件通常都很大，而不是小文件; 大多数文件是通过在末尾追加新数据，而不是覆盖现有数据来进行改变的; 应该协同设计应用程序和文件系统，使得整个系统的灵活性更好. Design Overview Interface GFS 作为一个分布式文件系统，对外提供了一个传统的单机文件系统接口。但是出于效率和使用性的角度，并没有实现标准的文件系统 POSIX API。
-POSIX，Portable Operating System Interface，即可移植操作系统接口，其为 UNIX 系统的一个设计标准，很多类 UNIX 系统也在支持兼容这个标准，如 Linux。Windows 则部分支持此协议。
-GFS提供了一个熟悉的文件系统接口，具有创建，删除，打开，关闭，读取和写入文件的常规操作，此外，GFS具有快照和记录附加操作。"><meta itemprop=datePublished content="2023-06-17T21:04:20+08:00"><meta itemprop=dateModified content="2023-06-17T21:04:20+08:00"><meta itemprop=wordCount content="350"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>17</span>
-<span class=rest>Jun 2023</span></div></div><div class=matter><h1 class=title>从GFS论文了解分布式文件系统</h1><p class=post-meta><span class=post-meta></span></p></div></div><div class=markdown><p>这篇博客主要记录我阅读分布式文件系统开山之作GFS的一些笔记。</p><ul><li><a href=#target--background>Target & Background</a></li><li><a href=#design-overview>Design Overview</a><ul><li><a href=#interface>Interface</a></li><li><a href=#architecture>Architecture</a></li><li><a href=#single-master>Single Master</a></li><li><a href=#chunk>Chunk</a></li><li><a href=#metadata>MetaData</a></li><li><a href=#consistency-model>Consistency Model</a></li></ul></li><li><a href=#system-interactions>System Interactions</a><ul><li><a href=#leases-and-mutation-order>Leases and Mutation Order</a></li><li><a href=#atomic-record-appends>Atomic Record Appends</a></li><li><a href=#snapshot>Snapshot</a></li></ul></li><li><a href=#master-operation>Master Operation</a><ul><li><a href=#namespace-management-and-locking>Namespace Management and Locking</a></li><li><a href=#replica-placement>Replica Placement</a></li><li><a href=#creationre-replicationrebalancing>Creation，Re-replication，Rebalancing</a></li></ul></li><li><a href=#fault-tolerance-and-diagnosis>Fault Tolerance And Diagnosis</a></li><li><a href=#summary>Summary</a></li><li><a href=#references>References</a></li></ul><h2 id=target--background>Target & Background</h2><blockquote><p>我们必须要注意一个系统的设计背景和目标，是因为一个系统通常是针对于某一个具体的应用领域而设计的。和语言一样，一个系统并不能做到样样精通，我们需要理解设计背后的trade-off。</p></blockquote><p><strong>Target</strong>：</p><p>高性能，可伸缩性，可靠性和可用性</p><p><strong>Background</strong>：</p><p>在GFS论文中，作指出 分布式文件系统的四个背景：</p><ul><li>组件故障是正常现象，而不是例外情况;</li><li>需要处理的文件通常都很大，而不是小文件;</li><li>大多数文件是通过在末尾追加新数据，而不是覆盖现有数据来进行改变的;</li><li>应该协同设计应用程序和文件系统，使得整个系统的灵活性更好.</li></ul><h2 id=design-overview>Design Overview</h2><h3 id=interface>Interface</h3><p>GFS 作为一个分布式文件系统，对外提供了一个传统的单机文件系统接口。但是出于效率和使用性的角度，并没有实现标准的文件系统 POSIX API。</p><blockquote><p>POSIX，Portable Operating System Interface，即可移植操作系统接口，其为 UNIX 系统的一个设计标准，很多类 UNIX 系统也在支持兼容这个标准，如 Linux。Windows 则部分支持此协议。</p></blockquote><p>GFS提供了一个熟悉的文件系统接口，具有创建，删除，打开，关闭，读取和写入文件的常规操作，此外，GFS具有快照和记录附加操作。</p><h3 id=architecture>Architecture</h3><p><figure><img src=https://zhytou.github.io/post/2023-6-17/gfs_architecture.png alt=gfs_architecture></figure></p><p>GFS的特点如下：</p><ul><li>一个GFS集群由一个 master和多个 chunkservers 组成，并且可以由多个 clients 访问。</li><li>文件分为固定大小的块，且为了提高可靠性，每个块都复制到多个chunk server上。</li><li>Master维护所有文件系统元数据。</li><li>GFS客户端代码实现文件系统API，并与Master和chunk server通信以代表该应用程序读取或写入数据。</li></ul><h3 id=single-master>Single Master</h3><p><strong>Client 读数据的流程</strong>：</p><ul><li>GFS Client 首先对要读取的字节相对偏移量在 chunk size 固定的背景下计算出 chunk index；</li><li>给 GFS Master 发送 file name 以及 chunk index，即文件名和块序号；</li><li>GFS Master 接收到查询请求后，将 filename 以及 chunk index 映射为 chunk handle 以及 chunk locations，并返回给 GFS Client；</li><li>GFS Client 接收到响应后以 key 为 file name + chunk index，value 为 chunk handle + chunk locations 的键值对形式缓存此次查询信息；</li><li>接着，GFS Client 向其中一个 replicas (最有可能是最近的副本)发送请求，去请求中指定 chunk handle 以及块中的字节范围；</li></ul><h3 id=chunk>Chunk</h3><p>GFS将文件分成 64MB 的固定块存储。</p><p><strong>Chunk Size</strong>：</p><p>将文件分块存储，以达到可以并行处理的思想很好理解。但和典型的文件系统相比，GFS 的 Chunk Size 大得多。</p><blockquote><p>例如，对于 64 位的 Linux 操作系统来说，其内存分配单元为 8kB，对于 32 位的 Linux 操作系统来说，内存分配单元为 4 kB。对于 SQL 服务器而言，通常的一次 I/O 磁盘读取则是 8KB（俗称 IO Chunk Size）。</p></blockquote><p>采用大Chunk Size的原因如下：</p><ul><li>首先，它减少了 Client 与 Master 服务器交互的次数，因为对同一块进行多次读写仅仅需要向 Master 服务器发出一次初始请求，就能获取全部的块位置信息。这可以有效地减少 Master 的工作负载；</li><li>其次，减少了 GFS Client 与 GFS chunkserver 进行交互的数据开销，这是因为数据的读取具有连续读取的倾向，即读到 offset 的字节数据后，下一次读取有较大的概率读紧挨着 offset 数据的后续数据，chunk 的大尺寸相当于提供了一层缓存，减少了网络 I/O 的开销；</li><li>第三，它减少了存储在主服务器上的元数据的大小。这允许我们将元数据保存在内存中。</li></ul><p>相应的，大块存储也具有缺点：当小数据量（比如仅仅占据一个 chunk 的文件，文件至少占据一个 chunk）的文件很多时，当很多 GFS Client 同时将 record 存储到该文件时就会造成局部的 hot spots 热点。</p><p><strong>Chunk Replication</strong>：</p><p>为了提高可靠性，每个块都会被复制到多个chunk server上。</p><h3 id=metadata>MetaData</h3><p>Master节点存储的元数据包括以下几个方面：</p><ul><li>块命名空间（Block Namespace）：GFS将一个文件划分为多个大小相等的数据块，每个数据块都有一个64位的全局唯一标识符（BlockID），Master节点负责维护块ID与块位置的映射关系。</li><li>文件命名空间（File Namespace）：GFS中的文件由一个全局唯一的文件名和一个文件ID组成，Master节点负责维护文件名和文件ID之间的映射关系。</li><li>块位置（Block Location）：Master节点记录了每个数据块所在的ChunkServer节点的位置信息，以及每个数据块的副本数和副本所在的ChunkServer节点的位置信息。</li><li>块版本号（Block Version）：GFS采用乐观并发控制（Optimistic Concurrency Control）来管理数据块的版本号，每次写操作都会增加数据块的版本号，以保证写操作的原子性和一致性。</li><li>块状态（Block State）：Master节点维护了每个数据块的状态，包括正常状态、丢失状态和过期状态等。如果某个数据块的所有副本都丢失或过期，Master节点会将该数据块的状态标记为丢失状态，并进行相应的处理。</li></ul><blockquote><p>一般来说，元数据是两张Map构成的，第一张是File ID对Chunk ID的一到多的映射；第二张则是Chunk ID对Chunk Server Location的一到多的映射。由于第一张表一般就是查找一个文件的所有块序号，所以使用哈希表存储；第二张由于会发生范围查找（一次查找多个块的存储地址），所以需要使用B+树存储。</p></blockquote><p><strong>In-Memory</strong>：</p><p>所有的元数据都存放在 Master 的内存中。</p><p>这种仅使用内存的方法的一个潜在问题是，块的数量以及整个系统的容量受到主机拥有多少内存的限制。</p><p><strong>Chunk Locations</strong>:</p><p>Master 不保留有关哪个块服务器具有给定块副本的持久记录。</p><p>它只是在启动时轮询chunkserver以获取该信息。之后，Master可以保持最新状态，因为它可以控制所有块的放置并通过常规HeartBeat消息监视块服务器的状态。</p><p><strong>Operation Log</strong>:</p><p>操作日志包含关键元数据更改的历史记录。它是GFS的核心。</p><p>它不仅是元数据的唯一持久记录，而且还用作定义并发操作顺序的逻辑时间表。</p><h3 id=consistency-model>Consistency Model</h3><h2 id=system-interactions>System Interactions</h2><p>这部分内容主要描述 Client，Master 和 Chunk Servers 如何交互以实现数据变化，原子记录追加和快照。</p><h3 id=leases-and-mutation-order>Leases and Mutation Order</h3><blockquote><p>lease 租约； mutation 修改</p></blockquote><h3 id=atomic-record-appends>Atomic Record Appends</h3><h3 id=snapshot>Snapshot</h3><h2 id=master-operation>Master Operation</h2><h3 id=namespace-management-and-locking>Namespace Management and Locking</h3><h3 id=replica-placement>Replica Placement</h3><p>chunk replica placement policy 有两个目的：</p><ul><li>最大化数据 reliability（可靠性）和 availability（可用性）；</li><li>最大化 network bandwidth utilization（网络带宽利用率）；</li></ul><h3 id=creationre-replicationrebalancing>Creation，Re-replication，Rebalancing</h3><p><strong>Creation</strong>：</p><p><strong>Re-replication</strong>：</p><p>一旦可用副本的数量低于用户指定的目标，主服务器就会重新复制块。</p><p>主机选择最高优先级的块，并通过指示某些块服务器直接从现有有效副本中复制块数据来对其进行“克隆”。</p><p>放置新副本的目标类似于创建副本的目标：均衡磁盘空间利用率，限制任何单个块服务器上的活动克隆操作，以及将副本分布在机架上。</p><p><strong>Rebalancing</strong>：</p><p>主服务器会定期重新平衡副本：它检查当前副本分发，并移动副本以获得更好的磁盘空间和负载平衡。</p><h2 id=fault-tolerance-and-diagnosis>Fault Tolerance And Diagnosis</h2><h2 id=summary>Summary</h2><p><strong>File System</strong>：</p><p>文件系统是计算机中一个非常重要的组件，为存储设备提供一致的访问和管理方式。在不同的操作系统中，文件系统会有一些差别，但也有一些共性几十年都没怎么变化：</p><p>数据是以文件的形式存在，提供 Open、Read、Write、Seek、Close 等API 进行访问；
-文件以树形目录进行组织，提供原子的重命名（Rename）操作改变文件或者目录的位置。</p><p>文件系统提供的访问和管理方法支撑了绝大部分的计算机应用，Unix 的“万物皆文件”的理念更是凸显了它的重要地位。</p><p><strong>Centralized File System vs Distributed File System</strong>：</p><p>绝大多数文件系统都是单机的，在单机操作系统内为一个或者多个存储设备提供访问和管理。随着互联网的高速发展，单机文件系统面临很多的挑战：</p><p>容量限制：单机文件系统的容量是由本地磁盘的大小所限制的。随着数据量的不断增长，单机文件系统的存储容量很容易就会超过磁盘的承受范围。</p><p>性能限制：单机文件系统的性能主要受限于本地磁盘的读写速度和CPU的处理能力。随着数据量的增加和用户访问量的增大，单机文件系统的性能瓶颈很容易就会出现。</p><p>可靠性限制：单机文件系统的可靠性主要依赖于本地磁盘的可靠性。如果本地磁盘出现故障，那么文件系统中的数据就有可能会丢失或损坏。</p><p>数据共享困难：单机文件系统无法满足多个用户之间的数据共享需求。如果多个用户需要同时访问同一份数据，那么单机文件系统就无法满足这个需求。</p><p>随着互联网的高速发展，这些问题变得日益突出，涌现出了一些分布式文件系统来应对这些挑战。</p><p><strong>Distributed File System vs Distributed Database</strong>：</p><p>我在参与CubeFS开源社区的时候，有时候感觉分布式文件系统的设计真的非常类似分布式数据库。二者实际上也确实有一些关联，具体可以查看这个知乎<a href=https://www.zhihu.com/question/21814195 target=_blank>问题</a>。</p><p><strong>Distributed File System History</strong>：</p><p><figure><img src=https://static1.juicefs.com/images/distributed-filesystem-timeline.original.png alt=dfs_history></figure></p><p><strong>Distributed File System Comparasion</strong>：</p><p><figure><img src=https://segmentfault.com/img/remote/1460000040129381 alt=dfs_comparasion></figure></p><h2 id=references>References</h2><ul><li><a href=https://juicefs.com/zh-cn/blog/engineering/distributed-filesystem-comparison target=_blank>分布式文件系统的对比</a></li><li><a href=https://spongecaptain.cool/post/paper/googlefilesystem/ target=_blank>GFS 论文阅读笔记</a></li><li><a href=https://juejin.cn/post/6964671364745658376#1-introduction target=_blank>GFS 论文</a></li></ul></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
+ 组件故障是正常现象，而不是例外情况; 需要处理的文件通常都很大，而不是小文件; 大多数文件是通过在末尾追加新数据，而不是覆盖现有数据来进行改变的; 应该协同设计应用程序和文件系统，使得整个系统的灵活性更好.  Design Overview Interface GFS 作为一个分布式文件系统，对外提供了一个传统的单机文件系统接口。但是出于效率和使用性的角度，并没有实现标准的文件系统 POSIX API。"><meta itemprop=datePublished content="2023-06-17T21:04:20+08:00">
+<meta itemprop=dateModified content="2023-06-17T21:04:20+08:00">
+<meta itemprop=wordCount content="350">
+<meta itemprop=keywords content>
+</head>
+<body>
+<header>
+<div id=avatar>
+<a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a>
+</div>
+<div id=titletext>
+<h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2>
+</div>
+<div id=title-description>
+<p id=subtitle>May the force be with me.</p>
+<div id=social>
+<nav><ul>
+<li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li>
+<li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li>
+</ul></nav>
+</div>
+</div>
+<div id=mainmenu>
+<nav>
+<ul>
+<li><a href=/>Home</a></li>
+<li><a href=/post>Posts</a></li>
+<li><a href=/about>About</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<main>
+<div class=post>
+<article>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>17</span>
+<span class=rest>Jun 2023</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>从GFS论文了解分布式文件系统</h1>
+<p class=post-meta>
+<span class=post-meta>
+</span>
+</p>
+</div>
+</div>
+<div class=markdown>
+<p>这篇博客主要记录我阅读分布式文件系统开山之作GFS的一些笔记。</p>
+<ul>
+<li><a href=#target--background>Target & Background</a></li>
+<li><a href=#design-overview>Design Overview</a>
+<ul>
+<li><a href=#interface>Interface</a></li>
+<li><a href=#architecture>Architecture</a></li>
+<li><a href=#single-master>Single Master</a></li>
+<li><a href=#chunk>Chunk</a></li>
+<li><a href=#metadata>MetaData</a></li>
+<li><a href=#consistency-model>Consistency Model</a></li>
+</ul>
+</li>
+<li><a href=#system-interactions>System Interactions</a>
+<ul>
+<li><a href=#leases-and-mutation-order>Leases and Mutation Order</a></li>
+<li><a href=#atomic-record-appends>Atomic Record Appends</a></li>
+<li><a href=#snapshot>Snapshot</a></li>
+</ul>
+</li>
+<li><a href=#master-operation>Master Operation</a>
+<ul>
+<li><a href=#namespace-management-and-locking>Namespace Management and Locking</a></li>
+<li><a href=#replica-placement>Replica Placement</a></li>
+<li><a href=#creationre-replicationrebalancing>Creation，Re-replication，Rebalancing</a></li>
+</ul>
+</li>
+<li><a href=#fault-tolerance-and-diagnosis>Fault Tolerance And Diagnosis</a></li>
+<li><a href=#summary>Summary</a></li>
+<li><a href=#references>References</a></li>
+</ul>
+<h2 id=target--background>Target & Background</h2>
+<blockquote>
+<p>我们必须要注意一个系统的设计背景和目标，是因为一个系统通常是针对于某一个具体的应用领域而设计的。和语言一样，一个系统并不能做到样样精通，我们需要理解设计背后的trade-off。</p>
+</blockquote>
+<p><strong>Target</strong>：</p>
+<p>高性能，可伸缩性，可靠性和可用性</p>
+<p><strong>Background</strong>：</p>
+<p>在GFS论文中，作指出 分布式文件系统的四个背景：</p>
+<ul>
+<li>组件故障是正常现象，而不是例外情况;</li>
+<li>需要处理的文件通常都很大，而不是小文件;</li>
+<li>大多数文件是通过在末尾追加新数据，而不是覆盖现有数据来进行改变的;</li>
+<li>应该协同设计应用程序和文件系统，使得整个系统的灵活性更好.</li>
+</ul>
+<h2 id=design-overview>Design Overview</h2>
+<h3 id=interface>Interface</h3>
+<p>GFS 作为一个分布式文件系统，对外提供了一个传统的单机文件系统接口。但是出于效率和使用性的角度，并没有实现标准的文件系统 POSIX API。</p>
+<blockquote>
+<p>POSIX，Portable Operating System Interface，即可移植操作系统接口，其为 UNIX 系统的一个设计标准，很多类 UNIX 系统也在支持兼容这个标准，如 Linux。Windows 则部分支持此协议。</p>
+</blockquote>
+<p>GFS提供了一个熟悉的文件系统接口，具有创建，删除，打开，关闭，读取和写入文件的常规操作，此外，GFS具有快照和记录附加操作。</p>
+<h3 id=architecture>Architecture</h3>
+<p><figure>
+<img src=https://zhytou.github.io/post/2023-6-17/gfs_architecture.png alt=gfs_architecture>
+</figure></p>
+<p>GFS的特点如下：</p>
+<ul>
+<li>一个GFS集群由一个 master和多个 chunkservers 组成，并且可以由多个 clients 访问。</li>
+<li>文件分为固定大小的块，且为了提高可靠性，每个块都复制到多个chunk server上。</li>
+<li>Master维护所有文件系统元数据。</li>
+<li>GFS客户端代码实现文件系统API，并与Master和chunk server通信以代表该应用程序读取或写入数据。</li>
+</ul>
+<h3 id=single-master>Single Master</h3>
+<p><strong>Client 读数据的流程</strong>：</p>
+<ul>
+<li>GFS Client 首先对要读取的字节相对偏移量在 chunk size 固定的背景下计算出 chunk index；</li>
+<li>给 GFS Master 发送 file name 以及 chunk index，即文件名和块序号；</li>
+<li>GFS Master 接收到查询请求后，将 filename 以及 chunk index 映射为 chunk handle 以及 chunk locations，并返回给 GFS Client；</li>
+<li>GFS Client 接收到响应后以 key 为 file name + chunk index，value 为 chunk handle + chunk locations 的键值对形式缓存此次查询信息；</li>
+<li>接着，GFS Client 向其中一个 replicas (最有可能是最近的副本)发送请求，去请求中指定 chunk handle 以及块中的字节范围；</li>
+</ul>
+<h3 id=chunk>Chunk</h3>
+<p>GFS将文件分成 64MB 的固定块存储。</p>
+<p><strong>Chunk Size</strong>：</p>
+<p>将文件分块存储，以达到可以并行处理的思想很好理解。但和典型的文件系统相比，GFS 的 Chunk Size 大得多。</p>
+<blockquote>
+<p>例如，对于 64 位的 Linux 操作系统来说，其内存分配单元为 8kB，对于 32 位的 Linux 操作系统来说，内存分配单元为 4 kB。对于 SQL 服务器而言，通常的一次 I/O 磁盘读取则是 8KB（俗称 IO Chunk Size）。</p>
+</blockquote>
+<p>采用大Chunk Size的原因如下：</p>
+<ul>
+<li>首先，它减少了 Client 与 Master 服务器交互的次数，因为对同一块进行多次读写仅仅需要向 Master 服务器发出一次初始请求，就能获取全部的块位置信息。这可以有效地减少 Master 的工作负载；</li>
+<li>其次，减少了 GFS Client 与 GFS chunkserver 进行交互的数据开销，这是因为数据的读取具有连续读取的倾向，即读到 offset 的字节数据后，下一次读取有较大的概率读紧挨着 offset 数据的后续数据，chunk 的大尺寸相当于提供了一层缓存，减少了网络 I/O 的开销；</li>
+<li>第三，它减少了存储在主服务器上的元数据的大小。这允许我们将元数据保存在内存中。</li>
+</ul>
+<p>相应的，大块存储也具有缺点：当小数据量（比如仅仅占据一个 chunk 的文件，文件至少占据一个 chunk）的文件很多时，当很多 GFS Client 同时将 record 存储到该文件时就会造成局部的 hot spots 热点。</p>
+<p><strong>Chunk Replication</strong>：</p>
+<p>为了提高可靠性，每个块都会被复制到多个chunk server上。</p>
+<h3 id=metadata>MetaData</h3>
+<p>Master节点存储的元数据包括以下几个方面：</p>
+<ul>
+<li>块命名空间（Block Namespace）：GFS将一个文件划分为多个大小相等的数据块，每个数据块都有一个64位的全局唯一标识符（BlockID），Master节点负责维护块ID与块位置的映射关系。</li>
+<li>文件命名空间（File Namespace）：GFS中的文件由一个全局唯一的文件名和一个文件ID组成，Master节点负责维护文件名和文件ID之间的映射关系。</li>
+<li>块位置（Block Location）：Master节点记录了每个数据块所在的ChunkServer节点的位置信息，以及每个数据块的副本数和副本所在的ChunkServer节点的位置信息。</li>
+<li>块版本号（Block Version）：GFS采用乐观并发控制（Optimistic Concurrency Control）来管理数据块的版本号，每次写操作都会增加数据块的版本号，以保证写操作的原子性和一致性。</li>
+<li>块状态（Block State）：Master节点维护了每个数据块的状态，包括正常状态、丢失状态和过期状态等。如果某个数据块的所有副本都丢失或过期，Master节点会将该数据块的状态标记为丢失状态，并进行相应的处理。</li>
+</ul>
+<blockquote>
+<p>一般来说，元数据是两张Map构成的，第一张是File ID对Chunk ID的一到多的映射；第二张则是Chunk ID对Chunk Server Location的一到多的映射。由于第一张表一般就是查找一个文件的所有块序号，所以使用哈希表存储；第二张由于会发生范围查找（一次查找多个块的存储地址），所以需要使用B+树存储。</p>
+</blockquote>
+<p><strong>In-Memory</strong>：</p>
+<p>所有的元数据都存放在 Master 的内存中。</p>
+<p>这种仅使用内存的方法的一个潜在问题是，块的数量以及整个系统的容量受到主机拥有多少内存的限制。</p>
+<p><strong>Chunk Locations</strong>:</p>
+<p>Master 不保留有关哪个块服务器具有给定块副本的持久记录。</p>
+<p>它只是在启动时轮询chunkserver以获取该信息。之后，Master可以保持最新状态，因为它可以控制所有块的放置并通过常规HeartBeat消息监视块服务器的状态。</p>
+<p><strong>Operation Log</strong>:</p>
+<p>操作日志包含关键元数据更改的历史记录。它是GFS的核心。</p>
+<p>它不仅是元数据的唯一持久记录，而且还用作定义并发操作顺序的逻辑时间表。</p>
+<h3 id=consistency-model>Consistency Model</h3>
+<h2 id=system-interactions>System Interactions</h2>
+<p>这部分内容主要描述 Client，Master 和 Chunk Servers 如何交互以实现数据变化，原子记录追加和快照。</p>
+<h3 id=leases-and-mutation-order>Leases and Mutation Order</h3>
+<blockquote>
+<p>lease 租约； mutation 修改</p>
+</blockquote>
+<h3 id=atomic-record-appends>Atomic Record Appends</h3>
+<h3 id=snapshot>Snapshot</h3>
+<h2 id=master-operation>Master Operation</h2>
+<h3 id=namespace-management-and-locking>Namespace Management and Locking</h3>
+<h3 id=replica-placement>Replica Placement</h3>
+<p>chunk replica placement policy 有两个目的：</p>
+<ul>
+<li>最大化数据 reliability（可靠性）和 availability（可用性）；</li>
+<li>最大化 network bandwidth utilization（网络带宽利用率）；</li>
+</ul>
+<h3 id=creationre-replicationrebalancing>Creation，Re-replication，Rebalancing</h3>
+<p><strong>Creation</strong>：</p>
+<p><strong>Re-replication</strong>：</p>
+<p>一旦可用副本的数量低于用户指定的目标，主服务器就会重新复制块。</p>
+<p>主机选择最高优先级的块，并通过指示某些块服务器直接从现有有效副本中复制块数据来对其进行“克隆”。</p>
+<p>放置新副本的目标类似于创建副本的目标：均衡磁盘空间利用率，限制任何单个块服务器上的活动克隆操作，以及将副本分布在机架上。</p>
+<p><strong>Rebalancing</strong>：</p>
+<p>主服务器会定期重新平衡副本：它检查当前副本分发，并移动副本以获得更好的磁盘空间和负载平衡。</p>
+<h2 id=fault-tolerance-and-diagnosis>Fault Tolerance And Diagnosis</h2>
+<h2 id=summary>Summary</h2>
+<p><strong>File System</strong>：</p>
+<p>文件系统是计算机中一个非常重要的组件，为存储设备提供一致的访问和管理方式。在不同的操作系统中，文件系统会有一些差别，但也有一些共性几十年都没怎么变化：</p>
+<p>数据是以文件的形式存在，提供 Open、Read、Write、Seek、Close 等API 进行访问；
+文件以树形目录进行组织，提供原子的重命名（Rename）操作改变文件或者目录的位置。</p>
+<p>文件系统提供的访问和管理方法支撑了绝大部分的计算机应用，Unix 的“万物皆文件”的理念更是凸显了它的重要地位。</p>
+<p><strong>Centralized File System vs Distributed File System</strong>：</p>
+<p>绝大多数文件系统都是单机的，在单机操作系统内为一个或者多个存储设备提供访问和管理。随着互联网的高速发展，单机文件系统面临很多的挑战：</p>
+<p>容量限制：单机文件系统的容量是由本地磁盘的大小所限制的。随着数据量的不断增长，单机文件系统的存储容量很容易就会超过磁盘的承受范围。</p>
+<p>性能限制：单机文件系统的性能主要受限于本地磁盘的读写速度和CPU的处理能力。随着数据量的增加和用户访问量的增大，单机文件系统的性能瓶颈很容易就会出现。</p>
+<p>可靠性限制：单机文件系统的可靠性主要依赖于本地磁盘的可靠性。如果本地磁盘出现故障，那么文件系统中的数据就有可能会丢失或损坏。</p>
+<p>数据共享困难：单机文件系统无法满足多个用户之间的数据共享需求。如果多个用户需要同时访问同一份数据，那么单机文件系统就无法满足这个需求。</p>
+<p>随着互联网的高速发展，这些问题变得日益突出，涌现出了一些分布式文件系统来应对这些挑战。</p>
+<p><strong>Distributed File System vs Distributed Database</strong>：</p>
+<p>我在参与CubeFS开源社区的时候，有时候感觉分布式文件系统的设计真的非常类似分布式数据库。二者实际上也确实有一些关联，具体可以查看这个知乎<a href=https://www.zhihu.com/question/21814195 target=_blank>问题</a>。</p>
+<p><strong>Distributed File System History</strong>：</p>
+<p><figure>
+<img src=https://static1.juicefs.com/images/distributed-filesystem-timeline.original.png alt=dfs_history>
+</figure></p>
+<p><strong>Distributed File System Comparasion</strong>：</p>
+<p><figure>
+<img src=https://segmentfault.com/img/remote/1460000040129381 alt=dfs_comparasion>
+</figure></p>
+<h2 id=references>References</h2>
+<ul>
+<li><a href=https://juicefs.com/zh-cn/blog/engineering/distributed-filesystem-comparison target=_blank>分布式文件系统的对比</a></li>
+<li><a href=https://spongecaptain.cool/post/paper/googlefilesystem/ target=_blank>GFS 论文阅读笔记</a></li>
+<li><a href=https://juejin.cn/post/6964671364745658376#1-introduction target=_blank>GFS 论文</a></li>
+</ul>
+</div>
+</div>
+</article>
+</div>
+</main>
+<footer>
+© Copyright <a href=https://github.com/Zhytou>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae>Vitae</a> theme for <a href=https://gohugo.io>Hugo</a>
+</footer><script src=/js/dark-mode.js></script>
+</body>
+</html>

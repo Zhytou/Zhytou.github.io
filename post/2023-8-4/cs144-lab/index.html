@@ -1,5 +1,17 @@
-<!doctype html><html lang=en><head><meta charset=UTF-8><title>CS144-Minnow Lab总结 | Zhytou</title>
-<meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=generator content="Hugo 0.123.8"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=/favicon.ico><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css media=screen href=/css/all.css><meta property="og:title" content="CS144-Minnow Lab总结"><meta property="og:description" content="课程地址CS144: Introduction to Computer Networking
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>CS144-Minnow Lab总结 | Zhytou</title>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=generator content="Hugo 0.91.2">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel="shortcut icon" href=/favicon.ico>
+<link rel=stylesheet type=text/css media=screen href=/css/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=/css/main.css>
+<link rel=stylesheet type=text/css media=screen href=/css/all.css>
+<meta property="og:title" content="CS144-Minnow Lab总结">
+<meta property="og:description" content="课程地址CS144: Introduction to Computer Networking
+  
 个人感觉，虽然整个CS144的Lab难度不算特别大（认认真真做一周时间应该是够了），但还是非常有收获的。反正我做完就感觉死去的计网记忆在攻击我:(。难度排序的话，应该是 TCP Sender > TCP receiver ≈Network Interface > IP router > Webget & ByteStream。
 0 Networking Warmup lab0的前几个部分主要以使用命令进行发Http请求或邮件并观察响应为主，只有最后两个部分需要写代码。下面介绍一下我的环境以及配置方法。
 WSL Install：
@@ -8,7 +20,15 @@ WSL Install：
 sudo apt install cmake make git clang-format Remote Repository：
 首先，在github中创建一个名为minnow的空仓库，作为我们的远程备份仓库。注意，为了遵守课程规定，我们需要将该仓库设为私有。
 其次，克隆课程项目，并将其推送到自己的远程仓库上，完成仓库的初始化。具体方法如下：
-# clone the bare git proj git clone --bare https://github.com/cs144/minnow # cd the bare git directory and push everything to your own repo cd minnow.git; git remote add mine git@github."><meta property="og:type" content="article"><meta property="og:url" content="https://zhytou.github.io/post/2023-8-4/cs144-lab/"><meta property="article:section" content="post"><meta property="article:published_time" content="2023-08-04T22:18:06+08:00"><meta property="article:modified_time" content="2023-08-04T22:18:06+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="CS144-Minnow Lab总结"><meta name=twitter:description content="课程地址CS144: Introduction to Computer Networking
+# clone the bare git proj git clone --bare https://github.com/cs144/minnow # cd the bare git directory and push everything to your own repo cd minnow.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://zhytou.github.io/post/2023-8-4/cs144-lab/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2023-08-04T22:18:06+08:00">
+<meta property="article:modified_time" content="2023-08-04T22:18:06+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="CS144-Minnow Lab总结">
+<meta name=twitter:description content="课程地址CS144: Introduction to Computer Networking
+  
 个人感觉，虽然整个CS144的Lab难度不算特别大（认认真真做一周时间应该是够了），但还是非常有收获的。反正我做完就感觉死去的计网记忆在攻击我:(。难度排序的话，应该是 TCP Sender > TCP receiver ≈Network Interface > IP router > Webget & ByteStream。
 0 Networking Warmup lab0的前几个部分主要以使用命令进行发Http请求或邮件并观察响应为主，只有最后两个部分需要写代码。下面介绍一下我的环境以及配置方法。
 WSL Install：
@@ -17,7 +37,10 @@ WSL Install：
 sudo apt install cmake make git clang-format Remote Repository：
 首先，在github中创建一个名为minnow的空仓库，作为我们的远程备份仓库。注意，为了遵守课程规定，我们需要将该仓库设为私有。
 其次，克隆课程项目，并将其推送到自己的远程仓库上，完成仓库的初始化。具体方法如下：
-# clone the bare git proj git clone --bare https://github.com/cs144/minnow # cd the bare git directory and push everything to your own repo cd minnow.git; git remote add mine git@github."><meta itemprop=name content="CS144-Minnow Lab总结"><meta itemprop=description content="课程地址CS144: Introduction to Computer Networking
+# clone the bare git proj git clone --bare https://github.com/cs144/minnow # cd the bare git directory and push everything to your own repo cd minnow.">
+<meta itemprop=name content="CS144-Minnow Lab总结">
+<meta itemprop=description content="课程地址CS144: Introduction to Computer Networking
+  
 个人感觉，虽然整个CS144的Lab难度不算特别大（认认真真做一周时间应该是够了），但还是非常有收获的。反正我做完就感觉死去的计网记忆在攻击我:(。难度排序的话，应该是 TCP Sender > TCP receiver ≈Network Interface > IP router > Webget & ByteStream。
 0 Networking Warmup lab0的前几个部分主要以使用命令进行发Http请求或邮件并观察响应为主，只有最后两个部分需要写代码。下面介绍一下我的环境以及配置方法。
 WSL Install：
@@ -26,727 +49,932 @@ WSL Install：
 sudo apt install cmake make git clang-format Remote Repository：
 首先，在github中创建一个名为minnow的空仓库，作为我们的远程备份仓库。注意，为了遵守课程规定，我们需要将该仓库设为私有。
 其次，克隆课程项目，并将其推送到自己的远程仓库上，完成仓库的初始化。具体方法如下：
-# clone the bare git proj git clone --bare https://github.com/cs144/minnow # cd the bare git directory and push everything to your own repo cd minnow.git; git remote add mine git@github."><meta itemprop=datePublished content="2023-08-04T22:18:06+08:00"><meta itemprop=dateModified content="2023-08-04T22:18:06+08:00"><meta itemprop=wordCount content="3631"><meta itemprop=keywords content></head><body><header><div id=avatar><a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a></div><div id=titletext><h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2></div><div id=title-description><p id=subtitle>May the force be with me.</p><div id=social><nav><ul><li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li><li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li></ul></nav></div></div><div id=mainmenu><nav><ul><li><a href=/>Home</a></li><li><a href=/post>Posts</a></li><li><a href=/about>About</a></li></ul></nav></div></header><main><div class=post><article><div class=post-header><div class=meta><div class=date><span class=day>04</span>
-<span class=rest>Aug 2023</span></div></div><div class=matter><h1 class=title>CS144-Minnow Lab总结</h1><p class=post-meta><span class=post-meta></span></p></div></div><div class=markdown><blockquote><p>课程地址<a href=https://cs144.github.io/ target=_blank>CS144: Introduction to Computer Networking</a></p></blockquote><p><a href=https://wakatime.com/badge/user/a7b329b7-d489-40d2-9239-8be7cf83b65e/project/b892df03-90fb-40ca-a3a3-f14a57f9a941 target=_blank><figure><img src=https://wakatime.com/badge/user/a7b329b7-d489-40d2-9239-8be7cf83b65e/project/b892df03-90fb-40ca-a3a3-f14a57f9a941.svg alt=wakatime></figure></a></p><p>个人感觉，虽然整个CS144的Lab难度不算特别大（认认真真做一周时间应该是够了），但还是非常有收获的。反正我做完就感觉死去的计网记忆在攻击我:(。难度排序的话，应该是 TCP Sender > TCP receiver ≈Network Interface > IP router > Webget & ByteStream。</p><h2 id=0-networking-warmup>0 Networking Warmup</h2><p>lab0的前几个部分主要以使用命令进行发Http请求或邮件并观察响应为主，只有最后两个部分需要写代码。下面介绍一下我的环境以及配置方法。</p><p><strong>WSL Install</strong>：</p><p>首先，在确保虚拟化以及WSL功能正确开启后，前往微软商店下载Windows Subsystem For Linux。我使用的发行版是Ubuntu 22.04.2 LTS。更详细的下载方法，可以查看我的另一篇博客[搭建自己的生产环境]中的WSL部分。</p><p>接着，在WSL下载cmake、make、git和clang-format。其中，cmake和make是用于项目构建和编译的；git则是用于版本管理；clang-format则是一个格式化工具。它都会在后续使用到。具体下载方法如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sudo apt install cmake make git clang-format
-</span></span></code></pre></div><p><strong>Remote Repository</strong>：</p><p>首先，在github中创建一个名为<code>minnow</code>的空仓库，作为我们的远程备份仓库。注意，为了遵守课程规定，我们需要将该仓库设为私有。</p><p>其次，克隆课程项目，并将其推送到自己的远程仓库上，完成仓库的初始化。具体方法如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#888># clone the bare git proj</span>
-</span></span><span style=display:flex><span>git clone --bare https://github.com/cs144/minnow
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># cd the bare git directory and push everything to your own repo</span>
-</span></span><span style=display:flex><span><span style=color:#007020>cd</span> minnow.git; git remote add mine git@github.com:Zhytou/minnow.git
-</span></span><span style=display:flex><span>git push --all mine
-</span></span><span style=display:flex><span>git push --tags mine
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#888># remove the bare git directory and see your own repo</span>
-</span></span><span style=display:flex><span>rm -rf minnow.git
-</span></span><span style=display:flex><span>git clone git@github.com:Zhytou/minnow.git
-</span></span></code></pre></div><p><strong>Compile & Run</strong>：</p><p>CS144课程实验使用cmake构架和编译，方法如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#007020>cd</span> minnow
-</span></span><span style=display:flex><span><span style=color:#888># 编译</span>
-</span></span><span style=display:flex><span>cmake -S . -B build
-</span></span><span style=display:flex><span><span style=color:#888># 运行</span>
-</span></span><span style=display:flex><span>cmake --build build --target check_Webget
-</span></span></code></pre></div><h3 id=writing-webget>Writing webget</h3><p>这部分要求我们在<code>apps/webget.cc</code>里面实现<code>void get_URL( const string& host, const string& path )</code>函数，最终完成抓取网页并写入到标准输出的功能。</p><p><strong>Socket</strong>：</p><p>这个任务在理解了套接字的通信流程之后就会变得非常简单。一个常见的客户端使用套接字向服务器发送信息的API调用顺序如下：</p><ul><li>首先，服务器创建一个套接字，并使用bind将其绑定到某IP和端口，接着使用listen使其监听该端口的连接请求。</li><li>接着，客户端创建一个套接字，并使用connect尝试连接服务器。成功后，使用send向其发送请求。</li><li>此时，服务器介绍到客户端请求，使用accept得到一个新套接字，先使用recv读取请求，接着使用send发送回复。</li><li>接着，客户端使用recv接收到回复，使用close关闭连接。</li><li>最后，服务器使用close关闭连接。</li></ul><p>此外，还需要注意的就是在写Http请求时，换行是<code>\r\n</code>。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>get_URL</span>( <span style=color:#080;font-weight:700>const</span> string<span style=color:#333>&amp;</span> host, <span style=color:#080;font-weight:700>const</span> string<span style=color:#333>&amp;</span> path )
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  TCPSocket sock;
-</span></span><span style=display:flex><span>  Address addr( host, <span style=background-color:#fff0f0>&#34;http&#34;</span> );
-</span></span><span style=display:flex><span>  sock.connect( addr );
-</span></span><span style=display:flex><span>  sock.write( <span style=background-color:#fff0f0>&#34;GET &#34;</span> <span style=color:#333>+</span> path <span style=color:#333>+</span> <span style=background-color:#fff0f0>&#34; HTTP/1.1</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\r\n</span><span style=background-color:#fff0f0>&#34;</span> );
-</span></span><span style=display:flex><span>  sock.write( <span style=background-color:#fff0f0>&#34;Host: &#34;</span> <span style=color:#333>+</span> host <span style=color:#333>+</span> <span style=background-color:#fff0f0>&#34; </span><span style=color:#666;background-color:#fff0f0;font-weight:700>\r\n</span><span style=background-color:#fff0f0>&#34;</span> );
-</span></span><span style=display:flex><span>  sock.write( <span style=background-color:#fff0f0>&#34;Connection: close </span><span style=color:#666;background-color:#fff0f0;font-weight:700>\r\n\r\n</span><span style=background-color:#fff0f0>&#34;</span> );
-</span></span><span style=display:flex><span>  string buf;
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>do</span> {
-</span></span><span style=display:flex><span>    sock.read( buf );
-</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> ( buf.empty() ) {
-</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>    } <span style=color:#080;font-weight:700>else</span> {
-</span></span><span style=display:flex><span>      cout <span style=color:#333>&lt;&lt;</span> buf;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>  } <span style=color:#080;font-weight:700>while</span> ( <span style=color:#00d;font-weight:700>1</span> );
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>Test Results</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check_webget
-</span></span><span style=display:flex><span>Test project /home/zhytou/minnow/build
-</span></span><span style=display:flex><span>    Start 1: compile with bug-checkers
-</span></span><span style=display:flex><span>1/2 Test <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.17 sec</span>
-</span></span><span style=display:flex><span>    Start 2: t_webget
-</span></span><span style=display:flex><span>2/2 Test <span style=color:#888>#2: t_webget .........................   Passed    1.21 sec</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>2</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>   1.38 sec
-</span></span><span style=display:flex><span>Built target check_webget
-</span></span></code></pre></div><h3 id=an-in-memory-reliable-byte-stream>An in-memory reliable byte stream</h3><p>这个部分要求我们在<code>src/byte_stream.hh</code>和<code>src/byte_stream.cc</code>文件中，完成<code>ByteStream</code>以及其派生类接口，实现可以读写的字节流。</p><p><strong>ByteStream Data Structure</strong>：</p><p>我一开始想到使用队列作为底层数据结构来实现这个类，但后面考虑到其派生类<code>Reader</code>中的<code>peek</code>接口要求返回string_view类型，于是便使用字符串作为底层结构实现。</p><p>因为，如果使用队列作为实际存储数据的结构，在实现<code>peek</code>时必然会使用一个临时字符串存储队列中数据，并使用这个字符串构造<code>string_view</code>返回。这样一定会报错，因为<code>string_view</code>只是一种只读的字符串视图，它并没有这段内存的所有权，所以在返回后临时字符串被销毁，那么就会有<code>string_view</code>悬空引用和访问无效内存的问题。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>ByteStream</span>
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>protected</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>uint64_t</span> capacity_;
-</span></span><span style=display:flex><span>  std<span style=color:#333>::</span>string buffer_;
-</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>bool</span> is_closed_;
-</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>bool</span> has_error_;
-</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>uint64_t</span> bytes_pushed_;
-</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>uint64_t</span> bytes_popped_;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// ...
-</span></span></span><span style=display:flex><span><span style=color:#888></span>};
-</span></span></code></pre></div><p><strong>Test Results</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check0
-</span></span><span style=display:flex><span>Test project /home/zhytou/minnow/build
-</span></span><span style=display:flex><span>      Start  1: compile with bug-checkers
-</span></span><span style=display:flex><span> 1/10 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.17 sec</span>
-</span></span><span style=display:flex><span>      Start  2: t_webget
-</span></span><span style=display:flex><span> 2/10 Test  <span style=color:#888>#2: t_webget .........................   Passed    1.21 sec</span>
-</span></span><span style=display:flex><span>      Start  3: byte_stream_basics
-</span></span><span style=display:flex><span> 3/10 Test  <span style=color:#888>#3: byte_stream_basics ...............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  4: byte_stream_capacity
-</span></span><span style=display:flex><span> 4/10 Test  <span style=color:#888>#4: byte_stream_capacity .............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  5: byte_stream_one_write
-</span></span><span style=display:flex><span> 5/10 Test  <span style=color:#888>#5: byte_stream_one_write ............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  6: byte_stream_two_writes
-</span></span><span style=display:flex><span> 6/10 Test  <span style=color:#888>#6: byte_stream_two_writes ...........   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  7: byte_stream_many_writes
-</span></span><span style=display:flex><span> 7/10 Test  <span style=color:#888>#7: byte_stream_many_writes ..........   Passed    0.03 sec</span>
-</span></span><span style=display:flex><span>      Start  8: byte_stream_stress_test
-</span></span><span style=display:flex><span> 8/10 Test  <span style=color:#888>#8: byte_stream_stress_test ..........   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 37: compile with optimization
-</span></span><span style=display:flex><span> 9/10 Test <span style=color:#888>#37: compile with optimization ........   Passed    3.98 sec</span>
-</span></span><span style=display:flex><span>      Start 38: byte_stream_speed_test
-</span></span><span style=display:flex><span>             ByteStream throughput: 6.56 Gbit/s
-</span></span><span style=display:flex><span>10/10 Test <span style=color:#888>#38: byte_stream_speed_test ...........   Passed    0.07 sec</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>10</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>   5.49 sec
-</span></span><span style=display:flex><span>Built target check0
-</span></span></code></pre></div><h2 id=1-stitching-substrings-into-a-byte-stream>1 Stitching Substrings Into A Byte Stream</h2><p>lab1要求实现一个名为<code>Reassembler</code>的整合器类。它能够将乱序传入且可能重叠的字符串排序并输出到给定的字节流中，其结构如下图：</p><p><figure><img src=https://zhytou.github.io/post/2023-8-4/reassembler.png alt=整合器></figure></p><p>其中，最重要的一点是<code>ByteStream</code>中未读取的部分加上<code>Reassembler</code>中无序的部分大小不能超过整个capacity。</p><p><strong>Reassembler Data Structure</strong>：</p><p><code>Reassembler</code>中最关键的一点就是如何临时存储可能重叠的字符串。我选择的是使用<code>map&lt;uint64_t, char></code>来存储，有一点滑动窗口的思想。可能更常规的做法是用<code>map&lt;uint64_t, string></code>来存储，但我考虑到重叠的字符串可能会导致维护这个字典的逻辑变得比较复杂，索性直接使用索引到字符的映射，让维护的逻辑变得非常简单。但这样做会导致效率严重下降（test13有可能超时）。<code>Reassembler</code>的定义如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>Reassembler</span>
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>private</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// Bytes stored temorarily in ther Reassembler whose indexes are in the available capacity
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>map<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint64_t</span>, <span style=color:#339;font-weight:700>char</span><span style=color:#333>&gt;</span> sliding_window_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// The index of next byte expected to write in the outbounded stream
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> expected_index_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// The index of last byte expected to write in the outbounded stream
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> expected_last_index_;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// ...
-</span></span></span><span style=display:flex><span><span style=color:#888></span>};
-</span></span></code></pre></div><p><strong>Putting Substrings In Sequence</strong>：</p><p>按前面的思路，<code>Reassembler::insert</code>函数的框架就应该包括：</p><ul><li>处理传入的字符串<ul><li>紧随expected_index_的直接写入输出字节流</li><li>超出容量的直接丢弃</li><li>其余的存入sliding_window_</li></ul></li><li>检测暂存的字符串是否能够写入</li><li>判断整合是否结束</li></ul><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>void</span> Reassembler<span style=color:#333>::</span>insert( <span style=color:#339;font-weight:700>uint64_t</span> first_index, string data, <span style=color:#339;font-weight:700>bool</span> is_last_substring, Writer<span style=color:#333>&amp;</span> output )
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> ( first_index <span style=color:#333>&lt;=</span> expected_index_ <span style=color:#333>&amp;&amp;</span> first_index <span style=color:#333>+</span> data.size() <span style=color:#333>&gt;</span> expected_index_ ) {
-</span></span><span style=display:flex><span>    <span style=color:#888>// if the part of substr lies just behind the expected index, push it to the output
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#888>// be careful to update the expected index with the actual written size
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  } <span style=color:#080;font-weight:700>else</span> <span style=color:#06b;font-weight:700>if</span> ( first_index <span style=color:#333>+</span> data.size() <span style=color:#333>&gt;</span> expected_index_
-</span></span><span style=display:flex><span>              <span style=color:#333>&amp;&amp;</span> first_index <span style=color:#333>&lt;</span> expected_index_ <span style=color:#333>+</span> output.available_capacity() ) {
-</span></span><span style=display:flex><span>    <span style=color:#888>// if part of the substr lies in the availabe capacity, add it to the sliding window
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#888>// be careful that the size of sliding window cannot exceed the available capacity of output stream
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>for</span> ( <span style=color:#339;font-weight:700>uint64_t</span> i <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>; i <span style=color:#333>&lt;</span> data.size() <span style=color:#333>&amp;&amp;</span> first_index <span style=color:#333>+</span> i <span style=color:#333>&lt;</span> expected_index_ <span style=color:#333>+</span> output.available_capacity();
-</span></span><span style=display:flex><span>          i<span style=color:#333>++</span> ) {
-</span></span><span style=display:flex><span>      <span style=color:#888>// ...
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    }
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// erase elements which are already written and check if there are any elements which can be written
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  string old_data;
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>for</span> ( <span style=color:#080;font-weight:700>auto</span> itr <span style=color:#333>=</span> sliding_window_.begin();
-</span></span><span style=display:flex><span>        itr <span style=color:#333>!=</span> sliding_window_.end() <span style=color:#333>&amp;&amp;</span> itr<span style=color:#333>-&gt;</span>first <span style=color:#333>&lt;=</span> expected_index_ <span style=color:#333>+</span> old_data.size();
-</span></span><span style=display:flex><span>        itr <span style=color:#333>=</span> sliding_window_.erase( itr ) ) {
-</span></span><span style=display:flex><span>    <span style=color:#888>// ...
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// set the expected last index if the substr is the last one
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( is_last_substring ) {
-</span></span><span style=display:flex><span>    expected_last_index_ <span style=color:#333>=</span> first_index <span style=color:#333>+</span> data.size();
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  <span style=color:#888>// when the last expected byte is inserted and the sliding window is empty, close the output
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( expected_index_ <span style=color:#333>==</span> expected_last_index_ <span style=color:#333>&amp;&amp;</span> sliding_window_.empty() ) {
-</span></span><span style=display:flex><span>    output.close();
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>Test Results</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check1
-</span></span><span style=display:flex><span>Test project /home/zhytou/minnow/build
-</span></span><span style=display:flex><span>      Start  1: compile with bug-checkers
-</span></span><span style=display:flex><span> 1/17 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.22 sec</span>
-</span></span><span style=display:flex><span>      Start  3: byte_stream_basics
-</span></span><span style=display:flex><span> 2/17 Test  <span style=color:#888>#3: byte_stream_basics ...............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  4: byte_stream_capacity
-</span></span><span style=display:flex><span> 3/17 Test  <span style=color:#888>#4: byte_stream_capacity .............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  5: byte_stream_one_write
-</span></span><span style=display:flex><span> 4/17 Test  <span style=color:#888>#5: byte_stream_one_write ............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  6: byte_stream_two_writes
-</span></span><span style=display:flex><span> 5/17 Test  <span style=color:#888>#6: byte_stream_two_writes ...........   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  7: byte_stream_many_writes
-</span></span><span style=display:flex><span> 6/17 Test  <span style=color:#888>#7: byte_stream_many_writes ..........   Passed    0.03 sec</span>
-</span></span><span style=display:flex><span>      Start  8: byte_stream_stress_test
-</span></span><span style=display:flex><span> 7/17 Test  <span style=color:#888>#8: byte_stream_stress_test ..........   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  9: reassembler_single
-</span></span><span style=display:flex><span> 8/17 Test  <span style=color:#888>#9: reassembler_single ...............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 10: reassembler_cap
-</span></span><span style=display:flex><span> 9/17 Test <span style=color:#888>#10: reassembler_cap ..................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 11: reassembler_seq
-</span></span><span style=display:flex><span>10/17 Test <span style=color:#888>#11: reassembler_seq ..................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 12: reassembler_dup
-</span></span><span style=display:flex><span>11/17 Test <span style=color:#888>#12: reassembler_dup ..................   Passed    0.02 sec</span>
-</span></span><span style=display:flex><span>      Start 13: reassembler_holes
-</span></span><span style=display:flex><span>12/17 Test <span style=color:#888>#13: reassembler_holes ................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 14: reassembler_overlapping
-</span></span><span style=display:flex><span>13/17 Test <span style=color:#888>#14: reassembler_overlapping ..........   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 15: reassembler_win
-</span></span><span style=display:flex><span>14/17 Test <span style=color:#888>#15: reassembler_win ..................   Passed    5.64 sec</span>
-</span></span><span style=display:flex><span>      Start 37: compile with optimization
-</span></span><span style=display:flex><span>15/17 Test <span style=color:#888>#37: compile with optimization ........   Passed    0.08 sec</span>
-</span></span><span style=display:flex><span>      Start 38: byte_stream_speed_test
-</span></span><span style=display:flex><span>             ByteStream throughput: 6.30 Gbit/s
-</span></span><span style=display:flex><span>16/17 Test <span style=color:#888>#38: byte_stream_speed_test ...........   Passed    0.07 sec</span>
-</span></span><span style=display:flex><span>      Start 39: reassembler_speed_test
-</span></span><span style=display:flex><span>             Reassembler throughput: 14.16 Gbit/s
-</span></span><span style=display:flex><span>17/17 Test <span style=color:#888>#39: reassembler_speed_test ...........   Passed    0.11 sec</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>17</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>   6.26 sec
-</span></span><span style=display:flex><span>Built target check1
-</span></span></code></pre></div><h2 id=2-the-tcp-receiver>2 The TCP Receiver</h2><p><strong>Translating Between 64-bit Indexes And 32-bit Seqnos</strong>：</p><p>在TCP报文中只能够提供一个32位的区域用于存储报文序号。当报文序号超过这个范围时，序号字段将循环回零重新计数。换句话说，TCP报文中的序号只是一个相对序号。</p><p>在实际通信中，发送者会随机初始化一个32位的起始报文序号（Initial Sequence Number，ISN），并告知接收者。此时，接收者就可以通过将报文中的相对序号（Sequence Number，seqno）与起始序号相加的方式获取实际的绝对序号（Absolute Sequence Number）。这三者的关系如下：</p><p><figure><img src=https://zhytou.github.io/post/2023-8-4/seqno.png alt=报文序号></figure></p><p>lab2在第一部分中，假设报文的绝对序号不会超过64位数表示范围，并要求实现一个用于32位数和64位数转换的一个<code>Wrap32</code>类。</p><p>这部分个人认为比较简单，对于<code>wrap</code>函数来说，直接将64位数截断就好了；对于<code>unwrap</code>函数来说，将相对序号不断加1 &#171; 32直到接近检查点就好了。不过要注意一些特殊情况，比如检查点特别小等。</p><p><strong>Receiving Bytes</strong>：</p><p>lab2第二部分要求实现<code>TCPReceiver</code>类，完成其中<code>receive</code>和<code>send</code>接口。我觉得其中最大的难点就是维护下一次希望发送的序号。尤其是要针对一些边界情况，比如，收到多个SYN或收到FIN但不能关闭等等。</p><p>因此，我在<code>TCPReceiver</code>类中添加了<code>ack_seqno_</code>用于记录下一次希望发送的序号（如果使用<code>inbound_stream.bytes_pushed()</code>，则面对SYN未发送或第一次发送的逻辑会比较复杂）、<code>is_connected_</code>用于记录是否开启连接（避免重复SYN）以及<code>isn_</code>记录第一个报文序号。具体如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>TCPReceiver</span>
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>private</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// The flag indicating whether the receiver is connected
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>bool</span> is_connected_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// The next sequence number expected from the sender
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> ack_seqno_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// The initial sequence number of the sender
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  Wrap32 isn_;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span>   <span style=color:#888>// ...
-</span></span></span><span style=display:flex><span><span style=color:#888></span>};
-</span></span></code></pre></div><p>有了<code>ack_seqno_</code>记录的下一次希望发送的序号，<code>send</code>函数就非常简单了，只需要将其放入<code>Wrap32</code>中返回即可。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span>TCPReceiverMessage TCPReceiver<span style=color:#333>::</span>send( <span style=color:#080;font-weight:700>const</span> Writer<span style=color:#333>&amp;</span> inbound_stream ) <span style=color:#080;font-weight:700>const</span>
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  TCPReceiverMessage message;
-</span></span><span style=display:flex><span>  <span style=color:#888>// get the window size
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( inbound_stream.available_capacity() <span style=color:#333>&gt;</span> UINT16_MAX ) {
-</span></span><span style=display:flex><span>    message.window_size <span style=color:#333>=</span> UINT16_MAX;
-</span></span><span style=display:flex><span>  } <span style=color:#080;font-weight:700>else</span> {
-</span></span><span style=display:flex><span>    message.window_size <span style=color:#333>=</span> inbound_stream.available_capacity();
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  <span style=color:#888>// get the ackno, only if receiver is connected
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( is_connected_ ) {
-</span></span><span style=display:flex><span>    message.ackno <span style=color:#333>=</span> Wrap32<span style=color:#333>::</span>wrap( ack_seqno_, isn_ );
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span> message;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p>至于<code>receive</code>函数，它要考虑的就多一些了，主要还是一些特殊情况，其框架如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>void</span> TCPReceiver<span style=color:#333>::</span>receive( TCPSenderMessage message, Reassembler<span style=color:#333>&amp;</span> reassembler, Writer<span style=color:#333>&amp;</span> inbound_stream )
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> ( message.SYN ) {
-</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> ( is_connected_ ) {
-</span></span><span style=display:flex><span>      <span style=color:#888>// avoid duplicate connections
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#080;font-weight:700>return</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    <span style=color:#888>// beginning of the byte stream
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    is_connected_ <span style=color:#333>=</span> <span style=color:#007020>true</span>;
-</span></span><span style=display:flex><span>    <span style=color:#888>// keep track of initial sequence number
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    isn_ <span style=color:#333>=</span> message.seqno;
-</span></span><span style=display:flex><span>    <span style=color:#888>// ack seqno must be at least 1, because receiving SYN
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    ack_seqno_ <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// transmission doesn&#39;t begin, do nothing
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( is_connected_ <span style=color:#333>==</span> <span style=color:#007020>false</span> ) {
-</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>return</span>;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// convert relative seqno to absolute seqno, checkpoint is the bytes written to the stream
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> absolute_seqno <span style=color:#333>=</span> message.seqno.unwrap( isn_, inbound_stream.bytes_pushed() );
-</span></span><span style=display:flex><span>  <span style=color:#888>// extract the data from the tcp payload, be careful to use Buffer::release()
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  string <span style=color:#06b;font-weight:700>data</span>( message.payload );
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// absolute seqno begin at 0 when SYN comes, so the actual starting index of data has to minus 1
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( absolute_seqno <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
-</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> ( <span style=color:#333>!</span>message.SYN ) {
-</span></span><span style=display:flex><span>      <span style=color:#888>// avoid invalid absolute seqno which equals to 0 but not SYN
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#080;font-weight:700>return</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    reassembler.insert( <span style=color:#00d;font-weight:700>0</span>, data, message.FIN, inbound_stream );
-</span></span><span style=display:flex><span>  } <span style=color:#080;font-weight:700>else</span> {
-</span></span><span style=display:flex><span>    reassembler.insert( absolute_seqno <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>1</span>, data, message.FIN, inbound_stream );
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// update ack seqno
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#888>// ack seqno is the next expected byte, because SYN has to occupy 0
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( reassembler.index_expected() <span style=color:#333>&gt;</span> <span style=color:#00d;font-weight:700>0</span> ) {
-</span></span><span style=display:flex><span>    ack_seqno_ <span style=color:#333>=</span> reassembler.index_expected() <span style=color:#333>+</span> <span style=color:#00d;font-weight:700>1</span>;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  <span style=color:#888>// if the last byte is received, ack seqno should be added by 1 because FIN is not counted
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( reassembler.last_index_expected() <span style=color:#333>==</span> reassembler.index_expected() ) {
-</span></span><span style=display:flex><span>    ack_seqno_ <span style=color:#333>+=</span> <span style=color:#00d;font-weight:700>1</span>;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>Test Results</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check2
-</span></span><span style=display:flex><span>Test project /home/zhytou/minnow/build
-</span></span><span style=display:flex><span>      Start  1: compile with bug-checkers
-</span></span><span style=display:flex><span> 1/29 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.21 sec</span>
-</span></span><span style=display:flex><span>      Start  3: byte_stream_basics
-</span></span><span style=display:flex><span> 2/29 Test  <span style=color:#888>#3: byte_stream_basics ...............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  4: byte_stream_capacity
-</span></span><span style=display:flex><span> 3/29 Test  <span style=color:#888>#4: byte_stream_capacity .............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  5: byte_stream_one_write
-</span></span><span style=display:flex><span> 4/29 Test  <span style=color:#888>#5: byte_stream_one_write ............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  6: byte_stream_two_writes
-</span></span><span style=display:flex><span> 5/29 Test  <span style=color:#888>#6: byte_stream_two_writes ...........   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  7: byte_stream_many_writes
-</span></span><span style=display:flex><span> 6/29 Test  <span style=color:#888>#7: byte_stream_many_writes ..........   Passed    0.03 sec</span>
-</span></span><span style=display:flex><span>      Start  8: byte_stream_stress_test
-</span></span><span style=display:flex><span> 7/29 Test  <span style=color:#888>#8: byte_stream_stress_test ..........   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  9: reassembler_single
-</span></span><span style=display:flex><span> 8/29 Test  <span style=color:#888>#9: reassembler_single ...............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 10: reassembler_cap
-</span></span><span style=display:flex><span> 9/29 Test <span style=color:#888>#10: reassembler_cap ..................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 11: reassembler_seq
-</span></span><span style=display:flex><span>10/29 Test <span style=color:#888>#11: reassembler_seq ..................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 12: reassembler_dup
-</span></span><span style=display:flex><span>11/29 Test <span style=color:#888>#12: reassembler_dup ..................   Passed    0.02 sec</span>
-</span></span><span style=display:flex><span>      Start 13: reassembler_holes
-</span></span><span style=display:flex><span>12/29 Test <span style=color:#888>#13: reassembler_holes ................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 14: reassembler_overlapping
-</span></span><span style=display:flex><span>13/29 Test <span style=color:#888>#14: reassembler_overlapping ..........   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 15: reassembler_win
-</span></span><span style=display:flex><span>14/29 Test <span style=color:#888>#15: reassembler_win ..................   Passed    5.89 sec</span>
-</span></span><span style=display:flex><span>      Start 16: wrapping_integers_cmp
-</span></span><span style=display:flex><span>15/29 Test <span style=color:#888>#16: wrapping_integers_cmp ............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 17: wrapping_integers_wrap
-</span></span><span style=display:flex><span>16/29 Test <span style=color:#888>#17: wrapping_integers_wrap ...........   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 18: wrapping_integers_unwrap
-</span></span><span style=display:flex><span>17/29 Test <span style=color:#888>#18: wrapping_integers_unwrap .........   Passed    0.00 sec</span>
-</span></span><span style=display:flex><span>      Start 19: wrapping_integers_roundtrip
-</span></span><span style=display:flex><span>18/29 Test <span style=color:#888>#19: wrapping_integers_roundtrip ......   Passed    0.29 sec</span>
-</span></span><span style=display:flex><span>      Start 20: wrapping_integers_extra
-</span></span><span style=display:flex><span>19/29 Test <span style=color:#888>#20: wrapping_integers_extra ..........   Passed    0.05 sec</span>
-</span></span><span style=display:flex><span>      Start 21: recv_connect
-</span></span><span style=display:flex><span>20/29 Test <span style=color:#888>#21: recv_connect .....................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 22: recv_transmit
-</span></span><span style=display:flex><span>21/29 Test <span style=color:#888>#22: recv_transmit ....................   Passed    0.17 sec</span>
-</span></span><span style=display:flex><span>      Start 23: recv_window
-</span></span><span style=display:flex><span>22/29 Test <span style=color:#888>#23: recv_window ......................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 24: recv_reorder
-</span></span><span style=display:flex><span>23/29 Test <span style=color:#888>#24: recv_reorder .....................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 25: recv_reorder_more
-</span></span><span style=display:flex><span>24/29 Test <span style=color:#888>#25: recv_reorder_more ................   Passed    9.54 sec</span>
-</span></span><span style=display:flex><span>      Start 26: recv_close
-</span></span><span style=display:flex><span>25/29 Test <span style=color:#888>#26: recv_close .......................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 27: recv_special
-</span></span><span style=display:flex><span>26/29 Test <span style=color:#888>#27: recv_special .....................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 37: compile with optimization
-</span></span><span style=display:flex><span>27/29 Test <span style=color:#888>#37: compile with optimization ........   Passed    0.07 sec</span>
-</span></span><span style=display:flex><span>      Start 38: byte_stream_speed_test
-</span></span><span style=display:flex><span>             ByteStream throughput: 6.51 Gbit/s
-</span></span><span style=display:flex><span>28/29 Test <span style=color:#888>#38: byte_stream_speed_test ...........   Passed    0.07 sec</span>
-</span></span><span style=display:flex><span>      Start 39: reassembler_speed_test
-</span></span><span style=display:flex><span>             Reassembler throughput: 16.55 Gbit/s
-</span></span><span style=display:flex><span>29/29 Test <span style=color:#888>#39: reassembler_speed_test ...........   Passed    0.10 sec</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>29</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>  16.62 sec
-</span></span><span style=display:flex><span>Built target check2
-</span></span></code></pre></div><h2 id=3-the-tcp-sender>3 The TCP Sender</h2><p>lab3要求实现一个名为<code>TCPSender</code>的类，尽可能的向接收者发送字节，并通过超时重传保证可靠性。</p><p><strong>Sending Bytes</strong>：</p><p>关于发送数据必须要说明的是，在lab3中，发送包是通过测试者调用<code>TCPSender::maybe_send</code>函数，而非发送者主动发送。换句话说，只需要将需要发送的包存储在一个队列，每次调用<code>TCPSender::maybe_send</code>时，弹出队首的包即可。</p><p><strong>Recording Time</strong>：</p><p>此外，lab3中也不允许使用其他计时器记录时间，而是依靠<code>TCPSender::tick</code>函数，由测试者告诉发送者已经过去的时间长短。因此，<code>TCPSender</code>只需要使用一个变量存储传入的时间即可。</p><p><strong>Keep Track Of Outstanding Segments and Resend Them After RTO</strong>：</p><p>TCP是一种面向流的可靠协议。为了保证其可靠传输，设计者在TCP中添加了许多机制，比如：校验和、滑动窗口和超时重传等等。lab3要求追踪未承认段（Outstanding Segments），并在超出重传时间（Retrasmission Timeout，RTO）后将RTO翻倍后，再次发送。因此，<code>TCPSender</code>需要一个记录未承认段的表以及一个记录当前重传时间的变量。</p><p><strong>TCPSender Data Structure</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>TCPSender</span>
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  <span style=color:#888>// initial SYN sequence number.
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  Wrap32 isn_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// initial RTO. It stays the same all the time
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> initial_RTO_ms_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// current RTO. When retransmission fails, double it
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> RTO_ms_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// retransmission timer which records how long it has been since last retransmission happened.
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> timer_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// consecutive retransmission times.
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> crt_times_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// receiver&#39;s acknowledged absolute sequence number.
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> ackno_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// receiver&#39;s window size.
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> wind_size_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// sender&#39;s absolute sequence number
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> seqno_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// segments which are waiting to be sent.
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>queue<span style=color:#333>&lt;</span>TCPSenderMessage<span style=color:#333>&gt;</span> segments_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// sender&#39;s sliding window shows all segments which haven&#39;t been acknowledged yet.
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>map<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint64_t</span>, TCPSenderMessage<span style=color:#333>&gt;</span> outstanding_segments_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// sender&#39;s working mode
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>bool</span> running_;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// ...
-</span></span></span><span style=display:flex><span><span style=color:#888></span>};
-</span></span></code></pre></div><p><strong>Push Bytes To Outbound Stream</strong>：</p><p>在完成了<code>TCPSender</code>的数据结构之后，就需要实现其最核心的接口，也就是发送数据的<code>TCPSender::push</code>函数。其实，这个函数的核心就是根据收到接收者的<code>ackno_</code>和<code>wind_size</code>来构造发送请求，并将这个包放入<code>segments_</code>和<code>outstanding_segments_</code>。只不过，它还需要考虑一些边界情况，包括：</p><ul><li>对于非发送者初始化而是接收者明确指出的<code>wind_size</code>为0时，将<code>wind_size</code>当作1。</li><li>何时将FIN置为真？仅当输出流结束，且接收者滑动窗口还有空间才写入（因为FIN要占序号）。</li></ul><p>总的来说，其大致流程如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>void</span> TCPSender<span style=color:#333>::</span>push( Reader<span style=color:#333>&amp;</span> outbound_stream )
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>while</span> ( ( ( wind_size_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> <span style=color:#333>&amp;&amp;</span> seqno_ <span style=color:#333>==</span> ackno_ ) <span style=color:#333>||</span> seqno_ <span style=color:#333>&lt;</span> ackno_ <span style=color:#333>+</span> wind_size_ ) <span style=color:#333>&amp;&amp;</span> running_ ) {
-</span></span><span style=display:flex><span>    <span style=color:#888>// construct sender message
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    TCPSenderMessage msg;
-</span></span><span style=display:flex><span>    string data;
-</span></span><span style=display:flex><span>    <span style=color:#339;font-weight:700>uint64_t</span> data_len <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> ( seqno_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
-</span></span><span style=display:flex><span>      <span style=color:#888>// SYN
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      msg.SYN <span style=color:#333>=</span> <span style=color:#007020>true</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    msg.seqno <span style=color:#333>=</span> Wrap32<span style=color:#333>::</span>wrap( seqno_, isn_ );
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#888>// use [ackno_, ackno_ + wind_size_) to calculate data_len
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( ackno_ <span style=color:#333>+</span> wind_size_ <span style=color:#333>&gt;</span> seqno_ ) {
-</span></span><span style=display:flex><span>      <span style=color:#888>// the actual length of seqno for payload has to minus 1, if SYN = true
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      data_len <span style=color:#333>=</span> ackno_ <span style=color:#333>+</span> wind_size_ <span style=color:#333>-</span> seqno_ <span style=color:#333>-</span> msg.SYN;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    <span style=color:#888>// make sure data len is in this range [1, MAX_PAYLOAD_SIZE), even if the receiver&#39;s window size is 0
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    data_len <span style=color:#333>=</span> max( <span style=color:#00d;font-weight:700>1UL</span>, min( data_len, TCPConfig<span style=color:#333>::</span>MAX_PAYLOAD_SIZE ) );
-</span></span><span style=display:flex><span>    read( outbound_stream, data_len, data );
-</span></span><span style=display:flex><span>    msg.payload <span style=color:#333>=</span> Buffer( std<span style=color:#333>::</span>move( data ) );
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#888>// if stream is finished and there is also space in receiver&#39;s window, set the FIN flag
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#888>// or if stream is finished and the window size is 0 and the data is empty and SYN flag is false, set the FIN
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#888>// flag otherwise put FIN in another separate message
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( outbound_stream.is_finished()
-</span></span><span style=display:flex><span>         <span style=color:#333>&amp;&amp;</span> ( seqno_ <span style=color:#333>+</span> msg.sequence_length() <span style=color:#333>&lt;</span> ackno_ <span style=color:#333>+</span> wind_size_
-</span></span><span style=display:flex><span>              <span style=color:#333>||</span> ( wind_size_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> <span style=color:#333>&amp;&amp;</span> msg.sequence_length() <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) ) ) {
-</span></span><span style=display:flex><span>      <span style=color:#888>// FIN
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      msg.FIN <span style=color:#333>=</span> <span style=color:#007020>true</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#888>// quit sending if msg is empty
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( msg.sequence_length() <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
-</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>return</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#888>// add it to the waiting queue. When maybe_send() is called, sender will send the first segment in the queue.
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    segments_.push( msg );
-</span></span><span style=display:flex><span>    <span style=color:#888>// keep track of the segment
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    outstanding_segments_.emplace( seqno_, msg );
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#888>// update sender&#39;s seqno
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    seqno_ <span style=color:#333>+=</span> msg.sequence_length();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#888>// only allow to send 1 byte by pretending window size equals to 1, when the actual size is 0
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( wind_size_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
-</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#888>// no more segments
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( msg.FIN ) {
-</span></span><span style=display:flex><span>      running_ <span style=color:#333>=</span> <span style=color:#007020>false</span>;
-</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>Receive ACK Message</strong>：</p><p>完成发送接口之后，就需要实现接收接口了。事实上，<code>TCPSender::receive</code>与<code>TCPSender::push</code>重要性相同。因为它决定了<code>ackno_</code>和<code>wind_size</code>的更新，并且还囊括了超时重发的逻辑。其核心功能包括：</p><ul><li>更新<code>ackno_</code>和<code>wind_size</code>；</li><li>更新<code>outstanding_segments_</code>；</li><li>如果发送了重发，将<code>RTO_ms_</code>翻倍，并更新<code>crt_times_</code>；</li><li>反之，则重置<code>RTO_ms_</code>、<code>crt_times_</code>以及<code>timer_</code>。</li></ul><p>总之，我的实现如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>void</span> TCPSender<span style=color:#333>::</span>receive( <span style=color:#080;font-weight:700>const</span> TCPReceiverMessage<span style=color:#333>&amp;</span> msg )
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>uint64_t</span> new_ackno <span style=color:#333>=</span> ackno_;
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> ( msg.ackno.has_value() ) {
-</span></span><span style=display:flex><span>    <span style=color:#888>// extract receiver&#39;s ackno
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    new_ackno <span style=color:#333>=</span> msg.ackno.value().unwrap( isn_, ackno_ );
-</span></span><span style=display:flex><span>    <span style=color:#888>// avoid invalid ackno which is smaller
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( ackno_ <span style=color:#333>&gt;</span> new_ackno ) {
-</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>return</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  <span style=color:#888>// set receiver&#39;s window size, even if new_ackno equals to ackno
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  wind_size_ <span style=color:#333>=</span> msg.window_size;
-</span></span><span style=display:flex><span>  <span style=color:#888>// update outstanding segments, remove those acknowledged by receiver
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#339;font-weight:700>bool</span> reset_flag <span style=color:#333>=</span> <span style=color:#007020>false</span>;
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>for</span> ( <span style=color:#080;font-weight:700>auto</span> itr <span style=color:#333>=</span> outstanding_segments_.begin(); itr <span style=color:#333>!=</span> outstanding_segments_.end(); itr<span style=color:#333>++</span> ) {
-</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>if</span> ( itr<span style=color:#333>-&gt;</span>first <span style=color:#333>+</span> itr<span style=color:#333>-&gt;</span>second.sequence_length() <span style=color:#333>==</span> new_ackno ) {
-</span></span><span style=display:flex><span>      reset_flag <span style=color:#333>=</span> <span style=color:#007020>true</span>;
-</span></span><span style=display:flex><span>      outstanding_segments_.erase( outstanding_segments_.begin(), <span style=color:#333>++</span>itr );
-</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  <span style=color:#888>// make sure the new ackno is valid
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( <span style=color:#333>!</span>reset_flag ) {
-</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>return</span>;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  <span style=color:#888>// update ackno
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  ackno_ <span style=color:#333>=</span> new_ackno;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// the test system will call push again to send the rest bytes after calling receive
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#888>// treat a 0 window size as equal to 1 but don&#39;t back off RTO
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( wind_size_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
-</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>return</span>;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// reset RTO
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  RTO_ms_ <span style=color:#333>=</span> initial_RTO_ms_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// reset retransmission timer
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  timer_ <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
-</span></span><span style=display:flex><span>  <span style=color:#888>// reset times of consecutive retransmissions
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  crt_times_ <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>Test Results</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check3
-</span></span><span style=display:flex><span>Test project /home/zhytou/minnow/build
-</span></span><span style=display:flex><span>      Start  1: compile with bug-checkers
-</span></span><span style=display:flex><span> 1/36 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.18 sec</span>
-</span></span><span style=display:flex><span>      Start  3: byte_stream_basics
-</span></span><span style=display:flex><span> 2/36 Test  <span style=color:#888>#3: byte_stream_basics ...............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  4: byte_stream_capacity
-</span></span><span style=display:flex><span> 3/36 Test  <span style=color:#888>#4: byte_stream_capacity .............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  5: byte_stream_one_write
-</span></span><span style=display:flex><span> 4/36 Test  <span style=color:#888>#5: byte_stream_one_write ............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  6: byte_stream_two_writes
-</span></span><span style=display:flex><span> 5/36 Test  <span style=color:#888>#6: byte_stream_two_writes ...........   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  7: byte_stream_many_writes
-</span></span><span style=display:flex><span> 6/36 Test  <span style=color:#888>#7: byte_stream_many_writes ..........   Passed    0.03 sec</span>
-</span></span><span style=display:flex><span>      Start  8: byte_stream_stress_test
-</span></span><span style=display:flex><span> 7/36 Test  <span style=color:#888>#8: byte_stream_stress_test ..........   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start  9: reassembler_single
-</span></span><span style=display:flex><span> 8/36 Test  <span style=color:#888>#9: reassembler_single ...............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 10: reassembler_cap
-</span></span><span style=display:flex><span> 9/36 Test <span style=color:#888>#10: reassembler_cap ..................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 11: reassembler_seq
-</span></span><span style=display:flex><span>10/36 Test <span style=color:#888>#11: reassembler_seq ..................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 12: reassembler_dup
-</span></span><span style=display:flex><span>11/36 Test <span style=color:#888>#12: reassembler_dup ..................   Passed    0.02 sec</span>
-</span></span><span style=display:flex><span>      Start 13: reassembler_holes
-</span></span><span style=display:flex><span>12/36 Test <span style=color:#888>#13: reassembler_holes ................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 14: reassembler_overlapping
-</span></span><span style=display:flex><span>13/36 Test <span style=color:#888>#14: reassembler_overlapping ..........   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 15: reassembler_win
-</span></span><span style=display:flex><span>14/36 Test <span style=color:#888>#15: reassembler_win ..................   Passed    5.61 sec</span>
-</span></span><span style=display:flex><span>      Start 16: wrapping_integers_cmp
-</span></span><span style=display:flex><span>15/36 Test <span style=color:#888>#16: wrapping_integers_cmp ............   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 17: wrapping_integers_wrap
-</span></span><span style=display:flex><span>16/36 Test <span style=color:#888>#17: wrapping_integers_wrap ...........   Passed    0.00 sec</span>
-</span></span><span style=display:flex><span>      Start 18: wrapping_integers_unwrap
-</span></span><span style=display:flex><span>17/36 Test <span style=color:#888>#18: wrapping_integers_unwrap .........   Passed    0.00 sec</span>
-</span></span><span style=display:flex><span>      Start 19: wrapping_integers_roundtrip
-</span></span><span style=display:flex><span>18/36 Test <span style=color:#888>#19: wrapping_integers_roundtrip ......   Passed    0.28 sec</span>
-</span></span><span style=display:flex><span>      Start 20: wrapping_integers_extra
-</span></span><span style=display:flex><span>19/36 Test <span style=color:#888>#20: wrapping_integers_extra ..........   Passed    0.05 sec</span>
-</span></span><span style=display:flex><span>      Start 21: recv_connect
-</span></span><span style=display:flex><span>20/36 Test <span style=color:#888>#21: recv_connect .....................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 22: recv_transmit
-</span></span><span style=display:flex><span>21/36 Test <span style=color:#888>#22: recv_transmit ....................   Passed    0.16 sec</span>
-</span></span><span style=display:flex><span>      Start 23: recv_window
-</span></span><span style=display:flex><span>22/36 Test <span style=color:#888>#23: recv_window ......................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 24: recv_reorder
-</span></span><span style=display:flex><span>23/36 Test <span style=color:#888>#24: recv_reorder .....................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 25: recv_reorder_more
-</span></span><span style=display:flex><span>24/36 Test <span style=color:#888>#25: recv_reorder_more ................   Passed    9.01 sec</span>
-</span></span><span style=display:flex><span>      Start 26: recv_close
-</span></span><span style=display:flex><span>25/36 Test <span style=color:#888>#26: recv_close .......................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 27: recv_special
-</span></span><span style=display:flex><span>26/36 Test <span style=color:#888>#27: recv_special .....................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 28: send_connect
-</span></span><span style=display:flex><span>27/36 Test <span style=color:#888>#28: send_connect .....................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 29: send_transmit
-</span></span><span style=display:flex><span>28/36 Test <span style=color:#888>#29: send_transmit ....................   Passed    0.30 sec</span>
-</span></span><span style=display:flex><span>      Start 30: send_retx
-</span></span><span style=display:flex><span>29/36 Test <span style=color:#888>#30: send_retx ........................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 31: send_window
-</span></span><span style=display:flex><span>30/36 Test <span style=color:#888>#31: send_window ......................   Passed    0.06 sec</span>
-</span></span><span style=display:flex><span>      Start 32: send_ack
-</span></span><span style=display:flex><span>31/36 Test <span style=color:#888>#32: send_ack .........................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>      Start 33: send_close
-</span></span><span style=display:flex><span>32/36 Test <span style=color:#888>#33: send_close .......................   Passed    0.02 sec</span>
-</span></span><span style=display:flex><span>      Start 34: send_extra
-</span></span><span style=display:flex><span>33/36 Test <span style=color:#888>#34: send_extra .......................   Passed    0.03 sec</span>
-</span></span><span style=display:flex><span>      Start 37: compile with optimization
-</span></span><span style=display:flex><span>34/36 Test <span style=color:#888>#37: compile with optimization ........   Passed    0.07 sec</span>
-</span></span><span style=display:flex><span>      Start 38: byte_stream_speed_test
-</span></span><span style=display:flex><span>             ByteStream throughput: 5.47 Gbit/s
-</span></span><span style=display:flex><span>35/36 Test <span style=color:#888>#38: byte_stream_speed_test ...........   Passed    0.07 sec</span>
-</span></span><span style=display:flex><span>      Start 39: reassembler_speed_test
-</span></span><span style=display:flex><span>             Reassembler throughput: 17.48 Gbit/s
-</span></span><span style=display:flex><span>36/36 Test <span style=color:#888>#39: reassembler_speed_test ...........   Passed    0.11 sec</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>36</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>  16.17 sec
-</span></span><span style=display:flex><span>Built target check3
-</span></span></code></pre></div><h2 id=4-the-network-interface>4 The Network Interface</h2><p>lab4要求实现一个名为<code>NetworkInterface</code>的类，即：链路层接口。其主要工作就是发送和接受数据帧。具体来在lab4中，其发送流程为将IP协议数据包封装为Ethernet数据帧，并根据IP地址找到对应的Ethernet接口；而接受流程则为接收Ethernet数据帧并根据帧内容回复。</p><p><strong>The Address Resolution Protocol</strong>：</p><p>由于<code>NetworkInterface</code>需要根据IP地址找到对应的Ethernet地址，这就表明它必须依靠某种机制获取未知设备的物理地址，并在内部存储该映射。</p><p>而这个根据IP地址获取MAC地址的机制被称作地址解析协议（Address Resolution Protocol，ARP）。它的原理是，设备向网络中的其他设备发送ARP请求，询问某个IP地址对应的MAC地址。收到请求的设备检查自己的ARP缓存表，如果有对应的条目，则返回已知的MAC地址；如果没有对应条目，则广播ARP请求到局域网上的所有设备。拥有被请求IP地址的设备收到请求后，会向请求设备回复一个ARP响应，包含自己的MAC地址。请求设备收到响应后，将收到的MAC地址与目标IP地址建立映射关系，并将映射结果存储在ARP缓存表中，以便后续使用。</p><p>除此之外，lab4对ARP缓存提出了有效时间限制，并且利用超时重发机制保证其可靠性。</p><p><strong>Network Interface</strong>：</p><p>在理解了ARP协议的工作原理之后，<code>NetworkInterface</code>的实现就变得比较清晰了，其结构实现如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>NetworkInterface</span>
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>private</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// Ethernet (known as hardware, network-access, or link-layer) address of the interface
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  EthernetAddress ethernet_address_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// IP (known as Internet-layer or network-layer) address of the interface
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  Address ip_address_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// ARP (Address Resolution Protocol) 30-second-valid cache recording a mapping from IP addresses to Ethernet
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  <span style=color:#888>// addresses
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>unordered_map<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint32_t</span>, std<span style=color:#333>::</span>pair<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint64_t</span>, EthernetAddress<span style=color:#333>&gt;&gt;</span> arp_cache_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// Ethernet frames ready to be sent, including ARP and IP datagrams
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>queue<span style=color:#333>&lt;</span>EthernetFrame<span style=color:#333>&gt;</span> frames_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// Ethernet frames waiting for the ARP respond
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>list<span style=color:#333>&lt;</span>std<span style=color:#333>::</span>pair<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint32_t</span>, EthernetFrame<span style=color:#333>&gt;&gt;</span> waiting_frames_;
-</span></span><span style=display:flex><span>  <span style=color:#888>// ARP timer recording how long it has been since last request was sent
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>unordered_map<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint32_t</span>, <span style=color:#339;font-weight:700>uint64_t</span><span style=color:#333>&gt;</span> arp_timer_;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// ...    
-</span></span></span><span style=display:flex><span><span style=color:#888></span>};
-</span></span></code></pre></div><p><strong>Sending Datagram</strong>：</p><p>对于发送接口来说，其工作流程应该如下：</p><ul><li>检测ARP缓存是否包含目标IP地址且有效；</li><li>若存在，则直接发送。</li><li>反之，检测该ARP请求是否近期发送过；<ul><li>若近期发送过，则直接返回，避免网络堵塞；</li><li>反之，发送ARP请求并重置ARP计时器，最后将该IP数据包暂存。</li></ul></li></ul><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>void</span> NetworkInterface<span style=color:#333>::</span>send_datagram( <span style=color:#080;font-weight:700>const</span> InternetDatagram<span style=color:#333>&amp;</span> dgram, <span style=color:#080;font-weight:700>const</span> Address<span style=color:#333>&amp;</span> next_hop )
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  <span style=color:#339;font-weight:700>uint32_t</span> next_hop_ip <span style=color:#333>=</span> next_hop.ipv4_numeric();
-</span></span><span style=display:flex><span>  <span style=color:#888>// construct Ethernet frame
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  EthernetFrame frame;
-</span></span><span style=display:flex><span>  frame.header.src <span style=color:#333>=</span> ethernet_address_;
-</span></span><span style=display:flex><span>  frame.header.type <span style=color:#333>=</span> EthernetHeader<span style=color:#333>::</span>TYPE_IPv4;
-</span></span><span style=display:flex><span>  frame.payload <span style=color:#333>=</span> serialize( dgram );
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>if</span> ( arp_cache_.find( next_hop_ip ) <span style=color:#333>==</span> arp_cache_.end()
-</span></span><span style=display:flex><span>       <span style=color:#333>||</span> arp_cache_.at( next_hop_ip ).first <span style=color:#333>&gt;=</span> ARP_CACHE_TIMEOUT ) {
-</span></span><span style=display:flex><span>    <span style=color:#888>// queue the datagram until knowning the Ethernet address
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    waiting_frames_.emplace_back( next_hop_ip, frame );
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#888>// avoid flooding the network with ARP requests
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( arp_timer_.find( next_hop_ip ) <span style=color:#333>!=</span> arp_timer_.end()
-</span></span><span style=display:flex><span>         <span style=color:#333>&amp;&amp;</span> arp_timer_.at( next_hop_ip ) <span style=color:#333>&lt;=</span> ARP_REQUEST_TIMEOUT ) {
-</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>return</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#888>// construct ARP frame
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    EthernetFrame arp_frame;
-</span></span><span style=display:flex><span>    <span style=color:#888>// ...
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    <span style=color:#888>// send the ARP request
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    frames_.emplace( arp_frame );
-</span></span><span style=display:flex><span>    <span style=color:#888>// update ARP timer
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    arp_timer_.emplace( next_hop_ip, <span style=color:#00d;font-weight:700>0</span> );
-</span></span><span style=display:flex><span>  } <span style=color:#080;font-weight:700>else</span> {
-</span></span><span style=display:flex><span>    <span style=color:#888>// send directly if destination is known
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    frame.header.dst <span style=color:#333>=</span> arp_cache_.at( next_hop_ip ).second;
-</span></span><span style=display:flex><span>    frames_.emplace( frame );
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span>;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>Receiving Frames</strong>：</p><p>对于接收接口来说，其工作流程应该如下：</p><ul><li>检测数据帧协议；</li><li>若为IP，直接解析返回。</li><li>若为ARP，则检查为ARP请求还是ARP回复；<ul><li>若为ARP请求，则更新ARP缓存，仅当存在查询地址才返回；</li><li>若为ARP回复，则更新ARP缓存，并<code>waiting_frames_</code>中已知地址的帧发送。</li></ul></li></ul><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#888>// frame: the incoming Ethernet frame
-</span></span></span><span style=display:flex><span><span style=color:#888></span>optional<span style=color:#333>&lt;</span>InternetDatagram<span style=color:#333>&gt;</span> NetworkInterface<span style=color:#333>::</span>recv_frame( <span style=color:#080;font-weight:700>const</span> EthernetFrame<span style=color:#333>&amp;</span> frame )
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  optional<span style=color:#333>&lt;</span>InternetDatagram<span style=color:#333>&gt;</span> recv_dgram <span style=color:#333>=</span> nullopt;
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>switch</span> ( frame.header.type ) {
-</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>case</span> EthernetHeader<span style=color:#333>::</span><span style=color:#970;font-weight:700>TYPE_IPv4</span>: {
-</span></span><span style=display:flex><span>      <span style=color:#888>// parse the recv datagram
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#888>// ... 
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      recv_dgram <span style=color:#333>=</span> dgram;
-</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>case</span> EthernetHeader<span style=color:#333>::</span><span style=color:#970;font-weight:700>TYPE_ARP</span>: {
-</span></span><span style=display:flex><span>      <span style=color:#888>// costruct ARP message
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      ARPMessage arp_msg;
-</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>if</span> ( <span style=color:#333>!</span>parse( arp_msg, frame.payload ) ) {
-</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>      }
-</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>switch</span> ( arp_msg.opcode ) {
-</span></span><span style=display:flex><span>        <span style=color:#888>// reply ARP request and update ARP cache
-</span></span></span><span style=display:flex><span><span style=color:#888></span>        <span style=color:#080;font-weight:700>case</span> ARPMessage<span style=color:#333>::</span><span style=color:#970;font-weight:700>OPCODE_REQUEST</span>: {
-</span></span><span style=display:flex><span>          <span style=color:#888>// the destination has to be the broadcast address
-</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#080;font-weight:700>if</span> ( frame.header.dst <span style=color:#333>!=</span> ETHERNET_BROADCAST ) {
-</span></span><span style=display:flex><span>            <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>          }
-</span></span><span style=display:flex><span>          <span style=color:#888>// update ARP cache
-</span></span></span><span style=display:flex><span><span style=color:#888></span>          arp_cache_.emplace( arp_msg.sender_ip_address, make_pair( <span style=color:#00d;font-weight:700>0</span>, arp_msg.sender_ethernet_address ) );
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>          <span style=color:#888>// reply only if the target IP address is known
-</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#080;font-weight:700>if</span> ( arp_msg.target_ip_address <span style=color:#333>!=</span> ip_address_.ipv4_numeric()
-</span></span><span style=display:flex><span>               <span style=color:#333>&amp;&amp;</span> ( arp_cache_.find( arp_msg.target_ip_address ) <span style=color:#333>==</span> arp_cache_.end()
-</span></span><span style=display:flex><span>                    <span style=color:#333>||</span> arp_cache_.at( arp_msg.target_ip_address ).first <span style=color:#333>&gt;=</span> ARP_CACHE_TIMEOUT ) ) {
-</span></span><span style=display:flex><span>            <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>          }
-</span></span><span style=display:flex><span>          <span style=color:#888>// construct ARP frame
-</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#888>// ... 
-</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#888>// send the ARP reply
-</span></span></span><span style=display:flex><span><span style=color:#888></span>          frames_.emplace( arp_frame );
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>          <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>        }
-</span></span><span style=display:flex><span>        <span style=color:#888>// update ARP cache, ARP timer and waiting frames
-</span></span></span><span style=display:flex><span><span style=color:#888></span>        <span style=color:#080;font-weight:700>case</span> ARPMessage<span style=color:#333>::</span><span style=color:#970;font-weight:700>OPCODE_REPLY</span>: {
-</span></span><span style=display:flex><span>          <span style=color:#888>// the destination has to be the receiver&#39;s address
-</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#080;font-weight:700>if</span> ( frame.header.dst <span style=color:#333>!=</span> ethernet_address_ ) {
-</span></span><span style=display:flex><span>            <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>          }
-</span></span><span style=display:flex><span>          arp_cache_.emplace( arp_msg.sender_ip_address, make_pair( <span style=color:#00d;font-weight:700>0UL</span>, arp_msg.sender_ethernet_address ) );
-</span></span><span style=display:flex><span>          arp_timer_.erase( arp_msg.sender_ip_address );
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>          <span style=color:#888>// update the waiting frames
-</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#888>// send the frames in the waiting list, when address is known and valid
-</span></span></span><span style=display:flex><span><span style=color:#888></span>          <span style=color:#888>// ...
-</span></span></span><span style=display:flex><span><span style=color:#888></span>        }
-</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>default</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span>          <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>      }
-</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>default</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span>      <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>return</span> recv_dgram;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>Test Results</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check4
-</span></span><span style=display:flex><span>Test project /home/zhytou/minnow/build
-</span></span><span style=display:flex><span>    Start  1: compile with bug-checkers
-</span></span><span style=display:flex><span>1/2 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.17 sec</span>
-</span></span><span style=display:flex><span>    Start 35: net_interface
-</span></span><span style=display:flex><span>2/2 Test <span style=color:#888>#35: net_interface ....................   Passed    0.02 sec</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>2</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>   0.20 sec
-</span></span><span style=display:flex><span>Built target check4
-</span></span></code></pre></div><h2 id=5-the-ip-router>5 The IP Router</h2><p><strong>Router Data Structure</strong>：</p><p>lab5要求在lab4<code>NetworkInterface</code>的基础之上实现一个名为<code>Router</code>的路由器类。其中，一个<code>Router</code>管理着一组<code>NetworkInterface</code>接口，每一个接口管理着一个子网，即：和这个子网内的所有设备接口进行通信，且每个接口可以使用不同数据链路层技术，比如、以太网、WIFI和蓝牙等。</p><p>此外，<code>Router</code>内部还存储着一组名为路由的跳转规则。它其实是一个IP地址到MAC地址的映射。当路由器接收到需要转发的数据包时，会查询该数据包的目的IP地址，在路由表中找到相应的下一跳地址。</p><blockquote><p>路由表和ARP缓存有什么区别？</p><p>第一，路由表映射的是整个网络中的IP地址与下一跳路由器/接口的映射关系，而ARP缓存只映射局域网内主机的IP与MAC地址关系。
-第二，路由表主要靠静态设置和路由协议动态学习获得，而ARP缓存通过ARP请求响应在本地网络内学习获得。</p></blockquote><p>因此，<code>Router</code>结构体如下：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>Router</span>
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  <span style=color:#888>// The router&#39;s collection of network interfaces
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>vector<span style=color:#333>&lt;</span>AsyncNetworkInterface<span style=color:#333>&gt;</span> interfaces_ {};
-</span></span><span style=display:flex><span>  <span style=color:#888>// The router&#39;s collection of forwarding rules
-</span></span></span><span style=display:flex><span><span style=color:#888></span>  std<span style=color:#333>::</span>vector<span style=color:#333>&lt;</span>std<span style=color:#333>::</span>tuple<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint32_t</span>, <span style=color:#339;font-weight:700>uint8_t</span>, std<span style=color:#333>::</span>optional<span style=color:#333>&lt;</span>Address<span style=color:#333>&gt;</span>, <span style=color:#339;font-weight:700>uint64_t</span><span style=color:#333>&gt;&gt;</span> routes_ {};
-</span></span><span style=display:flex><span><span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#888>// ...
-</span></span></span><span style=display:flex><span><span style=color:#888></span>};
-</span></span></code></pre></div><p><strong>Forward</strong>：</p><p>在理解了路由器的工作原理之后，实现转发<code>route</code>函数就很简单了。只需要注意修改TTL和Checksum。</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#339;font-weight:700>void</span> Router<span style=color:#333>::</span>route()
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  <span style=color:#080;font-weight:700>for</span> ( <span style=color:#080;font-weight:700>auto</span><span style=color:#333>&amp;</span> <span style=color:#970;font-weight:700>interface</span> : interfaces_ ) {
-</span></span><span style=display:flex><span>    <span style=color:#080;font-weight:700>while</span> ( <span style=color:#00d;font-weight:700>1</span> ) {
-</span></span><span style=display:flex><span>      optional<span style=color:#333>&lt;</span>InternetDatagram<span style=color:#333>&gt;</span> opt_dgram <span style=color:#333>=</span> interface.maybe_receive();
-</span></span><span style=display:flex><span>      <span style=color:#888>// no more datagrams
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#080;font-weight:700>if</span> ( <span style=color:#333>!</span>opt_dgram.has_value() ) {
-</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>break</span>;
-</span></span><span style=display:flex><span>      }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      InternetDatagram dgram <span style=color:#333>=</span> opt_dgram.value();
-</span></span><span style=display:flex><span>      <span style=color:#339;font-weight:700>uint32_t</span> dst_addr <span style=color:#333>=</span> dgram.header.dst;
-</span></span><span style=display:flex><span>      <span style=color:#339;font-weight:700>uint64_t</span> match_idx <span style=color:#333>=</span> routes_.size();
-</span></span><span style=display:flex><span>      <span style=color:#888>// iterate through all routes to find the longest prefix match
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#080;font-weight:700>for</span> ( <span style=color:#339;font-weight:700>uint64_t</span> i <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>; i <span style=color:#333>&lt;</span> routes_.size(); i<span style=color:#333>++</span> ) {
-</span></span><span style=display:flex><span>        <span style=color:#339;font-weight:700>uint32_t</span> route_prefix <span style=color:#333>=</span> get<span style=color:#333>&lt;</span><span style=color:#00d;font-weight:700>0</span><span style=color:#333>&gt;</span>( routes_[i] );
-</span></span><span style=display:flex><span>        <span style=color:#339;font-weight:700>uint8_t</span> prefix_length <span style=color:#333>=</span> get<span style=color:#333>&lt;</span><span style=color:#00d;font-weight:700>1</span><span style=color:#333>&gt;</span>( routes_[i] );
-</span></span><span style=display:flex><span>        <span style=color:#339;font-weight:700>uint32_t</span> mask <span style=color:#333>=</span> prefix_length <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> <span style=color:#333>?</span> <span style=color:#00d;font-weight:700>0</span> <span style=color:#333>:</span> <span style=color:#333>~</span>( ( <span style=color:#00d;font-weight:700>1U</span> <span style=color:#333>&lt;&lt;</span> ( <span style=color:#00d;font-weight:700>32</span> <span style=color:#333>-</span> prefix_length ) ) <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>1</span> );
-</span></span><span style=display:flex><span>        <span style=color:#888>// ...
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#888>// drop the datagram in the following 2 cases:
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#888>// no matched route
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#080;font-weight:700>if</span> ( match_idx <span style=color:#333>==</span> routes_.size() ) {
-</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>continue</span>;
-</span></span><span style=display:flex><span>      }
-</span></span><span style=display:flex><span>      <span style=color:#888>// TTL is arleady 0 or 0 after derecementing
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#080;font-weight:700>if</span> ( dgram.header.ttl <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> <span style=color:#333>||</span> dgram.header.ttl <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>1</span> <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
-</span></span><span style=display:flex><span>        <span style=color:#080;font-weight:700>continue</span>;
-</span></span><span style=display:flex><span>      }
-</span></span><span style=display:flex><span>      <span style=color:#888>// decrement the TTL
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      dgram.header.ttl <span style=color:#333>-=</span> <span style=color:#00d;font-weight:700>1</span>;
-</span></span><span style=display:flex><span>      <span style=color:#888>// compute checksum
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      dgram.header.compute_checksum();
-</span></span><span style=display:flex><span>      <span style=color:#888>// send it to the next hop
-</span></span></span><span style=display:flex><span><span style=color:#888></span>      <span style=color:#888>// ... 
-</span></span></span><span style=display:flex><span><span style=color:#888></span>    }
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p><strong>Test Results</strong>：</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check5
-</span></span><span style=display:flex><span>Test project /home/zhytou/minnow/build
-</span></span><span style=display:flex><span>    Start  1: compile with bug-checkers
-</span></span><span style=display:flex><span>1/3 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    2.36 sec</span>
-</span></span><span style=display:flex><span>    Start 35: net_interface
-</span></span><span style=display:flex><span>2/3 Test <span style=color:#888>#35: net_interface ....................   Passed    0.01 sec</span>
-</span></span><span style=display:flex><span>    Start 36: router
-</span></span><span style=display:flex><span>3/3 Test <span style=color:#888>#36: router ...........................   Passed    0.03 sec</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>3</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>   2.40 sec
-</span></span><span style=display:flex><span>Built target check5
-</span></span></code></pre></div></div></div></article></div></main><footer>© Copyright <a href=https://github.com/Zhytou target=_blank>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae target=_blank>Vitae</a> theme for <a href=https://gohugo.io target=_blank>Hugo</a></footer><script src=/js/dark-mode.js></script></body></html>
+# clone the bare git proj git clone --bare https://github.com/cs144/minnow # cd the bare git directory and push everything to your own repo cd minnow."><meta itemprop=datePublished content="2023-08-04T22:18:06+08:00">
+<meta itemprop=dateModified content="2023-08-04T22:18:06+08:00">
+<meta itemprop=wordCount content="3631">
+<meta itemprop=keywords content>
+</head>
+<body>
+<header>
+<div id=avatar>
+<a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a>
+</div>
+<div id=titletext>
+<h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2>
+</div>
+<div id=title-description>
+<p id=subtitle>May the force be with me.</p>
+<div id=social>
+<nav><ul>
+<li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li>
+<li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li>
+</ul></nav>
+</div>
+</div>
+<div id=mainmenu>
+<nav>
+<ul>
+<li><a href=/>Home</a></li>
+<li><a href=/post>Posts</a></li>
+<li><a href=/about>About</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<main>
+<div class=post>
+<article>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>04</span>
+<span class=rest>Aug 2023</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>CS144-Minnow Lab总结</h1>
+<p class=post-meta>
+<span class=post-meta>
+</span>
+</p>
+</div>
+</div>
+<div class=markdown>
+<blockquote>
+<p>课程地址<a href=https://cs144.github.io/ target=_blank>CS144: Introduction to Computer Networking</a></p>
+</blockquote>
+<p><a href=https://wakatime.com/badge/user/a7b329b7-d489-40d2-9239-8be7cf83b65e/project/b892df03-90fb-40ca-a3a3-f14a57f9a941 target=_blank><figure>
+<img src=https://wakatime.com/badge/user/a7b329b7-d489-40d2-9239-8be7cf83b65e/project/b892df03-90fb-40ca-a3a3-f14a57f9a941.svg alt=wakatime>
+</figure></a></p>
+<p>个人感觉，虽然整个CS144的Lab难度不算特别大（认认真真做一周时间应该是够了），但还是非常有收获的。反正我做完就感觉死去的计网记忆在攻击我:(。难度排序的话，应该是 TCP Sender > TCP receiver ≈Network Interface > IP router > Webget & ByteStream。</p>
+<h2 id=0-networking-warmup>0 Networking Warmup</h2>
+<p>lab0的前几个部分主要以使用命令进行发Http请求或邮件并观察响应为主，只有最后两个部分需要写代码。下面介绍一下我的环境以及配置方法。</p>
+<p><strong>WSL Install</strong>：</p>
+<p>首先，在确保虚拟化以及WSL功能正确开启后，前往微软商店下载Windows Subsystem For Linux。我使用的发行版是Ubuntu 22.04.2 LTS。更详细的下载方法，可以查看我的另一篇博客[搭建自己的生产环境]中的WSL部分。</p>
+<p>接着，在WSL下载cmake、make、git和clang-format。其中，cmake和make是用于项目构建和编译的；git则是用于版本管理；clang-format则是一个格式化工具。它都会在后续使用到。具体下载方法如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo apt install cmake make git clang-format
+</code></pre></div><p><strong>Remote Repository</strong>：</p>
+<p>首先，在github中创建一个名为<code>minnow</code>的空仓库，作为我们的远程备份仓库。注意，为了遵守课程规定，我们需要将该仓库设为私有。</p>
+<p>其次，克隆课程项目，并将其推送到自己的远程仓库上，完成仓库的初始化。具体方法如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#888># clone the bare git proj</span>
+git clone --bare https://github.com/cs144/minnow
+
+<span style=color:#888># cd the bare git directory and push everything to your own repo</span>
+<span style=color:#007020>cd</span> minnow.git; git remote add mine git@github.com:Zhytou/minnow.git
+git push --all mine
+git push --tags mine
+
+<span style=color:#888># remove the bare git directory and see your own repo</span>
+rm -rf minnow.git
+git clone git@github.com:Zhytou/minnow.git
+</code></pre></div><p><strong>Compile & Run</strong>：</p>
+<p>CS144课程实验使用cmake构架和编译，方法如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#007020>cd</span> minnow
+<span style=color:#888># 编译</span>
+cmake -S . -B build
+<span style=color:#888># 运行</span>
+cmake --build build --target check_Webget
+</code></pre></div><h3 id=writing-webget>Writing webget</h3>
+<p>这部分要求我们在<code>apps/webget.cc</code>里面实现<code>void get_URL( const string& host, const string& path )</code>函数，最终完成抓取网页并写入到标准输出的功能。</p>
+<p><strong>Socket</strong>：</p>
+<p>这个任务在理解了套接字的通信流程之后就会变得非常简单。一个常见的客户端使用套接字向服务器发送信息的API调用顺序如下：</p>
+<ul>
+<li>首先，服务器创建一个套接字，并使用bind将其绑定到某IP和端口，接着使用listen使其监听该端口的连接请求。</li>
+<li>接着，客户端创建一个套接字，并使用connect尝试连接服务器。成功后，使用send向其发送请求。</li>
+<li>此时，服务器介绍到客户端请求，使用accept得到一个新套接字，先使用recv读取请求，接着使用send发送回复。</li>
+<li>接着，客户端使用recv接收到回复，使用close关闭连接。</li>
+<li>最后，服务器使用close关闭连接。</li>
+</ul>
+<p>此外，还需要注意的就是在写Http请求时，换行是<code>\r\n</code>。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>get_URL</span>( <span style=color:#080;font-weight:700>const</span> string<span style=color:#333>&amp;</span> host, <span style=color:#080;font-weight:700>const</span> string<span style=color:#333>&amp;</span> path )
+{
+  TCPSocket sock;
+  Address addr( host, <span style=background-color:#fff0f0>&#34;http&#34;</span> );
+  sock.connect( addr );
+  sock.write( <span style=background-color:#fff0f0>&#34;GET &#34;</span> <span style=color:#333>+</span> path <span style=color:#333>+</span> <span style=background-color:#fff0f0>&#34; HTTP/1.1</span><span style=color:#666;background-color:#fff0f0;font-weight:700>\r\n</span><span style=background-color:#fff0f0>&#34;</span> );
+  sock.write( <span style=background-color:#fff0f0>&#34;Host: &#34;</span> <span style=color:#333>+</span> host <span style=color:#333>+</span> <span style=background-color:#fff0f0>&#34; </span><span style=color:#666;background-color:#fff0f0;font-weight:700>\r\n</span><span style=background-color:#fff0f0>&#34;</span> );
+  sock.write( <span style=background-color:#fff0f0>&#34;Connection: close </span><span style=color:#666;background-color:#fff0f0;font-weight:700>\r\n\r\n</span><span style=background-color:#fff0f0>&#34;</span> );
+  string buf;
+  <span style=color:#080;font-weight:700>do</span> {
+    sock.read( buf );
+    <span style=color:#080;font-weight:700>if</span> ( buf.empty() ) {
+      <span style=color:#080;font-weight:700>break</span>;
+    } <span style=color:#080;font-weight:700>else</span> {
+      cout <span style=color:#333>&lt;&lt;</span> buf;
+    }
+  } <span style=color:#080;font-weight:700>while</span> ( <span style=color:#00d;font-weight:700>1</span> );
+}
+</code></pre></div><p><strong>Test Results</strong>：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check_webget
+Test project /home/zhytou/minnow/build
+    Start 1: compile with bug-checkers
+1/2 Test <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.17 sec</span>
+    Start 2: t_webget
+2/2 Test <span style=color:#888>#2: t_webget .........................   Passed    1.21 sec</span>
+
+100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>2</span>
+
+Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>   1.38 sec
+Built target check_webget
+</code></pre></div><h3 id=an-in-memory-reliable-byte-stream>An in-memory reliable byte stream</h3>
+<p>这个部分要求我们在<code>src/byte_stream.hh</code>和<code>src/byte_stream.cc</code>文件中，完成<code>ByteStream</code>以及其派生类接口，实现可以读写的字节流。</p>
+<p><strong>ByteStream Data Structure</strong>：</p>
+<p>我一开始想到使用队列作为底层数据结构来实现这个类，但后面考虑到其派生类<code>Reader</code>中的<code>peek</code>接口要求返回string_view类型，于是便使用字符串作为底层结构实现。</p>
+<p>因为，如果使用队列作为实际存储数据的结构，在实现<code>peek</code>时必然会使用一个临时字符串存储队列中数据，并使用这个字符串构造<code>string_view</code>返回。这样一定会报错，因为<code>string_view</code>只是一种只读的字符串视图，它并没有这段内存的所有权，所以在返回后临时字符串被销毁，那么就会有<code>string_view</code>悬空引用和访问无效内存的问题。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>ByteStream</span>
+{
+<span style=color:#080;font-weight:700>protected</span><span style=color:#333>:</span>
+  <span style=color:#339;font-weight:700>uint64_t</span> capacity_;
+  std<span style=color:#333>::</span>string buffer_;
+  <span style=color:#339;font-weight:700>bool</span> is_closed_;
+  <span style=color:#339;font-weight:700>bool</span> has_error_;
+  <span style=color:#339;font-weight:700>uint64_t</span> bytes_pushed_;
+  <span style=color:#339;font-weight:700>uint64_t</span> bytes_popped_;
+
+<span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
+  <span style=color:#888>// ...
+</span><span style=color:#888></span>};
+</code></pre></div><p><strong>Test Results</strong>：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check0
+Test project /home/zhytou/minnow/build
+      Start  1: compile with bug-checkers
+ 1/10 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.17 sec</span>
+      Start  2: t_webget
+ 2/10 Test  <span style=color:#888>#2: t_webget .........................   Passed    1.21 sec</span>
+      Start  3: byte_stream_basics
+ 3/10 Test  <span style=color:#888>#3: byte_stream_basics ...............   Passed    0.01 sec</span>
+      Start  4: byte_stream_capacity
+ 4/10 Test  <span style=color:#888>#4: byte_stream_capacity .............   Passed    0.01 sec</span>
+      Start  5: byte_stream_one_write
+ 5/10 Test  <span style=color:#888>#5: byte_stream_one_write ............   Passed    0.01 sec</span>
+      Start  6: byte_stream_two_writes
+ 6/10 Test  <span style=color:#888>#6: byte_stream_two_writes ...........   Passed    0.01 sec</span>
+      Start  7: byte_stream_many_writes
+ 7/10 Test  <span style=color:#888>#7: byte_stream_many_writes ..........   Passed    0.03 sec</span>
+      Start  8: byte_stream_stress_test
+ 8/10 Test  <span style=color:#888>#8: byte_stream_stress_test ..........   Passed    0.01 sec</span>
+      Start 37: compile with optimization
+ 9/10 Test <span style=color:#888>#37: compile with optimization ........   Passed    3.98 sec</span>
+      Start 38: byte_stream_speed_test
+             ByteStream throughput: 6.56 Gbit/s
+10/10 Test <span style=color:#888>#38: byte_stream_speed_test ...........   Passed    0.07 sec</span>
+
+100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>10</span>
+
+Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>   5.49 sec
+Built target check0
+</code></pre></div><h2 id=1-stitching-substrings-into-a-byte-stream>1 Stitching Substrings Into A Byte Stream</h2>
+<p>lab1要求实现一个名为<code>Reassembler</code>的整合器类。它能够将乱序传入且可能重叠的字符串排序并输出到给定的字节流中，其结构如下图：</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2023-8-4/reassembler.png alt=整合器>
+</figure></p>
+<p>其中，最重要的一点是<code>ByteStream</code>中未读取的部分加上<code>Reassembler</code>中无序的部分大小不能超过整个capacity。</p>
+<p><strong>Reassembler Data Structure</strong>：</p>
+<p><code>Reassembler</code>中最关键的一点就是如何临时存储可能重叠的字符串。我选择的是使用<code>map&lt;uint64_t, char></code>来存储，有一点滑动窗口的思想。可能更常规的做法是用<code>map&lt;uint64_t, string></code>来存储，但我考虑到重叠的字符串可能会导致维护这个字典的逻辑变得比较复杂，索性直接使用索引到字符的映射，让维护的逻辑变得非常简单。但这样做会导致效率严重下降（test13有可能超时）。<code>Reassembler</code>的定义如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>Reassembler</span>
+{
+<span style=color:#080;font-weight:700>private</span><span style=color:#333>:</span>
+  <span style=color:#888>// Bytes stored temorarily in ther Reassembler whose indexes are in the available capacity
+</span><span style=color:#888></span>  std<span style=color:#333>::</span>map<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint64_t</span>, <span style=color:#339;font-weight:700>char</span><span style=color:#333>&gt;</span> sliding_window_;
+  <span style=color:#888>// The index of next byte expected to write in the outbounded stream
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> expected_index_;
+  <span style=color:#888>// The index of last byte expected to write in the outbounded stream
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> expected_last_index_;
+
+<span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
+  <span style=color:#888>// ...
+</span><span style=color:#888></span>};
+</code></pre></div><p><strong>Putting Substrings In Sequence</strong>：</p>
+<p>按前面的思路，<code>Reassembler::insert</code>函数的框架就应该包括：</p>
+<ul>
+<li>处理传入的字符串
+<ul>
+<li>紧随expected_index_的直接写入输出字节流</li>
+<li>超出容量的直接丢弃</li>
+<li>其余的存入sliding_window_</li>
+</ul>
+</li>
+<li>检测暂存的字符串是否能够写入</li>
+<li>判断整合是否结束</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#339;font-weight:700>void</span> Reassembler<span style=color:#333>::</span>insert( <span style=color:#339;font-weight:700>uint64_t</span> first_index, string data, <span style=color:#339;font-weight:700>bool</span> is_last_substring, Writer<span style=color:#333>&amp;</span> output )
+{
+  <span style=color:#080;font-weight:700>if</span> ( first_index <span style=color:#333>&lt;=</span> expected_index_ <span style=color:#333>&amp;&amp;</span> first_index <span style=color:#333>+</span> data.size() <span style=color:#333>&gt;</span> expected_index_ ) {
+    <span style=color:#888>// if the part of substr lies just behind the expected index, push it to the output
+</span><span style=color:#888></span>    <span style=color:#888>// be careful to update the expected index with the actual written size
+</span><span style=color:#888></span>  } <span style=color:#080;font-weight:700>else</span> <span style=color:#06b;font-weight:700>if</span> ( first_index <span style=color:#333>+</span> data.size() <span style=color:#333>&gt;</span> expected_index_
+              <span style=color:#333>&amp;&amp;</span> first_index <span style=color:#333>&lt;</span> expected_index_ <span style=color:#333>+</span> output.available_capacity() ) {
+    <span style=color:#888>// if part of the substr lies in the availabe capacity, add it to the sliding window
+</span><span style=color:#888></span>    <span style=color:#888>// be careful that the size of sliding window cannot exceed the available capacity of output stream
+</span><span style=color:#888></span>    <span style=color:#080;font-weight:700>for</span> ( <span style=color:#339;font-weight:700>uint64_t</span> i <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>; i <span style=color:#333>&lt;</span> data.size() <span style=color:#333>&amp;&amp;</span> first_index <span style=color:#333>+</span> i <span style=color:#333>&lt;</span> expected_index_ <span style=color:#333>+</span> output.available_capacity();
+          i<span style=color:#333>++</span> ) {
+      <span style=color:#888>// ...
+</span><span style=color:#888></span>    }
+  }
+
+  <span style=color:#888>// erase elements which are already written and check if there are any elements which can be written
+</span><span style=color:#888></span>  string old_data;
+  <span style=color:#080;font-weight:700>for</span> ( <span style=color:#080;font-weight:700>auto</span> itr <span style=color:#333>=</span> sliding_window_.begin();
+        itr <span style=color:#333>!=</span> sliding_window_.end() <span style=color:#333>&amp;&amp;</span> itr<span style=color:#333>-&gt;</span>first <span style=color:#333>&lt;=</span> expected_index_ <span style=color:#333>+</span> old_data.size();
+        itr <span style=color:#333>=</span> sliding_window_.erase( itr ) ) {
+    <span style=color:#888>// ...
+</span><span style=color:#888></span>  }
+
+  <span style=color:#888>// set the expected last index if the substr is the last one
+</span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( is_last_substring ) {
+    expected_last_index_ <span style=color:#333>=</span> first_index <span style=color:#333>+</span> data.size();
+  }
+  <span style=color:#888>// when the last expected byte is inserted and the sliding window is empty, close the output
+</span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( expected_index_ <span style=color:#333>==</span> expected_last_index_ <span style=color:#333>&amp;&amp;</span> sliding_window_.empty() ) {
+    output.close();
+  }
+
+  <span style=color:#080;font-weight:700>return</span>;
+}
+</code></pre></div><p><strong>Test Results</strong>：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check1
+Test project /home/zhytou/minnow/build
+      Start  1: compile with bug-checkers
+ 1/17 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.22 sec</span>
+      Start  3: byte_stream_basics
+ 2/17 Test  <span style=color:#888>#3: byte_stream_basics ...............   Passed    0.01 sec</span>
+      Start  4: byte_stream_capacity
+ 3/17 Test  <span style=color:#888>#4: byte_stream_capacity .............   Passed    0.01 sec</span>
+      Start  5: byte_stream_one_write
+ 4/17 Test  <span style=color:#888>#5: byte_stream_one_write ............   Passed    0.01 sec</span>
+      Start  6: byte_stream_two_writes
+ 5/17 Test  <span style=color:#888>#6: byte_stream_two_writes ...........   Passed    0.01 sec</span>
+      Start  7: byte_stream_many_writes
+ 6/17 Test  <span style=color:#888>#7: byte_stream_many_writes ..........   Passed    0.03 sec</span>
+      Start  8: byte_stream_stress_test
+ 7/17 Test  <span style=color:#888>#8: byte_stream_stress_test ..........   Passed    0.01 sec</span>
+      Start  9: reassembler_single
+ 8/17 Test  <span style=color:#888>#9: reassembler_single ...............   Passed    0.01 sec</span>
+      Start 10: reassembler_cap
+ 9/17 Test <span style=color:#888>#10: reassembler_cap ..................   Passed    0.01 sec</span>
+      Start 11: reassembler_seq
+10/17 Test <span style=color:#888>#11: reassembler_seq ..................   Passed    0.01 sec</span>
+      Start 12: reassembler_dup
+11/17 Test <span style=color:#888>#12: reassembler_dup ..................   Passed    0.02 sec</span>
+      Start 13: reassembler_holes
+12/17 Test <span style=color:#888>#13: reassembler_holes ................   Passed    0.01 sec</span>
+      Start 14: reassembler_overlapping
+13/17 Test <span style=color:#888>#14: reassembler_overlapping ..........   Passed    0.01 sec</span>
+      Start 15: reassembler_win
+14/17 Test <span style=color:#888>#15: reassembler_win ..................   Passed    5.64 sec</span>
+      Start 37: compile with optimization
+15/17 Test <span style=color:#888>#37: compile with optimization ........   Passed    0.08 sec</span>
+      Start 38: byte_stream_speed_test
+             ByteStream throughput: 6.30 Gbit/s
+16/17 Test <span style=color:#888>#38: byte_stream_speed_test ...........   Passed    0.07 sec</span>
+      Start 39: reassembler_speed_test
+             Reassembler throughput: 14.16 Gbit/s
+17/17 Test <span style=color:#888>#39: reassembler_speed_test ...........   Passed    0.11 sec</span>
+
+100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>17</span>
+
+Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>   6.26 sec
+Built target check1
+</code></pre></div><h2 id=2-the-tcp-receiver>2 The TCP Receiver</h2>
+<p><strong>Translating Between 64-bit Indexes And 32-bit Seqnos</strong>：</p>
+<p>在TCP报文中只能够提供一个32位的区域用于存储报文序号。当报文序号超过这个范围时，序号字段将循环回零重新计数。换句话说，TCP报文中的序号只是一个相对序号。</p>
+<p>在实际通信中，发送者会随机初始化一个32位的起始报文序号（Initial Sequence Number，ISN），并告知接收者。此时，接收者就可以通过将报文中的相对序号（Sequence Number，seqno）与起始序号相加的方式获取实际的绝对序号（Absolute Sequence Number）。这三者的关系如下：</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2023-8-4/seqno.png alt=报文序号>
+</figure></p>
+<p>lab2在第一部分中，假设报文的绝对序号不会超过64位数表示范围，并要求实现一个用于32位数和64位数转换的一个<code>Wrap32</code>类。</p>
+<p>这部分个人认为比较简单，对于<code>wrap</code>函数来说，直接将64位数截断就好了；对于<code>unwrap</code>函数来说，将相对序号不断加1 &#171; 32直到接近检查点就好了。不过要注意一些特殊情况，比如检查点特别小等。</p>
+<p><strong>Receiving Bytes</strong>：</p>
+<p>lab2第二部分要求实现<code>TCPReceiver</code>类，完成其中<code>receive</code>和<code>send</code>接口。我觉得其中最大的难点就是维护下一次希望发送的序号。尤其是要针对一些边界情况，比如，收到多个SYN或收到FIN但不能关闭等等。</p>
+<p>因此，我在<code>TCPReceiver</code>类中添加了<code>ack_seqno_</code>用于记录下一次希望发送的序号（如果使用<code>inbound_stream.bytes_pushed()</code>，则面对SYN未发送或第一次发送的逻辑会比较复杂）、<code>is_connected_</code>用于记录是否开启连接（避免重复SYN）以及<code>isn_</code>记录第一个报文序号。具体如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>TCPReceiver</span>
+{
+<span style=color:#080;font-weight:700>private</span><span style=color:#333>:</span>
+  <span style=color:#888>// The flag indicating whether the receiver is connected
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>bool</span> is_connected_;
+  <span style=color:#888>// The next sequence number expected from the sender
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> ack_seqno_;
+  <span style=color:#888>// The initial sequence number of the sender
+</span><span style=color:#888></span>  Wrap32 isn_;
+
+<span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
+   <span style=color:#888>// ...
+</span><span style=color:#888></span>};
+</code></pre></div><p>有了<code>ack_seqno_</code>记录的下一次希望发送的序号，<code>send</code>函数就非常简单了，只需要将其放入<code>Wrap32</code>中返回即可。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++>TCPReceiverMessage TCPReceiver<span style=color:#333>::</span>send( <span style=color:#080;font-weight:700>const</span> Writer<span style=color:#333>&amp;</span> inbound_stream ) <span style=color:#080;font-weight:700>const</span>
+{
+  TCPReceiverMessage message;
+  <span style=color:#888>// get the window size
+</span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( inbound_stream.available_capacity() <span style=color:#333>&gt;</span> UINT16_MAX ) {
+    message.window_size <span style=color:#333>=</span> UINT16_MAX;
+  } <span style=color:#080;font-weight:700>else</span> {
+    message.window_size <span style=color:#333>=</span> inbound_stream.available_capacity();
+  }
+  <span style=color:#888>// get the ackno, only if receiver is connected
+</span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( is_connected_ ) {
+    message.ackno <span style=color:#333>=</span> Wrap32<span style=color:#333>::</span>wrap( ack_seqno_, isn_ );
+  }
+  <span style=color:#080;font-weight:700>return</span> message;
+}
+</code></pre></div><p>至于<code>receive</code>函数，它要考虑的就多一些了，主要还是一些特殊情况，其框架如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#339;font-weight:700>void</span> TCPReceiver<span style=color:#333>::</span>receive( TCPSenderMessage message, Reassembler<span style=color:#333>&amp;</span> reassembler, Writer<span style=color:#333>&amp;</span> inbound_stream )
+{
+  <span style=color:#080;font-weight:700>if</span> ( message.SYN ) {
+    <span style=color:#080;font-weight:700>if</span> ( is_connected_ ) {
+      <span style=color:#888>// avoid duplicate connections
+</span><span style=color:#888></span>      <span style=color:#080;font-weight:700>return</span>;
+    }
+    <span style=color:#888>// beginning of the byte stream
+</span><span style=color:#888></span>    is_connected_ <span style=color:#333>=</span> <span style=color:#007020>true</span>;
+    <span style=color:#888>// keep track of initial sequence number
+</span><span style=color:#888></span>    isn_ <span style=color:#333>=</span> message.seqno;
+    <span style=color:#888>// ack seqno must be at least 1, because receiving SYN
+</span><span style=color:#888></span>    ack_seqno_ <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>1</span>;
+  }
+
+  <span style=color:#888>// transmission doesn&#39;t begin, do nothing
+</span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( is_connected_ <span style=color:#333>==</span> <span style=color:#007020>false</span> ) {
+    <span style=color:#080;font-weight:700>return</span>;
+  }
+
+  <span style=color:#888>// convert relative seqno to absolute seqno, checkpoint is the bytes written to the stream
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> absolute_seqno <span style=color:#333>=</span> message.seqno.unwrap( isn_, inbound_stream.bytes_pushed() );
+  <span style=color:#888>// extract the data from the tcp payload, be careful to use Buffer::release()
+</span><span style=color:#888></span>  string <span style=color:#06b;font-weight:700>data</span>( message.payload );
+
+  <span style=color:#888>// absolute seqno begin at 0 when SYN comes, so the actual starting index of data has to minus 1
+</span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( absolute_seqno <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
+    <span style=color:#080;font-weight:700>if</span> ( <span style=color:#333>!</span>message.SYN ) {
+      <span style=color:#888>// avoid invalid absolute seqno which equals to 0 but not SYN
+</span><span style=color:#888></span>      <span style=color:#080;font-weight:700>return</span>;
+    }
+    reassembler.insert( <span style=color:#00d;font-weight:700>0</span>, data, message.FIN, inbound_stream );
+  } <span style=color:#080;font-weight:700>else</span> {
+    reassembler.insert( absolute_seqno <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>1</span>, data, message.FIN, inbound_stream );
+  }
+
+  <span style=color:#888>// update ack seqno
+</span><span style=color:#888></span>  <span style=color:#888>// ack seqno is the next expected byte, because SYN has to occupy 0
+</span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( reassembler.index_expected() <span style=color:#333>&gt;</span> <span style=color:#00d;font-weight:700>0</span> ) {
+    ack_seqno_ <span style=color:#333>=</span> reassembler.index_expected() <span style=color:#333>+</span> <span style=color:#00d;font-weight:700>1</span>;
+  }
+  <span style=color:#888>// if the last byte is received, ack seqno should be added by 1 because FIN is not counted
+</span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( reassembler.last_index_expected() <span style=color:#333>==</span> reassembler.index_expected() ) {
+    ack_seqno_ <span style=color:#333>+=</span> <span style=color:#00d;font-weight:700>1</span>;
+  }
+
+  <span style=color:#080;font-weight:700>return</span>;
+}
+</code></pre></div><p><strong>Test Results</strong>：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check2
+Test project /home/zhytou/minnow/build
+      Start  1: compile with bug-checkers
+ 1/29 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.21 sec</span>
+      Start  3: byte_stream_basics
+ 2/29 Test  <span style=color:#888>#3: byte_stream_basics ...............   Passed    0.01 sec</span>
+      Start  4: byte_stream_capacity
+ 3/29 Test  <span style=color:#888>#4: byte_stream_capacity .............   Passed    0.01 sec</span>
+      Start  5: byte_stream_one_write
+ 4/29 Test  <span style=color:#888>#5: byte_stream_one_write ............   Passed    0.01 sec</span>
+      Start  6: byte_stream_two_writes
+ 5/29 Test  <span style=color:#888>#6: byte_stream_two_writes ...........   Passed    0.01 sec</span>
+      Start  7: byte_stream_many_writes
+ 6/29 Test  <span style=color:#888>#7: byte_stream_many_writes ..........   Passed    0.03 sec</span>
+      Start  8: byte_stream_stress_test
+ 7/29 Test  <span style=color:#888>#8: byte_stream_stress_test ..........   Passed    0.01 sec</span>
+      Start  9: reassembler_single
+ 8/29 Test  <span style=color:#888>#9: reassembler_single ...............   Passed    0.01 sec</span>
+      Start 10: reassembler_cap
+ 9/29 Test <span style=color:#888>#10: reassembler_cap ..................   Passed    0.01 sec</span>
+      Start 11: reassembler_seq
+10/29 Test <span style=color:#888>#11: reassembler_seq ..................   Passed    0.01 sec</span>
+      Start 12: reassembler_dup
+11/29 Test <span style=color:#888>#12: reassembler_dup ..................   Passed    0.02 sec</span>
+      Start 13: reassembler_holes
+12/29 Test <span style=color:#888>#13: reassembler_holes ................   Passed    0.01 sec</span>
+      Start 14: reassembler_overlapping
+13/29 Test <span style=color:#888>#14: reassembler_overlapping ..........   Passed    0.01 sec</span>
+      Start 15: reassembler_win
+14/29 Test <span style=color:#888>#15: reassembler_win ..................   Passed    5.89 sec</span>
+      Start 16: wrapping_integers_cmp
+15/29 Test <span style=color:#888>#16: wrapping_integers_cmp ............   Passed    0.01 sec</span>
+      Start 17: wrapping_integers_wrap
+16/29 Test <span style=color:#888>#17: wrapping_integers_wrap ...........   Passed    0.01 sec</span>
+      Start 18: wrapping_integers_unwrap
+17/29 Test <span style=color:#888>#18: wrapping_integers_unwrap .........   Passed    0.00 sec</span>
+      Start 19: wrapping_integers_roundtrip
+18/29 Test <span style=color:#888>#19: wrapping_integers_roundtrip ......   Passed    0.29 sec</span>
+      Start 20: wrapping_integers_extra
+19/29 Test <span style=color:#888>#20: wrapping_integers_extra ..........   Passed    0.05 sec</span>
+      Start 21: recv_connect
+20/29 Test <span style=color:#888>#21: recv_connect .....................   Passed    0.01 sec</span>
+      Start 22: recv_transmit
+21/29 Test <span style=color:#888>#22: recv_transmit ....................   Passed    0.17 sec</span>
+      Start 23: recv_window
+22/29 Test <span style=color:#888>#23: recv_window ......................   Passed    0.01 sec</span>
+      Start 24: recv_reorder
+23/29 Test <span style=color:#888>#24: recv_reorder .....................   Passed    0.01 sec</span>
+      Start 25: recv_reorder_more
+24/29 Test <span style=color:#888>#25: recv_reorder_more ................   Passed    9.54 sec</span>
+      Start 26: recv_close
+25/29 Test <span style=color:#888>#26: recv_close .......................   Passed    0.01 sec</span>
+      Start 27: recv_special
+26/29 Test <span style=color:#888>#27: recv_special .....................   Passed    0.01 sec</span>
+      Start 37: compile with optimization
+27/29 Test <span style=color:#888>#37: compile with optimization ........   Passed    0.07 sec</span>
+      Start 38: byte_stream_speed_test
+             ByteStream throughput: 6.51 Gbit/s
+28/29 Test <span style=color:#888>#38: byte_stream_speed_test ...........   Passed    0.07 sec</span>
+      Start 39: reassembler_speed_test
+             Reassembler throughput: 16.55 Gbit/s
+29/29 Test <span style=color:#888>#39: reassembler_speed_test ...........   Passed    0.10 sec</span>
+
+100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>29</span>
+
+Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>  16.62 sec
+Built target check2
+</code></pre></div><h2 id=3-the-tcp-sender>3 The TCP Sender</h2>
+<p>lab3要求实现一个名为<code>TCPSender</code>的类，尽可能的向接收者发送字节，并通过超时重传保证可靠性。</p>
+<p><strong>Sending Bytes</strong>：</p>
+<p>关于发送数据必须要说明的是，在lab3中，发送包是通过测试者调用<code>TCPSender::maybe_send</code>函数，而非发送者主动发送。换句话说，只需要将需要发送的包存储在一个队列，每次调用<code>TCPSender::maybe_send</code>时，弹出队首的包即可。</p>
+<p><strong>Recording Time</strong>：</p>
+<p>此外，lab3中也不允许使用其他计时器记录时间，而是依靠<code>TCPSender::tick</code>函数，由测试者告诉发送者已经过去的时间长短。因此，<code>TCPSender</code>只需要使用一个变量存储传入的时间即可。</p>
+<p><strong>Keep Track Of Outstanding Segments and Resend Them After RTO</strong>：</p>
+<p>TCP是一种面向流的可靠协议。为了保证其可靠传输，设计者在TCP中添加了许多机制，比如：校验和、滑动窗口和超时重传等等。lab3要求追踪未承认段（Outstanding Segments），并在超出重传时间（Retrasmission Timeout，RTO）后将RTO翻倍后，再次发送。因此，<code>TCPSender</code>需要一个记录未承认段的表以及一个记录当前重传时间的变量。</p>
+<p><strong>TCPSender Data Structure</strong>：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>TCPSender</span>
+{
+  <span style=color:#888>// initial SYN sequence number.
+</span><span style=color:#888></span>  Wrap32 isn_;
+  <span style=color:#888>// initial RTO. It stays the same all the time
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> initial_RTO_ms_;
+  <span style=color:#888>// current RTO. When retransmission fails, double it
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> RTO_ms_;
+  <span style=color:#888>// retransmission timer which records how long it has been since last retransmission happened.
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> timer_;
+  <span style=color:#888>// consecutive retransmission times.
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> crt_times_;
+  <span style=color:#888>// receiver&#39;s acknowledged absolute sequence number.
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> ackno_;
+  <span style=color:#888>// receiver&#39;s window size.
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> wind_size_;
+  <span style=color:#888>// sender&#39;s absolute sequence number
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>uint64_t</span> seqno_;
+  <span style=color:#888>// segments which are waiting to be sent.
+</span><span style=color:#888></span>  std<span style=color:#333>::</span>queue<span style=color:#333>&lt;</span>TCPSenderMessage<span style=color:#333>&gt;</span> segments_;
+  <span style=color:#888>// sender&#39;s sliding window shows all segments which haven&#39;t been acknowledged yet.
+</span><span style=color:#888></span>  std<span style=color:#333>::</span>map<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint64_t</span>, TCPSenderMessage<span style=color:#333>&gt;</span> outstanding_segments_;
+  <span style=color:#888>// sender&#39;s working mode
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>bool</span> running_;
+
+<span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
+  <span style=color:#888>// ...
+</span><span style=color:#888></span>};
+</code></pre></div><p><strong>Push Bytes To Outbound Stream</strong>：</p>
+<p>在完成了<code>TCPSender</code>的数据结构之后，就需要实现其最核心的接口，也就是发送数据的<code>TCPSender::push</code>函数。其实，这个函数的核心就是根据收到接收者的<code>ackno_</code>和<code>wind_size</code>来构造发送请求，并将这个包放入<code>segments_</code>和<code>outstanding_segments_</code>。只不过，它还需要考虑一些边界情况，包括：</p>
+<ul>
+<li>对于非发送者初始化而是接收者明确指出的<code>wind_size</code>为0时，将<code>wind_size</code>当作1。</li>
+<li>何时将FIN置为真？仅当输出流结束，且接收者滑动窗口还有空间才写入（因为FIN要占序号）。</li>
+</ul>
+<p>总的来说，其大致流程如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#339;font-weight:700>void</span> TCPSender<span style=color:#333>::</span>push( Reader<span style=color:#333>&amp;</span> outbound_stream )
+{
+  <span style=color:#080;font-weight:700>while</span> ( ( ( wind_size_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> <span style=color:#333>&amp;&amp;</span> seqno_ <span style=color:#333>==</span> ackno_ ) <span style=color:#333>||</span> seqno_ <span style=color:#333>&lt;</span> ackno_ <span style=color:#333>+</span> wind_size_ ) <span style=color:#333>&amp;&amp;</span> running_ ) {
+    <span style=color:#888>// construct sender message
+</span><span style=color:#888></span>    TCPSenderMessage msg;
+    string data;
+    <span style=color:#339;font-weight:700>uint64_t</span> data_len <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+
+    <span style=color:#080;font-weight:700>if</span> ( seqno_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
+      <span style=color:#888>// SYN
+</span><span style=color:#888></span>      msg.SYN <span style=color:#333>=</span> <span style=color:#007020>true</span>;
+    }
+    msg.seqno <span style=color:#333>=</span> Wrap32<span style=color:#333>::</span>wrap( seqno_, isn_ );
+
+    <span style=color:#888>// use [ackno_, ackno_ + wind_size_) to calculate data_len
+</span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( ackno_ <span style=color:#333>+</span> wind_size_ <span style=color:#333>&gt;</span> seqno_ ) {
+      <span style=color:#888>// the actual length of seqno for payload has to minus 1, if SYN = true
+</span><span style=color:#888></span>      data_len <span style=color:#333>=</span> ackno_ <span style=color:#333>+</span> wind_size_ <span style=color:#333>-</span> seqno_ <span style=color:#333>-</span> msg.SYN;
+    }
+    <span style=color:#888>// make sure data len is in this range [1, MAX_PAYLOAD_SIZE), even if the receiver&#39;s window size is 0
+</span><span style=color:#888></span>    data_len <span style=color:#333>=</span> max( <span style=color:#00d;font-weight:700>1UL</span>, min( data_len, TCPConfig<span style=color:#333>::</span>MAX_PAYLOAD_SIZE ) );
+    read( outbound_stream, data_len, data );
+    msg.payload <span style=color:#333>=</span> Buffer( std<span style=color:#333>::</span>move( data ) );
+
+    <span style=color:#888>// if stream is finished and there is also space in receiver&#39;s window, set the FIN flag
+</span><span style=color:#888></span>    <span style=color:#888>// or if stream is finished and the window size is 0 and the data is empty and SYN flag is false, set the FIN
+</span><span style=color:#888></span>    <span style=color:#888>// flag otherwise put FIN in another separate message
+</span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( outbound_stream.is_finished()
+         <span style=color:#333>&amp;&amp;</span> ( seqno_ <span style=color:#333>+</span> msg.sequence_length() <span style=color:#333>&lt;</span> ackno_ <span style=color:#333>+</span> wind_size_
+              <span style=color:#333>||</span> ( wind_size_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> <span style=color:#333>&amp;&amp;</span> msg.sequence_length() <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) ) ) {
+      <span style=color:#888>// FIN
+</span><span style=color:#888></span>      msg.FIN <span style=color:#333>=</span> <span style=color:#007020>true</span>;
+    }
+
+    <span style=color:#888>// quit sending if msg is empty
+</span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( msg.sequence_length() <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
+      <span style=color:#080;font-weight:700>return</span>;
+    }
+
+    <span style=color:#888>// add it to the waiting queue. When maybe_send() is called, sender will send the first segment in the queue.
+</span><span style=color:#888></span>    segments_.push( msg );
+    <span style=color:#888>// keep track of the segment
+</span><span style=color:#888></span>    outstanding_segments_.emplace( seqno_, msg );
+
+    <span style=color:#888>// update sender&#39;s seqno
+</span><span style=color:#888></span>    seqno_ <span style=color:#333>+=</span> msg.sequence_length();
+
+    <span style=color:#888>// only allow to send 1 byte by pretending window size equals to 1, when the actual size is 0
+</span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( wind_size_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
+      <span style=color:#080;font-weight:700>break</span>;
+    }
+
+    <span style=color:#888>// no more segments
+</span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( msg.FIN ) {
+      running_ <span style=color:#333>=</span> <span style=color:#007020>false</span>;
+      <span style=color:#080;font-weight:700>break</span>;
+    }
+  }
+  <span style=color:#080;font-weight:700>return</span>;
+}
+</code></pre></div><p><strong>Receive ACK Message</strong>：</p>
+<p>完成发送接口之后，就需要实现接收接口了。事实上，<code>TCPSender::receive</code>与<code>TCPSender::push</code>重要性相同。因为它决定了<code>ackno_</code>和<code>wind_size</code>的更新，并且还囊括了超时重发的逻辑。其核心功能包括：</p>
+<ul>
+<li>更新<code>ackno_</code>和<code>wind_size</code>；</li>
+<li>更新<code>outstanding_segments_</code>；</li>
+<li>如果发送了重发，将<code>RTO_ms_</code>翻倍，并更新<code>crt_times_</code>；</li>
+<li>反之，则重置<code>RTO_ms_</code>、<code>crt_times_</code>以及<code>timer_</code>。</li>
+</ul>
+<p>总之，我的实现如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#339;font-weight:700>void</span> TCPSender<span style=color:#333>::</span>receive( <span style=color:#080;font-weight:700>const</span> TCPReceiverMessage<span style=color:#333>&amp;</span> msg )
+{
+  <span style=color:#339;font-weight:700>uint64_t</span> new_ackno <span style=color:#333>=</span> ackno_;
+  <span style=color:#080;font-weight:700>if</span> ( msg.ackno.has_value() ) {
+    <span style=color:#888>// extract receiver&#39;s ackno
+</span><span style=color:#888></span>    new_ackno <span style=color:#333>=</span> msg.ackno.value().unwrap( isn_, ackno_ );
+    <span style=color:#888>// avoid invalid ackno which is smaller
+</span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( ackno_ <span style=color:#333>&gt;</span> new_ackno ) {
+      <span style=color:#080;font-weight:700>return</span>;
+    }
+  }
+  <span style=color:#888>// set receiver&#39;s window size, even if new_ackno equals to ackno
+</span><span style=color:#888></span>  wind_size_ <span style=color:#333>=</span> msg.window_size;
+  <span style=color:#888>// update outstanding segments, remove those acknowledged by receiver
+</span><span style=color:#888></span>  <span style=color:#339;font-weight:700>bool</span> reset_flag <span style=color:#333>=</span> <span style=color:#007020>false</span>;
+  <span style=color:#080;font-weight:700>for</span> ( <span style=color:#080;font-weight:700>auto</span> itr <span style=color:#333>=</span> outstanding_segments_.begin(); itr <span style=color:#333>!=</span> outstanding_segments_.end(); itr<span style=color:#333>++</span> ) {
+    <span style=color:#080;font-weight:700>if</span> ( itr<span style=color:#333>-&gt;</span>first <span style=color:#333>+</span> itr<span style=color:#333>-&gt;</span>second.sequence_length() <span style=color:#333>==</span> new_ackno ) {
+      reset_flag <span style=color:#333>=</span> <span style=color:#007020>true</span>;
+      outstanding_segments_.erase( outstanding_segments_.begin(), <span style=color:#333>++</span>itr );
+      <span style=color:#080;font-weight:700>break</span>;
+    }
+  }
+  <span style=color:#888>// make sure the new ackno is valid
+</span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( <span style=color:#333>!</span>reset_flag ) {
+    <span style=color:#080;font-weight:700>return</span>;
+  }
+  <span style=color:#888>// update ackno
+</span><span style=color:#888></span>  ackno_ <span style=color:#333>=</span> new_ackno;
+
+  <span style=color:#888>// the test system will call push again to send the rest bytes after calling receive
+</span><span style=color:#888></span>  <span style=color:#888>// treat a 0 window size as equal to 1 but don&#39;t back off RTO
+</span><span style=color:#888></span>  <span style=color:#080;font-weight:700>if</span> ( wind_size_ <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
+    <span style=color:#080;font-weight:700>return</span>;
+  }
+
+  <span style=color:#888>// reset RTO
+</span><span style=color:#888></span>  RTO_ms_ <span style=color:#333>=</span> initial_RTO_ms_;
+  <span style=color:#888>// reset retransmission timer
+</span><span style=color:#888></span>  timer_ <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+  <span style=color:#888>// reset times of consecutive retransmissions
+</span><span style=color:#888></span>  crt_times_ <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>;
+}
+</code></pre></div><p><strong>Test Results</strong>：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check3
+Test project /home/zhytou/minnow/build
+      Start  1: compile with bug-checkers
+ 1/36 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.18 sec</span>
+      Start  3: byte_stream_basics
+ 2/36 Test  <span style=color:#888>#3: byte_stream_basics ...............   Passed    0.01 sec</span>
+      Start  4: byte_stream_capacity
+ 3/36 Test  <span style=color:#888>#4: byte_stream_capacity .............   Passed    0.01 sec</span>
+      Start  5: byte_stream_one_write
+ 4/36 Test  <span style=color:#888>#5: byte_stream_one_write ............   Passed    0.01 sec</span>
+      Start  6: byte_stream_two_writes
+ 5/36 Test  <span style=color:#888>#6: byte_stream_two_writes ...........   Passed    0.01 sec</span>
+      Start  7: byte_stream_many_writes
+ 6/36 Test  <span style=color:#888>#7: byte_stream_many_writes ..........   Passed    0.03 sec</span>
+      Start  8: byte_stream_stress_test
+ 7/36 Test  <span style=color:#888>#8: byte_stream_stress_test ..........   Passed    0.01 sec</span>
+      Start  9: reassembler_single
+ 8/36 Test  <span style=color:#888>#9: reassembler_single ...............   Passed    0.01 sec</span>
+      Start 10: reassembler_cap
+ 9/36 Test <span style=color:#888>#10: reassembler_cap ..................   Passed    0.01 sec</span>
+      Start 11: reassembler_seq
+10/36 Test <span style=color:#888>#11: reassembler_seq ..................   Passed    0.01 sec</span>
+      Start 12: reassembler_dup
+11/36 Test <span style=color:#888>#12: reassembler_dup ..................   Passed    0.02 sec</span>
+      Start 13: reassembler_holes
+12/36 Test <span style=color:#888>#13: reassembler_holes ................   Passed    0.01 sec</span>
+      Start 14: reassembler_overlapping
+13/36 Test <span style=color:#888>#14: reassembler_overlapping ..........   Passed    0.01 sec</span>
+      Start 15: reassembler_win
+14/36 Test <span style=color:#888>#15: reassembler_win ..................   Passed    5.61 sec</span>
+      Start 16: wrapping_integers_cmp
+15/36 Test <span style=color:#888>#16: wrapping_integers_cmp ............   Passed    0.01 sec</span>
+      Start 17: wrapping_integers_wrap
+16/36 Test <span style=color:#888>#17: wrapping_integers_wrap ...........   Passed    0.00 sec</span>
+      Start 18: wrapping_integers_unwrap
+17/36 Test <span style=color:#888>#18: wrapping_integers_unwrap .........   Passed    0.00 sec</span>
+      Start 19: wrapping_integers_roundtrip
+18/36 Test <span style=color:#888>#19: wrapping_integers_roundtrip ......   Passed    0.28 sec</span>
+      Start 20: wrapping_integers_extra
+19/36 Test <span style=color:#888>#20: wrapping_integers_extra ..........   Passed    0.05 sec</span>
+      Start 21: recv_connect
+20/36 Test <span style=color:#888>#21: recv_connect .....................   Passed    0.01 sec</span>
+      Start 22: recv_transmit
+21/36 Test <span style=color:#888>#22: recv_transmit ....................   Passed    0.16 sec</span>
+      Start 23: recv_window
+22/36 Test <span style=color:#888>#23: recv_window ......................   Passed    0.01 sec</span>
+      Start 24: recv_reorder
+23/36 Test <span style=color:#888>#24: recv_reorder .....................   Passed    0.01 sec</span>
+      Start 25: recv_reorder_more
+24/36 Test <span style=color:#888>#25: recv_reorder_more ................   Passed    9.01 sec</span>
+      Start 26: recv_close
+25/36 Test <span style=color:#888>#26: recv_close .......................   Passed    0.01 sec</span>
+      Start 27: recv_special
+26/36 Test <span style=color:#888>#27: recv_special .....................   Passed    0.01 sec</span>
+      Start 28: send_connect
+27/36 Test <span style=color:#888>#28: send_connect .....................   Passed    0.01 sec</span>
+      Start 29: send_transmit
+28/36 Test <span style=color:#888>#29: send_transmit ....................   Passed    0.30 sec</span>
+      Start 30: send_retx
+29/36 Test <span style=color:#888>#30: send_retx ........................   Passed    0.01 sec</span>
+      Start 31: send_window
+30/36 Test <span style=color:#888>#31: send_window ......................   Passed    0.06 sec</span>
+      Start 32: send_ack
+31/36 Test <span style=color:#888>#32: send_ack .........................   Passed    0.01 sec</span>
+      Start 33: send_close
+32/36 Test <span style=color:#888>#33: send_close .......................   Passed    0.02 sec</span>
+      Start 34: send_extra
+33/36 Test <span style=color:#888>#34: send_extra .......................   Passed    0.03 sec</span>
+      Start 37: compile with optimization
+34/36 Test <span style=color:#888>#37: compile with optimization ........   Passed    0.07 sec</span>
+      Start 38: byte_stream_speed_test
+             ByteStream throughput: 5.47 Gbit/s
+35/36 Test <span style=color:#888>#38: byte_stream_speed_test ...........   Passed    0.07 sec</span>
+      Start 39: reassembler_speed_test
+             Reassembler throughput: 17.48 Gbit/s
+36/36 Test <span style=color:#888>#39: reassembler_speed_test ...........   Passed    0.11 sec</span>
+
+100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>36</span>
+
+Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>  16.17 sec
+Built target check3
+</code></pre></div><h2 id=4-the-network-interface>4 The Network Interface</h2>
+<p>lab4要求实现一个名为<code>NetworkInterface</code>的类，即：链路层接口。其主要工作就是发送和接受数据帧。具体来在lab4中，其发送流程为将IP协议数据包封装为Ethernet数据帧，并根据IP地址找到对应的Ethernet接口；而接受流程则为接收Ethernet数据帧并根据帧内容回复。</p>
+<p><strong>The Address Resolution Protocol</strong>：</p>
+<p>由于<code>NetworkInterface</code>需要根据IP地址找到对应的Ethernet地址，这就表明它必须依靠某种机制获取未知设备的物理地址，并在内部存储该映射。</p>
+<p>而这个根据IP地址获取MAC地址的机制被称作地址解析协议（Address Resolution Protocol，ARP）。它的原理是，设备向网络中的其他设备发送ARP请求，询问某个IP地址对应的MAC地址。收到请求的设备检查自己的ARP缓存表，如果有对应的条目，则返回已知的MAC地址；如果没有对应条目，则广播ARP请求到局域网上的所有设备。拥有被请求IP地址的设备收到请求后，会向请求设备回复一个ARP响应，包含自己的MAC地址。请求设备收到响应后，将收到的MAC地址与目标IP地址建立映射关系，并将映射结果存储在ARP缓存表中，以便后续使用。</p>
+<p>除此之外，lab4对ARP缓存提出了有效时间限制，并且利用超时重发机制保证其可靠性。</p>
+<p><strong>Network Interface</strong>：</p>
+<p>在理解了ARP协议的工作原理之后，<code>NetworkInterface</code>的实现就变得比较清晰了，其结构实现如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>NetworkInterface</span>
+{
+<span style=color:#080;font-weight:700>private</span><span style=color:#333>:</span>
+  <span style=color:#888>// Ethernet (known as hardware, network-access, or link-layer) address of the interface
+</span><span style=color:#888></span>  EthernetAddress ethernet_address_;
+  <span style=color:#888>// IP (known as Internet-layer or network-layer) address of the interface
+</span><span style=color:#888></span>  Address ip_address_;
+  <span style=color:#888>// ARP (Address Resolution Protocol) 30-second-valid cache recording a mapping from IP addresses to Ethernet
+</span><span style=color:#888></span>  <span style=color:#888>// addresses
+</span><span style=color:#888></span>  std<span style=color:#333>::</span>unordered_map<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint32_t</span>, std<span style=color:#333>::</span>pair<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint64_t</span>, EthernetAddress<span style=color:#333>&gt;&gt;</span> arp_cache_;
+  <span style=color:#888>// Ethernet frames ready to be sent, including ARP and IP datagrams
+</span><span style=color:#888></span>  std<span style=color:#333>::</span>queue<span style=color:#333>&lt;</span>EthernetFrame<span style=color:#333>&gt;</span> frames_;
+  <span style=color:#888>// Ethernet frames waiting for the ARP respond
+</span><span style=color:#888></span>  std<span style=color:#333>::</span>list<span style=color:#333>&lt;</span>std<span style=color:#333>::</span>pair<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint32_t</span>, EthernetFrame<span style=color:#333>&gt;&gt;</span> waiting_frames_;
+  <span style=color:#888>// ARP timer recording how long it has been since last request was sent
+</span><span style=color:#888></span>  std<span style=color:#333>::</span>unordered_map<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint32_t</span>, <span style=color:#339;font-weight:700>uint64_t</span><span style=color:#333>&gt;</span> arp_timer_;
+
+<span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
+  <span style=color:#888>// ...    
+</span><span style=color:#888></span>};
+</code></pre></div><p><strong>Sending Datagram</strong>：</p>
+<p>对于发送接口来说，其工作流程应该如下：</p>
+<ul>
+<li>检测ARP缓存是否包含目标IP地址且有效；</li>
+<li>若存在，则直接发送。</li>
+<li>反之，检测该ARP请求是否近期发送过；
+<ul>
+<li>若近期发送过，则直接返回，避免网络堵塞；</li>
+<li>反之，发送ARP请求并重置ARP计时器，最后将该IP数据包暂存。</li>
+</ul>
+</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#339;font-weight:700>void</span> NetworkInterface<span style=color:#333>::</span>send_datagram( <span style=color:#080;font-weight:700>const</span> InternetDatagram<span style=color:#333>&amp;</span> dgram, <span style=color:#080;font-weight:700>const</span> Address<span style=color:#333>&amp;</span> next_hop )
+{
+  <span style=color:#339;font-weight:700>uint32_t</span> next_hop_ip <span style=color:#333>=</span> next_hop.ipv4_numeric();
+  <span style=color:#888>// construct Ethernet frame
+</span><span style=color:#888></span>  EthernetFrame frame;
+  frame.header.src <span style=color:#333>=</span> ethernet_address_;
+  frame.header.type <span style=color:#333>=</span> EthernetHeader<span style=color:#333>::</span>TYPE_IPv4;
+  frame.payload <span style=color:#333>=</span> serialize( dgram );
+
+  <span style=color:#080;font-weight:700>if</span> ( arp_cache_.find( next_hop_ip ) <span style=color:#333>==</span> arp_cache_.end()
+       <span style=color:#333>||</span> arp_cache_.at( next_hop_ip ).first <span style=color:#333>&gt;=</span> ARP_CACHE_TIMEOUT ) {
+    <span style=color:#888>// queue the datagram until knowning the Ethernet address
+</span><span style=color:#888></span>    waiting_frames_.emplace_back( next_hop_ip, frame );
+
+    <span style=color:#888>// avoid flooding the network with ARP requests
+</span><span style=color:#888></span>    <span style=color:#080;font-weight:700>if</span> ( arp_timer_.find( next_hop_ip ) <span style=color:#333>!=</span> arp_timer_.end()
+         <span style=color:#333>&amp;&amp;</span> arp_timer_.at( next_hop_ip ) <span style=color:#333>&lt;=</span> ARP_REQUEST_TIMEOUT ) {
+      <span style=color:#080;font-weight:700>return</span>;
+    }
+
+    <span style=color:#888>// construct ARP frame
+</span><span style=color:#888></span>    EthernetFrame arp_frame;
+    <span style=color:#888>// ...
+</span><span style=color:#888></span>    <span style=color:#888>// send the ARP request
+</span><span style=color:#888></span>    frames_.emplace( arp_frame );
+    <span style=color:#888>// update ARP timer
+</span><span style=color:#888></span>    arp_timer_.emplace( next_hop_ip, <span style=color:#00d;font-weight:700>0</span> );
+  } <span style=color:#080;font-weight:700>else</span> {
+    <span style=color:#888>// send directly if destination is known
+</span><span style=color:#888></span>    frame.header.dst <span style=color:#333>=</span> arp_cache_.at( next_hop_ip ).second;
+    frames_.emplace( frame );
+  }
+  <span style=color:#080;font-weight:700>return</span>;
+}
+</code></pre></div><p><strong>Receiving Frames</strong>：</p>
+<p>对于接收接口来说，其工作流程应该如下：</p>
+<ul>
+<li>检测数据帧协议；</li>
+<li>若为IP，直接解析返回。</li>
+<li>若为ARP，则检查为ARP请求还是ARP回复；
+<ul>
+<li>若为ARP请求，则更新ARP缓存，仅当存在查询地址才返回；</li>
+<li>若为ARP回复，则更新ARP缓存，并<code>waiting_frames_</code>中已知地址的帧发送。</li>
+</ul>
+</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#888>// frame: the incoming Ethernet frame
+</span><span style=color:#888></span>optional<span style=color:#333>&lt;</span>InternetDatagram<span style=color:#333>&gt;</span> NetworkInterface<span style=color:#333>::</span>recv_frame( <span style=color:#080;font-weight:700>const</span> EthernetFrame<span style=color:#333>&amp;</span> frame )
+{
+  optional<span style=color:#333>&lt;</span>InternetDatagram<span style=color:#333>&gt;</span> recv_dgram <span style=color:#333>=</span> nullopt;
+  <span style=color:#080;font-weight:700>switch</span> ( frame.header.type ) {
+    <span style=color:#080;font-weight:700>case</span> EthernetHeader<span style=color:#333>::</span><span style=color:#970;font-weight:700>TYPE_IPv4</span>: {
+      <span style=color:#888>// parse the recv datagram
+</span><span style=color:#888></span>      <span style=color:#888>// ... 
+</span><span style=color:#888></span>      recv_dgram <span style=color:#333>=</span> dgram;
+      <span style=color:#080;font-weight:700>break</span>;
+    }
+    <span style=color:#080;font-weight:700>case</span> EthernetHeader<span style=color:#333>::</span><span style=color:#970;font-weight:700>TYPE_ARP</span>: {
+      <span style=color:#888>// costruct ARP message
+</span><span style=color:#888></span>      ARPMessage arp_msg;
+      <span style=color:#080;font-weight:700>if</span> ( <span style=color:#333>!</span>parse( arp_msg, frame.payload ) ) {
+        <span style=color:#080;font-weight:700>break</span>;
+      }
+      <span style=color:#080;font-weight:700>switch</span> ( arp_msg.opcode ) {
+        <span style=color:#888>// reply ARP request and update ARP cache
+</span><span style=color:#888></span>        <span style=color:#080;font-weight:700>case</span> ARPMessage<span style=color:#333>::</span><span style=color:#970;font-weight:700>OPCODE_REQUEST</span>: {
+          <span style=color:#888>// the destination has to be the broadcast address
+</span><span style=color:#888></span>          <span style=color:#080;font-weight:700>if</span> ( frame.header.dst <span style=color:#333>!=</span> ETHERNET_BROADCAST ) {
+            <span style=color:#080;font-weight:700>break</span>;
+          }
+          <span style=color:#888>// update ARP cache
+</span><span style=color:#888></span>          arp_cache_.emplace( arp_msg.sender_ip_address, make_pair( <span style=color:#00d;font-weight:700>0</span>, arp_msg.sender_ethernet_address ) );
+
+          <span style=color:#888>// reply only if the target IP address is known
+</span><span style=color:#888></span>          <span style=color:#080;font-weight:700>if</span> ( arp_msg.target_ip_address <span style=color:#333>!=</span> ip_address_.ipv4_numeric()
+               <span style=color:#333>&amp;&amp;</span> ( arp_cache_.find( arp_msg.target_ip_address ) <span style=color:#333>==</span> arp_cache_.end()
+                    <span style=color:#333>||</span> arp_cache_.at( arp_msg.target_ip_address ).first <span style=color:#333>&gt;=</span> ARP_CACHE_TIMEOUT ) ) {
+            <span style=color:#080;font-weight:700>break</span>;
+          }
+          <span style=color:#888>// construct ARP frame
+</span><span style=color:#888></span>          <span style=color:#888>// ... 
+</span><span style=color:#888></span>          <span style=color:#888>// send the ARP reply
+</span><span style=color:#888></span>          frames_.emplace( arp_frame );
+
+          <span style=color:#080;font-weight:700>break</span>;
+        }
+        <span style=color:#888>// update ARP cache, ARP timer and waiting frames
+</span><span style=color:#888></span>        <span style=color:#080;font-weight:700>case</span> ARPMessage<span style=color:#333>::</span><span style=color:#970;font-weight:700>OPCODE_REPLY</span>: {
+          <span style=color:#888>// the destination has to be the receiver&#39;s address
+</span><span style=color:#888></span>          <span style=color:#080;font-weight:700>if</span> ( frame.header.dst <span style=color:#333>!=</span> ethernet_address_ ) {
+            <span style=color:#080;font-weight:700>break</span>;
+          }
+          arp_cache_.emplace( arp_msg.sender_ip_address, make_pair( <span style=color:#00d;font-weight:700>0UL</span>, arp_msg.sender_ethernet_address ) );
+          arp_timer_.erase( arp_msg.sender_ip_address );
+
+          <span style=color:#888>// update the waiting frames
+</span><span style=color:#888></span>          <span style=color:#888>// send the frames in the waiting list, when address is known and valid
+</span><span style=color:#888></span>          <span style=color:#888>// ...
+</span><span style=color:#888></span>        }
+        <span style=color:#080;font-weight:700>default</span><span style=color:#333>:</span>
+          <span style=color:#080;font-weight:700>break</span>;
+      }
+      <span style=color:#080;font-weight:700>break</span>;
+    }
+    <span style=color:#080;font-weight:700>default</span><span style=color:#333>:</span>
+      <span style=color:#080;font-weight:700>break</span>;
+  }
+
+  <span style=color:#080;font-weight:700>return</span> recv_dgram;
+}
+</code></pre></div><p><strong>Test Results</strong>：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check4
+Test project /home/zhytou/minnow/build
+    Start  1: compile with bug-checkers
+1/2 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    0.17 sec</span>
+    Start 35: net_interface
+2/2 Test <span style=color:#888>#35: net_interface ....................   Passed    0.02 sec</span>
+
+100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>2</span>
+
+Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>   0.20 sec
+Built target check4
+</code></pre></div><h2 id=5-the-ip-router>5 The IP Router</h2>
+<p><strong>Router Data Structure</strong>：</p>
+<p>lab5要求在lab4<code>NetworkInterface</code>的基础之上实现一个名为<code>Router</code>的路由器类。其中，一个<code>Router</code>管理着一组<code>NetworkInterface</code>接口，每一个接口管理着一个子网，即：和这个子网内的所有设备接口进行通信，且每个接口可以使用不同数据链路层技术，比如、以太网、WIFI和蓝牙等。</p>
+<p>此外，<code>Router</code>内部还存储着一组名为路由的跳转规则。它其实是一个IP地址到MAC地址的映射。当路由器接收到需要转发的数据包时，会查询该数据包的目的IP地址，在路由表中找到相应的下一跳地址。</p>
+<blockquote>
+<p>路由表和ARP缓存有什么区别？</p>
+<p>第一，路由表映射的是整个网络中的IP地址与下一跳路由器/接口的映射关系，而ARP缓存只映射局域网内主机的IP与MAC地址关系。
+第二，路由表主要靠静态设置和路由协议动态学习获得，而ARP缓存通过ARP请求响应在本地网络内学习获得。</p>
+</blockquote>
+<p>因此，<code>Router</code>结构体如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#080;font-weight:700>class</span> <span style=color:#b06;font-weight:700>Router</span>
+{
+  <span style=color:#888>// The router&#39;s collection of network interfaces
+</span><span style=color:#888></span>  std<span style=color:#333>::</span>vector<span style=color:#333>&lt;</span>AsyncNetworkInterface<span style=color:#333>&gt;</span> interfaces_ {};
+  <span style=color:#888>// The router&#39;s collection of forwarding rules
+</span><span style=color:#888></span>  std<span style=color:#333>::</span>vector<span style=color:#333>&lt;</span>std<span style=color:#333>::</span>tuple<span style=color:#333>&lt;</span><span style=color:#339;font-weight:700>uint32_t</span>, <span style=color:#339;font-weight:700>uint8_t</span>, std<span style=color:#333>::</span>optional<span style=color:#333>&lt;</span>Address<span style=color:#333>&gt;</span>, <span style=color:#339;font-weight:700>uint64_t</span><span style=color:#333>&gt;&gt;</span> routes_ {};
+<span style=color:#080;font-weight:700>public</span><span style=color:#333>:</span>
+  <span style=color:#888>// ...
+</span><span style=color:#888></span>};
+</code></pre></div><p><strong>Forward</strong>：</p>
+<p>在理解了路由器的工作原理之后，实现转发<code>route</code>函数就很简单了。只需要注意修改TTL和Checksum。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#339;font-weight:700>void</span> Router<span style=color:#333>::</span>route()
+{
+  <span style=color:#080;font-weight:700>for</span> ( <span style=color:#080;font-weight:700>auto</span><span style=color:#333>&amp;</span> <span style=color:#970;font-weight:700>interface</span> : interfaces_ ) {
+    <span style=color:#080;font-weight:700>while</span> ( <span style=color:#00d;font-weight:700>1</span> ) {
+      optional<span style=color:#333>&lt;</span>InternetDatagram<span style=color:#333>&gt;</span> opt_dgram <span style=color:#333>=</span> interface.maybe_receive();
+      <span style=color:#888>// no more datagrams
+</span><span style=color:#888></span>      <span style=color:#080;font-weight:700>if</span> ( <span style=color:#333>!</span>opt_dgram.has_value() ) {
+        <span style=color:#080;font-weight:700>break</span>;
+      }
+
+      InternetDatagram dgram <span style=color:#333>=</span> opt_dgram.value();
+      <span style=color:#339;font-weight:700>uint32_t</span> dst_addr <span style=color:#333>=</span> dgram.header.dst;
+      <span style=color:#339;font-weight:700>uint64_t</span> match_idx <span style=color:#333>=</span> routes_.size();
+      <span style=color:#888>// iterate through all routes to find the longest prefix match
+</span><span style=color:#888></span>      <span style=color:#080;font-weight:700>for</span> ( <span style=color:#339;font-weight:700>uint64_t</span> i <span style=color:#333>=</span> <span style=color:#00d;font-weight:700>0</span>; i <span style=color:#333>&lt;</span> routes_.size(); i<span style=color:#333>++</span> ) {
+        <span style=color:#339;font-weight:700>uint32_t</span> route_prefix <span style=color:#333>=</span> get<span style=color:#333>&lt;</span><span style=color:#00d;font-weight:700>0</span><span style=color:#333>&gt;</span>( routes_[i] );
+        <span style=color:#339;font-weight:700>uint8_t</span> prefix_length <span style=color:#333>=</span> get<span style=color:#333>&lt;</span><span style=color:#00d;font-weight:700>1</span><span style=color:#333>&gt;</span>( routes_[i] );
+        <span style=color:#339;font-weight:700>uint32_t</span> mask <span style=color:#333>=</span> prefix_length <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> <span style=color:#333>?</span> <span style=color:#00d;font-weight:700>0</span> <span style=color:#333>:</span> <span style=color:#333>~</span>( ( <span style=color:#00d;font-weight:700>1U</span> <span style=color:#333>&lt;&lt;</span> ( <span style=color:#00d;font-weight:700>32</span> <span style=color:#333>-</span> prefix_length ) ) <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>1</span> );
+        <span style=color:#888>// ...
+</span><span style=color:#888></span>      }
+
+      <span style=color:#888>// drop the datagram in the following 2 cases:
+</span><span style=color:#888></span>      <span style=color:#888>// no matched route
+</span><span style=color:#888></span>      <span style=color:#080;font-weight:700>if</span> ( match_idx <span style=color:#333>==</span> routes_.size() ) {
+        <span style=color:#080;font-weight:700>continue</span>;
+      }
+      <span style=color:#888>// TTL is arleady 0 or 0 after derecementing
+</span><span style=color:#888></span>      <span style=color:#080;font-weight:700>if</span> ( dgram.header.ttl <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> <span style=color:#333>||</span> dgram.header.ttl <span style=color:#333>-</span> <span style=color:#00d;font-weight:700>1</span> <span style=color:#333>==</span> <span style=color:#00d;font-weight:700>0</span> ) {
+        <span style=color:#080;font-weight:700>continue</span>;
+      }
+      <span style=color:#888>// decrement the TTL
+</span><span style=color:#888></span>      dgram.header.ttl <span style=color:#333>-=</span> <span style=color:#00d;font-weight:700>1</span>;
+      <span style=color:#888>// compute checksum
+</span><span style=color:#888></span>      dgram.header.compute_checksum();
+      <span style=color:#888>// send it to the next hop
+</span><span style=color:#888></span>      <span style=color:#888>// ... 
+</span><span style=color:#888></span>    }
+  }
+}
+
+</code></pre></div><p><strong>Test Results</strong>：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>zhytou@LAPTOP-Q0M4I2VQ:~/minnow/build$ make check5
+Test project /home/zhytou/minnow/build
+    Start  1: compile with bug-checkers
+1/3 Test  <span style=color:#888>#1: compile with bug-checkers ........   Passed    2.36 sec</span>
+    Start 35: net_interface
+2/3 Test <span style=color:#888>#35: net_interface ....................   Passed    0.01 sec</span>
+    Start 36: router
+3/3 Test <span style=color:#888>#36: router ...........................   Passed    0.03 sec</span>
+
+100% tests passed, <span style=color:#60e;font-weight:700>0</span> tests failed out of <span style=color:#60e;font-weight:700>3</span>
+
+Total Test <span style=color:#007020>time</span> <span style=color:#333>(</span>real<span style=color:#333>)</span> <span style=color:#333>=</span>   2.40 sec
+Built target check5
+</code></pre></div>
+</div>
+</div>
+</article>
+</div>
+</main>
+<footer>
+© Copyright <a href=https://github.com/Zhytou>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae>Vitae</a> theme for <a href=https://gohugo.io>Hugo</a>
+</footer><script src=/js/dark-mode.js></script>
+</body>
+</html>
