@@ -498,9 +498,9 @@ MVC(模型-视图-控制器)是一种软件架构模式。它将应用程序划�
 
 ### Data Access Layer
 
-- ![DAO vs Repository](https://stackoverflow.com/questions/8550124/what-is-the-difference-between-dao-and-repository-patterns)
-- ![DTO, VO, POJO, Entity, JavaBean](https://stackoverflow.com/questions/1612334/difference-between-dto-vo-pojo-javabeans)
+- [DAO vs Repository](https://stackoverflow.com/questions/8550124/what-is-the-difference-between-dao-and-repository-patterns)
+- [DTO, VO, POJO, Entity, JavaBean](https://stackoverflow.com/questions/1612334/difference-between-dto-vo-pojo-javabeans)
 
 ### Domain Driven Design
 
-![Domain-Driven Design vs. anemic model. How do they differ?](https://blog.pragmatists.com/domain-driven-design-vs-anemic-model-how-do-they-differ-ffdee9371a86)
+[Domain-Driven Design vs. anemic model. How do they differ?](https://blog.pragmatists.com/domain-driven-design-vs-anemic-model-how-do-they-differ-ffdee9371a86)
