@@ -66,8 +66,28 @@ draft: false
 
 ### Visibility/Occlusion
 
-**画家算法**：
+**画家算法**：受画家作画启发，根据片元位置从后往前依次着色，计算framebuffer值。此时，后着色的片元颜色会覆盖旧的framebuffer值。对于首位交替重叠的特殊情况难以处理。
 
-**Z-Buffer算法**：
+**Z-Buffer算法**：额外添加一个z-buffer记录当前像素的最小z值。
 
 ## Shading
+
+着色（Shading）
+
+### Illumination Model
+
+光照模型（Illumination Model），有时也被称为着色模型，是用于计算任意给定位置的光线强度的数学模型。根据是否考虑光源和场景中物体相互作用产生的二次光照，可将光照模型分为局部光照模型和全局光照模型。其中，常见的局部光照模型包括：Lambert漫反射模型、Phong光照模型、Blinn-Phong光照模型和Cook-Torrance模型等。而全局光照模型则包括：光线追踪、路径追踪、辐射度算法和光子映射等。
+
+具体的，局部光照大都基于经验（当然也有Cook-Torrance模型这种PBR的特例），而全局光照模型是基于光学物理原理的。后者的计算依赖于光能在现实世界中的传播情况，会考虑光线与整个场景中各物体表面及物体表面间的相互影响，包括多次反射、透射、散射等。正是这个原因，全局光照模型通常需要相当大的计算量，但同时也能取得非常逼真的真实效果。此外，局部光照模型往往无法直接生成阴影，而全局光照模型则可以。
+
+### Phong/Blinn-Phong
+
+### Shading Frequency
+
+- 面着色（Flat Shading）：一个平面计算一次，计算结果应用给该平面的每个点
+- 顶点着色（Vertex Shading/Grouraud Shading）：每个顶点都计算一次，然后面内点做插值
+- 像素着色（Pixel Shading/Phong Shading）：算出每个顶点法线，对法线进行插值得到面内每个像素的法线，再做着色计算
+
+### Graphics Pipeline
+
+## Texture
