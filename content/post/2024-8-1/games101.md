@@ -72,7 +72,9 @@ draft: false
 
 ## Shading
 
-着色（Shading）
+> In computer graphics, shading is the process of applying a material to an object.
+
+着色（Shading）是计算机图形学中用于模拟光照效果的过程，通过对物体表面的光照属性进行计算，为物体赋予逼真的外观。
 
 ### Illumination Model
 
@@ -81,6 +83,28 @@ draft: false
 具体的，局部光照大都基于经验（当然也有Cook-Torrance模型这种PBR的特例），而全局光照模型是基于光学物理原理的。后者的计算依赖于光能在现实世界中的传播情况，会考虑光线与整个场景中各物体表面及物体表面间的相互影响，包括多次反射、透射、散射等。正是这个原因，全局光照模型通常需要相当大的计算量，但同时也能取得非常逼真的真实效果。此外，局部光照模型往往无法直接生成阴影，而全局光照模型则可以。
 
 ### Phong/Blinn-Phong
+
+在Phong/Blinn-Phong光照模型中，它将任意位置发出的光线分成漫反射(Diffuse/Lambertian)、镜面(Specular)和环境(Ambient)三个分量。
+
+假设光源强度为I，带计算位置和光源距离为r，则该位置入射光线强度$L_{in}=I/r^2$。此时，出射光线强度为三个分量之和，即$L_{out}=L_d+L_s+L_a$。
+
+**Diffuse/Lambertian**：
+
+其中，漫反射强度由入射光线强度$L_{in}$、材料漫反射系数$K_d$、法向量方向$\vec{n}$和反射光线方向$\vec{out}$一起决定，即$L_d=k_d*L_{in}*max(0, \vec{n}*\vec{out})$。
+
+**Specular**：
+
+类似的，高光强度（或镜面反射强度）也由入射光线强度$L_{in}$、材料镜面反射系数$K_s$、材料的高光反光度shininess、法向量方向$\vec{n}$和反射光线方向$\vec{out}$一起决定。其中，高光反光度描述的是材料对镜面反光散射的能力。一个物体的反光度越高，反射光的能力越强，散射得越少，高光点就会越小。在下面的图片里，你会看到不同反光度的视觉效果影响：
+
+![高光反光度](https://learnopengl-cn.github.io/img/02/02/basic_lighting_specular_shininess.png)
+
+尽管Phong模型和Blinn-Phong模型计算这一分量所需参数类似，但计算方法却不同，这也是二者的区别。其中，前者的计算方式如下$L_s=k_s*L_{in}*pow(max(0, \vec{in}*\vec{out}), shininess)$。而后者则是引入了一个名为$\vec{h}$半程向量的方向来计算高光强度，其示意图如下。具体来说，$\vec{h}=\frac{\vec{in}+\vec{out}}{||\vec{in}+\vec{out}||}$，而高光强度$L_s=k_s*L_{in}*pow(max(0, \vec{n}*\vec{h}), shininess)$。
+
+![半程向量](https://zhytou.github.io/post/2024-8-1/half_vector.png)
+
+**Ambient**：
+
+至于环境光的计算方式就非常简单了。它表示为光的颜色乘以一个很小的常量环境因子，再乘以物体的颜色。
 
 ### Shading Frequency
 
@@ -91,3 +115,15 @@ draft: false
 ### Graphics Pipeline
 
 ## Texture
+
+### Texture Mapping
+
+### Interpolation Across Triangles: Barycentric Coordinates
+
+## Shadow Mapping
+
+前面提到使用局部光照模型进行着色并不会生成阴影，因此就需要使用额外的技术手段来生成这一信息。其中，最基础的方法就是阴影贴图（Shadow Mapping）技术。
+
+### Shadow Mapping Process
+
+### Drawbacks
