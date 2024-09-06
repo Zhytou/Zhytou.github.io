@@ -5,6 +5,8 @@ draft: false
 ---
 
 - [Transformation](#transformation)
+  - [MVP](#mvp)
+  - [Triangle](#triangle)
 - [Rasterization](#rasterization)
   - [Anti-aliasing](#anti-aliasing)
   - [Visibility/Occlusion](#visibilityocclusion)
@@ -16,10 +18,8 @@ draft: false
   - [Graphics Pipeline](#graphics-pipeline)
 - [Texture](#texture)
   - [Texture Mapping](#texture-mapping)
-  - [Interpolation Across Triangles: Barycentric Coordinates](#interpolation-across-triangles-barycentric-coordinates)
-- [Shadow Mapping](#shadow-mapping)
-  - [Shadow Mapping Process](#shadow-mapping-process)
-  - [Drawbacks](#drawbacks)
+  - [Normal Mapping](#normal-mapping)
+  - [Shadow Mapping](#shadow-mapping)
 - [PBR](#pbr)
   - [Radiometry](#radiometry)
   - [Microfacet Model](#microfacet-model)
@@ -33,11 +33,17 @@ draft: false
 
 ## Transformation
 
+### MVP
+
 - 模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。
 - 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。
 - 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。
 
 其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。
+
+### Triangle
+
+****
 
 ## Rasterization
 
@@ -157,15 +163,11 @@ Lambertian模型用于描述粗糙材料的表面。它是一种理想模型，�
 
 ### Texture Mapping
 
-### Interpolation Across Triangles: Barycentric Coordinates
+### Normal Mapping
 
-## Shadow Mapping
+### Shadow Mapping
 
 前面提到使用局部光照模型进行着色并不会生成阴影，因此就需要使用额外的技术手段来生成这一信息。其中，最基础的方法就是阴影贴图（Shadow Mapping）技术。
-
-### Shadow Mapping Process
-
-### Drawbacks
 
 ## PBR
 
@@ -197,6 +199,8 @@ BRDF(Bidirectional Reflectance Distribution Function)，译作双向反射分布
 
 具体的，BRDF表示了当给定一条入射光的时候，某一条特定的出射光线的性质是怎么样的。它的精确定义是出射光辐射率(Radiance)的微分和入射光辐照度(Irradiance)的微分之比，即$f(l,v)=\frac{dL_o(v)}{dE(l)}$。其中，v和l分别为出射和入射光线方向。
 
+其实，采用ωi和ωo作为输入参数的Blinn-Phong光照模型也可以被当作是一个BRDF。不过由于Blinn-Phong模型并没有遵循能量守恒定律，因此它不被认为是基于物理的渲染。至于，目前广泛用于基于物理渲染和实时渲染的BRDF模型则是一种被称为Cook-Torrance的BRDF模型。我们将在后两节详细介绍它。
+
 ### Rendering Equation
 
 渲染方程是一个描述光能在场景中流转的方程，它基于能量守恒定律，在理论上给出了一个完美的光能求解结果。在一个特定的位置和方向，出射光Lo是发射光Le与反射光之和。而反射光本身则是各个方向的入射光Li之和乘以表面反射率及入射角。
@@ -208,6 +212,63 @@ BRDF(Bidirectional Reflectance Distribution Function)，译作双向反射分布
 ### Cook-Torrance BRDF
 
 > [learnopengl中关于Cook-Torrance BRDF的介绍](https://learnopengl-cn.github.io/07%20PBR/01%20Theory/#brdf)
+
+Cook-Torrance BRDF兼有漫反射和镜面反射两个部分：$f_r=k_df_{lambert}+k_sf_{cook-torrance}$。其中，$f_{lambert}=\frac\rho\pi$，而$f_{cook-torrance}=\frac{DFG}{4(\vec{w_o}*\vec{n})(\vec{w_i}*\vec{n})}$。
+
+**漫反射**：
+
+漫反射BRDF系数$f_{lambert}=\frac\rho\pi$的推导基于一个前提：入射光是均匀且遍布整个半球方向。那么出射光则可表示为
+
+$$
+\begin{align}
+L_o(w_o) &= \int_{H^2}{f_rL_i(w_i)cos\theta}dw_i\\
+         &= f_rL_i\int_{H^2}{cos\theta}dw_i\\
+         &= f_rL_i\pi\\
+f_r &= \frac\rho\pi
+\end{align}
+$$
+
+其中，$\rho$表示的是发生反射位置的颜色。
+
+**法线分布函数**：
+
+Cook-Torrance BRDF的镜面反射部分包含法线分布函数(Normal Distribution Function)、菲涅尔方程(Fresnel Rquation)、几何函数(Geometry Function)以及用于标准化的分母 。
+
+其中，法线分布函数用于描述给定法线$\vec{n}$、半程向量$\vec{h}$和粗糙度$\alpha$时，法线方向和半程向量方向一致的比例。它和Phong光照模型中的反光度shiness参数作用类似，都是用于描述物体表面的光泽程度。当粗糙度越小（或反光度越大），镜面反射光线越集中，物体表面越有光泽；反之，镜面反射越散射，物体表面越缺乏光泽。比如：
+
+![法线分布函数](https://learnopengl-cn.github.io/img/07/01/ndf.png)
+
+一个常见的法线分布函数如下$NDF(\vec{n}, \vec{h}, \alpha)=\frac{\alpha^2}{\pi((\vec{n}*\vec{h})^2(\alpha^2-1)+1)^2}$。将它在GLSL实现可得：
+
+```GLSL
+float D_GGX_TR(vec3 N, vec3 H, float a)
+{
+  float a2     = a*a;
+  float NdotH  = max(dot(N, H), 0.0);
+  float NdotH2 = NdotH*NdotH;
+
+  float nom    = a2;
+  float denom  = (NdotH2 * (a2 - 1.0) + 1.0);
+  denom        = PI * denom * denom;
+
+  return nom / denom;
+}
+```
+
+**几何函数**：
+
+几何函数用于描述给定法线$\vec{n}$、视线$\vec{v}$和粗糙度$\alpha$时，反射光线被遮蔽的比率。比如：$G(\vec{n}, \vec{v}, k)=\frac{\vec{n}*\vec{v}}{(\vec{n}*\vec{v})(1-k)+k}$。
+
+其中，k是针对粗糙度的重映射(Remapping)，取决于我们要用的是针对直接光照还是针对IBL光照的几何函数。
+
+$$
+k_{direct}=\frac{(\alpha+1)^2}{8}\\
+k_{ibl}=\frac{\alpha^2}{2}
+$$
+
+**菲涅尔方程**：
+
+菲涅尔方程描述的是被反射的光线对比光线被折射的部分所占的比率，这个比率会随着我们观察的角度不同而不同。
 
 ### PBR Implementation
 
