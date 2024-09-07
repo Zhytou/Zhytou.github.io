@@ -18,14 +18,18 @@ draft: false
   - [Graphics Pipeline](#graphics-pipeline)
 - [Texture](#texture)
   - [Texture Mapping](#texture-mapping)
+  - [Light Mapping](#light-mapping)
   - [Normal Mapping](#normal-mapping)
   - [Shadow Mapping](#shadow-mapping)
 - [PBR](#pbr)
   - [Radiometry](#radiometry)
-  - [Microfacet Model](#microfacet-model)
-  - [BRDF](#brdf)
+  - [Optics and Microfacet Model](#optics-and-microfacet-model)
+  - [BRDF and BxDF](#brdf-and-bxdf)
   - [Rendering Equation](#rendering-equation)
   - [Cook-Torrance BRDF](#cook-torrance-brdf)
+  - [Diffuse Part](#diffuse-part)
+  - [Specular Part](#specular-part)
+  - [Linear Space and Tone Mapping](#linear-space-and-tone-mapping)
   - [PBR Implementation](#pbr-implementation)
   - [PBR GI——IBL](#pbr-giibl)
 - [Ray Tracing](#ray-tracing)
@@ -156,24 +160,46 @@ Lambertian模型用于描述粗糙材料的表面。它是一种理想模型，�
 - 应用阶段：输入一堆三维空间中的点。
 - 顶点处理：经过MVPV变换后得到这些点在屏幕上的二维坐标。
 - 图元处理：规定哪些点相互构成三角形(指定图元拓扑结构)。
-- 光栅化：得到被三角形覆盖的像素。
+- 光栅化：得到被三角形覆盖的像素。（除此之外，顶点着色器传给片元着色器的数据会通过插值得出。）
 - 片元处理：计算每个像素该显示什么，应该是什么颜色，Z-buffer的生成等。
 
 ## Texture
 
 ### Texture Mapping
 
+纹理贴图(Texture Mapping)简单的理解就是将一张二维图像，按照一定的映射关系，将每个像素贴合到物体表面的对应位置。纹理技术可以增加物体表面的细节。
+
+**纹理环绕**：
+
+**Mipmap**：
+
+### Light Mapping
+
 ### Normal Mapping
+
+除了可以保存物体的颜色信息，纹理还可以用于保存物体的法线信息，也就是法线贴图(Normal Mapping)。它的主要作用就是通过(U, V)
 
 ### Shadow Mapping
 
-前面提到使用局部光照模型进行着色并不会生成阴影，因此就需要使用额外的技术手段来生成这一信息。其中，最基础的方法就是阴影贴图（Shadow Mapping）技术。
+和路径追踪这类方法不同，光栅化不会自动生成阴影。其中，最基础的方法就是阴影贴图（Shadow Mapping）技术。
 
 ## PBR
 
-基于物理的渲染（Physicallly Based Rendering, PBR）是计算机图形学中一种主流的着色方法。相比于，传统的经验模型，如Phong式光照模型，PBR方法基于物理学原理和光学特性，更加真实和准确。
+> [PBR 白皮书](https://github.com/QianMo/PBR-White-Paper/tree/master)
 
-而其三大基础分别是辐射度量学、微平面模型和反射方程。其中，前两者的出现基本上只是为了证明：PBR里的数学公式是符合物理的；而最后的反射方程则是PBR中核心数学公式。
+基于物理的渲染（Physicallly Based Rendering, PBR）是计算机图形学中一种主流的着色方法。相比于，传统的经验模型，如Phong式光照模型，PBR方法基于物理学原理和光学特性，更加真实和准确。具体来说，PBR理论包括：
+
+- 基于物理的材质（Material）；
+- 基于物理的光照（Lighting）；
+- 基于物理适配的摄像机（Camera）。
+
+而该理论的三大基础则分别是辐射度量学、微平面模型和反射方程。其中，前两者的出现基本上只是为了证明：PBR里的数学公式是符合物理的；而后者才是PBR中的核心。换句话说说，反射方程的推导、简化和应用构成了PBR理论。
+
+最后，基于物理的渲染相比传统方法有以下优势：
+
+- 直观参数（最重要的一点）：PBR使用的参数（如粗糙度、金属度等）与实际物理属性紧密相关，这使得艺术家和开发者能够更直观地理解和调整材质参数以获得预期的视觉效果。
+- 一致的材质表现：PBR模型提供了一种标准化的方法来表示材质属性，这意味着同样的材质设置在不同的光照条件下能保持一致的外观。这种一致性对于跨平台开发和维护大型项目尤其重要。
+- 逼真的视觉效果：由于PBR基于真实的物理光照模型，它能够更好地模拟光与材质的交互，提供更逼真的阴影、高光和反射效果。这种逼真效果能够显著提升视觉细节和沉浸感。
 
 ### Radiometry
 
@@ -189,17 +215,56 @@ Lambertian模型用于描述粗糙材料的表面。它是一种理想模型，�
 
 ![Irradiance和Radiance的关系](https://pic3.zhimg.com/80/v2-7cddd5ba8c0e546af7245a60982cfcaa_1440w.webp)
 
-### Microfacet Model
+### Optics and Microfacet Model
+
+**微平面模型**：
 
 微表面模型是计算机图形学中用于模拟真实表面的微观结构的一种技术。它将现实世界中任意材料视作多个微小凹凸结构组成，并使用统计学原理去描述微观结构的几何形状、法线分布和表面粗糙度等参数从而计算光线的反射和折射。
 
-### BRDF
+为了更好的理解微平面模型，下面将介绍一些光学基础知识。
+
+**折射和折射率**：
+
+而光在传播到两种不同介质交界处时，原始光波和新的光波的相速度（Phase Velocity）的比率定义了介质的光学性质，就是折射率（Index Of Refraction，IOR），由字母n表示。
+
+除了代表光的相速度的实部n之外，还用希腊字母κ（kappa）表示介质将光能转为为其他形式能量的吸收性。n和κ通常都随波长而变化，两者组合成复数n +iκ，称为复折射率（complex index of refraction）。
+
+也就是说，折射率IOR是一个复数（complex number），其分为实部和虚部两部分：
+
+- 折射率的实部（real part）度量了物质如何影响光速，即相对于光在真空中传播速度减慢的度量。
+- 折射率的虚部（imaginary part）确定了光在传播时是否被吸收，转换成其他形式的能量，通常是热能。非吸收性介质虚部为零。
+
+**光与平面交互**：
+
+![漫反射](https://raw.githubusercontent.com/QianMo/PBR-White-Paper/master/content/part%202/media/db572e0923acd8d22e67a4e1875fb206.png)
+
+在了解了折射和折射率之后，我们可以进一步总结得出光与平面交互方法，包括：
+
+- 反射（Reflection）。光线在两种介质交界处的直接反射即镜面反射（Specular）。金属的镜面反射颜色为三通道的彩色，而非金属的镜面反射颜色为单通道的单色。
+- 折射（Refraction）。 从表面折射入介质的光，会发生吸收和散射，而介质的整体外观由其散射和吸收特性的组合决定，其中：
+  - 散射（Scattering）。 折射率的快速变化引起散射，光的方向会改变（分裂成多个方向），但是光的总量或光谱分布不会改变。散射最终被视作的类型与观察尺度有关：
+    - 次表面散射（Subsurface Scattering）。观察像素小于散射距离，散射被视作次表面散射。
+    - 漫反射（Diffuse）。观察像素大于散射距离，散射被视作漫反射。
+    - 透射（Transmission）。入射光经过折射穿过物体后的出射现象。透射为次表面散射的特例。
+  - 吸收（Absorption）。 具有复折射率的物质区域会引起吸收，具体原理是光波频率与该材质原子中的电子振动的频率相匹配。复折射率（complex number）的虚部（imaginary part）确定了光在传播时是否被吸收（转换成其他形式的能量）。发生吸收的介质的光量会随传播的距离而减小（如果吸收优先发生于某些波长，则可能也会改变光的颜色），而光的方向不会因为吸收而改变。任何颜色色调通常都是由吸收的波长相关性引起的。
+
+因此，从宏观上看，光在介质表面扣除吸收部分，即剩下：（镜面）反射、漫反射和透射三部分。
+
+**菲涅尔效应和方程**：
+
+### BRDF and BxDF
 
 BRDF(Bidirectional Reflectance Distribution Function)，译作双向反射分布函数，是一个用来描述物体表面如何反射光线的方程。简单来说，它就是微表面模型的数学表达。
 
 具体的，BRDF表示了当给定一条入射光的时候，某一条特定的出射光线的性质是怎么样的。它的精确定义是出射光辐射率(Radiance)的微分和入射光辐照度(Irradiance)的微分之比，即$f(l,v)=\frac{dL_o(v)}{dE(l)}$。其中，v和l分别为出射和入射光线方向。
 
 其实，采用ωi和ωo作为输入参数的Blinn-Phong光照模型也可以被当作是一个BRDF。不过由于Blinn-Phong模型并没有遵循能量守恒定律，因此它不被认为是基于物理的渲染。至于，目前广泛用于基于物理渲染和实时渲染的BRDF模型则是一种被称为Cook-Torrance的BRDF模型。我们将在后两节详细介绍它。
+
+除了BRDF之外，图形学中还有一些其他的双向分布函数，比如BRDF、BTDF、BSDF、BSSRDF等，这些一起被称作BxDF。
+
+![BxDF](https://raw.githubusercontent.com/QianMo/PBR-White-Paper/master/content/part%201/media/8c60f94b8b6f430fc5dcb41068770454.png)
+
+在上述这些BxDF中，BRDF最为简单，也最为常用。因为游戏和电影中的大多数物体都是不透明的，用BRDF就完全足够。而BSDF、BTDF、BSSRDF往往更多用于半透明材质和次表面散射材质。
 
 ### Rendering Equation
 
@@ -213,11 +278,11 @@ BRDF(Bidirectional Reflectance Distribution Function)，译作双向反射分布
 
 > [learnopengl中关于Cook-Torrance BRDF的介绍](https://learnopengl-cn.github.io/07%20PBR/01%20Theory/#brdf)
 
-Cook-Torrance BRDF兼有漫反射和镜面反射两个部分：$f_r=k_df_{lambert}+k_sf_{cook-torrance}$。其中，$f_{lambert}=\frac\rho\pi$，而$f_{cook-torrance}=\frac{DFG}{4(\vec{w_o}*\vec{n})(\vec{w_i}*\vec{n})}$。
+Cook-Torrance BRDF是一种目前最流行一种BRDF反射模型，它包含漫反射和镜面反射两个部分：$f_r=k_df_{lambert}+k_sf_{cook-torrance}$。其中，$f_{lambert}=\frac\rho\pi$，而$f_{cook-torrance}=\frac{DFG}{4(\vec{w_o}*\vec{n})(\vec{w_i}*\vec{n})}$。
 
-**漫反射**：
+### Diffuse Part
 
-漫反射BRDF系数$f_{lambert}=\frac\rho\pi$的推导基于一个前提：入射光是均匀且遍布整个半球方向。那么出射光则可表示为
+Cook-Torrance BRDF中，漫反射系数$f_{lambert}=\frac\rho\pi$的推导基于一个前提：入射光是均匀且遍布整个半球方向。那么出射光则可表示为：
 
 $$
 \begin{align}
@@ -230,15 +295,35 @@ $$
 
 其中，$\rho$表示的是发生反射位置的颜色。
 
+### Specular Part
+
+Cook-Torrance BRDF的镜面反射部分包含法线分布函数(Normal Distribution Function)、菲涅尔方程(Fresnel Equation)、几何函数(Geometry Function)以及用于矫正的分母 。
+
+其中，分母作为微观几何的局部空间和整个宏观表面的局部空间之间变换的微平面量的校正，有两点需要注意：
+
+- 对于分母中的点积，仅仅避免负值是不够的 - 也必须避免零值。通常通过在常规的clamp或绝对值操作之后添加非常小的正值来完成。
+- Microfacet Cook-Torrance BRDF是实践中使用最广泛的模型，实际上也是人们可以想到的最简单的微平面模型。它仅对几何光学系统中的单层微表面上的单个散射进行建模，没有考虑多次散射，分层材质，以及衍射。Microfacet模型，实际上还有很长的路要走。
+
+**菲涅尔项**：
+
+其中，菲涅尔方程描述的是被反射的光线对比光线被折射的部分所占的比率，这个比率会随着观察角度变化而变化。比如，当我们站在湖边低头看脚下的湖水，会发现水是透明的，反射不会特别强烈；而如果我们看远处的湖面时，会发现水并不透明，而且反射非常强烈。
+
+目前，菲涅尔项一般都采用Schlick近似$$。因为计算成本低廉，而且精度足。
+
 **法线分布函数**：
 
-Cook-Torrance BRDF的镜面反射部分包含法线分布函数(Normal Distribution Function)、菲涅尔方程(Fresnel Rquation)、几何函数(Geometry Function)以及用于标准化的分母 。
+法线分布函数用于描述给定法线$\vec{n}$、半程向量$\vec{h}$和粗糙度$\alpha$时，法线方向和半程向量方向一致的比例。它满足一些列基本性质，包括：
 
-其中，法线分布函数用于描述给定法线$\vec{n}$、半程向量$\vec{h}$和粗糙度$\alpha$时，法线方向和半程向量方向一致的比例。它和Phong光照模型中的反光度shiness参数作用类似，都是用于描述物体表面的光泽程度。当粗糙度越小（或反光度越大），镜面反射光线越集中，物体表面越有光泽；反之，镜面反射越散射，物体表面越缺乏光泽。比如：
+- 微平面法线密度始终为非负值；
+- 微表面的总面积始终不小于宏观表面总面积；
+- 任何方向上微观表面投影面积始终与宏观表面投影面积相同；
+- 若观察方向为法线方向，则其积分可以归一化。
+
+一个最常见的法线分布函数其实就是Blinn-Phong中关于镜面反射引入的shiness参数，其具体表达如下：$NDF(\vec{n}, \vec{h}, shiness)=pow(max(0, \vec{n}*\vec{h}), shininess)$。当粗糙度越小（或反光度越大），镜面反射光线越集中，物体表面越有光泽；反之，镜面反射越散射，物体表面越缺乏光泽。
 
 ![法线分布函数](https://learnopengl-cn.github.io/img/07/01/ndf.png)
 
-一个常见的法线分布函数如下$NDF(\vec{n}, \vec{h}, \alpha)=\frac{\alpha^2}{\pi((\vec{n}*\vec{h})^2(\alpha^2-1)+1)^2}$。将它在GLSL实现可得：
+除此之外，还有比较经典的CGX法线分布函数$NDF(\vec{n}, \vec{h}, \alpha)=\frac{\alpha^2}{\pi((\vec{n}*\vec{h})^2(\alpha^2-1)+1)^2}$。将它在GLSL实现可得：
 
 ```GLSL
 float D_GGX_TR(vec3 N, vec3 H, float a)
@@ -255,9 +340,11 @@ float D_GGX_TR(vec3 N, vec3 H, float a)
 }
 ```
 
+注意：NDF其实和传统的Normal Mapping有一定相似。只不过，法线贴图只为每个像素提供。而法线分布函数使用法线贴图和粗糙度贴图一起，提供了亚像素精度的细节。且传统法线贴图没有经过归一化处理，不满足能量守恒，容易出现失真。
+
 **几何函数**：
 
-几何函数用于描述给定法线$\vec{n}$、视线$\vec{v}$和粗糙度$\alpha$时，反射光线被遮蔽的比率。比如：$G(\vec{n}, \vec{v}, k)=\frac{\vec{n}*\vec{v}}{(\vec{n}*\vec{v})(1-k)+k}$。
+几何函数用于描述给定法线$\vec{n}$、视线$\vec{v}$和粗糙度$\alpha$时，反射光线被遮蔽的比率，它是实现PBR能量守恒的核心。比如：$G(\vec{n}, \vec{v}, k)=\frac{\vec{n}*\vec{v}}{(\vec{n}*\vec{v})(1-k)+k}$。
 
 其中，k是针对粗糙度的重映射(Remapping)，取决于我们要用的是针对直接光照还是针对IBL光照的几何函数。
 
@@ -266,9 +353,7 @@ k_{direct}=\frac{(\alpha+1)^2}{8}\\
 k_{ibl}=\frac{\alpha^2}{2}
 $$
 
-**菲涅尔方程**：
-
-菲涅尔方程描述的是被反射的光线对比光线被折射的部分所占的比率，这个比率会随着我们观察的角度不同而不同。
+### Linear Space and Tone Mapping
 
 ### PBR Implementation
 
