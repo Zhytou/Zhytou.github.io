@@ -10,18 +10,18 @@
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
 <meta property="og:title" content="GAMES101 学习笔记">
-<meta property="og:description" content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Shadow Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。此外，还有">
+<meta property="og:description" content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。此外，还有">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2024-8-1/games101/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2024-08-01T17:06:45+08:00">
 <meta property="article:modified_time" content="2024-08-01T17:06:45+08:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="GAMES101 学习笔记">
-<meta name=twitter:description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Shadow Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。此外，还有">
+<meta name=twitter:description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。此外，还有">
 <meta itemprop=name content="GAMES101 学习笔记">
-<meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Shadow Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。此外，还有"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
+<meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。此外，还有"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
 <meta itemprop=dateModified content="2024-08-01T17:06:45+08:00">
-<meta itemprop=wordCount content="512">
+<meta itemprop=wordCount content="582">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -100,7 +100,7 @@
 <li><a href=#texture-mapping>Texture Mapping</a></li>
 <li><a href=#light-mapping>Light Mapping</a></li>
 <li><a href=#normal-mapping>Normal Mapping</a></li>
-<li><a href=#shadow-mapping>Shadow Mapping</a></li>
+<li><a href=#displacement-mapping>Displacement Mapping</a></li>
 </ul>
 </li>
 <li><a href=#pbr>PBR</a>
@@ -131,13 +131,13 @@
 </ul>
 <p>其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。此外，还有</p>
 <p><strong>齐次坐标</strong>：</p>
-<p>为什么三维的坐标会使用四维矩阵进行平移或旋转的计算呢？</p>
+<p>为什么三维的坐标会使用四维矩阵进行平移或旋转的计算呢？即：为什么原本n维的向量要用一个n+1维向量来表示？</p>
 <blockquote>
 <p><a href=https://gamedev.stackexchange.com/questions/72044/why-do-we-use-4x4-matrices-to-transform-things-in-3d target=_blank>Why do we use 4x4 matrices to transform things in 3D?</a></p>
 </blockquote>
-<p>其实就是因为引入第四维可以更优雅的表示平移的距离，比如：</p>
+<p>其实，这种表达方式被称为齐次坐标(Homogeneous Coordinates)，即原本n维的向量用一个n+1维向量来表示。其核心目的是为了更优雅的表示平移的距离，比如：</p>
 <p><figure>
-<img src=https://images2015.cnblogs.com/blog/686199/201601/686199-20160125091026363-1704080139.png alt=平移>
+<img src=https://zhytou.github.io/post/2024-8-1/homogeneous_coordinates.png alt=平移>
 </figure></p>
 <h3 id=triangle>Triangle</h3>
 <p><strong>判断点在三角形内部</strong>：</p>
@@ -160,17 +160,17 @@
 <p><strong>采样绘制</strong>：</p>
 <p>采样绘制就是将三角形图元分割为屏幕上的像素，确定哪些像素需要在稍后上色。具体来说，就是根据像素中心是否位于图元内部这一点来判断的，如下图所示。</p>
 <p><figure>
-<img src=https://i-blog.csdnimg.cn/blog_migrate/0f3b07a11380d1754bbabc63d6a9e6ab.png alt=采样绘制>
+<img src=https://zhytou.github.io/post/2024-8-1/rasterization.png alt=采样绘制>
 </figure></p>
 <h3 id=aliasing>Aliasing</h3>
 <p><strong>走样原理</strong>：</p>
 <p>站在信号与系统的角度来看采样，在时域上是原信号和周期冲激信号的一个乘积。那么根据傅里叶变化，在频域上就是原信号和周期冲激信号的卷积，如下图所示。</p>
 <p><figure>
-<img src=https://i-blog.csdnimg.cn/blog_migrate/e66dc5b5fe031c6065421bafc7d88b99.png alt=傅里叶变换>
+<img src=https://zhytou.github.io/post/2024-8-1/aliasing_reason.png alt=傅里叶变换>
 </figure></p>
 <p>那么当原信号频谱过宽或采样用的冲激信号频率太低，就容易发生信号重叠，由此造成走样。</p>
 <p><figure>
-<img src=https://i-blog.csdnimg.cn/blog_migrate/5a79462c87eee40450393d63c45bb780.png alt=走样原理>
+<img src=https://zhytou.github.io/post/2024-8-1/fourier_transform.png alt=走样原理>
 </figure></p>
 <p><strong>抗锯齿/抗走样原理</strong>：</p>
 <p>根据走样原理，由此可得出抗锯齿原理其实就是尽可能避免信号高频部分发生重叠。一般来说，常见的抗锯齿方法有两种，分别是：</p>
@@ -200,7 +200,7 @@
 <h3 id=lamberts-cosine-law>Lambert&rsquo;s Cosine Law</h3>
 <p>Lambertian模型用于描述粗糙材料的表面。它是一种理想模型，只考虑漫反射，即完全漫反射。这些反射光，在不同角度的辐射强度会依余弦公式变化，角度越大强度越弱。</p>
 <p><figure>
-<img src=https://i-blog.csdnimg.cn/blog_migrate/de1476d341f40073b443de3aec2450da.png#pic_center alt=Lambert余弦定理>
+<img src=https://zhytou.github.io/post/2024-8-1/lambert_cosine_law.png alt=Lambert余弦定理>
 </figure></p>
 <h3 id=phongblinn-phong-model>Phong/Blinn-Phong Model</h3>
 <p>在Phong/Blinn-Phong光照模型中，它将任意位置发出的光线分成漫反射(Diffuse/Lambertian)、镜面(Specular)和环境(Ambient)三个分量。</p>
@@ -267,14 +267,16 @@
 <p>不过，Early-Z会带来透明测试的冲突，例如某个片元A虽然遮挡了另一个片元B，但A却是透明的，GPU应当渲染的是片元B，这就产生了矛盾。</p>
 <h2 id=texture>Texture</h2>
 <h3 id=texture-mapping>Texture Mapping</h3>
-<p>纹理贴图(Texture Mapping)简单的理解就是将一张二维图像，按照一定的映射关系，将每个像素贴合到物体表面的对应位置。纹理技术可以增加物体表面的细节。</p>
+<p>纹理贴图(Texture Mapping)简单的理解就是将一张二维图像，按照一定的映射关系，将每个像素贴合到物体表面的对应位置。</p>
 <p><strong>纹理环绕</strong>：</p>
+<p><strong>纹理过滤</strong>：</p>
 <p><strong>Mipmap</strong>：</p>
+<p>多级渐远纹理(Mipmap)</p>
 <h3 id=light-mapping>Light Mapping</h3>
 <h3 id=normal-mapping>Normal Mapping</h3>
 <p>除了可以保存物体的颜色信息，纹理还可以用于保存物体的法线信息，也就是法线贴图(Normal Mapping)。它的主要作用就是通过(U, V)</p>
-<h3 id=shadow-mapping>Shadow Mapping</h3>
-<p>和路径追踪这类方法不同，光栅化不会自动生成阴影。其中，最基础的方法就是阴影贴图（Shadow Mapping）技术。</p>
+<h3 id=displacement-mapping>Displacement Mapping</h3>
+<p>视觉贴图是一种用于模拟表面几何细节的贴图，通过改变顶点的位置来实现凹凸效果。</p>
 <h2 id=pbr>PBR</h2>
 <blockquote>
 <p><a href=https://github.com/QianMo/PBR-White-Paper/tree/master target=_blank>PBR 白皮书</a></p>
@@ -359,6 +361,10 @@
 <p><a href=https://learnopengl-cn.github.io/07%20PBR/01%20Theory/#brdf target=_blank>learnopengl中关于Cook-Torrance BRDF的介绍</a></p>
 </blockquote>
 <p>Cook-Torrance BRDF是一种目前最流行一种BRDF反射模型，它包含漫反射和镜面反射两个部分：$f_r=k_df_{lambert}+k_sf_{cook-torrance}$。其中，$f_{lambert}=\frac\rho\pi$，而$f_{cook-torrance}=\frac{DFG}{4(\vec{w_o}<em>\vec{n})(\vec{w_i}</em>\vec{n})}$。</p>
+<p>此外，Cook-Torrance BRDF的间接光（即环境光）的计算在点光源下和传统模型仍然类似，可通过一个名为环境光遮蔽贴图(Ambient Occlusion, AO)的方式获取每个位置的环境光强度，比如：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-GLSL data-lang=GLSL><span style=color:#888>// albedo就是片元位置的baseColor</span>
+<span style=color:#080;font-weight:700>vec3</span> ambient <span style=color:#333>=</span> <span style=color:#080;font-weight:700>vec3</span>(<span style=color:#60e;font-weight:700>0.03</span>) <span style=color:#333>*</span> albedo <span style=color:#333>*</span> ao;
+</code></pre></div><p>至于，使用IBL技术表示的全局光照则需要使用更复杂的手段解决，比如预计算PRT等。</p>
 <h3 id=diffuse-part>Diffuse Part</h3>
 <p>Cook-Torrance BRDF中，漫反射系数$f_{lambert}=\frac\rho\pi$的推导基于一个前提：入射光是均匀且遍布整个半球方向。那么出射光则可表示为：</p>
 <p>$$
@@ -430,17 +436,44 @@ f_r =& k_df_{lambert}+k_sf_{cook-torrance}\
 $$</p>
 <p><strong>PBR常见材料/纹理</strong>：</p>
 <p><figure>
-<img src=https://learnopengl-cn.github.io/img/07/01/textures.png alt=PBR纹理列表>
+<img src=https://zhytou.github.io/post/2024-8-1/pbr_textures.png alt=PBR纹理列表>
 </figure></p>
+<p>对美工来说，PBR一般右两种材质工作流：金属/粗糙度工作流（Metal/Roughness）和镜面反射/光泽度工作流（Specular/Glossiness）。它们的目的都是进行PBR渲染，获取尽可能真实的渲染效果，即一体两面。</p>
+<p>其中，金属度/粗错度工作流需要三张贴图来表示PBR需要的参数：</p>
 <ul>
-<li>反照率（Albedo）纹理为每一个金属的纹素(Texel)（纹理像素）指定表面颜色或者基础反射率。这和我们之前使用过的漫反射纹理相当类似，不同的是所有光照信息都是由一个纹理中提取的。</li>
-<li>法线（Normal）贴图纹理和我们之前在法线贴图教程中所使用的贴图是完全一样的。法线贴图使我们可以逐片段的指定独特的法线，来为表面制造出起伏不平的假象。</li>
-<li>金属(Metallic)贴图逐个纹素的指定该纹素是不是金属质地的。</li>
-<li>粗糙度(Roughness)贴图可以以纹素为单位指定某个表面有多粗糙。采样得来的粗糙度数值会影响一个表面的微平面统计学上的取向度。</li>
-<li>环境光遮蔽(Ambient Occlusion)贴图或者说AO贴图为表面和周围潜在的几何图形指定了一个额外的阴影因子。比如如果我们有一个砖块表面，反照率纹理上的砖块裂缝部分应该没有任何阴影信息。然而AO贴图则会把那些光线较难逃逸出来的暗色边缘指定出来。</li>
+<li>albedo/baseColor：每个Texel表示对应位置的表面颜色，且不包含任何光影信息。</li>
+<li>metallic：每个Texel表示对应位置金属成分的占比，1表示100%的纯金属，0表示100%的非金属。</li>
+<li>roughness：每个Texel表示对应位置粗糙程度。越粗糙，该位置镜面反射光线越分散，光泽程度越低。</li>
+</ul>
+<p>类似的，镜面反射/光泽度工作流也需要三张贴图表示PBR所需参数：</p>
+<ul>
+<li>diffuse/albedo：每个Texel表示对应位置的表面颜色。</li>
+<li>specular：每个Texel表示对应位置的$F_0$，即入射角为0°时的菲涅尔系数。</li>
+<li>glossiness：每个Texel表示对应位置粗糙程度。</li>
 </ul>
 <h3 id=linear-space-and-tone-mapping>Linear Space and Tone Mapping</h3>
-<h3 id=pbr-implementation>PBR Implementation</h3>
+<blockquote>
+<p><a href=https://learnopengl-cn.github.io/07%20PBR/02%20Lighting/#hdr target=_blank>learnopengl中关于线性空间和HDR的介绍</a></p>
+</blockquote>
+<p><strong>线性空间</strong>：</p>
+<p>在渲染中，颜色值的计算总是发生在线性空间中的。因为，线性空间中的颜色计算才是正确的。然而人眼对亮度的感知是非线性的，所以为了更好的利用表示颜色带宽，所以引入了Gama矫正。因此，在渲染时，也需要将输出颜色给进行Gama矫正。</p>
+<p><strong>色调调整</strong>：</p>
+<p>一般来说，当存储在帧缓冲(Framebuffer)中时，亮度和颜色的值是默认被限制在0.0到1.0之间的。换句话说，显示器只能显示值为0.0到1.0间的颜色。然而，光照方程中却没有这个限制。当片段颜色超过1.0时，被称作HDR(High Dynamic Range, 高动态范围)。与之相对的，处于0.0到1.0的颜色则被称为标准动态范围(LDR，Low Dynamic Range)。</p>
+<p>在实时渲染中，使用HDR记录颜色信息是很重要的，因为它允许片段保留更多的细节，同时还让我们能够根据光源的真实强度指定它的强度。不过，由于显示器只能显示LDR范围的颜色，将计算得到的HDR结果转换为LDR颜色就是一个必要过程，即色调映射。</p>
+<p>色调映射(Tone Mapping)是一个损失很小的转换浮点颜色值至我们所需的LDR[0.0, 1.0]范围内的过程。最简单的色调映射算法是Reinhard色调映射，它涉及到分散整个HDR颜色值到LDR颜色值上，所有的值都有对应。比如：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-GLSL data-lang=GLSL><span style=color:#080;font-weight:700>void</span> main()
+{             
+  <span style=color:#080;font-weight:700>const</span> <span style=color:#080;font-weight:700>float</span> gamma <span style=color:#333>=</span> <span style=color:#60e;font-weight:700>2.2</span>;
+  <span style=color:#080;font-weight:700>vec3</span> hdrColor <span style=color:#333>=</span> texture(hdrBuffer, TexCoords).rgb;
+
+  <span style=color:#888>// Reinhard色调映射</span>
+  <span style=color:#080;font-weight:700>vec3</span> mapped <span style=color:#333>=</span> hdrColor <span style=color:#333>/</span> (hdrColor <span style=color:#333>+</span> <span style=color:#080;font-weight:700>vec3</span>(<span style=color:#60e;font-weight:700>1.0</span>));
+  <span style=color:#888>// Gamma校正</span>
+  mapped <span style=color:#333>=</span> pow(mapped, <span style=color:#080;font-weight:700>vec3</span>(<span style=color:#60e;font-weight:700>1.0</span> <span style=color:#333>/</span> gamma));
+
+  color <span style=color:#333>=</span> <span style=color:#080;font-weight:700>vec4</span>(mapped, <span style=color:#60e;font-weight:700>1.0</span>);
+}   
+</code></pre></div><h3 id=pbr-implementation>PBR Implementation</h3>
 <blockquote>
 <p><a href=https://learnopengl-cn.github.io/07%20PBR/02%20Lighting/ target=_blank>learnopengl中关于使用opengl实现一个PBR着色器</a></p>
 </blockquote>
