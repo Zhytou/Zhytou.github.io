@@ -29,6 +29,7 @@ draft: false
   - [Cook-Torrance BRDF](#cook-torrance-brdf)
   - [Diffuse Part](#diffuse-part)
   - [Specular Part](#specular-part)
+  - [Disney Principled BRDF](#disney-principled-brdf)
   - [Linear Space and Tone Mapping](#linear-space-and-tone-mapping)
   - [PBR Implementation](#pbr-implementation)
   - [PBR GI——IBL](#pbr-giibl)
@@ -42,12 +43,36 @@ draft: false
 - 模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。
 - 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。
 - 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。
+- 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小
 
-其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。
+其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。此外，还有
+
+**齐次坐标**：
+
+为什么三维的坐标会使用四维矩阵进行平移或旋转的计算呢？
+
+> [Why do we use 4x4 matrices to transform things in 3D?](https://gamedev.stackexchange.com/questions/72044/why-do-we-use-4x4-matrices-to-transform-things-in-3d)
+
+其实就是因为引入第四维可以更优雅的表示平移的距离，比如：
+
+![平移](https://images2015.cnblogs.com/blog/686199/201601/686199-20160125091026363-1704080139.png)
+
+**OpenGL中的坐标变换**：
+
+- World Coordinates:输入坐标(x1, y1, z1, 1)；
+- Eye/Camera Coordinates:将原点通过平移和旋转的方式移动到相机处，得到相机坐标系下的坐标(x2, y2, z2, 1)
+- Clip Space:将数据投影至距离相机n处的平面，得到裁剪空间下的坐标(x3, y3, n, w3)=(x2/z2*n, y2/z2*n, n, n/z2)；
+- Normalized Device Coordinates：除去w，得到裁剪后的归一化坐标(x4, y3, z4, 1)=(x2, y2, z2, 1)。
 
 ### Triangle
 
-****
+**判断点在三角形内部**：
+
+设三角形顶点为P1、P2和P3，待检测点为Q，则Q在三角形P1P2P3内部的条件为，下面三个叉乘符号相同：
+
+- P0P1×P0Q
+- P1P2×P1Q
+- P2P0×P2Q
 
 ## Rasterization
 
@@ -67,14 +92,6 @@ draft: false
 采样绘制就是将三角形图元分割为屏幕上的像素，确定哪些像素需要在稍后上色。具体来说，就是根据像素中心是否位于图元内部这一点来判断的，如下图所示。
 
 ![采样绘制](https://i-blog.csdnimg.cn/blog_migrate/0f3b07a11380d1754bbabc63d6a9e6ab.png)
-
-**判断点在三角形内部**：
-
-设三角形顶点为P1、P2和P3，待检测点为Q，则Q在三角形P1P2P3内部的条件为，下面三个叉乘符号相同：
-
-- P0P1×P0Q
-- P1P2×P1Q
-- P2P0×P2Q
 
 ### Anti-aliasing
 
@@ -352,6 +369,38 @@ $$
 k_{direct}=\frac{(\alpha+1)^2}{8}\\
 k_{ibl}=\frac{\alpha^2}{2}
 $$
+
+### Disney Principled BRDF
+
+迪士尼动画工作室在SIGGRAPH 2012上著名的talk《Physically-based shading at Disney》中提出了迪士尼原则的BRDF（Disney Principled BRDF），奠定了后续游戏行业和电影行业PBR的方向和标准。它的核心贡献其实是避免了过去PBR中复杂晦涩物理参数，而引入了一系列直观的参数，包括：用于表示表示材料吸收光的金属度（metallic）和用于表示材料镜面反射集中度的粗糙度（roughness）等。
+
+**漫反射/镜面反射的比例**：
+
+在Cook-Torrance BRDF中，$k_d$和$k_s$参数分别表示了漫反射和镜面反射的比例。将它们用菲涅尔项和金属度表示如下：
+
+$$
+k_d=(1-F)*(1-metallic)\\
+k_s=F
+$$
+
+换句话说，Cook-Torrance BRDF可改写为
+
+$$
+\begin{align}
+f_r =& k_df_{lambert}+k_sf_{cook-torrance}\\
+=& (1-F)*(1-metallic)\frac\rho\pi+F\frac{DG}{4(\vec{w_o}*\vec{n})(\vec{w_i}*\vec{n})}  
+\end{align}
+$$
+
+**PBR常见材料/纹理**：
+
+![PBR纹理列表](https://learnopengl-cn.github.io/img/07/01/textures.png)
+
+- 反照率（Albedo）纹理为每一个金属的纹素(Texel)（纹理像素）指定表面颜色或者基础反射率。这和我们之前使用过的漫反射纹理相当类似，不同的是所有光照信息都是由一个纹理中提取的。
+- 法线（Normal）贴图纹理和我们之前在法线贴图教程中所使用的贴图是完全一样的。法线贴图使我们可以逐片段的指定独特的法线，来为表面制造出起伏不平的假象。
+- 金属(Metallic)贴图逐个纹素的指定该纹素是不是金属质地的。
+- 粗糙度(Roughness)贴图可以以纹素为单位指定某个表面有多粗糙。采样得来的粗糙度数值会影响一个表面的微平面统计学上的取向度。
+- 环境光遮蔽(Ambient Occlusion)贴图或者说AO贴图为表面和周围潜在的几何图形指定了一个额外的阴影因子。比如如果我们有一个砖块表面，反照率纹理上的砖块裂缝部分应该没有任何阴影信息。然而AO贴图则会把那些光线较难逃逸出来的暗色边缘指定出来。
 
 ### Linear Space and Tone Mapping
 
