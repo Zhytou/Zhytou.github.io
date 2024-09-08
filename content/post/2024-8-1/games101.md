@@ -23,7 +23,7 @@ draft: false
   - [Texture Mapping](#texture-mapping)
   - [Light Mapping](#light-mapping)
   - [Normal Mapping](#normal-mapping)
-  - [Shadow Mapping](#shadow-mapping)
+  - [Displacement Mapping](#displacement-mapping)
 - [PBR](#pbr)
   - [Radiometry](#radiometry)
   - [Optics and Microfacet Model](#optics-and-microfacet-model)
@@ -230,11 +230,15 @@ Lambertian模型用于描述粗糙材料的表面。它是一种理想模型，�
 
 ### Texture Mapping
 
-纹理贴图(Texture Mapping)简单的理解就是将一张二维图像，按照一定的映射关系，将每个像素贴合到物体表面的对应位置。纹理技术可以增加物体表面的细节。
+纹理贴图(Texture Mapping)简单的理解就是将一张二维图像，按照一定的映射关系，将每个像素贴合到物体表面的对应位置。
 
 **纹理环绕**：
 
+**纹理过滤**：
+
 **Mipmap**：
+
+多级渐远纹理(Mipmap)
 
 ### Light Mapping
 
@@ -242,9 +246,9 @@ Lambertian模型用于描述粗糙材料的表面。它是一种理想模型，�
 
 除了可以保存物体的颜色信息，纹理还可以用于保存物体的法线信息，也就是法线贴图(Normal Mapping)。它的主要作用就是通过(U, V)
 
-### Shadow Mapping
+### Displacement Mapping
 
-和路径追踪这类方法不同，光栅化不会自动生成阴影。其中，最基础的方法就是阴影贴图（Shadow Mapping）技术。
+视觉贴图是一种用于模拟表面几何细节的贴图，通过改变顶点的位置来实现凹凸效果。
 
 ## PBR
 
@@ -342,6 +346,15 @@ BRDF(Bidirectional Reflectance Distribution Function)，译作双向反射分布
 > [learnopengl中关于Cook-Torrance BRDF的介绍](https://learnopengl-cn.github.io/07%20PBR/01%20Theory/#brdf)
 
 Cook-Torrance BRDF是一种目前最流行一种BRDF反射模型，它包含漫反射和镜面反射两个部分：$f_r=k_df_{lambert}+k_sf_{cook-torrance}$。其中，$f_{lambert}=\frac\rho\pi$，而$f_{cook-torrance}=\frac{DFG}{4(\vec{w_o}*\vec{n})(\vec{w_i}*\vec{n})}$。
+
+此外，Cook-Torrance BRDF的间接光（即环境光）的计算在点光源下和传统模型仍然类似，可通过一个名为环境光遮蔽贴图(Ambient Occlusion, AO)的方式获取每个位置的环境光强度，比如：
+
+```GLSL
+// albedo就是片元位置的baseColor
+vec3 ambient = vec3(0.03) * albedo * ao;
+```
+
+至于，使用IBL技术表示的全局光照则需要使用更复杂的手段解决，比如预计算PRT等。
 
 ### Diffuse Part
 
@@ -457,6 +470,35 @@ $$
 - glossiness：每个Texel表示对应位置粗糙程度。
 
 ### Linear Space and Tone Mapping
+
+> [learnopengl中关于线性空间和HDR的介绍](https://learnopengl-cn.github.io/07%20PBR/02%20Lighting/#hdr)
+
+**线性空间**：
+
+在渲染中，颜色值的计算总是发生在线性空间中的。因为，线性空间中的颜色计算才是正确的。然而人眼对亮度的感知是非线性的，所以为了更好的利用表示颜色带宽，所以引入了Gama矫正。因此，在渲染时，也需要将输出颜色给进行Gama矫正。
+
+**色调调整**：
+
+一般来说，当存储在帧缓冲(Framebuffer)中时，亮度和颜色的值是默认被限制在0.0到1.0之间的。换句话说，显示器只能显示值为0.0到1.0间的颜色。然而，光照方程中却没有这个限制。当片段颜色超过1.0时，被称作HDR(High Dynamic Range, 高动态范围)。与之相对的，处于0.0到1.0的颜色则被称为标准动态范围(LDR，Low Dynamic Range)。
+
+在实时渲染中，使用HDR记录颜色信息是很重要的，因为它允许片段保留更多的细节，同时还让我们能够根据光源的真实强度指定它的强度。不过，由于显示器只能显示LDR范围的颜色，将计算得到的HDR结果转换为LDR颜色就是一个必要过程，即色调映射。
+
+色调映射(Tone Mapping)是一个损失很小的转换浮点颜色值至我们所需的LDR[0.0, 1.0]范围内的过程。最简单的色调映射算法是Reinhard色调映射，它涉及到分散整个HDR颜色值到LDR颜色值上，所有的值都有对应。比如：
+
+```GLSL
+void main()
+{             
+  const float gamma = 2.2;
+  vec3 hdrColor = texture(hdrBuffer, TexCoords).rgb;
+
+  // Reinhard色调映射
+  vec3 mapped = hdrColor / (hdrColor + vec3(1.0));
+  // Gamma校正
+  mapped = pow(mapped, vec3(1.0 / gamma));
+
+  color = vec4(mapped, 1.0);
+}   
+```
 
 ### PBR Implementation
 
