@@ -8,14 +8,17 @@ draft: false
   - [MVP](#mvp)
   - [Triangle](#triangle)
 - [Rasterization](#rasterization)
-  - [Anti-aliasing](#anti-aliasing)
+  - [Aliasing](#aliasing)
+  - [MSAA](#msaa)
+  - [FXAA](#fxaa)
+  - [TAA](#taa)
   - [Visibility/Occlusion](#visibilityocclusion)
 - [Shading](#shading)
   - [Illumination Model](#illumination-model)
   - [Lambert's Cosine Law](#lamberts-cosine-law)
   - [Phong/Blinn-Phong Model](#phongblinn-phong-model)
   - [Shading Frequency](#shading-frequency)
-  - [Graphics Pipeline](#graphics-pipeline)
+  - [OpenGL Graphics Pipeline](#opengl-graphics-pipeline)
 - [Texture](#texture)
   - [Texture Mapping](#texture-mapping)
   - [Light Mapping](#light-mapping)
@@ -57,13 +60,6 @@ draft: false
 
 ![平移](https://images2015.cnblogs.com/blog/686199/201601/686199-20160125091026363-1704080139.png)
 
-**OpenGL中的坐标变换**：
-
-- World Coordinates:输入坐标(x1, y1, z1, 1)；
-- Eye/Camera Coordinates:将原点通过平移和旋转的方式移动到相机处，得到相机坐标系下的坐标(x2, y2, z2, 1)
-- Clip Space:将数据投影至距离相机n处的平面，得到裁剪空间下的坐标(x3, y3, n, w3)=(x2/z2*n, y2/z2*n, n, n/z2)；
-- Normalized Device Coordinates：除去w，得到裁剪后的归一化坐标(x4, y3, z4, 1)=(x2, y2, z2, 1)。
-
 ### Triangle
 
 **判断点在三角形内部**：
@@ -93,7 +89,7 @@ draft: false
 
 ![采样绘制](https://i-blog.csdnimg.cn/blog_migrate/0f3b07a11380d1754bbabc63d6a9e6ab.png)
 
-### Anti-aliasing
+### Aliasing
 
 **走样原理**：
 
@@ -112,11 +108,21 @@ draft: false
 - **模糊+采样（Blur Anti-aliasing）**：即先使用一个平滑滤波器去滤除部分高频信号，再进行采样。
 - **超采样抗锯齿（Supersampling Anti-aliasing，SSAA）**：即使用一个更高的采样频率来避免潜在的重叠。
 
-**多重采样抗锯齿**：
+### MSAA
 
-此外，还需要补充的是多重采样抗锯齿(Multisample Anti-aliasing, MSAA)。它借鉴了超采样的思想，但同时又避免了超采样的性能消耗。因为在前面提到的SSAA中，每个子采样点都要进行单独的着色，这样在片元着色器比较复杂的情况下其实是非常浪费性能的。
+多重采样抗锯齿(Multisample Anti-aliasing, MSAA)。它借鉴了超采样的思想，但同时又避免了超采样的性能消耗。因为在前面提到的SSAA中，每个子采样点都要进行单独的着色，这样在片元着色器比较复杂的情况下其实是非常浪费性能的。
 
 相比之下，MSAA虽然增加了每个像素点的子采样点数量，但对于每个像素来说都只需要运行一次片元着色器。因为，它使用采样点的覆盖率来计算该像素的颜色。同样的，深度和模板测试也受多个采样点的影响。
+
+不过，MSAA的问题在于和延迟渲染不太兼容，因为延迟渲染时，场景光栅化之后都被输入到GBuffer上了，并不会直接着色。
+
+### FXAA
+
+快速近似抗锯齿(Fast Approximate Anti-Aliasing, FXAA)
+
+### TAA
+
+时域抗锯齿(Temporal Anti-Aliasing, TAA)是一种基于时域的抗锯齿技术，旨在进一步减少图形中的锯齿现象。它利用前一帧和当前帧之间的像素信息进行抗锯齿处理，通过时间上的积累和混合来减少锯齿，并提高图像的质量和稳定性。
 
 ### Visibility/Occlusion
 
@@ -172,13 +178,53 @@ Lambertian模型用于描述粗糙材料的表面。它是一种理想模型，�
 - 顶点着色（Vertex Shading/Grouraud Shading）：每个顶点都计算一次，然后面内点做插值
 - 像素着色（Pixel Shading/Phong Shading）：算出每个顶点法线，对法线进行插值得到面内每个像素的法线，再做着色计算
 
-### Graphics Pipeline
+### OpenGL Graphics Pipeline
 
 - 应用阶段：输入一堆三维空间中的点。
-- 顶点处理：经过MVPV变换后得到这些点在屏幕上的二维坐标。
-- 图元处理：规定哪些点相互构成三角形(指定图元拓扑结构)。
-- 光栅化：得到被三角形覆盖的像素。（除此之外，顶点着色器传给片元着色器的数据会通过插值得出。）
-- 片元处理：计算每个像素该显示什么，应该是什么颜色，Z-buffer的生成等。
+- 几何阶段：依次进行MVP变换，并进行视锥体剔除、裁剪和屏幕映射，得到三角形顶点对应屏幕像素位置。
+- 光栅化：通过顶点插值，得到被三角形覆盖的所有像素位置。
+- 片元处理：依次对像素着色，并进行深度、透明度等测试，最终得到显示在屏幕上的图像。
+
+![渲染管线](https://pica.zhimg.com/80/v2-85a9e77245f43d4bab56f2052c3d81f0_720w.webp)
+
+**OpenGL中的坐标变换**：
+
+几何阶段中的顶点处理应该是渲染管线中较为复杂的部分，下面详细总结其流程：
+
+- World Coordinates:输入坐标(x1, y1, z1, 1)；
+- Eye/Camera Coordinates:将原点通过平移和旋转的方式移动到相机处，得到相机坐标系下的坐标(x2, y2, z2, 1)
+- Clip Space:将数据投影至距离相机n处的平面，同时直接剔除视锥体之外的三角形，得到裁剪空间下的坐标(x3, y3, n, w3)=(x2/z2*n, y2/z2*n, n, n/z2)；
+- Normalized Device Coordinates：除去w，得到裁剪后的归一化坐标(x4, y3, z4, 1)=(x2, y2, z2, 1)。
+
+其中，视锥体剔除和裁剪的区别如下：
+
+![视锥体剔除和裁剪的区别](https://pica.zhimg.com/80/v2-109bce4132140a2490f0de65666519b2_720w.webp)
+
+**各种测试**：
+
+在完成片元着色后，会进行各种测试和混合操作，最终得到呈现在屏幕上的图片。这些测试按从前到后的顺序为：
+
+- 模板测试
+- 透明度测试用于处理半透明物体，根据片元的透明度值来决定如何处理片元的颜色混合。
+- 深度测试用于比较片元的深度值与深度缓冲区中对应位置的深度值，并决定是否绘制该片元。深度测试可以确保物体的遮挡关系正确，避免后面的物体遮挡前面的物体。
+
+**背面剔除**：
+
+面剔除(Face culling)通过检查三角形的法线方向，剔除背面朝向观察者的三角形，从而减小开销。
+
+在OpenGL中，可以先使用函数glEnable(GL_CULL_FACE)开启面剔除功能。接着，使用函数glCullFace函数来实现。它需要传入一个参数，用于指定剔除面类，其可能的选项包括：
+
+- GL_BACK：只剔除背面。
+- GL_FRONT：只剔除正面。
+- GL_FRONT_AND_BACK：剔除背面和正面。
+
+**延迟渲染**：
+
+**Early-Z测试**：
+
+一般来说，深度测试都发生在片元着色之后。为了减少进入片元着色的像素数量，一种提前进行深度测试的Early-Z技术被提出了。它位于光栅化阶段之后，像素处理阶段之前。
+
+不过，Early-Z会带来透明测试的冲突，例如某个片元A虽然遮挡了另一个片元B，但A却是透明的，GPU应当渲染的是片元B，这就产生了矛盾。
 
 ## Texture
 
