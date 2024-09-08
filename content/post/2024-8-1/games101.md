@@ -52,13 +52,13 @@ draft: false
 
 **齐次坐标**：
 
-为什么三维的坐标会使用四维矩阵进行平移或旋转的计算呢？
+为什么三维的坐标会使用四维矩阵进行平移或旋转的计算呢？即：为什么原本n维的向量要用一个n+1维向量来表示？
 
 > [Why do we use 4x4 matrices to transform things in 3D?](https://gamedev.stackexchange.com/questions/72044/why-do-we-use-4x4-matrices-to-transform-things-in-3d)
 
-其实就是因为引入第四维可以更优雅的表示平移的距离，比如：
+其实，这种表达方式被称为齐次坐标(Homogeneous Coordinates)，即原本n维的向量用一个n+1维向量来表示。其核心目的是为了更优雅的表示平移的距离，比如：
 
-![平移](https://images2015.cnblogs.com/blog/686199/201601/686199-20160125091026363-1704080139.png)
+![平移](https://zhytou.github.io/post/2024-8-1/homogeneous_coordinates.png)
 
 ### Triangle
 
@@ -87,7 +87,7 @@ draft: false
 
 采样绘制就是将三角形图元分割为屏幕上的像素，确定哪些像素需要在稍后上色。具体来说，就是根据像素中心是否位于图元内部这一点来判断的，如下图所示。
 
-![采样绘制](https://i-blog.csdnimg.cn/blog_migrate/0f3b07a11380d1754bbabc63d6a9e6ab.png)
+![采样绘制](https://zhytou.github.io/post/2024-8-1/rasterization.png)
 
 ### Aliasing
 
@@ -95,11 +95,11 @@ draft: false
 
 站在信号与系统的角度来看采样，在时域上是原信号和周期冲激信号的一个乘积。那么根据傅里叶变化，在频域上就是原信号和周期冲激信号的卷积，如下图所示。
 
-![傅里叶变换](https://i-blog.csdnimg.cn/blog_migrate/e66dc5b5fe031c6065421bafc7d88b99.png)
+![傅里叶变换](https://zhytou.github.io/post/2024-8-1/aliasing_reason.png)
 
 那么当原信号频谱过宽或采样用的冲激信号频率太低，就容易发生信号重叠，由此造成走样。
 
-![走样原理](https://i-blog.csdnimg.cn/blog_migrate/5a79462c87eee40450393d63c45bb780.png)
+![走样原理](https://zhytou.github.io/post/2024-8-1/fourier_transform.png)
 
 **抗锯齿/抗走样原理**：
 
@@ -146,7 +146,7 @@ draft: false
 
 Lambertian模型用于描述粗糙材料的表面。它是一种理想模型，只考虑漫反射，即完全漫反射。这些反射光，在不同角度的辐射强度会依余弦公式变化，角度越大强度越弱。
 
-![Lambert余弦定理](https://i-blog.csdnimg.cn/blog_migrate/de1476d341f40073b443de3aec2450da.png#pic_center)
+![Lambert余弦定理](https://zhytou.github.io/post/2024-8-1/lambert_cosine_law.png)
 
 ### Phong/Blinn-Phong Model
 
@@ -440,13 +440,21 @@ $$
 
 **PBR常见材料/纹理**：
 
-![PBR纹理列表](https://learnopengl-cn.github.io/img/07/01/textures.png)
+![PBR纹理列表](https://zhytou.github.io/post/2024-8-1/pbr_textures.png)
 
-- 反照率（Albedo）纹理为每一个金属的纹素(Texel)（纹理像素）指定表面颜色或者基础反射率。这和我们之前使用过的漫反射纹理相当类似，不同的是所有光照信息都是由一个纹理中提取的。
-- 法线（Normal）贴图纹理和我们之前在法线贴图教程中所使用的贴图是完全一样的。法线贴图使我们可以逐片段的指定独特的法线，来为表面制造出起伏不平的假象。
-- 金属(Metallic)贴图逐个纹素的指定该纹素是不是金属质地的。
-- 粗糙度(Roughness)贴图可以以纹素为单位指定某个表面有多粗糙。采样得来的粗糙度数值会影响一个表面的微平面统计学上的取向度。
-- 环境光遮蔽(Ambient Occlusion)贴图或者说AO贴图为表面和周围潜在的几何图形指定了一个额外的阴影因子。比如如果我们有一个砖块表面，反照率纹理上的砖块裂缝部分应该没有任何阴影信息。然而AO贴图则会把那些光线较难逃逸出来的暗色边缘指定出来。
+对美工来说，PBR一般右两种材质工作流：金属/粗糙度工作流（Metal/Roughness）和镜面反射/光泽度工作流（Specular/Glossiness）。它们的目的都是进行PBR渲染，获取尽可能真实的渲染效果，即一体两面。
+
+其中，金属度/粗错度工作流需要三张贴图来表示PBR需要的参数：
+
+- albedo/baseColor：每个Texel表示对应位置的表面颜色，且不包含任何光影信息。
+- metallic：每个Texel表示对应位置金属成分的占比，1表示100%的纯金属，0表示100%的非金属。
+- roughness：每个Texel表示对应位置粗糙程度。越粗糙，该位置镜面反射光线越分散，光泽程度越低。
+
+类似的，镜面反射/光泽度工作流也需要三张贴图表示PBR所需参数：
+
+- diffuse/albedo：每个Texel表示对应位置的表面颜色。
+- specular：每个Texel表示对应位置的$F_0$，即入射角为0°时的菲涅尔系数。
+- glossiness：每个Texel表示对应位置粗糙程度。
 
 ### Linear Space and Tone Mapping
 
