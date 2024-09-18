@@ -10,42 +10,18 @@
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
 <meta property="og:title" content="GAMES202 学习笔记">
-<meta property="og:description" content="1 Introdution Real-Time High Quality Rendering:
- 实时性：30 frame per second（对于VR/AR，要求可能到90FPS）； 高质量：尽可能保证结果真实，即对错误容忍度低； 渲染：  4 Different Parts of Real-Time Rendering：
- 阴影 全局光照 基于物理的着色 实时光线追踪  Motivation of Real-Time Rendering：
-目前，计算机图形学中的技术已经支持生成一些极逼真的图像，但这些方法大多耗时过长，比如光线追踪等。因此，出现了一系列针对实时渲染的研究，它们的目的就是牺牲一小部分准确性，来获取较高质量的快速渲染。
-Evolution of Real-Time Rendering：
- 20年前：图形硬件（SGI/GPU）出现，大部分重点放在几何图形和纹理映射上，同时出现了一些调增强真实感的技术：阴影映射、累积缓冲区等。 10年到20年前：着色器出现（可编程图形硬件），更多复杂的图形渲染技术出现，比如：环境光、软阴影等 目前：VR/AR  Technological and Algorithmic Milestones：
- 20年前：可编程图形硬件（着色器） 15年前：基于预计算的渲染方法 8-10年前：交互式光线追踪  2 Recap of CG Basics Graphics Pipeline OpenGL A Set of API：
-OpenGL是一组可编程渲染管线API的封装。它的特点包括：
- 跨平台； 很多替代技术，比如：DirectX和Vulkan； C风格的。  Analogy: Oil Painting：">
+<meta property="og:description" content="1 Introdution 2 Recap of CG Basics  Graphics Pipeline OpenGL The Rendering Equation   3 Real-Time Shadows  Shadow Map Percentage Closer Filtering Percentage Closer Soft Shadow Variance Soft Shadow Map Cascaded Shadow Map   4 Real-Time Environment Map  Recap: Image-Based Lighting Split Sum Approximation Precomputed Radiance Transfer   5 Real-Time Global Illumination  Reflective Shadow Maps Light Propagation Volumes Voxel Global Illumination Screen Space Ambient Occlusion Horizon Based Ambient Occlusion+ Screen Space Directional Occlusin Screen Space Reflection    1 Introdution Real-Time High Quality Rendering:">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2024-8-5/games202/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2024-08-05T18:26:29+08:00">
 <meta property="article:modified_time" content="2024-08-05T18:26:29+08:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="GAMES202 学习笔记">
-<meta name=twitter:description content="1 Introdution Real-Time High Quality Rendering:
- 实时性：30 frame per second（对于VR/AR，要求可能到90FPS）； 高质量：尽可能保证结果真实，即对错误容忍度低； 渲染：  4 Different Parts of Real-Time Rendering：
- 阴影 全局光照 基于物理的着色 实时光线追踪  Motivation of Real-Time Rendering：
-目前，计算机图形学中的技术已经支持生成一些极逼真的图像，但这些方法大多耗时过长，比如光线追踪等。因此，出现了一系列针对实时渲染的研究，它们的目的就是牺牲一小部分准确性，来获取较高质量的快速渲染。
-Evolution of Real-Time Rendering：
- 20年前：图形硬件（SGI/GPU）出现，大部分重点放在几何图形和纹理映射上，同时出现了一些调增强真实感的技术：阴影映射、累积缓冲区等。 10年到20年前：着色器出现（可编程图形硬件），更多复杂的图形渲染技术出现，比如：环境光、软阴影等 目前：VR/AR  Technological and Algorithmic Milestones：
- 20年前：可编程图形硬件（着色器） 15年前：基于预计算的渲染方法 8-10年前：交互式光线追踪  2 Recap of CG Basics Graphics Pipeline OpenGL A Set of API：
-OpenGL是一组可编程渲染管线API的封装。它的特点包括：
- 跨平台； 很多替代技术，比如：DirectX和Vulkan； C风格的。  Analogy: Oil Painting：">
+<meta name=twitter:description content="1 Introdution 2 Recap of CG Basics  Graphics Pipeline OpenGL The Rendering Equation   3 Real-Time Shadows  Shadow Map Percentage Closer Filtering Percentage Closer Soft Shadow Variance Soft Shadow Map Cascaded Shadow Map   4 Real-Time Environment Map  Recap: Image-Based Lighting Split Sum Approximation Precomputed Radiance Transfer   5 Real-Time Global Illumination  Reflective Shadow Maps Light Propagation Volumes Voxel Global Illumination Screen Space Ambient Occlusion Horizon Based Ambient Occlusion+ Screen Space Directional Occlusin Screen Space Reflection    1 Introdution Real-Time High Quality Rendering:">
 <meta itemprop=name content="GAMES202 学习笔记">
-<meta itemprop=description content="1 Introdution Real-Time High Quality Rendering:
- 实时性：30 frame per second（对于VR/AR，要求可能到90FPS）； 高质量：尽可能保证结果真实，即对错误容忍度低； 渲染：  4 Different Parts of Real-Time Rendering：
- 阴影 全局光照 基于物理的着色 实时光线追踪  Motivation of Real-Time Rendering：
-目前，计算机图形学中的技术已经支持生成一些极逼真的图像，但这些方法大多耗时过长，比如光线追踪等。因此，出现了一系列针对实时渲染的研究，它们的目的就是牺牲一小部分准确性，来获取较高质量的快速渲染。
-Evolution of Real-Time Rendering：
- 20年前：图形硬件（SGI/GPU）出现，大部分重点放在几何图形和纹理映射上，同时出现了一些调增强真实感的技术：阴影映射、累积缓冲区等。 10年到20年前：着色器出现（可编程图形硬件），更多复杂的图形渲染技术出现，比如：环境光、软阴影等 目前：VR/AR  Technological and Algorithmic Milestones：
- 20年前：可编程图形硬件（着色器） 15年前：基于预计算的渲染方法 8-10年前：交互式光线追踪  2 Recap of CG Basics Graphics Pipeline OpenGL A Set of API：
-OpenGL是一组可编程渲染管线API的封装。它的特点包括：
- 跨平台； 很多替代技术，比如：DirectX和Vulkan； C风格的。  Analogy: Oil Painting："><meta itemprop=datePublished content="2024-08-05T18:26:29+08:00">
+<meta itemprop=description content="1 Introdution 2 Recap of CG Basics  Graphics Pipeline OpenGL The Rendering Equation   3 Real-Time Shadows  Shadow Map Percentage Closer Filtering Percentage Closer Soft Shadow Variance Soft Shadow Map Cascaded Shadow Map   4 Real-Time Environment Map  Recap: Image-Based Lighting Split Sum Approximation Precomputed Radiance Transfer   5 Real-Time Global Illumination  Reflective Shadow Maps Light Propagation Volumes Voxel Global Illumination Screen Space Ambient Occlusion Horizon Based Ambient Occlusion+ Screen Space Directional Occlusin Screen Space Reflection    1 Introdution Real-Time High Quality Rendering:"><meta itemprop=datePublished content="2024-08-05T18:26:29+08:00">
 <meta itemprop=dateModified content="2024-08-05T18:26:29+08:00">
-<meta itemprop=wordCount content="540">
+<meta itemprop=wordCount content="749">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -94,12 +70,48 @@ OpenGL是一组可编程渲染管线API的封装。它的特点包括：
 </div>
 </div>
 <div class=markdown>
+<ul>
+<li><a href=#1-introdution>1 Introdution</a></li>
+<li><a href=#2-recap-of-cg-basics>2 Recap of CG Basics</a>
+<ul>
+<li><a href=#graphics-pipeline>Graphics Pipeline</a></li>
+<li><a href=#opengl>OpenGL</a></li>
+<li><a href=#the-rendering-equation>The Rendering Equation</a></li>
+</ul>
+</li>
+<li><a href=#3-real-time-shadows>3 Real-Time Shadows</a>
+<ul>
+<li><a href=#shadow-map>Shadow Map</a></li>
+<li><a href=#percentage-closer-filtering>Percentage Closer Filtering</a></li>
+<li><a href=#percentage-closer-soft-shadow>Percentage Closer Soft Shadow</a></li>
+<li><a href=#variance-soft-shadow-map>Variance Soft Shadow Map</a></li>
+<li><a href=#cascaded-shadow-map>Cascaded Shadow Map</a></li>
+</ul>
+</li>
+<li><a href=#4-real-time-environment-map>4 Real-Time Environment Map</a>
+<ul>
+<li><a href=#recap-image-based-lighting>Recap: Image-Based Lighting</a></li>
+<li><a href=#split-sum-approximation>Split Sum Approximation</a></li>
+<li><a href=#precomputed-radiance-transfer>Precomputed Radiance Transfer</a></li>
+</ul>
+</li>
+<li><a href=#5-real-time-global-illumination>5 Real-Time Global Illumination</a>
+<ul>
+<li><a href=#reflective-shadow-maps>Reflective Shadow Maps</a></li>
+<li><a href=#light-propagation-volumes>Light Propagation Volumes</a></li>
+<li><a href=#voxel-global-illumination>Voxel Global Illumination</a></li>
+<li><a href=#screen-space-ambient-occlusion>Screen Space Ambient Occlusion</a></li>
+<li><a href=#horizon-based-ambient-occlusion>Horizon Based Ambient Occlusion+</a></li>
+<li><a href=#screen-space-directional-occlusin>Screen Space Directional Occlusin</a></li>
+<li><a href=#screen-space-reflection>Screen Space Reflection</a></li>
+</ul>
+</li>
+</ul>
 <h2 id=1-introdution>1 Introdution</h2>
 <p><strong>Real-Time High Quality Rendering</strong>:</p>
 <ul>
 <li>实时性：30 frame per second（对于VR/AR，要求可能到90FPS）；</li>
 <li>高质量：尽可能保证结果真实，即对错误容忍度低；</li>
-<li>渲染：</li>
 </ul>
 <p><strong>4 Different Parts of Real-Time Rendering</strong>：</p>
 <ul>
@@ -144,7 +156,7 @@ OpenGL是一组可编程渲染管线API的封装。它的特点包括：
 <p><strong>Cook-Torrance BRDF</strong>：</p>
 <p>Cook-Torrance BRDF是一种目前最流行一种BRDF反射模型，它包含漫反射和镜面反射两个部分：$f_r=k_df_{lambert}+k_sf_{cook-torrance}$。其中，$f_{lambert}=\frac\rho\pi$，而$f_{cook-torrance}=\frac{DFG}{4(\vec{w_o}<em>\vec{n})(\vec{w_i}</em>\vec{n})}$。</p>
 <h2 id=3-real-time-shadows>3 Real-Time Shadows</h2>
-<h3 id=shadow-mapping>Shadow Mapping</h3>
+<h3 id=shadow-map>Shadow Map</h3>
 <p>阴影贴图是目前最主流的阴影生成算法。这主要得益于它算法直观，并且能够充分利用现代硬件的光栅化能力。具体来说，它的核心思路基于一个假设，即对于指定光源来说，场景中某个点是否被其照亮，取决于从光源的视角看去，这个点是否可见。</p>
 <p><strong>Two-Pass Algorithmn</strong>：</p>
 <p>因此，该算法被分成了两步：</p>
@@ -209,20 +221,20 @@ OpenGL是一组可编程渲染管线API的封装。它的特点包括：
 
   gl_FragColor <span style=color:#333>=</span> <span style=color:#080;font-weight:700>vec4</span>(phongColor <span style=color:#333>*</span> visibility, <span style=color:#60e;font-weight:700>1.0</span>);
 }
-</code></pre></div><p><strong>Issues in Shadow Mapping</strong>：</p>
+</code></pre></div><p><strong>Issues in Shadow Map</strong>：</p>
 <p>阴影失真（Shadow Acne）是阴影贴图中最容易出现的问题。它表现为在阴影区域出现间隔的条纹，如下图所示。</p>
 <p><figure>
-<img src=https://i-blog.csdnimg.cn/blog_migrate/c4d0c52217b34561520e3340a93f7200.png alt=阴影失真>
+<img src=https://zhytou.github.io/post/2024-8-5/shadow_acne.png alt=阴影失真>
 </figure></p>
 <p>出现这种现象的原因在于ShadowMap中的每个texel只能记录一个深度值，但一个像素内的不同位置可能会有不同的深度值（即，试图用离散的纹理去记录连续的信息）。因此，当实际场景的深度值大于ShadowMap上记录的深度值时，就会出现Shadow Acne现象。</p>
 <p>一个简单通用的解决方案是在比较前给d加上一个固定偏移。但是若偏移选取过大，又会产生所谓的阴影悬空（Peter-Panning）问题，如下图所示。</p>
 <p><figure>
-<img src=https://pic2.zhimg.com/80/v2-8b7a421a28ac57a3b779cb824f1e0cb9_720w.webp alt=阴影悬空>
+<img src=https://zhytou.github.io/post/2024-8-5/peter_panning.png alt=阴影悬空>
 </figure></p>
 <p>改进的方法则是添加自适应偏移的方案，即基于斜率去计算当前深度要加的偏移（Slope Scale Depth Bias）。</p>
 <p>另外，阴影走样（Shadow Aliasing）也是阴影贴图中容易出现的问题。比如</p>
 <p><figure>
-<img src=https://i-blog.csdnimg.cn/blog_migrate/08e1b652b0eb13a489399f583989c68c.png alt=阴影走样>
+<img src=https://zhytou.github.io/post/2024-8-5/shadow_aliasing.png alt=阴影走样>
 </figure></p>
 <p>其原因则是阴影贴图是一个大小不足，造成多个片段对应一个纹理像素。工业界的解决办法是，不同位置采用不同分辨率的shadow map，或者是动态分辨率之类的技术，也可以直接用PCF生成软阴影。</p>
 <p>除此之外，阴影贴图还存在纹理利用不足的问题。因为相机和光源视角不同，所以从光源视角光栅化后的每个像素投影到屏幕空间后，对应的区域大小也不相同，进而引发靠近相机位置的阴影贴图精度不够，而远离相机位置的阴影贴图精度又过高的问题。改善这种利用率不足的方法包括：级联阴影贴图和Sample Distribution Shadow Map。</p>
@@ -249,7 +261,7 @@ OpenGL是一组可编程渲染管线API的封装。它的特点包括：
 </code></pre></div><h3 id=percentage-closer-soft-shadow>Percentage Closer Soft Shadow</h3>
 <p>如下图所示，在真实世界中，笔尖的阴影十分锐利，而笔杆的阴影会软一些。</p>
 <p><figure>
-<img src=https://i-blog.csdnimg.cn/blog_migrate/99b100153b711cf71511864ea50e5462.png alt=钢笔的阴影>
+<img src=https://zhytou.github.io/post/2024-8-5/pen.png alt=钢笔的阴影>
 </figure></p>
 <p>由此，我们可以得出结论：</p>
 <ul>
@@ -257,7 +269,7 @@ OpenGL是一组可编程渲染管线API的封装。它的特点包括：
 <li>阴影的软硬与光源距离无关，与遮挡物距离有关</li>
 </ul>
 <p><figure>
-<img src=https://i-blog.csdnimg.cn/blog_migrate/7c25e9e78dca72b3a5708523fcd85c50.png alt=软阴影面积变化示意图>
+<img src=https://zhytou.github.io/post/2024-8-5/pcss.png alt=软阴影面积变化示意图>
 </figure></p>
 <p>进一步，我们可以根据相似三角形定理从上述示意图中推导出一个公式，这也是PCSS的核心。</p>
 <p>$$
@@ -301,14 +313,100 @@ $$</p>
 
   <span style=color:#080;font-weight:700>return</span> visibility;
 }
-</code></pre></div><h3 id=variance-soft-shadow-mapping>Variance Soft Shadow Mapping</h3>
-<p>PCSS、PCF 的算法都需要多重采样，尤其 PCSS 需要两个多重采样（第一步的Blocker Search和第三步的PCF），这使得算法速度较慢。</p>
-<p>为了避免多重采样的计算，Variance Soft Shadow Mapping（VSSM）假定一定范围内的深度的分布符合正态分布（Normal Distribution） ，那么只要知道该段范围的均值E 、方差Var，就能先得到该范围的概率密度函数PDF。进而通过该概率密度函数的积分——累计分布函数CDF快速计算出该范围中有多少比例大于某个指定深度。</p>
-<h3 id=cascaded-shadow-mapping>Cascaded Shadow Mapping</h3>
-<h2 id=4-real-time-environment-mapping>4 Real-Time Environment Mapping</h2>
+</code></pre></div><h3 id=variance-soft-shadow-map>Variance Soft Shadow Map</h3>
+<p>PCSS、PCF的算法都需要多重采样，尤其PCSS需要两个多重采样（第一步的Blocker Search和第三步的PCF），这使得算法速度较慢。为了避免多重采样的计算，方差阴影贴图（Variance Shadow Map, VSM）和方差软阴影贴图（Variance Soft Shadow Map, VSSM）被提出了。</p>
+<p>其中，VSM假定阴影贴图中一定范围内的深度符合正态分布。那么只要计算出该范围的深度均值E和方差Var，就能根据正太分布的概率密度函数快速得出该范围中有多少比例大于某个指定深度，从而计算出该位置片元的visibility。至于VSSM则是PCSS对应的版本，即先用概率密度函数估计平均遮挡物深度，再通过平均遮挡物深度计算软阴影半径，进而得出片元visibility。</p>
+<p>此外，在VSM和VSSM中，均值和方差都不通过采样去得到，而是依靠硬件实现。具体来说，均值E是通过纹理mipmap来实现的。而方差根据公式$Var(X)=E(X^2)-E^2(X)$，只需要额外存储一张深度平方贴图即可通过类似的方法快速得出。</p>
+<p>尽管VSSM用于不错的计算速度，但大胆的假设使得其仅仅在真实深度分布为某个单峰曲线才比较符号物理，这也是它的问题。</p>
+<h3 id=cascaded-shadow-map>Cascaded Shadow Map</h3>
+<p>由于相机和光源视角不同，从光源视角光栅化后的每个像素投影到屏幕空间后，对应的区域大小也不相同，所以往往会出现距离相机较近位置的Shadow Map精度不够，而距离相机较远位置的Shadow Map精度又过高的问题，于是就会出现阴影边缘的明显锯齿。</p>
+<p>缓解这个问题的方法是把视锥沿着Z轴切分成多段，每段单独计算出一个光源坐标空间内的紧凑AABB，然后基于这个AABB生成多张Shadow Map，也就是所谓的级联式阴影（Cascaded Shadow Map）。在进行深度查询时，首先根据当前像素在相机空间中的Z值确定其位于哪个分段中，然后找到对应分段的Shadow Map和投影矩阵。在实际操作中，通常会选择3~4级分段，划分位置通常是指数划分和均匀划分的结果进行插值后得到。鉴于划分是基于视锥的，所以较远处的Shadow Map可以预先计算好，或者每隔几帧才更新一次，以此提高渲染效率。</p>
+<p>关于级联阴影的问题，可以参考这篇<a href=https://blog.csdn.net/pizi0475/article/details/7933743 target=_blank>文章</a>。</p>
+<h2 id=4-real-time-environment-map>4 Real-Time Environment Map</h2>
 <h3 id=recap-image-based-lighting>Recap: Image-Based Lighting</h3>
-<p>基于图像的光照(Image Based Lighting, IBL)</p>
+<p>基于图像的光照(Image Based Lighting, IBL)是使用图片表示场景中所有光照的技术。它通常是一个包含场景周围环境的全景图像或立方体贴图，其中每个像素都被视作一个光源。</p>
 <h3 id=split-sum-approximation>Split Sum Approximation</h3>
+<blockquote>
+<p><a href=https://learnopengl-cn.github.io/07%20PBR/03%20IBL/02%20Specular%20IBL/ target=_blank>learnopengl中镜面反射IBL</a></p>
+</blockquote>
+<p><strong>Prefiltered Environment Lighting</strong>:</p>
+<p>IBL下的渲染仍然是解决渲染方程，在不考虑visiblity项前提下，使用积分差分法近似出射光辐射度，可得渲染方程如下：</p>
+<p>$$
+\begin{align}
+L_o(p, w_o) &= \int_{\Omega}{L_i(p, w_i)f_r(p, w_i, w_o)cos\theta}dw_i\
+&\approx \frac{\int_{\Omega_{f_r}}L_i(p, w_i)dw_i}{\int_{\Omega_{f_r}}dw_i}\int_{\Omega}{f_r(p, w_i, w_o)cos\theta}dw_i
+\end{align}
+$$</p>
+<p>其中，拆分得到的第一项其实就是对入射光辐射度的一个模糊处理，即对其进行平滑滤波并除以一个定值。不过，需要注意的是第一项的积分域为$\Omega_{f_r}$，也即受$f_r$影响，因此需要针对不同的$f_r$（即粗糙度）进行平滑滤波，最终得到下图所示效果。</p>
+<p><figure>
+<img src=https://learnopengl-cn.github.io/img/07/03/02/ibl_prefilter_map.png alt=预滤波环境贴图>
+</figure></p>
+<p><strong>Look-Up Texture</strong>:</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-8-5/lut.png alt=lut>
+</figure></p>
+<h3 id=precomputed-radiance-transfer>Precomputed Radiance Transfer</h3>
+<h2 id=5-real-time-global-illumination>5 Real-Time Global Illumination</h2>
+<p>全局光照（Global Illumination, GI）就是直接光照+间接光照。在实时渲染中，GI技术通常只考虑一次弹射的间接光，它们可按处理阶段分为：</p>
+<ul>
+<li>3D空间GI技术：RSM、LPM和VXGI等；</li>
+<li>屏幕空间GI技术：SSAO、SSAO+、HSAO和SSR等。</li>
+</ul>
+<p>其中，屏幕空间方法都可以视作一种图像后处理，因为它仅仅利用了图像中的信息，比如：深度信息和阴影贴图等。</p>
+<h3 id=reflective-shadow-maps>Reflective Shadow Maps</h3>
+<p>反射阴影贴图（Reflective Shadow Maps, RSM）</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-8-5/rsm.png alt=RSM>
+</figure></p>
+<p><strong>Problem</strong>：</p>
+<p>次级光源到着色点的可见性没法计算</p>
+<p><strong>Acceleration</strong>：</p>
+<h3 id=light-propagation-volumes>Light Propagation Volumes</h3>
+<p>光照传播体积（Light Propagation Volumes, LPV）</p>
+<p><strong>Steps</strong>：</p>
+<ul>
+<li>通过阴影贴图找出所有直接光源照亮的片元，并将它们作为次级光源；</li>
+<li>将这些次级光源放入划分好的3d网格中；</li>
+<li>计算所有次级光源传播到它周围六个格子中的辐射度（类似RSM，仍然不考虑visibility的问题），迭代直到辐射度稳定；</li>
+<li>根据这些辐射度进行渲染。</li>
+</ul>
+<p><strong>Problem</strong>：</p>
+<h3 id=voxel-global-illumination>Voxel Global Illumination</h3>
+<h3 id=screen-space-ambient-occlusion>Screen Space Ambient Occlusion</h3>
+<p>环境光遮蔽（Ambient Occlusion, AO）是一种简单全局光照技术。它通过计算物体之间相互遮挡而导致的间接光衰减，进而刻画出相邻物体间隙的明暗。</p>
+<p>具体来说，AO技术基于一个假设，即任何一个着色点的间接光都是常数，且只考虑diffuse。由此，该位置的渲染方程由此可以化简为：</p>
+<p>$$
+L_o^{indir}(x, w_o)=\int_H^2L_i^{indir}(x, w_i)f_r(x, w_o, w_i)V(x, wi)cos\theta dw_i\
+L_o^{indir}(x, w_o)=L_i^{indir}f_r\int_H^2V(x, wi)cos\theta dw_i\
+$$</p>
+<p><strong>Ambient Map</strong>：</p>
+<p>早期的AO技术以预计算为主。它使用光线追踪得到一张AO贴图，即原理中提到的关于visibility的积分，从而在实时渲染中实现环境光遮蔽效果。不过这种方法的缺点也比较明显，它需要额外的纹理存储，且只能表现静态场景。</p>
+<p><strong>SSAO Algorithm</strong>：</p>
+<p>屏幕空间环境光遮蔽(Screen Space Ambient Occlusion, SSAO)是对预计算AO贴图的一种改进。它只利用屏幕空间的信息就可以实时的计算出上述提到的visibility积分。其核心是根据实时计算中得到的z-buffer信息得出着色点之间的相互遮挡情况。</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-8-5/ssao.png alt=SSAO>
+</figure></p>
+<p>具体来说，它使用蒙塔卡洛来计算上述积分，即：</p>
+<ul>
+<li>在当前着色点周围采样一定数量的点；</li>
+<li>计算出采样点的深度，将其和阴影贴图中相应位置的深度比较，得出是否能接受到直接光。换句话说，只要采样点能接收到直接光，就认为它发出的间接光一定会被着色点接收到。</li>
+</ul>
+<p><strong>SSAO Problem</strong>：</p>
+<ul>
+<li>只采样有限范围的点，即较远位置发出的间接光对着色点没有考虑；</li>
+<li>理论上应该计算的是着色点到采样点的visibility，但在实践中只考虑的采样点到光源的visibility。</li>
+<li>采样球，能量会不守恒。</li>
+<li>由于没有法线信息，无法考虑cos。</li>
+</ul>
+<h3 id=horizon-based-ambient-occlusion>Horizon Based Ambient Occlusion+</h3>
+<p>屏幕空间水平基准环境光遮蔽（Horizon Based Ambient Occlusion, HBAO）是对SSAO的一种改进。它整体和SSAO思路类似。只不过HBAO要求获取着色点法线信息，因此它可以采样半球同时考虑cos。</p>
+<h3 id=screen-space-directional-occlusin>Screen Space Directional Occlusin</h3>
+<h3 id=screen-space-reflection>Screen Space Reflection</h3>
+<p>屏幕空间反射（Screen Space Reflection, SSR）是一种屏幕空间的全局光照技术。具体来说，它利用屏幕空间信息进行光线追踪。因此，和AO技术相比，SSR不仅仅考虑diffuse的间接光，同样也可以计算specular的间接光。</p>
+<p><strong>Ray Marching</strong>：</p>
+<p>光线步进（Ray Marching）是SSR中进行光线追踪的方法，它的实现步骤如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-glsl data-lang=glsl>
+</code></pre></div>
 </div>
 </div>
 </article>
