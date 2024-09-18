@@ -10,12 +10,12 @@ draft: false
   - [OpenGL](#opengl)
   - [The Rendering Equation](#the-rendering-equation)
 - [3 Real-Time Shadows](#3-real-time-shadows)
-  - [Shadow Mapping](#shadow-mapping)
+  - [Shadow Map](#shadow-map)
   - [Percentage Closer Filtering](#percentage-closer-filtering)
   - [Percentage Closer Soft Shadow](#percentage-closer-soft-shadow)
-  - [Variance Soft Shadow Mapping](#variance-soft-shadow-mapping)
-  - [Cascaded Shadow Mapping](#cascaded-shadow-mapping)
-- [4 Real-Time Environment Mapping](#4-real-time-environment-mapping)
+  - [Variance Soft Shadow Map](#variance-soft-shadow-map)
+  - [Cascaded Shadow Map](#cascaded-shadow-map)
+- [4 Real-Time Environment Map](#4-real-time-environment-map)
   - [Recap: Image-Based Lighting](#recap-image-based-lighting)
   - [Split Sum Approximation](#split-sum-approximation)
   - [Precomputed Radiance Transfer](#precomputed-radiance-transfer)
@@ -34,7 +34,6 @@ draft: false
 
 - 实时性：30 frame per second（对于VR/AR，要求可能到90FPS）；
 - 高质量：尽可能保证结果真实，即对错误容忍度低；
-- 渲染：
 
 **4 Different Parts of Real-Time Rendering**：
 
@@ -92,7 +91,7 @@ Cook-Torrance BRDF是一种目前最流行一种BRDF反射模型，它包含漫�
 
 ## 3 Real-Time Shadows
 
-### Shadow Mapping
+### Shadow Map
 
 阴影贴图是目前最主流的阴影生成算法。这主要得益于它算法直观，并且能够充分利用现代硬件的光栅化能力。具体来说，它的核心思路基于一个假设，即对于指定光源来说，场景中某个点是否被其照亮，取决于从光源的视角看去，这个点是否可见。
 
@@ -171,7 +170,7 @@ void main(void) {
 }
 ```
 
-**Issues in Shadow Mapping**：
+**Issues in Shadow Map**：
 
 阴影失真（Shadow Acne）是阴影贴图中最容易出现的问题。它表现为在阴影区域出现间隔的条纹，如下图所示。
 
@@ -282,15 +281,25 @@ float PCSS(sampler2D shadowMap, vec4 coords, float searchRange){
 }
 ```
 
-### Variance Soft Shadow Mapping
+### Variance Soft Shadow Map
 
-PCSS、PCF 的算法都需要多重采样，尤其 PCSS 需要两个多重采样（第一步的Blocker Search和第三步的PCF），这使得算法速度较慢。
+PCSS、PCF的算法都需要多重采样，尤其PCSS需要两个多重采样（第一步的Blocker Search和第三步的PCF），这使得算法速度较慢。为了避免多重采样的计算，方差阴影贴图（Variance Shadow Map, VSM）和方差软阴影贴图（Variance Soft Shadow Map, VSSM）被提出了。
 
-为了避免多重采样的计算，Variance Soft Shadow Mapping（VSSM）假定一定范围内的深度的分布符合正态分布（Normal Distribution） ，那么只要知道该段范围的均值E 、方差Var，就能先得到该范围的概率密度函数PDF。进而通过该概率密度函数的积分——累计分布函数CDF快速计算出该范围中有多少比例大于某个指定深度。
+其中，VSM假定阴影贴图中一定范围内的深度符合正态分布。那么只要计算出该范围的深度均值E和方差Var，就能根据正太分布的概率密度函数快速得出该范围中有多少比例大于某个指定深度，从而计算出该位置片元的visibility。至于VSSM则是PCSS对应的版本，即先用概率密度函数估计平均遮挡物深度，再通过平均遮挡物深度计算软阴影半径，进而得出片元visibility。
 
-### Cascaded Shadow Mapping
+此外，在VSM和VSSM中，均值和方差都不通过采样去得到，而是依靠硬件实现。具体来说，均值E是通过纹理mipmap来实现的。而方差根据公式$Var(X)=E(X^2)-E^2(X)$，只需要额外存储一张深度平方贴图即可通过类似的方法快速得出。
 
-## 4 Real-Time Environment Mapping
+尽管VSSM用于不错的计算速度，但大胆的假设使得其仅仅在真实深度分布为某个单峰曲线才比较符号物理，这也是它的问题。
+
+### Cascaded Shadow Map
+
+由于相机和光源视角不同，从光源视角光栅化后的每个像素投影到屏幕空间后，对应的区域大小也不相同，所以往往会出现距离相机较近位置的Shadow Map精度不够，而距离相机较远位置的Shadow Map精度又过高的问题，于是就会出现阴影边缘的明显锯齿。
+
+缓解这个问题的方法是把视锥沿着Z轴切分成多段，每段单独计算出一个光源坐标空间内的紧凑AABB，然后基于这个AABB生成多张Shadow Map，也就是所谓的级联式阴影（Cascaded Shadow Map）。在进行深度查询时，首先根据当前像素在相机空间中的Z值确定其位于哪个分段中，然后找到对应分段的Shadow Map和投影矩阵。在实际操作中，通常会选择3~4级分段，划分位置通常是指数划分和均匀划分的结果进行插值后得到。鉴于划分是基于视锥的，所以较远处的Shadow Map可以预先计算好，或者每隔几帧才更新一次，以此提高渲染效率。
+
+关于级联阴影的问题，可以参考这篇[文章](https://blog.csdn.net/pizi0475/article/details/7933743)。
+
+## 4 Real-Time Environment Map
 
 ### Recap: Image-Based Lighting
 
@@ -347,7 +356,7 @@ L_o^{indir}(x, w_o)=\int_H^2L_i^{indir}(x, w_i)f_r(x, w_o, w_i)V(x, wi)cos\theta
 L_o^{indir}(x, w_o)=L_i^{indir}f_r\int_H^2V(x, wi)cos\theta dw_i\\
 $$
 
-**Ambient Mapping**：
+**Ambient Map**：
 
 早期的AO技术以预计算为主。它使用光线追踪得到一张AO贴图，即原理中提到的关于visibility的积分，从而在实时渲染中实现环境光遮蔽效果。不过这种方法的缺点也比较明显，它需要额外的纹理存储，且只能表现静态场景。
 
