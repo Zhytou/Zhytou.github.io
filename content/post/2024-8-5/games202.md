@@ -4,6 +4,30 @@ date: 2024-08-05T18:26:29+08:00
 draft: false
 ---
 
+- [1 Introdution](#1-introdution)
+- [2 Recap of CG Basics](#2-recap-of-cg-basics)
+  - [Graphics Pipeline](#graphics-pipeline)
+  - [OpenGL](#opengl)
+  - [The Rendering Equation](#the-rendering-equation)
+- [3 Real-Time Shadows](#3-real-time-shadows)
+  - [Shadow Mapping](#shadow-mapping)
+  - [Percentage Closer Filtering](#percentage-closer-filtering)
+  - [Percentage Closer Soft Shadow](#percentage-closer-soft-shadow)
+  - [Variance Soft Shadow Mapping](#variance-soft-shadow-mapping)
+  - [Cascaded Shadow Mapping](#cascaded-shadow-mapping)
+- [4 Real-Time Environment Mapping](#4-real-time-environment-mapping)
+  - [Recap: Image-Based Lighting](#recap-image-based-lighting)
+  - [Split Sum Approximation](#split-sum-approximation)
+  - [Precomputed Radiance Transfer](#precomputed-radiance-transfer)
+- [5 Real-Time Global Illumination](#5-real-time-global-illumination)
+  - [Reflective Shadow Maps](#reflective-shadow-maps)
+  - [Light Propagation Volumes](#light-propagation-volumes)
+  - [Voxel Global Illumination](#voxel-global-illumination)
+  - [Screen Space Ambient Occlusion](#screen-space-ambient-occlusion)
+  - [Horizon Based Ambient Occlusion+](#horizon-based-ambient-occlusion)
+  - [Screen Space Directional Occlusin](#screen-space-directional-occlusin)
+  - [Screen Space Reflection](#screen-space-reflection)
+
 ## 1 Introdution
 
 **Real-Time High Quality Rendering**:
@@ -151,19 +175,19 @@ void main(void) {
 
 阴影失真（Shadow Acne）是阴影贴图中最容易出现的问题。它表现为在阴影区域出现间隔的条纹，如下图所示。
 
-![阴影失真](https://i-blog.csdnimg.cn/blog_migrate/c4d0c52217b34561520e3340a93f7200.png)
+![阴影失真](https://zhytou.github.io/post/2024-8-5/shadow_acne.png)
 
 出现这种现象的原因在于ShadowMap中的每个texel只能记录一个深度值，但一个像素内的不同位置可能会有不同的深度值（即，试图用离散的纹理去记录连续的信息）。因此，当实际场景的深度值大于ShadowMap上记录的深度值时，就会出现Shadow Acne现象。
 
 一个简单通用的解决方案是在比较前给d加上一个固定偏移。但是若偏移选取过大，又会产生所谓的阴影悬空（Peter-Panning）问题，如下图所示。
 
-![阴影悬空](https://pic2.zhimg.com/80/v2-8b7a421a28ac57a3b779cb824f1e0cb9_720w.webp)
+![阴影悬空](https://zhytou.github.io/post/2024-8-5/peter_panning.png)
 
 改进的方法则是添加自适应偏移的方案，即基于斜率去计算当前深度要加的偏移（Slope Scale Depth Bias）。
 
 另外，阴影走样（Shadow Aliasing）也是阴影贴图中容易出现的问题。比如
 
-![阴影走样](https://i-blog.csdnimg.cn/blog_migrate/08e1b652b0eb13a489399f583989c68c.png)
+![阴影走样](https://zhytou.github.io/post/2024-8-5/shadow_aliasing.png)
 
 其原因则是阴影贴图是一个大小不足，造成多个片段对应一个纹理像素。工业界的解决办法是，不同位置采用不同分辨率的shadow map，或者是动态分辨率之类的技术，也可以直接用PCF生成软阴影。
 
@@ -200,14 +224,14 @@ float PCF(sampler2D shadowMap, vec4 coords, float filterSize) {
 
 如下图所示，在真实世界中，笔尖的阴影十分锐利，而笔杆的阴影会软一些。
 
-![钢笔的阴影](https://i-blog.csdnimg.cn/blog_migrate/99b100153b711cf71511864ea50e5462.png)
+![钢笔的阴影](https://zhytou.github.io/post/2024-8-5/pen.png)
 
 由此，我们可以得出结论：
 
 - 承载阴影的物体表面点与阴影产生物的距离越小，阴影越硬。
 - 阴影的软硬与光源距离无关，与遮挡物距离有关
 
-![软阴影面积变化示意图](https://i-blog.csdnimg.cn/blog_migrate/7c25e9e78dca72b3a5708523fcd85c50.png)
+![软阴影面积变化示意图](https://zhytou.github.io/post/2024-8-5/pcss.png)
 
 进一步，我们可以根据相似三角形定理从上述示意图中推导出一个公式，这也是PCSS的核心。
 
@@ -273,3 +297,92 @@ PCSS、PCF 的算法都需要多重采样，尤其 PCSS 需要两个多重采样
 基于图像的光照(Image Based Lighting, IBL)
 
 ### Split Sum Approximation
+
+### Precomputed Radiance Transfer
+
+## 5 Real-Time Global Illumination
+
+全局光照（Global Illumination, GI）就是直接光照+间接光照。在实时渲染中，GI技术通常只考虑一次弹射的间接光，它们可按处理阶段分为：
+
+- 3D空间GI技术：RSM、LPM和VXGI等；
+- 屏幕空间GI技术：SSAO、SSAO+、HSAO和SSR等。
+
+其中，屏幕空间方法都可以视作一种图像后处理，因为它仅仅利用了图像中的信息，比如：深度信息和阴影贴图等。
+
+### Reflective Shadow Maps
+
+反射阴影贴图（Reflective Shadow Maps, RSM）
+
+![RSM](https://zhytou.github.io/post/2024-8-5/rsm.png)
+
+**Problem**：
+
+次级光源到着色点的可见性没法计算
+
+**Acceleration**：
+
+### Light Propagation Volumes
+
+光照传播体积（Light Propagation Volumes, LPV）
+
+**Steps**：
+
+- 通过阴影贴图找出所有直接光源照亮的片元，并将它们作为次级光源；
+- 将这些次级光源放入划分好的3d网格中；
+- 计算所有次级光源传播到它周围六个格子中的辐射度（类似RSM，仍然不考虑visibility的问题），迭代直到辐射度稳定；
+- 根据这些辐射度进行渲染。
+
+**Problem**：
+
+### Voxel Global Illumination
+
+### Screen Space Ambient Occlusion
+
+环境光遮蔽（Ambient Occlusion, AO）是一种简单全局光照技术。它通过计算物体之间相互遮挡而导致的间接光衰减，进而刻画出相邻物体间隙的明暗。
+
+具体来说，AO技术基于一个假设，即任何一个着色点的间接光都是常数，且只考虑diffuse。由此，该位置的渲染方程由此可以化简为：
+
+$$
+L_o^{indir}(x, w_o)=\int_H^2L_i^{indir}(x, w_i)f_r(x, w_o, w_i)V(x, wi)cos\theta dw_i\\
+L_o^{indir}(x, w_o)=L_i^{indir}f_r\int_H^2V(x, wi)cos\theta dw_i\\
+$$
+
+**Ambient Mapping**：
+
+早期的AO技术以预计算为主。它使用光线追踪得到一张AO贴图，即原理中提到的关于visibility的积分，从而在实时渲染中实现环境光遮蔽效果。不过这种方法的缺点也比较明显，它需要额外的纹理存储，且只能表现静态场景。
+
+**SSAO Algorithm**：
+
+屏幕空间环境光遮蔽(Screen Space Ambient Occlusion, SSAO)是对预计算AO贴图的一种改进。它只利用屏幕空间的信息就可以实时的计算出上述提到的visibility积分。其核心是根据实时计算中得到的z-buffer信息得出着色点之间的相互遮挡情况。
+
+![SSAO](https://zhytou.github.io/post/2024-8-5/ssao.png)
+
+具体来说，它使用蒙塔卡洛来计算上述积分，即：
+
+- 在当前着色点周围采样一定数量的点；
+- 计算出采样点的深度，将其和阴影贴图中相应位置的深度比较，得出是否能接受到直接光。换句话说，只要采样点能接收到直接光，就认为它发出的间接光一定会被着色点接收到。
+
+**SSAO Problem**：
+
+- 只采样有限范围的点，即较远位置发出的间接光对着色点没有考虑；
+- 理论上应该计算的是着色点到采样点的visibility，但在实践中只考虑的采样点到光源的visibility。
+- 采样球，能量会不守恒。
+- 由于没有法线信息，无法考虑cos。
+
+### Horizon Based Ambient Occlusion+
+
+屏幕空间水平基准环境光遮蔽（Horizon Based Ambient Occlusion, HBAO）是对SSAO的一种改进。它整体和SSAO思路类似。只不过HBAO要求获取着色点法线信息，因此它可以采样半球同时考虑cos。
+
+### Screen Space Directional Occlusin
+
+### Screen Space Reflection
+
+屏幕空间反射（Screen Space Reflection, SSR）是一种屏幕空间的全局光照技术。具体来说，它利用屏幕空间信息进行光线追踪。因此，和AO技术相比，SSR不仅仅考虑diffuse的间接光，同样也可以计算specular的间接光。
+
+**Ray Marching**：
+
+光线步进（Ray Marching）是SSR中进行光线追踪的方法，它的实现步骤如下：
+
+```glsl
+
+```
