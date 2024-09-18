@@ -303,9 +303,30 @@ PCSS、PCF的算法都需要多重采样，尤其PCSS需要两个多重采样（
 
 ### Recap: Image-Based Lighting
 
-基于图像的光照(Image Based Lighting, IBL)
+基于图像的光照(Image Based Lighting, IBL)是使用图片表示场景中所有光照的技术。它通常是一个包含场景周围环境的全景图像或立方体贴图，其中每个像素都被视作一个光源。
 
 ### Split Sum Approximation
+
+> [learnopengl中镜面反射IBL](https://learnopengl-cn.github.io/07%20PBR/03%20IBL/02%20Specular%20IBL/)
+
+**Prefiltered Environment Lighting**:
+
+IBL下的渲染仍然是解决渲染方程，在不考虑visiblity项前提下，使用积分差分法近似出射光辐射度，可得渲染方程如下：
+
+$$
+\begin{align}
+L_o(p, w_o) &= \int_{\Omega}{L_i(p, w_i)f_r(p, w_i, w_o)cos\theta}dw_i\\
+         &\approx \frac{\int_{\Omega_{f_r}}L_i(p, w_i)dw_i}{\int_{\Omega_{f_r}}dw_i}\int_{\Omega}{f_r(p, w_i, w_o)cos\theta}dw_i
+\end{align}
+$$
+
+其中，拆分得到的第一项其实就是对入射光辐射度的一个模糊处理，即对其进行平滑滤波并除以一个定值。不过，需要注意的是第一项的积分域为$\Omega_{f_r}$，也即受$f_r$影响，因此需要针对不同的$f_r$（即粗糙度）进行平滑滤波，最终得到下图所示效果。
+
+![预滤波环境贴图](https://learnopengl-cn.github.io/img/07/03/02/ibl_prefilter_map.png)
+
+**Look-Up Texture**:
+
+![lut](https://zhytou.github.io/post/2024-8-5/lut.png)
 
 ### Precomputed Radiance Transfer
 
