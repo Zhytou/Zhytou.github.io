@@ -330,6 +330,22 @@ $$
 
 ### Precomputed Radiance Transfer
 
+预计算辐射度传输（Precomputed Radiance Transfer，PRT） 是一类基于预计算渲染方法。它将渲染方程中入射光项$L_i$和非入射光项$V\cdot{f_r}\cdot{cos\theta}$分别用一系列基函数近似，并将方程中将时域上的积分转换为频域上的乘积，从而达到快速计算的目的。
+
+**Spherical Harmonics**：
+
+一般来说，PRT选择球谐函数（Spherical Harmonics, SH）作为其基函数。而球谐函数是一系列定义在二维球面中的函数。
+
+![sh](https://zhytou.github.io/post/2024-8-5/sh.png)
+
+**Light/Light Transport Coefficents**：
+
+前面提到渲染方程中入射光项和非入射光项可分别用球谐函数近似，即：$L_i=\sum{l_iB_i(i)}$和$V\cdot{f_r}\cdot{cos\theta}=\sum{t_iB_i(i)}$。
+
+而其中系数其实就是待表达项在对应球谐函数上的投影，即：$l_i=\int_\Omega{L(i)B_i(i)di}$。
+
+而整个输出光辐射度则可根据球谐函数正交的特点化简为$L_o(i)\approx\sum{l_it_i}$。
+
 ## 5 Real-Time Global Illumination
 
 全局光照（Global Illumination, GI）就是直接光照+间接光照。在实时渲染中，GI技术通常只考虑一次弹射的间接光，它们可按处理阶段分为：
@@ -341,19 +357,50 @@ $$
 
 ### Reflective Shadow Maps
 
-反射阴影贴图（Reflective Shadow Maps, RSM）
+反射阴影贴图（Reflective Shadow Maps, RSM）是一种3D空间的全局光照技术。它将任何能够接收到直接光照的片元视作次级光源，同时假设次级光源总是diffuse的，即次级光源的任意出射辐射度相同。
 
 ![RSM](https://zhytou.github.io/post/2024-8-5/rsm.png)
 
+由此，下图中某位置p接收到的q处发射的间接光，可表示为：
+
+$$
+\begin{align}
+L_o(p,w_o)=&\int_{\Omega_{patch}}{L_i(p,w_i)V(p,w_i,w_o)f_r(p,w_i,w_o)cos\theta_{p}dw_i}\\
+=&\int_{A_{patch}}{L_i(p,q\rightarrow p)V(p,q\rightarrow p,w_o)f_r(p,q\rightarrow p,w_o)\frac{cos\theta_{p}cos\theta_{q}}{||p-q||^2}dA}\\
+\end{align}
+$$
+
+其中，根据次级光源总是diffuse的假设，q处发射的间接光又可以表示为：
+
+$$
+\begin{align}
+L_o(q,w_o)=&\int_\Omega{L_{light}f_r(p,w_i,w_o)cos\theta_{q}dw_i}\\
+=&\frac{albedo}{\pi}\int_\Omega{L_{light}dw_i}\\
+=&\frac{albedo}{\pi}I_q\\
+=&\frac{albedo}{\pi}\frac{\Phi_q}{dA}
+\end{align}
+$$
+
+此外，由于着色位置p点和间接光源q点之间visibility难以计算，通常认为其总是1，即所有次级光源发射的间接光都可以被其他点接收到。由此，进一步化简p点处出射间接光。
+
+$$
+\begin{align}
+E_o(p,w_o)=\frac{albedo}{\pi}\Phi_q\frac{cos\theta_{p}cos\theta_{q}}{||p-q||^2}
+\end{align}
+$$
+
 **Problem**：
 
-次级光源到着色点的可见性没法计算
+- 次级光源到着色点的可见性没法计算；
+- 次级光源总是被视为diffuse的。
 
 **Acceleration**：
 
+按照RSM算法的逻辑，需要将阴影贴图中所有点都视作次级光源，显然计算量太大。一个不错的加速办法就是引入权重，即尽量多考虑距离着色点近的次级光源，这样就避免了大量计算。
+
 ### Light Propagation Volumes
 
-光照传播体积（Light Propagation Volumes, LPV）
+光照传播体积（Light Propagation Volumes, LPV）同样是一种3D空间的全局光照算法。
 
 **Steps**：
 
@@ -361,8 +408,6 @@ $$
 - 将这些次级光源放入划分好的3d网格中；
 - 计算所有次级光源传播到它周围六个格子中的辐射度（类似RSM，仍然不考虑visibility的问题），迭代直到辐射度稳定；
 - 根据这些辐射度进行渲染。
-
-**Problem**：
 
 ### Voxel Global Illumination
 
