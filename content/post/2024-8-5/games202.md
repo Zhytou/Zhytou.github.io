@@ -450,6 +450,26 @@ $$
 
 ### Screen Space Directional Occlusin
 
+屏幕空间的方向性遮挡（Screen Space Directional Occlusin, SSDO）也是一种屏幕空间的全局光照技术。它的做法整体和SSAO或HBAO类似，也即在半球中采样一系列点，判断这些点是否为次级光源，从而计算该着色点处间接光。
+
+**SSAO vs SSDO**：
+
+不过，SSAO和SSDO判断采样点是否为次级光源不同。SSDO认为采样点被折叠时为次级光源，而SSAO则相反。这也是这两者方法的核心区别，即对间接光来源的假设不同。
+
+如下图所示，SSAO假设间接光来自较远的位置（红色圈部分）；而SSDO则假设间接光来自较近位置的弹射（橙色圈）。
+
+![SSAO vs SSDO](https://zhytou.github.io/post/2024-8-5/ssao_ssdo.png)
+
+**Problem**：
+
+![SSDO](https://zhytou.github.io/post/2024-8-5/ssdo.png)
+
+类似SSAO，SSDO也假设采样点如果是次级光源，那么着色点一定会接收到间接光。即，使用光源视角下采样点的可见性代替了着色点视角下采样点的可见性。
+
+这样就会造成如上图第三个例子中的问题。在SSDO算法中，P到A没有被挡住，那么A对P不会产生间接光。然而，在实际实现中，A在shadow map被挡住，我们反而认为A点会产生间接光，这显然不合理。
+
+除此之外，SSDO另外的问题则是其只能感受小范围的间接光，因为采样范围有限。
+
 ### Screen Space Reflection
 
 屏幕空间反射（Screen Space Reflection, SSR）是一种屏幕空间的全局光照技术。具体来说，它利用屏幕空间信息进行光线追踪。因此，和AO技术相比，SSR不仅仅考虑diffuse的间接光，同样也可以计算specular的间接光。
