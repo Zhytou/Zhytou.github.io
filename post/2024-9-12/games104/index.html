@@ -1,0 +1,428 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>Games104 | Zhytou</title>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=generator content="Hugo 0.91.2">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel="shortcut icon" href=/favicon.ico>
+<link rel=stylesheet type=text/css media=screen href=/css/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=/css/main.css>
+<link rel=stylesheet type=text/css media=screen href=/css/all.css>
+<meta property="og:title" content="Games104">
+<meta property="og:description" content="4 Rendering on Game Engine  Outline GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Shadow Moving Wave of High Quality Shader Management 5 Summary   6 游戏中地形大气和云的渲染  Hard Tessellation   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs    4 Rendering on Game Engine Outline Basics of Game Rendering:">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://zhytou.github.io/post/2024-9-12/games104/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2024-09-12T13:55:22+08:00">
+<meta property="article:modified_time" content="2024-09-12T13:55:22+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Games104">
+<meta name=twitter:description content="4 Rendering on Game Engine  Outline GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Shadow Moving Wave of High Quality Shader Management 5 Summary   6 游戏中地形大气和云的渲染  Hard Tessellation   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs    4 Rendering on Game Engine Outline Basics of Game Rendering:">
+<meta itemprop=name content="Games104">
+<meta itemprop=description content="4 Rendering on Game Engine  Outline GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Shadow Moving Wave of High Quality Shader Management 5 Summary   6 游戏中地形大气和云的渲染  Hard Tessellation   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs    4 Rendering on Game Engine Outline Basics of Game Rendering:"><meta itemprop=datePublished content="2024-09-12T13:55:22+08:00">
+<meta itemprop=dateModified content="2024-09-12T13:55:22+08:00">
+<meta itemprop=wordCount content="908">
+<meta itemprop=keywords content>
+</head>
+<body>
+<header>
+<div id=avatar>
+<a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a>
+</div>
+<div id=titletext>
+<h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2>
+</div>
+<div id=title-description>
+<p id=subtitle>May the force be with me.</p>
+<div id=social>
+<nav><ul>
+<li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li>
+<li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li>
+</ul></nav>
+</div>
+</div>
+<div id=mainmenu>
+<nav>
+<ul>
+<li><a href=/>Home</a></li>
+<li><a href=/post>Posts</a></li>
+<li><a href=/about>About</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<main>
+<div class=post>
+<article>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>12</span>
+<span class=rest>Sep 2024</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>Games104</h1>
+<p class=post-meta>
+<span class=post-meta>
+</span>
+</p>
+</div>
+</div>
+<div class=markdown>
+<ul>
+<li><a href=#4-rendering-on-game-engine>4 Rendering on Game Engine</a>
+<ul>
+<li><a href=#outline>Outline</a></li>
+<li><a href=#gpu>GPU</a></li>
+<li><a href=#renderable>Renderable</a></li>
+<li><a href=#render-objects-in-engine>Render Objects in Engine</a></li>
+<li><a href=#visibility-culling>Visibility Culling</a></li>
+<li><a href=#texture-comperssion>Texture Comperssion</a></li>
+<li><a href=#authoring-tools-of-modeling>Authoring Tools of Modeling</a></li>
+<li><a href=#cluster-based-mesh-pipeline>Cluster-based Mesh Pipeline</a></li>
+<li><a href=#4-summary>4 Summary</a></li>
+</ul>
+</li>
+<li><a href=#5-lighting-materials-and-shders>5 Lighting, Materials and Shders</a>
+<ul>
+<li><a href=#participants-of-rendering-computation>Participants of Rendering Computation</a></li>
+<li><a href=#the-rendering-equation>The Rendering Equation</a></li>
+<li><a href=#starting-from-simple>Starting from Simple</a></li>
+<li><a href=#pre-computed-global-illumination>Pre-computed Global Illumination</a></li>
+<li><a href=#physically-based-material>Physically Based Material</a></li>
+<li><a href=#image-based-lighting>Image Based Lighting</a></li>
+<li><a href=#shadow>Shadow</a></li>
+<li><a href=#moving-wave-of-high-quality>Moving Wave of High Quality</a></li>
+<li><a href=#shader-management>Shader Management</a></li>
+<li><a href=#5-summary>5 Summary</a></li>
+</ul>
+</li>
+<li><a href=#6-%e6%b8%b8%e6%88%8f%e4%b8%ad%e5%9c%b0%e5%bd%a2%e5%a4%a7%e6%b0%94%e5%92%8c%e4%ba%91%e7%9a%84%e6%b8%b2%e6%9f%93>6 游戏中地形大气和云的渲染</a>
+<ul>
+<li><a href=#hard-tessellation>Hard Tessellation</a></li>
+</ul>
+</li>
+<li><a href=#7-render-pipeline-post-process-and-everything>7 Render Pipeline, Post-process and Everything</a>
+<ul>
+<li><a href=#ambient-occlusion>Ambient Occlusion</a></li>
+<li><a href=#fog>Fog</a></li>
+<li><a href=#anti-aliasing>Anti-aliasing</a></li>
+<li><a href=#post-processs>Post-processs</a></li>
+</ul>
+</li>
+</ul>
+<h2 id=4-rendering-on-game-engine>4 Rendering on Game Engine</h2>
+<h3 id=outline>Outline</h3>
+<p><strong>Basics of Game Rendering</strong>:</p>
+<ul>
+<li>Hardware architecture</li>
+<li>Render data organization</li>
+<li>Visibility</li>
+</ul>
+<p><strong>Special Rendering</strong>:</p>
+<ul>
+<li>Terrain</li>
+<li>Sky/Fog</li>
+<li>Postprocess</li>
+</ul>
+<p><strong>Materials, Shaders and Lighting</strong>:</p>
+<ul>
+<li>PBR(SG, MR)</li>
+<li>Shader permutation</li>
+<li>Lighting
+<ul>
+<li>Point/Directional lighting</li>
+<li>IBL/Simple GI</li>
+</ul>
+</li>
+</ul>
+<p><strong>Pipeline</strong>:</p>
+<ul>
+<li>Forward, deferred rendering, foward plus</li>
+<li>Real pipeline with mixed effects</li>
+<li>Ring buffer and V-Sync</li>
+<li>Time-based rendering</li>
+</ul>
+<h3 id=gpu>GPU</h3>
+<p><strong>SIMD and SIMT</strong>:</p>
+<ul>
+<li>Single Instruction Multiple Data</li>
+<li>Single Instruction Multiple Threads</li>
+</ul>
+<p><strong>GPU Architecture</strong>:</p>
+<ul>
+<li>GPC(Graphics Processing Cluster): A dedicated hardware block for
+computing, rasterization, shading, and texturing, usually consisting of serval TPCs.</li>
+<li>TPC(Texture Processing Cluster): A sub-block mainly used to process texture data(texture sampling and filtering), consisting of 2 SM.</li>
+<li>SM(Streaming Multiprocesseor): Part of the GPU that runs CUDA kernels, containing multiple CUDA cores.</li>
+<li>CUDA Core: A computing unit in GPU.</li>
+<li>Warp: A collection of threads.</li>
+</ul>
+<p><strong>CPU and GPU Dataflow</strong>:</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-9-12/dataflow_cpu2gpu.png alt="CPU and GPU Dataflow">
+</figure></p>
+<p><strong>GPU Bounds and Performance</strong>:</p>
+<ul>
+<li>Memory Bounds</li>
+<li>ALU Bounds</li>
+<li>TMU(Texture Mapping Unit) Bounds</li>
+<li>BW(Bandwidth) Bounds</li>
+</ul>
+<h3 id=renderable>Renderable</h3>
+<p><strong>Mesh Render Component</strong>:</p>
+<p>游戏世界中的任意物体都是GO，也即Game Object。而GO总是使用基于组件(Componet-based)的方式描述，它使得游戏功能可被分解为独立模块，易于维护和开发。</p>
+<p>其中，一个可显示的GO往往拥有一个Mesh Render Component来帮助其显示。</p>
+<p><strong>Mesh Primitive</strong>:</p>
+<p>图元/片元通常是一个三角形，即由三个顶点数据构成，比如：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#080;font-weight:700>struct</span> <span style=color:#b06;font-weight:700>Vertex</span> {
+  Vector3 m_position;
+  <span style=color:#888>// other info
+</span><span style=color:#888></span>  Ubyte m_color;
+  Vector3 m_normal;
+};
+<span style=color:#080;font-weight:700>struct</span> <span style=color:#b06;font-weight:700>Triangle</span> {
+  Vertex m_vertex[<span style=color:#00d;font-weight:700>3</span>];
+};
+</code></pre></div><p><strong>Vertex and Index Buffer</strong>:</p>
+<p>实际上，图元只存储顶点序号，这样可以避免重复存储相同顶点（因为图元可能会共用多个顶点）。比如，OpenGL中用EBO存储序号、VAO存储顶点数据类型（说明每个Vertex中有哪些信息，怎么排布的）、VBO存储实际顶点数据。</p>
+<p><strong>Why We Need Pre-vertex Normal</strong>:</p>
+<p>为什么每个顶点中都要保存一个单独法线信息？因为每个片元在光栅化后都会根据其图元顶点的法线插值得到一个新的法线，这样就使得模型拥有了更丰富的表达。</p>
+<p><strong>Material</strong>:</p>
+<p>在游戏中，材质通常只描述物体的视觉特性，即物体如何和光交互。它不会包含物体的其他物理特性，比如密度、质量等。</p>
+<p><strong>Famous Material Model</strong>:</p>
+<ul>
+<li>Phong Model</li>
+<li>Physically Based Material</li>
+<li>Subsurface Material</li>
+</ul>
+<h3 id=render-objects-in-engine>Render Objects in Engine</h3>
+<p><strong>Coordinate System and Transformation</strong>:</p>
+<ul>
+<li>模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。</li>
+<li>视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。</li>
+<li>投影变换（Projection Transformation）：投影变换将场景从相机坐标转换到裁剪空间坐标，再进一步将其转换到NDC空间。</li>
+<li>视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。</li>
+</ul>
+<p><strong>How to Display Different Textures on a Single Model? SubMesh/Resource Pool</strong>:</p>
+<p>将每一个可绘制的GO划分为SubMesh，每个SubMesh使用不同的纹理进行渲染。</p>
+<h3 id=visibility-culling>Visibility Culling</h3>
+<p><strong>Potential Visibility Set</strong>:</p>
+<p><strong>GPU Culling</strong>:</p>
+<h3 id=texture-comperssion>Texture Comperssion</h3>
+<p>纹理压缩(Texture Compression)是一种专为在三维计算机图形渲染系统中存储纹理而使用的图像压缩技术。与普通图像压缩算法的不同之处在于，纹理压缩算法为纹素的随机存取做了优化。</p>
+<p><strong>In-game Texture Comperssion Requirement</strong>:</p>
+<ul>
+<li>Decoding speed</li>
+<li>Random access(That&rsquo;s why cannot use JPEG)</li>
+<li>Compreesion rate and visual quality</li>
+<li>Encoding speed</li>
+</ul>
+<p><strong>Block Compression</strong>:</p>
+<p>现代纹理压缩算法的基础是块压缩(Block Compression)。它将纹理数据分成4×4大小的块来进行颜色压缩，在渲染前将其解压。</p>
+<p>目前比较流行的块压缩格式包括：</p>
+<ul>
+<li>On PC, BC7 or DXTC</li>
+<li>On mobile, ASTC or ETC</li>
+</ul>
+<h3 id=authoring-tools-of-modeling>Authoring Tools of Modeling</h3>
+<ul>
+<li>PolyModeling: 3ds Max/Maya/Blender</li>
+<li>Sculpting: ZBrush</li>
+<li>Scanning</li>
+<li>Procedural Modeling: Houdini</li>
+</ul>
+<h3 id=cluster-based-mesh-pipeline>Cluster-based Mesh Pipeline</h3>
+<p>GPU-driven Rendering Pipeline(2015): Mesh Cluster Rendering</p>
+<ul>
+<li>Arbitray number of meshes in single drawcall.</li>
+<li>GPU-culled by cluster bounds.</li>
+<li>Cluster depth sorting.</li>
+</ul>
+<p>Geometry Rendering Pipeline Architecture(2021): Rendering primitives are divided as:</p>
+<ul>
+<li>Batch</li>
+<li>Surf</li>
+<li>Cluster</li>
+</ul>
+<p><strong>Programmable Mesh Pipeline</strong>:</p>
+<p><strong>Nanite</strong>:</p>
+<h3 id=4-summary>4 Summary</h3>
+<ul>
+<li>The design of game engine is deeply related to the hardware architecture design.</li>
+<li>A submesh design is used to support with multiple materials.</li>
+<li>Using culling algorithms to draw as few objects as possible.</li>
+<li>As GPU become more powerful, more and more work are moved into GPU, which called GPU Driven.</li>
+</ul>
+<h2 id=5-lighting-materials-and-shders>5 Lighting, Materials and Shders</h2>
+<h3 id=participants-of-rendering-computation>Participants of Rendering Computation</h3>
+<ul>
+<li>Lighting: Photon emit, bounce and perception is the origin of everything in rendering.</li>
+<li>Material: How matter react to photon</li>
+<li>Shader: How to train and organize those micro-slaves to finish such a vast and dirty</li>
+</ul>
+<h3 id=the-rendering-equation>The Rendering Equation</h3>
+<p>$$L_o(x, w_o)=L_e(x, w_o)+\int_{H^2}L_i(x, wi)f_r()cos\thetadw_i $$</p>
+<p>勉强</p>
+<h3 id=starting-from-simple>Starting from Simple</h3>
+<p><strong>Blinn-phong</strong>：</p>
+<p>问题：</p>
+<ul>
+<li>能量不守恒，出射能量可能大于入射能量</li>
+<li>难以渲染复杂模型，大多有一种塑料感</li>
+</ul>
+<p><strong>Shadow</strong>:</p>
+<p>目前，游戏引擎主流的阴影算法是一种名为阴影贴图(Shadow Map)的算法。</p>
+<p>问题：</p>
+<ul>
+<li>贴图分辨率有限，致使多个像素可能需要使用同一个深度值，进而引起走样/锯齿现象。从信号与系统上来说，就是因为两个信号频率不同，就可能致使互相遮挡的问题。</li>
+<li>贴图深度进度受限，造成条纹状阴影。引入bias，又有可能引起模型浮空的问题。</li>
+</ul>
+<p><strong>Basic Shading Solution</strong>：</p>
+<ul>
+<li>Simple light</li>
+<li>Blinn-Phong material</li>
+<li>Shadow Map</li>
+</ul>
+<h3 id=pre-computed-global-illumination>Pre-computed Global Illumination</h3>
+<p><strong>Problem of Ambient</strong>:</p>
+<p>只能同一变亮或者变暗</p>
+<p><strong>How to Reprensent</strong>:</p>
+<hr>
+<p><strong>Light Probe and Reflection Probe</strong>:</p>
+<h3 id=physically-based-material>Physically Based Material</h3>
+<p><strong>Mircofacet Theory</strong>:</p>
+<p><strong>BRDF Model Based on Microfact</strong>:</p>
+<p>$$
+f_r(x, w_o, w_i)=\alpha\frac{abedo}{\pi}+\frac{DFG}{4}
+$$</p>
+<p>其中，$\alpha$是材料的粗糙度的。</p>
+<p><strong>Normal Distribution Function</strong>:</p>
+<p>$$
+NDF_{GGX}(\vec{n}, \vec{h}, \alpha)=\frac{\alpha^2}{\pi((\vec{n}*\vec{h})^2(\alpha^2-1)+1)^2}
+$$</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-GLSL data-lang=GLSL><span style=color:#080;font-weight:700>float</span> D_GGX_TR(<span style=color:#080;font-weight:700>vec3</span> N, <span style=color:#080;font-weight:700>vec3</span> H, <span style=color:#080;font-weight:700>float</span> a)
+{
+  <span style=color:#080;font-weight:700>float</span> a2     <span style=color:#333>=</span> a<span style=color:#333>*</span>a;
+  <span style=color:#080;font-weight:700>float</span> NdotH  <span style=color:#333>=</span> max(dot(N, H), <span style=color:#60e;font-weight:700>0.0</span>);
+  <span style=color:#080;font-weight:700>float</span> NdotH2 <span style=color:#333>=</span> NdotH<span style=color:#333>*</span>NdotH;
+
+  <span style=color:#080;font-weight:700>float</span> nom    <span style=color:#333>=</span> a2;
+  <span style=color:#080;font-weight:700>float</span> denom  <span style=color:#333>=</span> (NdotH2 <span style=color:#333>*</span> (a2 <span style=color:#333>-</span> <span style=color:#60e;font-weight:700>1.0</span>) <span style=color:#333>+</span> <span style=color:#60e;font-weight:700>1.0</span>);
+  denom        <span style=color:#333>=</span> PI <span style=color:#333>*</span> denom <span style=color:#333>*</span> denom;
+
+  <span style=color:#080;font-weight:700>return</span> nom <span style=color:#333>/</span> denom;
+}
+</code></pre></div><p><strong>Geometric Attenuation Term(Self-Shadowing)</strong>:</p>
+<p>$$
+G_{Smith}(\vec{l}, \vec{v})=G_{GGX}(\vec{l})G_{GGX}(\vec{v})\
+G_{GGX}(\vec{v})=\frac{\vec{n}<em>\vec{v}}{(\vec{n}</em>\vec{v})(1-k)+k}\
+k=\frac{(\alpha+1)^2}{8}
+$$</p>
+<p><strong>Fresnel Equation</strong>:</p>
+<p>$$
+F_{Schlick}(\vec{h}, \vec{v}, F_0)=F_0+(1-F_0)(1-(\vec{v}*\vec{h}))^5
+$$</p>
+<p><strong>Disney Principled BRDF</strong>:</p>
+<p><strong>PBR Specular/Glossiness(SG)</strong>:</p>
+<p><strong>PBR Metallic/Roughness(MR)</strong>:</p>
+<h3 id=image-based-lighting>Image Based Lighting</h3>
+<p><strong>Basic Idea of IBL</strong>:</p>
+<h3 id=shadow>Shadow</h3>
+<p><strong>Big World and Cascade Shadow</strong>:</p>
+<p>将视锥体分成多片的</p>
+<p><strong>Blend between Cascade Layers</strong>:</p>
+<p><strong>Pros and Cons of Cascade Shadow</strong>:</p>
+<p>pros:
+方法。</p>
+<ul>
+<li>的
+<strong>Percentage Closer Filter</strong>:</li>
+</ul>
+<p><strong>Percentage Closer Soft Shadow</strong>:</p>
+<p><strong>Variance Soft Shadow Map</strong>:</p>
+<h3 id=moving-wave-of-high-quality>Moving Wave of High Quality</h3>
+<p><strong>Quick Evolving of GPU</strong>:</p>
+<ul>
+<li>More flexible new shader model: compute shader/mesh shader/ray-tracing shader</li>
+<li>High performance parallel architecture: warp or wave architecture</li>
+<li>Fully opened graphics API: DirectX 12/Vulkan(glNext)</li>
+</ul>
+<p><strong>Real-Time Ray-Tracing</strong>:</p>
+<p><strong>Real-Time Global Illumination</strong>:</p>
+<p><strong>More Complex Material Model</strong>:</p>
+<p><strong>Virtual Shadow Map</strong>:</p>
+<h3 id=shader-management>Shader Management</h3>
+<p><strong>Uber Shader and Variants</strong>:</p>
+<blockquote>
+<p>Uber shader is a combination of shader for all possible light types, render passes and material type.</p>
+</blockquote>
+<p>超着色器，也叫全能着色器，通过宏区别执行分支，进而生成各种渲染参数下的着色器，最终达到简化着色器管理的目的。</p>
+<p>至于为什么使用宏，而是不if-else这类条件语句，则是因为GPU是基于SIMD的，它应该尽量避免分支带来的执行时间不一致，从而影响执行效率。</p>
+<p><strong>Cross Platform Shader Compile</strong>:</p>
+<h3 id=5-summary>5 Summary</h3>
+<p>目前游戏引擎中流行的渲染方案</p>
+<ul>
+<li>lightmap/lightprobe</li>
+<li>PBR/IBL</li>
+<li>cascade shadow/VSSM</li>
+</ul>
+<h2 id=6-游戏中地形大气和云的渲染>6 游戏中地形大气和云的渲染</h2>
+<p><strong>Heightfield</strong>:</p>
+<p><strong>Adaptive Mesh Tessellation</strong>:</p>
+<p>地形自适应</p>
+<p><strong>Binary Triangle Subdivision</strong>:</p>
+<p><strong>Subdivision and T-Junction</strong>:</p>
+<p><strong>QuadTree-Based Subdivision</strong>:</p>
+<h3 id=hard-tessellation>Hard Tessellation</h3>
+<ul>
+<li>DerictX 11: hull shader+tesslator+domain shader</li>
+<li>DerictX 12: mesh shader</li>
+</ul>
+<h2 id=7-render-pipeline-post-process-and-everything>7 Render Pipeline, Post-process and Everything</h2>
+<h3 id=ambient-occlusion>Ambient Occlusion</h3>
+<blockquote>
+<p>Ambient occlusion is approximation of attenuation of ambient light due to occlusion.</p>
+</blockquote>
+<p>环境光遮蔽(Ambient Occlusion, AO)是对场景中物体因相互遮蔽而引发的环境光衰减的一种近似技术。它和Cook-Torrence BRDF中几何遮蔽项G描述的是类似信息。只不过，几何遮蔽项G用于确保BRDF的能量守恒，并正确计算镜面发射光；而AO技术则用于实现全局光照，即环境光。具体来说，它会得出一个衰减值attenuation，并乘上间接光照，从而得出最终的片元颜色。</p>
+<p>它的理论基础仍然是渲染方程，不过多了一个假设，即将环境光和其BRDF视作一个常量。根据这个假设，便可将出射光强度化简为下式：</p>
+<p>$$
+L_o(x, w_o)=\int_H^2L_i(x, w_i)f_r(x, w_o, w_i)V(x, wi)cos\theta dw_i\
+L_o(x, w_o)=L_if_r\int_H^2V(x, wi)cos\theta dw_i\
+$$</p>
+<p>某种意义上，它和阴影贴图一起实现了各类环境下的阴影现象。前者可以近似出多次弹射的间接光产生的阴影，即间接光阴影；而后者则只考虑少量点光源组成场景的阴影效果，即直接光阴影。</p>
+<p><strong>Precomputed AO</strong>：</p>
+<p>早期的AO技术以预计算为主。它使用光线追踪得到一张AO贴图，即原理中提到的关于visibility的积分，从而在实时渲染中实现环境光遮蔽效果。不过这种方法的缺点也比较明显，它需要额外的纹理存储，且只能表现静态场景。</p>
+<p><strong>Screen Space Ambient Occlusion</strong>:</p>
+<p>屏幕空间环境光遮蔽(Screen Space Ambient Occlusion, SSAO)是对预计算AO贴图的一种改进。它只利用屏幕空间的信息就可以实时的计算出上述提到的visibility积分。其核心是把实时计算中得到的z-buffer信息近似看作几何场景的，因为z-buffer表示。</p>
+<p>不过这个原理其实有点问题，即</p>
+<p>SSAO+</p>
+<p><strong>Horizon Based Ambient Occlusion</strong>:</p>
+<p><strong>Ground Truth Based Ambient Occlusion</strong>:</p>
+<p><strong>Ray-Tracing Ambient Occlusion</strong>:</p>
+<p>由于现代GPU已经提供了</p>
+<h3 id=fog>Fog</h3>
+<p><strong>Depth Fog</strong>:</p>
+<p><strong>Height Fog</strong>:</p>
+<h3 id=anti-aliasing>Anti-aliasing</h3>
+<p><strong>Reason of Aliasing</strong>:</p>
+<p>Aliasing is a series of rendering artifact which is caused by high-frequency signal vs. insufficient of limited rendering resolutions.</p>
+<p>本质上是需要用有限的屏幕像素去拟合连续的真实世界物体。</p>
+<p><strong>Anti-aliasing</strong>:</p>
+<p>The general strategy of screen-based anti-aliasing schemes is using a sampling pattern to get more samples and then weight and sum samples to produce a pixel color.</p>
+<p>关于抗走样算法这一部分的详细介绍，可以查看games101笔记中的介绍。</p>
+<h3 id=post-processs>Post-processs</h3>
+<p><strong>Bloom</strong>:</p>
+<p><strong>Tone Mapping</strong>:</p>
+<p>****:</p>
+</div>
+</div>
+</article>
+</div>
+</main>
+<footer>
+© Copyright <a href=https://github.com/Zhytou>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae>Vitae</a> theme for <a href=https://gohugo.io>Hugo</a>
+</footer><script src=/js/dark-mode.js></script>
+</body>
+</html>

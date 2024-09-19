@@ -21,7 +21,7 @@
 <meta itemprop=name content="GAMES202 学习笔记">
 <meta itemprop=description content="1 Introdution 2 Recap of CG Basics  Graphics Pipeline OpenGL The Rendering Equation   3 Real-Time Shadows  Shadow Map Percentage Closer Filtering Percentage Closer Soft Shadow Variance Soft Shadow Map Cascaded Shadow Map   4 Real-Time Environment Map  Recap: Image-Based Lighting Split Sum Approximation Precomputed Radiance Transfer   5 Real-Time Global Illumination  Reflective Shadow Maps Light Propagation Volumes Voxel Global Illumination Screen Space Ambient Occlusion Horizon Based Ambient Occlusion+ Screen Space Directional Occlusin Screen Space Reflection    1 Introdution Real-Time High Quality Rendering:"><meta itemprop=datePublished content="2024-08-05T18:26:29+08:00">
 <meta itemprop=dateModified content="2024-08-05T18:26:29+08:00">
-<meta itemprop=wordCount content="749">
+<meta itemprop=wordCount content="805">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -346,6 +346,16 @@ $$</p>
 <img src=https://zhytou.github.io/post/2024-8-5/lut.png alt=lut>
 </figure></p>
 <h3 id=precomputed-radiance-transfer>Precomputed Radiance Transfer</h3>
+<p>预计算辐射度传输（Precomputed Radiance Transfer，PRT） 是一类基于预计算渲染方法。它将渲染方程中入射光项$L_i$和非入射光项$V\cdot{f_r}\cdot{cos\theta}$分别用一系列基函数近似，并将方程中将时域上的积分转换为频域上的乘积，从而达到快速计算的目的。</p>
+<p><strong>Spherical Harmonics</strong>：</p>
+<p>一般来说，PRT选择球谐函数（Spherical Harmonics, SH）作为其基函数。而球谐函数是一系列定义在二维球面中的函数。</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-8-5/sh.png alt=sh>
+</figure></p>
+<p><strong>Light/Light Transport Coefficents</strong>：</p>
+<p>前面提到渲染方程中入射光项和非入射光项可分别用球谐函数近似，即：$L_i=\sum{l_iB_i(i)}$和$V\cdot{f_r}\cdot{cos\theta}=\sum{t_iB_i(i)}$。</p>
+<p>而其中系数其实就是待表达项在对应球谐函数上的投影，即：$l_i=\int_\Omega{L(i)B_i(i)di}$。</p>
+<p>而整个输出光辐射度则可根据球谐函数正交的特点化简为$L_o(i)\approx\sum{l_it_i}$。</p>
 <h2 id=5-real-time-global-illumination>5 Real-Time Global Illumination</h2>
 <p>全局光照（Global Illumination, GI）就是直接光照+间接光照。在实时渲染中，GI技术通常只考虑一次弹射的间接光，它们可按处理阶段分为：</p>
 <ul>
@@ -354,15 +364,41 @@ $$</p>
 </ul>
 <p>其中，屏幕空间方法都可以视作一种图像后处理，因为它仅仅利用了图像中的信息，比如：深度信息和阴影贴图等。</p>
 <h3 id=reflective-shadow-maps>Reflective Shadow Maps</h3>
-<p>反射阴影贴图（Reflective Shadow Maps, RSM）</p>
+<p>反射阴影贴图（Reflective Shadow Maps, RSM）是一种3D空间的全局光照技术。它将任何能够接收到直接光照的片元视作次级光源，同时假设次级光源总是diffuse的，即次级光源的任意出射辐射度相同。</p>
 <p><figure>
 <img src=https://zhytou.github.io/post/2024-8-5/rsm.png alt=RSM>
 </figure></p>
+<p>由此，下图中某位置p接收到的q处发射的间接光，可表示为：</p>
+<p>$$
+\begin{align}
+L_o(p,w_o)=&\int_{\Omega_{patch}}{L_i(p,w_i)V(p,w_i,w_o)f_r(p,w_i,w_o)cos\theta_{p}dw_i}\
+=&\int_{A_{patch}}{L_i(p,q\rightarrow p)V(p,q\rightarrow p,w_o)f_r(p,q\rightarrow p,w_o)\frac{cos\theta_{p}cos\theta_{q}}{||p-q||^2}dA}\
+\end{align}
+$$</p>
+<p>其中，根据次级光源总是diffuse的假设，q处发射的间接光又可以表示为：</p>
+<p>$$
+\begin{align}
+L_o(q,w_o)=&\int_\Omega{L_{light}f_r(p,w_i,w_o)cos\theta_{q}dw_i}\
+=&\frac{albedo}{\pi}\int_\Omega{L_{light}dw_i}\
+=&\frac{albedo}{\pi}I_q\
+=&\frac{albedo}{\pi}\frac{\Phi_q}{dA}
+\end{align}
+$$</p>
+<p>此外，由于着色位置p点和间接光源q点之间visibility难以计算，通常认为其总是1，即所有次级光源发射的间接光都可以被其他点接收到。由此，进一步化简p点处出射间接光。</p>
+<p>$$
+\begin{align}
+E_o(p,w_o)=\frac{albedo}{\pi}\Phi_q\frac{cos\theta_{p}cos\theta_{q}}{||p-q||^2}
+\end{align}
+$$</p>
 <p><strong>Problem</strong>：</p>
-<p>次级光源到着色点的可见性没法计算</p>
+<ul>
+<li>次级光源到着色点的可见性没法计算；</li>
+<li>次级光源总是被视为diffuse的。</li>
+</ul>
 <p><strong>Acceleration</strong>：</p>
+<p>按照RSM算法的逻辑，需要将阴影贴图中所有点都视作次级光源，显然计算量太大。一个不错的加速办法就是引入权重，即尽量多考虑距离着色点近的次级光源，这样就避免了大量计算。</p>
 <h3 id=light-propagation-volumes>Light Propagation Volumes</h3>
-<p>光照传播体积（Light Propagation Volumes, LPV）</p>
+<p>光照传播体积（Light Propagation Volumes, LPV）同样是一种3D空间的全局光照算法。</p>
 <p><strong>Steps</strong>：</p>
 <ul>
 <li>通过阴影贴图找出所有直接光源照亮的片元，并将它们作为次级光源；</li>
@@ -370,7 +406,6 @@ $$</p>
 <li>计算所有次级光源传播到它周围六个格子中的辐射度（类似RSM，仍然不考虑visibility的问题），迭代直到辐射度稳定；</li>
 <li>根据这些辐射度进行渲染。</li>
 </ul>
-<p><strong>Problem</strong>：</p>
 <h3 id=voxel-global-illumination>Voxel Global Illumination</h3>
 <h3 id=screen-space-ambient-occlusion>Screen Space Ambient Occlusion</h3>
 <p>环境光遮蔽（Ambient Occlusion, AO）是一种简单全局光照技术。它通过计算物体之间相互遮挡而导致的间接光衰减，进而刻画出相邻物体间隙的明暗。</p>
@@ -401,6 +436,20 @@ $$</p>
 <h3 id=horizon-based-ambient-occlusion>Horizon Based Ambient Occlusion+</h3>
 <p>屏幕空间水平基准环境光遮蔽（Horizon Based Ambient Occlusion, HBAO）是对SSAO的一种改进。它整体和SSAO思路类似。只不过HBAO要求获取着色点法线信息，因此它可以采样半球同时考虑cos。</p>
 <h3 id=screen-space-directional-occlusin>Screen Space Directional Occlusin</h3>
+<p>屏幕空间的方向性遮挡（Screen Space Directional Occlusin, SSDO）也是一种屏幕空间的全局光照技术。它的做法整体和SSAO或HBAO类似，也即在半球中采样一系列点，判断这些点是否为次级光源，从而计算该着色点处间接光。</p>
+<p><strong>SSAO vs SSDO</strong>：</p>
+<p>不过，SSAO和SSDO判断采样点是否为次级光源不同。SSDO认为采样点被折叠时为次级光源，而SSAO则相反。这也是这两者方法的核心区别，即对间接光来源的假设不同。</p>
+<p>如下图所示，SSAO假设间接光来自较远的位置（红色圈部分）；而SSDO则假设间接光来自较近位置的弹射（橙色圈）。</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-8-5/ssao_ssdo.png alt="SSAO vs SSDO">
+</figure></p>
+<p><strong>Problem</strong>：</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-8-5/ssdo.png alt=SSDO>
+</figure></p>
+<p>类似SSAO，SSDO也假设采样点如果是次级光源，那么着色点一定会接收到间接光。即，使用光源视角下采样点的可见性代替了着色点视角下采样点的可见性。</p>
+<p>这样就会造成如上图第三个例子中的问题。在SSDO算法中，P到A没有被挡住，那么A对P不会产生间接光。然而，在实际实现中，A在shadow map被挡住，我们反而认为A点会产生间接光，这显然不合理。</p>
+<p>除此之外，SSDO另外的问题则是其只能感受小范围的间接光，因为采样范围有限。</p>
 <h3 id=screen-space-reflection>Screen Space Reflection</h3>
 <p>屏幕空间反射（Screen Space Reflection, SSR）是一种屏幕空间的全局光照技术。具体来说，它利用屏幕空间信息进行光线追踪。因此，和AO技术相比，SSR不仅仅考虑diffuse的间接光，同样也可以计算specular的间接光。</p>
 <p><strong>Ray Marching</strong>：</p>
