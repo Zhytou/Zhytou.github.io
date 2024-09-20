@@ -10,18 +10,18 @@
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
 <meta property="og:title" content="Games104">
-<meta property="og:description" content="4 Rendering on Game Engine  Outline GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Shadow Moving Wave of High Quality Shader Management 5 Summary   6 游戏中地形大气和云的渲染  Hard Tessellation   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs    4 Rendering on Game Engine Outline Basics of Game Rendering:">
+<meta property="og:description" content="4 Rendering on Game Engine  Outline GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Classic Shadow Solution Moving Wave of High Quality Shader Management 5 Summary   6 游戏中地形大气和云的渲染  Terrain Hard Tessellation   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs    4 Rendering on Game Engine Outline Basics of Game Rendering:">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2024-9-12/games104/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2024-09-12T13:55:22+08:00">
 <meta property="article:modified_time" content="2024-09-12T13:55:22+08:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Games104">
-<meta name=twitter:description content="4 Rendering on Game Engine  Outline GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Shadow Moving Wave of High Quality Shader Management 5 Summary   6 游戏中地形大气和云的渲染  Hard Tessellation   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs    4 Rendering on Game Engine Outline Basics of Game Rendering:">
+<meta name=twitter:description content="4 Rendering on Game Engine  Outline GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Classic Shadow Solution Moving Wave of High Quality Shader Management 5 Summary   6 游戏中地形大气和云的渲染  Terrain Hard Tessellation   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs    4 Rendering on Game Engine Outline Basics of Game Rendering:">
 <meta itemprop=name content="Games104">
-<meta itemprop=description content="4 Rendering on Game Engine  Outline GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Shadow Moving Wave of High Quality Shader Management 5 Summary   6 游戏中地形大气和云的渲染  Hard Tessellation   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs    4 Rendering on Game Engine Outline Basics of Game Rendering:"><meta itemprop=datePublished content="2024-09-12T13:55:22+08:00">
+<meta itemprop=description content="4 Rendering on Game Engine  Outline GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Classic Shadow Solution Moving Wave of High Quality Shader Management 5 Summary   6 游戏中地形大气和云的渲染  Terrain Hard Tessellation   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs    4 Rendering on Game Engine Outline Basics of Game Rendering:"><meta itemprop=datePublished content="2024-09-12T13:55:22+08:00">
 <meta itemprop=dateModified content="2024-09-12T13:55:22+08:00">
-<meta itemprop=wordCount content="908">
+<meta itemprop=wordCount content="1093">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -92,7 +92,7 @@
 <li><a href=#pre-computed-global-illumination>Pre-computed Global Illumination</a></li>
 <li><a href=#physically-based-material>Physically Based Material</a></li>
 <li><a href=#image-based-lighting>Image Based Lighting</a></li>
-<li><a href=#shadow>Shadow</a></li>
+<li><a href=#classic-shadow-solution>Classic Shadow Solution</a></li>
 <li><a href=#moving-wave-of-high-quality>Moving Wave of High Quality</a></li>
 <li><a href=#shader-management>Shader Management</a></li>
 <li><a href=#5-summary>5 Summary</a></li>
@@ -100,6 +100,7 @@
 </li>
 <li><a href=#6-%e6%b8%b8%e6%88%8f%e4%b8%ad%e5%9c%b0%e5%bd%a2%e5%a4%a7%e6%b0%94%e5%92%8c%e4%ba%91%e7%9a%84%e6%b8%b2%e6%9f%93>6 游戏中地形大气和云的渲染</a>
 <ul>
+<li><a href=#terrain>Terrain</a></li>
 <li><a href=#hard-tessellation>Hard Tessellation</a></li>
 </ul>
 </li>
@@ -263,18 +264,43 @@ computing, rasterization, shading, and texturing, usually consisting of serval T
 <li>Shader: How to train and organize those micro-slaves to finish such a vast and dirty</li>
 </ul>
 <h3 id=the-rendering-equation>The Rendering Equation</h3>
-<p>$$L_o(x, w_o)=L_e(x, w_o)+\int_{H^2}L_i(x, wi)f_r()cos\thetadw_i $$</p>
-<p>勉强</p>
+<p>$$
+L_o(x, w_o)=L_e(x, w_o)+\int_{H^2}L_i(x, w_i)f_r(x, w_i, w_o)cos\theta dw_i
+$$</p>
+<p><strong>Challenge</strong>:</p>
+<ul>
+<li>Visibility to lights</li>
+<li>Light soure complexity</li>
+<li>How to integral efficiently on hardware</li>
+<li>Indirect light/global illumination</li>
+</ul>
 <h3 id=starting-from-simple>Starting from Simple</h3>
-<p><strong>Blinn-phong</strong>：</p>
-<p>问题：</p>
+<p><strong>Simple Light Solution</strong>:</p>
+<ul>
+<li>Use simple light soure(directional/point light) in most cases.</li>
+<li>Use ambient light to hack others.</li>
+<li>Use evironment map to enhance glossory surface reflection.</li>
+<li>Use evironment mipmap to represent different roughness of surface.</li>
+</ul>
+<p><strong>Blinn-phong Material</strong>：</p>
+<p>在Blinn-Phong光照模型中，它将任意位置发出的光线分成漫反射(Diffuse/Lambertian)、镜面(Specular)和环境(Ambient)三个分量。</p>
+<p>其中，漫反射强度由入射光线强度$L_{in}$、材料漫反射系数$K_d$、法向量方向$\vec{n}$和反射光线方向$\vec{out}$一起决定，即$L_d=k_d*L_{in}<em>max(0, \vec{n}</em>\vec{out})$。</p>
+<p>而高光强度则由入射光线强度$L_{in}$、材料镜面反射系数$K_s$、材料的高光反光度shininess、法向量方向$\vec{n}$和半程向量$\vec{h}$一起决定。具体来说，$\vec{h}=\frac{\vec{in}+\vec{out}}{||\vec{in}+\vec{out}||}$，而高光强度$L_s=k_s*L_{in}<em>pow(max(0, \vec{n}</em>\vec{h}), shininess)$。</p>
+<p>至于环境光的计算方式就非常简单了。它表示为光的颜色乘以一个很小的常量环境因子，再乘以物体的颜色。</p>
+<p>尽管Blinn-Phong模型简单易实现，但其也有明显的问题，包括：</p>
 <ul>
 <li>能量不守恒，出射能量可能大于入射能量</li>
 <li>难以渲染复杂模型，大多有一种塑料感</li>
 </ul>
 <p><strong>Shadow</strong>:</p>
-<p>目前，游戏引擎主流的阴影算法是一种名为阴影贴图(Shadow Map)的算法。</p>
-<p>问题：</p>
+<p>目前，游戏引擎主流的阴影算法是一种名为阴影贴图(Shadow Map)的算法。它的核心思想是——对于指定光源来说，场景中某个点是否被其照亮，取决于从光源的视角看去，这个点是否可见。</p>
+<p>具体来说，该算法被分成了两步：</p>
+<ul>
+<li>第一步，从光源的视角出发绘制整个场景（平行光用正交投影，点光用透视投影），生成深度图，即所谓的阴影贴图；</li>
+<li>第二步，从摄像机视角出发重新绘制场景，并根据光源投影矩阵的逆矩阵，将世界坐标空间变换回光源的投影空间，找出对应投影空间UV坐标以及投影空间内的深度d。</li>
+</ul>
+<p>此时，就可以使用光源投影空间的UV坐标和阴影贴图，得到深度z。比较深度z和深度d，若d>z，则当前位置被遮挡，处于阴影内；反之，则未被遮挡。</p>
+<p>阴影贴图也有一系列问题，包括：</p>
 <ul>
 <li>贴图分辨率有限，致使多个像素可能需要使用同一个深度值，进而引起走样/锯齿现象。从信号与系统上来说，就是因为两个信号频率不同，就可能致使互相遮挡的问题。</li>
 <li>贴图深度进度受限，造成条纹状阴影。引入bias，又有可能引起模型浮空的问题。</li>
@@ -328,20 +354,23 @@ $$</p>
 <p><strong>PBR Specular/Glossiness(SG)</strong>:</p>
 <p><strong>PBR Metallic/Roughness(MR)</strong>:</p>
 <h3 id=image-based-lighting>Image Based Lighting</h3>
-<p><strong>Basic Idea of IBL</strong>:</p>
-<h3 id=shadow>Shadow</h3>
+<p><strong>Basic Idea of IBL</strong>: An image representing distant lighting from all directions.</p>
+<p><strong>How to shade a point under IBL?</strong></p>
+<p>Solving the rendering equation with Monte Carlo integration is a possible solution, but it&rsquo;s too slow.</p>
+<p>A more elegant way is to use irradince map for diffuse light and split approximation for specular light.</p>
+<h3 id=classic-shadow-solution>Classic Shadow Solution</h3>
 <p><strong>Big World and Cascade Shadow</strong>:</p>
-<p>将视锥体分成多片的</p>
-<p><strong>Blend between Cascade Layers</strong>:</p>
-<p><strong>Pros and Cons of Cascade Shadow</strong>:</p>
-<p>pros:
-方法。</p>
 <ul>
-<li>的
-<strong>Percentage Closer Filter</strong>:</li>
+<li>Partition the frustum into multiple frustums.</li>
+<li>A shadow map is rendered for each sub frustum.</li>
 </ul>
-<p><strong>Percentage Closer Soft Shadow</strong>:</p>
-<p><strong>Variance Soft Shadow Map</strong>:</p>
+<p><strong>Blend between Cascade Layers</strong>:</p>
+<ul>
+<li>A visible seam can be seen where cascades overlap between cascade layers because the resolution does not match.</li>
+<li>The shader then linearly interpolates between the two values based on the pixel&rsquo;s locationintheblendband</li>
+</ul>
+<p><strong>PCF, PCSS and VSSM</strong>:</p>
+<p><a href=https://zhytou.github.io/post/2024-8-5/games202/#3-real-time-shadows target=_blank>Games202 Shadow</a></p>
 <h3 id=moving-wave-of-high-quality>Moving Wave of High Quality</h3>
 <p><strong>Quick Evolving of GPU</strong>:</p>
 <ul>
@@ -349,10 +378,19 @@ $$</p>
 <li>High performance parallel architecture: warp or wave architecture</li>
 <li>Fully opened graphics API: DirectX 12/Vulkan(glNext)</li>
 </ul>
-<p><strong>Real-Time Ray-Tracing</strong>:</p>
+<p><strong>Real-Time Ray-Tracing on GPU</strong>:</p>
 <p><strong>Real-Time Global Illumination</strong>:</p>
+<ul>
+<li>Screen-space GI</li>
+<li>SDF based GI</li>
+<li>Voxel based GI</li>
+<li>RSM/RTX GI</li>
+</ul>
 <p><strong>More Complex Material Model</strong>:</p>
-<p><strong>Virtual Shadow Map</strong>:</p>
+<ul>
+<li>BSDF(Strand-based hair)</li>
+<li>BSSDF</li>
+</ul>
 <h3 id=shader-management>Shader Management</h3>
 <p><strong>Uber Shader and Variants</strong>:</p>
 <blockquote>
@@ -364,11 +402,12 @@ $$</p>
 <h3 id=5-summary>5 Summary</h3>
 <p>目前游戏引擎中流行的渲染方案</p>
 <ul>
-<li>lightmap/lightprobe</li>
+<li>lightmap/light probe</li>
 <li>PBR/IBL</li>
 <li>cascade shadow/VSSM</li>
 </ul>
 <h2 id=6-游戏中地形大气和云的渲染>6 游戏中地形大气和云的渲染</h2>
+<h3 id=terrain>Terrain</h3>
 <p><strong>Heightfield</strong>:</p>
 <p><strong>Adaptive Mesh Tessellation</strong>:</p>
 <p>地形自适应</p>
@@ -395,13 +434,21 @@ $$</p>
 <p><strong>Precomputed AO</strong>：</p>
 <p>早期的AO技术以预计算为主。它使用光线追踪得到一张AO贴图，即原理中提到的关于visibility的积分，从而在实时渲染中实现环境光遮蔽效果。不过这种方法的缺点也比较明显，它需要额外的纹理存储，且只能表现静态场景。</p>
 <p><strong>Screen Space Ambient Occlusion</strong>:</p>
-<p>屏幕空间环境光遮蔽(Screen Space Ambient Occlusion, SSAO)是对预计算AO贴图的一种改进。它只利用屏幕空间的信息就可以实时的计算出上述提到的visibility积分。其核心是把实时计算中得到的z-buffer信息近似看作几何场景的，因为z-buffer表示。</p>
-<p>不过这个原理其实有点问题，即</p>
-<p>SSAO+</p>
+<p>屏幕空间环境光遮蔽(Screen Space Ambient Occlusion, SSAO)是对预计算AO贴图的一种改进。它只利用屏幕空间的信息就可以实时的计算出上述提到的visibility积分，即根据z-buffer信息得出着色点之间的相互遮挡情况。具体来说，SSAO在当前着色点周围采样一定数量的点，并计算出这些采样点的深度。接着，SSAO将其和阴影贴图中相应位置的深度比较，得出是否能接受到直接光。换句话说，只要采样点能接收到直接光，就认为它发出的间接光一定会被着色点接收到。</p>
+<p>显然，这样大胆的假设会带来不少问题，包括：</p>
+<ul>
+<li>只采样有限范围的点，即较远位置发出的间接光对着色点没有考虑；</li>
+<li>理论上应该计算的是着色点到采样点的visibility，但在实践中只考虑的采样点到光源的visibility。</li>
+<li>采样球，能量会不守恒。</li>
+<li>由于没有法线信息，无法考虑cos。</li>
+</ul>
 <p><strong>Horizon Based Ambient Occlusion</strong>:</p>
+<p>屏幕空间水平基准环境光遮蔽(Horizon Based Ambient Occlusion, HBAO)是对SSAO的一种改进。它整体和SSAO思路类似。只不过HBAO要求获取着色点法线信息，因此它可以采样半球同时考虑cos。此外，HBAO还引入的了光线步进(Ray Marching)来计算采样点到着色点之间的可见性，从而大大增强了其真实性。</p>
 <p><strong>Ground Truth Based Ambient Occlusion</strong>:</p>
+<p>基于地面实况的环境光遮蔽(Ground Truth Based Ambient Occlusion, GTAO)基于HBAO，不过在AO积分公式中引入了一个cos项，同时对两个方向进行光线步进。</p>
+<p><a href=https://developer.huawei.com/consumer/cn/forum/topic/0202342980490920385 target=_blank>GTAO</a></p>
 <p><strong>Ray-Tracing Ambient Occlusion</strong>:</p>
-<p>由于现代GPU已经提供了</p>
+<p>由于现代GPU已经提供了光线追踪的能力，所以使用在屏幕空间使用光线追踪，即屏幕空间反射(Screen Spaces Reflection, SSR)来实现全局光照变得越来越流行。相比其他AO算法，SSR可以感知到距离较远的物体发射的间接光，且可以不再假设间接光一定为diffuse的。</p>
 <h3 id=fog>Fog</h3>
 <p><strong>Depth Fog</strong>:</p>
 <p><strong>Height Fog</strong>:</p>
@@ -411,7 +458,7 @@ $$</p>
 <p>本质上是需要用有限的屏幕像素去拟合连续的真实世界物体。</p>
 <p><strong>Anti-aliasing</strong>:</p>
 <p>The general strategy of screen-based anti-aliasing schemes is using a sampling pattern to get more samples and then weight and sum samples to produce a pixel color.</p>
-<p>关于抗走样算法这一部分的详细介绍，可以查看games101笔记中的介绍。</p>
+<p><a href=https://zhytou.github.io/post/2024-8-1/games101/#aliasing target=_blank>Games101 Anti-aliasing</a></p>
 <h3 id=post-processs>Post-processs</h3>
 <p><strong>Bloom</strong>:</p>
 <p><strong>Tone Mapping</strong>:</p>
