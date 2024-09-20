@@ -21,11 +21,12 @@ draft: false
   - [Pre-computed Global Illumination](#pre-computed-global-illumination)
   - [Physically Based Material](#physically-based-material)
   - [Image Based Lighting](#image-based-lighting)
-  - [Shadow](#shadow)
+  - [Classic Shadow Solution](#classic-shadow-solution)
   - [Moving Wave of High Quality](#moving-wave-of-high-quality)
   - [Shader Management](#shader-management)
   - [5 Summary](#5-summary)
 - [6 游戏中地形大气和云的渲染](#6-游戏中地形大气和云的渲染)
+  - [Terrain](#terrain)
   - [Hard Tessellation](#hard-tessellation)
 - [7 Render Pipeline, Post-process and Everything](#7-render-pipeline-post-process-and-everything)
   - [Ambient Occlusion](#ambient-occlusion)
@@ -214,24 +215,53 @@ Geometry Rendering Pipeline Architecture(2021): Rendering primitives are divided
 
 ### The Rendering Equation
 
-$$L_o(x, w_o)=L_e(x, w_o)+\int_{H^2}L_i(x, wi)f_r()cos\thetadw_i $$
+$$
+L_o(x, w_o)=L_e(x, w_o)+\int_{H^2}L_i(x, w_i)f_r(x, w_i, w_o)cos\theta dw_i
+$$
 
-勉强
+**Challenge**:
+
+- Visibility to lights
+- Light soure complexity
+- How to integral efficiently on hardware
+- Indirect light/global illumination
 
 ### Starting from Simple
 
-**Blinn-phong**：
+**Simple Light Solution**:
 
-问题：
+- Use simple light soure(directional/point light) in most cases.
+- Use ambient light to hack others.
+- Use evironment map to enhance glossory surface reflection.
+- Use evironment mipmap to represent different roughness of surface.
+
+**Blinn-phong Material**：
+
+在Blinn-Phong光照模型中，它将任意位置发出的光线分成漫反射(Diffuse/Lambertian)、镜面(Specular)和环境(Ambient)三个分量。
+
+其中，漫反射强度由入射光线强度$L_{in}$、材料漫反射系数$K_d$、法向量方向$\vec{n}$和反射光线方向$\vec{out}$一起决定，即$L_d=k_d*L_{in}*max(0, \vec{n}*\vec{out})$。
+
+而高光强度则由入射光线强度$L_{in}$、材料镜面反射系数$K_s$、材料的高光反光度shininess、法向量方向$\vec{n}$和半程向量$\vec{h}$一起决定。具体来说，$\vec{h}=\frac{\vec{in}+\vec{out}}{||\vec{in}+\vec{out}||}$，而高光强度$L_s=k_s*L_{in}*pow(max(0, \vec{n}*\vec{h}), shininess)$。
+
+至于环境光的计算方式就非常简单了。它表示为光的颜色乘以一个很小的常量环境因子，再乘以物体的颜色。
+
+尽管Blinn-Phong模型简单易实现，但其也有明显的问题，包括：
 
 - 能量不守恒，出射能量可能大于入射能量
 - 难以渲染复杂模型，大多有一种塑料感
 
 **Shadow**:
 
-目前，游戏引擎主流的阴影算法是一种名为阴影贴图(Shadow Map)的算法。
+目前，游戏引擎主流的阴影算法是一种名为阴影贴图(Shadow Map)的算法。它的核心思想是——对于指定光源来说，场景中某个点是否被其照亮，取决于从光源的视角看去，这个点是否可见。
 
-问题：
+具体来说，该算法被分成了两步：
+
+- 第一步，从光源的视角出发绘制整个场景（平行光用正交投影，点光用透视投影），生成深度图，即所谓的阴影贴图；
+- 第二步，从摄像机视角出发重新绘制场景，并根据光源投影矩阵的逆矩阵，将世界坐标空间变换回光源的投影空间，找出对应投影空间UV坐标以及投影空间内的深度d。
+
+此时，就可以使用光源投影空间的UV坐标和阴影贴图，得到深度z。比较深度z和深度d，若d>z，则当前位置被遮挡，处于阴影内；反之，则未被遮挡。
+
+阴影贴图也有一系列问题，包括：
 
 - 贴图分辨率有限，致使多个像素可能需要使用同一个深度值，进而引起走样/锯齿现象。从信号与系统上来说，就是因为两个信号频率不同，就可能致使互相遮挡的问题。
 - 贴图深度进度受限，造成条纹状阴影。引入bias，又有可能引起模型浮空的问题。
@@ -309,27 +339,29 @@ $$
 
 ### Image Based Lighting
 
-**Basic Idea of IBL**:
+**Basic Idea of IBL**: An image representing distant lighting from all directions.
 
-### Shadow
+**How to shade a point under IBL?**
+
+Solving the rendering equation with Monte Carlo integration is a possible solution, but it's too slow.
+
+A more elegant way is to use irradince map for diffuse light and split approximation for specular light.
+
+### Classic Shadow Solution
 
 **Big World and Cascade Shadow**:
 
-将视锥体分成多片的
+- Partition the frustum into multiple frustums.
+- A shadow map is rendered for each sub frustum.
 
 **Blend between Cascade Layers**:
 
-**Pros and Cons of Cascade Shadow**:
+- A visible seam can be seen where cascades overlap between cascade layers because the resolution does not match.
+- The shader then linearly interpolates between the two values based on the pixel's locationintheblendband
 
-pros:
-方法。
+**PCF, PCSS and VSSM**:
 
-- 的
-**Percentage Closer Filter**:
-
-**Percentage Closer Soft Shadow**:
-
-**Variance Soft Shadow Map**:
+[Games202 Shadow](https://zhytou.github.io/post/2024-8-5/games202/#3-real-time-shadows)
 
 ### Moving Wave of High Quality
 
@@ -339,13 +371,19 @@ pros:
 - High performance parallel architecture: warp or wave architecture
 - Fully opened graphics API: DirectX 12/Vulkan(glNext)
 
-**Real-Time Ray-Tracing**:
+**Real-Time Ray-Tracing on GPU**:
 
 **Real-Time Global Illumination**:
 
+- Screen-space GI
+- SDF based GI
+- Voxel based GI
+- RSM/RTX GI
+
 **More Complex Material Model**:
 
-**Virtual Shadow Map**:
+- BSDF(Strand-based hair)
+- BSSDF
 
 ### Shader Management
 
@@ -363,11 +401,13 @@ pros:
 
 目前游戏引擎中流行的渲染方案
 
-- lightmap/lightprobe
+- lightmap/light probe
 - PBR/IBL
 - cascade shadow/VSSM
 
 ## 6 游戏中地形大气和云的渲染
+
+### Terrain
 
 **Heightfield**:
 
@@ -409,19 +449,28 @@ $$
 
 **Screen Space Ambient Occlusion**:
 
-屏幕空间环境光遮蔽(Screen Space Ambient Occlusion, SSAO)是对预计算AO贴图的一种改进。它只利用屏幕空间的信息就可以实时的计算出上述提到的visibility积分。其核心是把实时计算中得到的z-buffer信息近似看作几何场景的，因为z-buffer表示。
+屏幕空间环境光遮蔽(Screen Space Ambient Occlusion, SSAO)是对预计算AO贴图的一种改进。它只利用屏幕空间的信息就可以实时的计算出上述提到的visibility积分，即根据z-buffer信息得出着色点之间的相互遮挡情况。具体来说，SSAO在当前着色点周围采样一定数量的点，并计算出这些采样点的深度。接着，SSAO将其和阴影贴图中相应位置的深度比较，得出是否能接受到直接光。换句话说，只要采样点能接收到直接光，就认为它发出的间接光一定会被着色点接收到。
 
-不过这个原理其实有点问题，即
+显然，这样大胆的假设会带来不少问题，包括：
 
-SSAO+
+- 只采样有限范围的点，即较远位置发出的间接光对着色点没有考虑；
+- 理论上应该计算的是着色点到采样点的visibility，但在实践中只考虑的采样点到光源的visibility。
+- 采样球，能量会不守恒。
+- 由于没有法线信息，无法考虑cos。
 
 **Horizon Based Ambient Occlusion**:
 
+屏幕空间水平基准环境光遮蔽(Horizon Based Ambient Occlusion, HBAO)是对SSAO的一种改进。它整体和SSAO思路类似。只不过HBAO要求获取着色点法线信息，因此它可以采样半球同时考虑cos。此外，HBAO还引入的了光线步进(Ray Marching)来计算采样点到着色点之间的可见性，从而大大增强了其真实性。
+
 **Ground Truth Based Ambient Occlusion**:
+
+基于地面实况的环境光遮蔽(Ground Truth Based Ambient Occlusion, GTAO)基于HBAO，不过在AO积分公式中引入了一个cos项，同时对两个方向进行光线步进。
+
+[GTAO](https://developer.huawei.com/consumer/cn/forum/topic/0202342980490920385)
 
 **Ray-Tracing Ambient Occlusion**:
 
-由于现代GPU已经提供了
+由于现代GPU已经提供了光线追踪的能力，所以使用在屏幕空间使用光线追踪，即屏幕空间反射(Screen Spaces Reflection, SSR)来实现全局光照变得越来越流行。相比其他AO算法，SSR可以感知到距离较远的物体发射的间接光，且可以不再假设间接光一定为diffuse的。
 
 ### Fog
 
@@ -441,7 +490,7 @@ Aliasing is a series of rendering artifact which is caused by high-frequency sig
 
 The general strategy of screen-based anti-aliasing schemes is using a sampling pattern to get more samples and then weight and sum samples to produce a pixel color.
 
-关于抗走样算法这一部分的详细介绍，可以查看games101笔记中的介绍。
+[Games101 Anti-aliasing](https://zhytou.github.io/post/2024-8-1/games101/#aliasing)
 
 ### Post-processs
 
