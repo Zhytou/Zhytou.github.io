@@ -4,8 +4,11 @@ date: 2024-09-12T13:55:22+08:00
 draft: false
 ---
 
+- [1 Overview of Game Engine](#1-overview-of-game-engine)
+- [2 Layered Architecture of Game Engine](#2-layered-architecture-of-game-engine)
+- [3 How to Build a Game World](#3-how-to-build-a-game-world)
 - [4 Rendering on Game Engine](#4-rendering-on-game-engine)
-  - [Outline](#outline)
+  - [Outline of Rendering](#outline-of-rendering)
   - [GPU](#gpu)
   - [Renderable](#renderable)
   - [Render Objects in Engine](#render-objects-in-engine)
@@ -33,10 +36,83 @@ draft: false
   - [Fog](#fog)
   - [Anti-aliasing](#anti-aliasing)
   - [Post-processs](#post-processs)
+- [8 Basics of Animation System](#8-basics-of-animation-system)
+  - [Challenges in Game Animation](#challenges-in-game-animation)
+  - [Outline of Animation System](#outline-of-animation-system)
+  - [2D Animation Techniques in Games](#2d-animation-techniques-in-games)
+  - [3D Animation Techniques in Games](#3d-animation-techniques-in-games)
+  - [Skinned Animation Implementation](#skinned-animation-implementation)
+- [Physic System](#physic-system)
+- [Tool Chains](#tool-chains)
+  - [Outline of Tool Chains](#outline-of-tool-chains)
+  - [What is Game Engine Tool Chain](#what-is-game-engine-tool-chain)
+  - [Complicated Tool GUI](#complicated-tool-gui)
+  - [How to Load Asset - Deserialization](#how-to-load-asset---deserialization)
+  - [How to Make a Robust Tool](#how-to-make-a-robust-tool)
+  - [How to Make Tool Chain](#how-to-make-tool-chain)
+  - [What You See is What You Get](#what-you-see-is-what-you-get)
+- [Advanced Topics of Tool Chain](#advanced-topics-of-tool-chain)
+  - [Architecture of A World Editor](#architecture-of-a-world-editor)
+  - [Plugin Architecture](#plugin-architecture)
+  - [Design Narrative Tools](#design-narrative-tools)
+  - [Reflection and Gameplay](#reflection-and-gameplay)
+  - [Collaborative Editing](#collaborative-editing)
+
+## 1 Overview of Game Engine
+
+**Basic Elements**:
+
+- engine structure and layer
+- data organization and management
+
+**Rendering**:
+
+- model, material, shader and texture
+- light and shadow
+- render pipeline
+- sky, terrain, etc
+
+**Animation**:
+
+- basic concepts of animation
+- animation structure and pipeline
+
+**Physics**:
+
+- basic concepts of physics system
+- gameplay applications
+- performance optimization
+
+**Gameplay**:
+
+- event system
+- scripts system
+- graph driven
+
+**Misc. System**:
+
+- effects
+- navigation
+- camera
+
+**Tool Set**:
+
+- C++ reflection
+- data schema
+
+**Onlien Gaming**:
+
+- lockstep synchronization
+- state synchronization
+- consistency
+
+## 2 Layered Architecture of Game Engine
+
+## 3 How to Build a Game World
 
 ## 4 Rendering on Game Engine
 
-### Outline
+### Outline of Rendering
 
 **Basics of Game Rendering**:
 
@@ -499,3 +575,221 @@ The general strategy of screen-based anti-aliasing schemes is using a sampling p
 **Tone Mapping**:
 
 ****:
+
+## 8 Basics of Animation System
+
+### Challenges in Game Animation
+
+**Interactive and dynamic animation**:
+
+- Vary according to the interaction
+- Cooperate with other gameplay systems
+- Make adjustments in complex environments
+
+**Real-time**:
+
+- Compute per frame
+- Massive animation data
+
+**Realism**:
+
+- More vivid expression
+- More authentic experience
+
+### Outline of Animation System
+
+Basics of Animation Technology
+
+- 2D Animation
+- 3D Animation
+- Skinned Animation Implementation（蒙皮动画）
+- Animation Compression
+- Animation DCC
+
+Advanced Animation Technology
+
+- Animation Blend
+- Inverse Kinematics
+- Animation Pipeline
+- Animation Graph
+- Facial Animation
+- Retargeting
+
+### 2D Animation Techniques in Games
+
+**Sprite Animation**:
+
+**Live2D**:
+
+### 3D Animation Techniques in Games
+
+**Degrees of Freedom**:
+
+Degrees of freedom(DoF) refer to the number of independent variables or parameters of a system.
+
+**Rigid Hierachical Animation**:
+
+**Pre-vertex Animation**:
+
+### Skinned Animation Implementation
+
+**How to Animate a Mesh**:
+
+## Physic System
+
+## Tool Chains
+
+### Outline of Tool Chains
+
+**Foundation of Tool Chains**:
+
+- What is Game Engine Tool Chains
+- Complicated Tool GUI
+- How to Load Assets - Deserialization
+- How to Make a Robust Tool
+- How to Make Tool Chain
+- What You See is What You Get
+- One More Thing - Plugin
+
+**Application & Advanced Topic**:
+
+- Common Game Production Workflow
+- Common Editors
+- Reflection
+- Collaborative Editing
+
+### What is Game Engine Tool Chain
+
+![Tool Chain Architecture](tool_chain)
+
+引擎中的工具链其实是用户和Engine Runtine之间的中间层。它提供上图绿色线框中所提供功能，包括：蓝图编辑器、第三方资产导入、脚本管理等，其核心目的是允许让developers、artists以及designers能够一起工作。
+
+此外，在商业引擎中Tool Chain往往比Engine Runtime复杂度更高，也更难以开发和维护。
+
+### Complicated Tool GUI
+
+**Immediate Mode**:
+
+GUI通常有两种实现方式，即：及时模式(Immediate Mode)和保留模式(Retained Mode)。其中，前者是一种简单直接的GUI实现方式，它总是立刻响应用户，并重新绘制整个界面；而后者基于对象模型来描述和管理GUI，它会保存界面状态，每次仅更新发生变化的部分。
+
+在及时模式下，GUI每一帧都需要重新绘制整个界面，响应用户输入和更新界面状态。换句话说，用户界面的状态和视图是即时生成的，不需要保留或存储界面的状态。它的特点以及优缺点如下：
+
+- Characteristic: lightweight/procedural programming/widgets don't maintain any data or state
+- Pros: straightforward/simple/quick prototype
+- Cons: poor scalability/poor performance/poor maintainability
+
+**Retained Mode**:
+
+在保留模式下，界面元素和状态会被保留在内存中，每次只需要更新发生变化的部分，而不需要重新绘制整个界面。它的特点以及优缺点如下：
+
+- Characteristic: object-oriented/widgets contain their own state and data/draw widgets as needed
+- Pros: high scalability/high performance/high maintainability
+- Cons: complex for developers(callbacks/synchronization between GUI)
+- Examples: Unreal UMG/WPF GUI/QT
+
+**Design Pattern**:
+
+- MVC
+- MVP
+- MVVM
+
+**Serialization and Deserialization**:
+
+序列化（Serialization）是指将对象转换为字节流或其他格式，以便在网络传输或持久化存储时进行传输或保存的过程。解序列化（Deserialization）则是将序列化后的数据重新转换为对象的过程。
+
+常见的序列化存储格式包括：
+
+- Text files(can be read/good for debug): txt/json/yaml/xml
+- Binary files(need less storage): uasset/fbx binary
+
+**Asset Reference**:
+
+Asset reference is a way to seperate redundant data into asset files and complete association by establishing reference relationshops.
+
+**Build Variance by Data Inheritance**:
+
+Inherit the data of the inherited object and allow overriding assignments to the data defined in its data structure.
+
+### How to Load Asset - Deserialization
+
+### How to Make a Robust Tool
+
+**Core Functions**:
+
+- Undo and Redo
+- Crash Recovery
+
+**How to Implement Undo/Redo/Crash Recovery?**:
+
+Abstract all user operations to atomic commands which can invoke, revoke and serialize, deserialize.(Similar to crash recovery of DB)
+
+**How to Define a Command**:
+
+```java
+public interface ICommand<TData>
+{
+  long UID;
+  TData Data;
+
+  void Invoke();
+  void Revoke();
+  byte[] Serialize();
+  void Deserialize(byte[] data);
+}
+```
+
+- UID: monotonic increase over time/unique identification
+- Serialize/Deserialize: usually provide by GO data
+
+### How to Make Tool Chain
+
+**Challenge**: various tools for different users
+
+- different views for different tools
+- each tool has its own data structure
+- same data may have different view for different user
+
+develop all tools seperately?
+
+- no saclability
+- no maintainbility
+
+**Schema**: a description structure
+
+two definition ways:
+
+- defined in code(oop)
+- standalone schema definition(xml/json use reflection)
+
+### What You See is What You Get
+
+- Stanealone Tool
+- In Game Tool: Editor Mode/Play in Editor
+
+## Advanced Topics of Tool Chain
+
+### Architecture of A World Editor
+
+World editor is a hub for everything to build the world.
+
+### Plugin Architecture
+
+### Design Narrative Tools
+
+### Reflection and Gameplay
+
+**Reflection**:
+
+In computer science, reflective programming or reflection is the ability of a process to examine, introspect, and modify its own structure and behavior.
+
+By generating a code meta information map, reflection build the bridge between code and tools
+
+**How to Implement Reflection in C++**:
+
+- Collect type info from code
+- Generate code to provide accessors for fields and methods
+- Manage all accessors with a <string,accessor> map
+
+**Code Rendering**:
+
+### Collaborative Editing
