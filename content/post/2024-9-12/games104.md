@@ -28,22 +28,26 @@ draft: false
   - [Moving Wave of High Quality](#moving-wave-of-high-quality)
   - [Shader Management](#shader-management)
   - [5 Summary](#5-summary)
-- [6 游戏中地形大气和云的渲染](#6-游戏中地形大气和云的渲染)
-  - [Terrain](#terrain)
+- [6(1) Terrain](#61-terrain)
   - [Hard Tessellation](#hard-tessellation)
+- [6(2) Sky and Atmosphere](#62-sky-and-atmosphere)
+  - [Atmosphere](#atmosphere)
+  - [Cloud](#cloud)
 - [7 Render Pipeline, Post-process and Everything](#7-render-pipeline-post-process-and-everything)
   - [Ambient Occlusion](#ambient-occlusion)
   - [Fog](#fog)
   - [Anti-aliasing](#anti-aliasing)
   - [Post-processs](#post-processs)
+  - [Render Pipeline](#render-pipeline)
 - [8 Basics of Animation System](#8-basics-of-animation-system)
   - [Challenges in Game Animation](#challenges-in-game-animation)
   - [Outline of Animation System](#outline-of-animation-system)
   - [2D Animation Techniques in Games](#2d-animation-techniques-in-games)
   - [3D Animation Techniques in Games](#3d-animation-techniques-in-games)
   - [Skinned Animation Implementation](#skinned-animation-implementation)
-- [Physic System](#physic-system)
-- [Tool Chains](#tool-chains)
+- [9 Advanced Animation Technology](#9-advanced-animation-technology)
+- [10 Physic System](#10-physic-system)
+- [11 Tool Chains](#11-tool-chains)
   - [Outline of Tool Chains](#outline-of-tool-chains)
   - [What is Game Engine Tool Chain](#what-is-game-engine-tool-chain)
   - [Complicated Tool GUI](#complicated-tool-gui)
@@ -481,9 +485,7 @@ A more elegant way is to use irradince map for diffuse light and split approxima
 - PBR/IBL
 - cascade shadow/VSSM
 
-## 6 游戏中地形大气和云的渲染
-
-### Terrain
+## 6(1) Terrain
 
 **Heightfield**:
 
@@ -501,6 +503,36 @@ A more elegant way is to use irradince map for diffuse light and split approxima
 
 - DerictX 11: hull shader+tesslator+domain shader
 - DerictX 12: mesh shader
+
+## 6(2) Sky and Atmosphere
+
+### Atmosphere
+
+**Analytic Atmosphere Appearance Modeling**:
+
+- pros:
+- cons:
+
+**Participating Meida**:
+
+### Cloud
+
+**Cloud Type**:
+
+**Mesh-Based Cloud Modeling**:
+
+- pros: high quality
+- cons: overall expensive/don't support dynamic weather
+
+**Billboard Cloud**:
+
+- pros: efficient
+- cons: limited visual effect/limited cloud type
+
+**Volumentric Cloud Modeling**:
+
+- pros:
+- cons: efficiency must be considered
 
 ## 7 Render Pipeline, Post-process and Everything
 
@@ -554,6 +586,8 @@ $$
 
 **Height Fog**:
 
+**Voxel-based Volumetric Fog**:
+
 ### Anti-aliasing
 
 **Reason of Aliasing**:
@@ -570,11 +604,76 @@ The general strategy of screen-based anti-aliasing schemes is using a sampling p
 
 ### Post-processs
 
+Post-process in 3D Graphics refers to any algorithm that will be applied to thefinal image. It can be done for stylistic reasons (color correction, contrast, etc.) or for realistic reasons (tone mapping, depth of field, etc.)
+
 **Bloom**:
+
+泛光(Bloom)是一种使得亮光部分产生“泛光”或“辉光”效果的技术。它用于模拟真实相机成像的瑕疵效果，即产生从图像明亮区域边界向外延伸的光线条纹，从而给人的感觉是极其明亮的光线压制住了摄像机或是透过眼睛看到该场景。
+
+泛光一般的做法如下：
+
+- 检测高光部分，使用rgb值构成的多项式，比如：r×0.2126+g×0.7152+b×0.0722。
+- 对提取的亮部分进行高斯模糊处理，产生一个光晕效果。
+- 多次迭代高斯模糊来实现不同程度的“泛光”效果。（高斯金字塔）
+- 将模糊处理后的亮部分与原始图像进行混合合成，最终得到泛光效果。
 
 **Tone Mapping**:
 
-****:
+> The purpose of the Tone Mapping function is to map the wide range of highdynamicrange (HDR) colors into standard dynamic range (SDR) that a display can output.
+
+颜色映射(Tone Mapping)是一种用于将HDR图像转换为LDR图像的技术。在HDR图像中，像素的亮度值可以超出典型的显示设备所能表示的范围，因此需要进行色调映射以适应标准的显示器或打印设备。
+
+在实践中，颜色映射主要使用一个多项式，即色调映射曲线，来进行变化。
+
+**Color Grading**:
+
+色彩分级(Color Grading)是一种用于调整图像色彩和色调的技术，常用于电影制作和摄影中。通过对色彩、对比度、亮度等参数的调整，可以改变图像的整体感觉和氛围，达到艺术和表现效果。
+
+### Render Pipeline
+
+**Forward Rendering**:
+
+前向渲染(Forward Rendering)是渲染基础方法。它会遍历每一个图元和光源，依次计算该图元涉及的像素颜色。其伪代码如下：
+
+```txt
+for(auto mesh : meshes) {
+  for(auto light : lights) {
+    color = shading(mesh, light);
+  }
+}
+```
+
+**Sort and Render Transparent after Opaque Objects**:
+
+对于一个包含透明物的场景，前向渲染总是优先渲染不透明物体，接着将透明物体排序由远及近的渲染。至于，下图出现的难以排序的情况，则直接不管了。
+
+![draw transparent](https://zhytou.github.io/post/2024-9-12/transparent.png)
+
+**Deferred Rendering**:
+
+延迟渲染(Deferred Rendering)是目前较为流行的一种渲染方法。它先遍历场景中图元，并将图元的几何信息存储在缓冲中，然后在后处理阶段根据光照信息计算最终颜色。其伪代码实现如下：
+
+```txt
+for(auto mesh : meshes) {
+  write(g_buffers, mesh);
+}
+
+for (auto pixel : pixels) {
+  g_buffer = read(g_buffers);
+  for (auto light : lights) {
+    shading(g_buffer, light);
+  }
+}
+```
+
+相比前向渲染，延迟渲染大大减少了shading函数调用次数，使其只需要针对可被照亮的片元计算。不过，它大量使用G-buffer，导致其内存和带宽开销非常大。此外，它不支持透明物体绘制且对MSAA不友好。
+
+**Tile-based Rendering**:
+
+基于块的渲染是一种在移动端广泛应用的渲染技术。它将屏幕分成小块（每块包含一定数量的像素），每个块独立处理，以提高渲染效率。
+
+```txt
+```
 
 ## 8 Basics of Animation System
 
@@ -635,9 +734,11 @@ Degrees of freedom(DoF) refer to the number of independent variables or paramete
 
 **How to Animate a Mesh**:
 
-## Physic System
+## 9 Advanced Animation Technology
 
-## Tool Chains
+## 10 Physic System
+
+## 11 Tool Chains
 
 ### Outline of Tool Chains
 
