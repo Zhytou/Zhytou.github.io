@@ -45,6 +45,7 @@ draft: false
   - [2D Animation Techniques in Games](#2d-animation-techniques-in-games)
   - [3D Animation Techniques in Games](#3d-animation-techniques-in-games)
   - [Skinned Animation Implementation](#skinned-animation-implementation)
+  - [Math of 3D Rotation](#math-of-3d-rotation)
 - [9 Advanced Animation Technology](#9-advanced-animation-technology)
 - [10 Physic System](#10-physic-system)
 - [11 Tool Chains](#11-tool-chains)
@@ -629,6 +630,12 @@ Post-process in 3D Graphics refers to any algorithm that will be applied to thef
 
 色彩分级(Color Grading)是一种用于调整图像色彩和色调的技术，常用于电影制作和摄影中。通过对色彩、对比度、亮度等参数的调整，可以改变图像的整体感觉和氛围，达到艺术和表现效果。
 
+具体来说，色彩分级通常依赖查找表(Look-Up Table，LUT)来实现。LUT是一种用于将输入颜色映射到输出颜色的数据结构。在实际开发中，为了节省内存和提高效率，LUT往往不会存储一个完整的256×256×256的纹理，这样的纹理会占用过多的空间。相反，通常会选择一个较小的尺寸来存储LUT，比如一张64×64×64的LUT。此外，早期图形API还不支持3D纹理，所以LUT通常还会进一步处理为一张二维图片。比如，一张64×64×64的LUT通常是用一张分辨率为512×512的二维纹理存储，如下图所示。
+
+![2d lut](https://zhytou.github.io/post/2024-9-12/2d_lut.png)
+
+其中，LUT由8×8个小方格组成，每个小方格的Blue分量为固定值。而对于，每个小方格横竖方向又各自分为64个像素，以左下角为原点，横向小格的Red分量依次增加，纵向小格的Green分量依次增加。
+
 ### Render Pipeline
 
 **Forward Rendering**:
@@ -734,6 +741,16 @@ Degrees of freedom(DoF) refer to the number of independent variables or paramete
 
 **How to Animate a Mesh**:
 
+### Math of 3D Rotation
+
+**2D Orientation Math**:
+
+![2d orientation](https://zhytou.github.io/post/2024-9-12/2d_orientation.png)
+
+**3D Orientation Math**:
+
+![3d orientation](https://zhytou.github.io/post/2024-9-12/3d_orientation.png)
+
 ## 9 Advanced Animation Technology
 
 ## 10 Physic System
@@ -761,7 +778,7 @@ Degrees of freedom(DoF) refer to the number of independent variables or paramete
 
 ### What is Game Engine Tool Chain
 
-![Tool Chain Architecture](tool_chain)
+![Tool Chain Architecture](https://zhytou.github.io/post/2024-9-12/tool_chain.png)
 
 引擎中的工具链其实是用户和Engine Runtine之间的中间层。它提供上图绿色线框中所提供功能，包括：蓝图编辑器、第三方资产导入、脚本管理等，其核心目的是允许让developers、artists以及designers能够一起工作。
 
