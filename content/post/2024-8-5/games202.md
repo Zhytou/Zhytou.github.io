@@ -297,7 +297,15 @@ PCSS、PCF的算法都需要多重采样，尤其PCSS需要两个多重采样（
 
 缓解这个问题的方法是把视锥沿着Z轴切分成多段，每段单独计算出一个光源坐标空间内的紧凑AABB，然后基于这个AABB生成多张Shadow Map，也就是所谓的级联式阴影（Cascaded Shadow Map）。在进行深度查询时，首先根据当前像素在相机空间中的Z值确定其位于哪个分段中，然后找到对应分段的Shadow Map和投影矩阵。在实际操作中，通常会选择3~4级分段，划分位置通常是指数划分和均匀划分的结果进行插值后得到。鉴于划分是基于视锥的，所以较远处的Shadow Map可以预先计算好，或者每隔几帧才更新一次，以此提高渲染效率。
 
-关于级联阴影的问题，可以参考这篇[文章](https://blog.csdn.net/pizi0475/article/details/7933743)。
+**Issues in CSM**:
+
+![blend between cascades](https://zhytou.github.io/post/2024-8-5/csm_seam.png)
+
+级联阴影之间有时会因为前后两层的分辨率不同而产生阴影间隙，如上图所示。解决办法则是使用前后两张阴影贴图进行线性插值。
+
+除此之外，由于使用紧凑AABB划分视锥，那么视锥的一些微小变换就可能造成阴影贴图的有效分辨率大大减小。一种合理的解决方案则是使用球体包围盒代替紧凑AABB。
+
+关于级联阴影更多的问题，可以参考这篇[文章](https://blog.csdn.net/pizi0475/article/details/7933743)。
 
 ## 4 Real-Time Environment Map
 
@@ -325,6 +333,8 @@ $$
 ![预滤波环境贴图](https://learnopengl-cn.github.io/img/07/03/02/ibl_prefilter_map.png)
 
 **Look-Up Texture**:
+
+至于第二项，则可以通过下图中的公式进行计算。
 
 ![lut](https://zhytou.github.io/post/2024-8-5/lut.png)
 
@@ -446,7 +456,7 @@ $$
 
 ### Horizon Based Ambient Occlusion+
 
-屏幕空间水平基准环境光遮蔽（Horizon Based Ambient Occlusion, HBAO）是对SSAO的一种改进。它整体和SSAO思路类似。只不过HBAO要求获取着色点法线信息，因此它可以采样半球同时考虑cos。
+屏幕空间水平基准环境光遮蔽（Horizon Based Ambient Occlusion, HBAO）是对SSAO的一种改进。它整体和SSAO思路类似。只不过HBAO要求获取着色点法线信息，因此它可以采样半球同时考虑cos。此外，HBAO还引入的了光线步进(Ray Marching)来计算采样点到着色点之间的可见性，从而大大增强了其真实性。
 
 ### Screen Space Directional Occlusin
 
@@ -476,8 +486,27 @@ $$
 
 **Ray Marching**：
 
-光线步进（Ray Marching）是SSR中进行光线追踪的方法，它的实现步骤如下：
+光线步进（Ray Marching）是SSR中进行光线追踪的方法。根据实现不同，又可分为线性光线步进（Linear Ray Marching）和层次光线步进（Hierarchical Ray Marching）。其中，线性光线步进每次沿着追踪方向前进固定步长，其使用GLSL实现的代码如下：
 
 ```glsl
-
+bool RayMarch(vec3 ori, vec3 dir, out vec3 hitPos) {
+  hitPos = ori;
+  for (int i = 0; i < 100; i++) {
+    hitPos += dir * STEP_LEN;
+    float depth = GetDepth(hitPos);
+    float gDepth = GetGBufferDepth(GetScreenCoordinate(hitPos));
+    if (gDepth > depth) {
+      return true;
+    }
+  }
+  return false;
+}
 ```
+
+至于层次光线步进，它每次前进的步长则是自适应的，有点类似网络中拥塞窗口的变化。其执行流程如下：
+
+- 首先，将发生反射/光线追踪的视锥切分成固定大小的格子；
+- 接着，开始光线步进；
+  - 若没发生碰撞，则将步长翻倍，继续前进；
+  - 反之，缩短步长为二分之一，直到步长为1时，跳出循环。
+- 返回碰撞点。

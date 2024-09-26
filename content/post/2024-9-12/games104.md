@@ -652,7 +652,18 @@ for(auto mesh : meshes) {
 
 **Sort and Render Transparent after Opaque Objects**:
 
-对于一个包含透明物的场景，前向渲染总是优先渲染不透明物体，接着将透明物体排序由远及近的渲染。至于，下图出现的难以排序的情况，则直接不管了。
+对于一个包含透明物的场景，前向渲染总是优先渲染不透明物体，接着将透明物体排序由远及近的渲染。具体来说，在渲染不透明物体时，需要开启深度测试和深度写入功能；接着，按由远至近的顺序渲染透明物体，同时要注意开启深度测试和混合功能，同时关闭深度写入；最后，根据混合公式，计算出每个像素的颜色，如下图所示。
+
+![blend](https://zhytou.github.io/post/2024-8-1/color_blend.png)
+
+对于OpenGL来说，它开启混合功能和指定混合方程的代码如下：
+
+```c++
+glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+```
+
+至于一些特殊情况，比如下图出现的难以排序的情况，目前没有什么特别好的解决方案，普遍做法是直接不处理。
 
 ![draw transparent](https://zhytou.github.io/post/2024-9-12/transparent.png)
 
