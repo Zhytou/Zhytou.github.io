@@ -10,18 +10,18 @@
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
 <meta property="og:title" content="Games104">
-<meta property="og:description" content="4 Rendering on Game Engine  Outline GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Classic Shadow Solution Moving Wave of High Quality Shader Management 5 Summary   6 游戏中地形大气和云的渲染  Terrain Hard Tessellation   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs    4 Rendering on Game Engine Outline Basics of Game Rendering:">
+<meta property="og:description" content="1 Overview of Game Engine 2 Layered Architecture of Game Engine 3 How to Build a Game World 4 Rendering on Game Engine  Outline of Rendering GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Classic Shadow Solution Moving Wave of High Quality Shader Management 5 Summary   6(1) Terrain  Hard Tessellation   6(2) Sky and Atmosphere  Atmosphere Cloud   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs Render Pipeline   8 Basics of Animation System  Challenges in Game Animation Outline of Animation System 2D Animation Techniques in Games 3D Animation Techniques in Games Skinned Animation Implementation Math of 3D Rotation   9 Advanced Animation Technology 10 Physic System 11 Tool Chains  Outline of Tool Chains What is Game Engine Tool Chain Complicated Tool GUI How to Load Asset - Deserialization How to Make a Robust Tool How to Make Tool Chain What You See is What You Get   Advanced Topics of Tool Chain  Architecture of A World Editor Plugin Architecture Design Narrative Tools Reflection and Gameplay Collaborative Editing    1 Overview of Game Engine Basic Elements:">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2024-9-12/games104/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2024-09-12T13:55:22+08:00">
 <meta property="article:modified_time" content="2024-09-12T13:55:22+08:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Games104">
-<meta name=twitter:description content="4 Rendering on Game Engine  Outline GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Classic Shadow Solution Moving Wave of High Quality Shader Management 5 Summary   6 游戏中地形大气和云的渲染  Terrain Hard Tessellation   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs    4 Rendering on Game Engine Outline Basics of Game Rendering:">
+<meta name=twitter:description content="1 Overview of Game Engine 2 Layered Architecture of Game Engine 3 How to Build a Game World 4 Rendering on Game Engine  Outline of Rendering GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Classic Shadow Solution Moving Wave of High Quality Shader Management 5 Summary   6(1) Terrain  Hard Tessellation   6(2) Sky and Atmosphere  Atmosphere Cloud   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs Render Pipeline   8 Basics of Animation System  Challenges in Game Animation Outline of Animation System 2D Animation Techniques in Games 3D Animation Techniques in Games Skinned Animation Implementation Math of 3D Rotation   9 Advanced Animation Technology 10 Physic System 11 Tool Chains  Outline of Tool Chains What is Game Engine Tool Chain Complicated Tool GUI How to Load Asset - Deserialization How to Make a Robust Tool How to Make Tool Chain What You See is What You Get   Advanced Topics of Tool Chain  Architecture of A World Editor Plugin Architecture Design Narrative Tools Reflection and Gameplay Collaborative Editing    1 Overview of Game Engine Basic Elements:">
 <meta itemprop=name content="Games104">
-<meta itemprop=description content="4 Rendering on Game Engine  Outline GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Classic Shadow Solution Moving Wave of High Quality Shader Management 5 Summary   6 游戏中地形大气和云的渲染  Terrain Hard Tessellation   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs    4 Rendering on Game Engine Outline Basics of Game Rendering:"><meta itemprop=datePublished content="2024-09-12T13:55:22+08:00">
+<meta itemprop=description content="1 Overview of Game Engine 2 Layered Architecture of Game Engine 3 How to Build a Game World 4 Rendering on Game Engine  Outline of Rendering GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Classic Shadow Solution Moving Wave of High Quality Shader Management 5 Summary   6(1) Terrain  Hard Tessellation   6(2) Sky and Atmosphere  Atmosphere Cloud   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs Render Pipeline   8 Basics of Animation System  Challenges in Game Animation Outline of Animation System 2D Animation Techniques in Games 3D Animation Techniques in Games Skinned Animation Implementation Math of 3D Rotation   9 Advanced Animation Technology 10 Physic System 11 Tool Chains  Outline of Tool Chains What is Game Engine Tool Chain Complicated Tool GUI How to Load Asset - Deserialization How to Make a Robust Tool How to Make Tool Chain What You See is What You Get   Advanced Topics of Tool Chain  Architecture of A World Editor Plugin Architecture Design Narrative Tools Reflection and Gameplay Collaborative Editing    1 Overview of Game Engine Basic Elements:"><meta itemprop=datePublished content="2024-09-12T13:55:22+08:00">
 <meta itemprop=dateModified content="2024-09-12T13:55:22+08:00">
-<meta itemprop=wordCount content="1093">
+<meta itemprop=wordCount content="2077">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -71,9 +71,12 @@
 </div>
 <div class=markdown>
 <ul>
+<li><a href=#1-overview-of-game-engine>1 Overview of Game Engine</a></li>
+<li><a href=#2-layered-architecture-of-game-engine>2 Layered Architecture of Game Engine</a></li>
+<li><a href=#3-how-to-build-a-game-world>3 How to Build a Game World</a></li>
 <li><a href=#4-rendering-on-game-engine>4 Rendering on Game Engine</a>
 <ul>
-<li><a href=#outline>Outline</a></li>
+<li><a href=#outline-of-rendering>Outline of Rendering</a></li>
 <li><a href=#gpu>GPU</a></li>
 <li><a href=#renderable>Renderable</a></li>
 <li><a href=#render-objects-in-engine>Render Objects in Engine</a></li>
@@ -98,10 +101,15 @@
 <li><a href=#5-summary>5 Summary</a></li>
 </ul>
 </li>
-<li><a href=#6-%e6%b8%b8%e6%88%8f%e4%b8%ad%e5%9c%b0%e5%bd%a2%e5%a4%a7%e6%b0%94%e5%92%8c%e4%ba%91%e7%9a%84%e6%b8%b2%e6%9f%93>6 游戏中地形大气和云的渲染</a>
+<li><a href=#61-terrain>6(1) Terrain</a>
 <ul>
-<li><a href=#terrain>Terrain</a></li>
 <li><a href=#hard-tessellation>Hard Tessellation</a></li>
+</ul>
+</li>
+<li><a href=#62-sky-and-atmosphere>6(2) Sky and Atmosphere</a>
+<ul>
+<li><a href=#atmosphere>Atmosphere</a></li>
+<li><a href=#cloud>Cloud</a></li>
 </ul>
 </li>
 <li><a href=#7-render-pipeline-post-process-and-everything>7 Render Pipeline, Post-process and Everything</a>
@@ -110,11 +118,93 @@
 <li><a href=#fog>Fog</a></li>
 <li><a href=#anti-aliasing>Anti-aliasing</a></li>
 <li><a href=#post-processs>Post-processs</a></li>
+<li><a href=#render-pipeline>Render Pipeline</a></li>
+</ul>
+</li>
+<li><a href=#8-basics-of-animation-system>8 Basics of Animation System</a>
+<ul>
+<li><a href=#challenges-in-game-animation>Challenges in Game Animation</a></li>
+<li><a href=#outline-of-animation-system>Outline of Animation System</a></li>
+<li><a href=#2d-animation-techniques-in-games>2D Animation Techniques in Games</a></li>
+<li><a href=#3d-animation-techniques-in-games>3D Animation Techniques in Games</a></li>
+<li><a href=#skinned-animation-implementation>Skinned Animation Implementation</a></li>
+<li><a href=#math-of-3d-rotation>Math of 3D Rotation</a></li>
+</ul>
+</li>
+<li><a href=#9-advanced-animation-technology>9 Advanced Animation Technology</a></li>
+<li><a href=#10-physic-system>10 Physic System</a></li>
+<li><a href=#11-tool-chains>11 Tool Chains</a>
+<ul>
+<li><a href=#outline-of-tool-chains>Outline of Tool Chains</a></li>
+<li><a href=#what-is-game-engine-tool-chain>What is Game Engine Tool Chain</a></li>
+<li><a href=#complicated-tool-gui>Complicated Tool GUI</a></li>
+<li><a href=#how-to-load-asset---deserialization>How to Load Asset - Deserialization</a></li>
+<li><a href=#how-to-make-a-robust-tool>How to Make a Robust Tool</a></li>
+<li><a href=#how-to-make-tool-chain>How to Make Tool Chain</a></li>
+<li><a href=#what-you-see-is-what-you-get>What You See is What You Get</a></li>
+</ul>
+</li>
+<li><a href=#advanced-topics-of-tool-chain>Advanced Topics of Tool Chain</a>
+<ul>
+<li><a href=#architecture-of-a-world-editor>Architecture of A World Editor</a></li>
+<li><a href=#plugin-architecture>Plugin Architecture</a></li>
+<li><a href=#design-narrative-tools>Design Narrative Tools</a></li>
+<li><a href=#reflection-and-gameplay>Reflection and Gameplay</a></li>
+<li><a href=#collaborative-editing>Collaborative Editing</a></li>
 </ul>
 </li>
 </ul>
+<h2 id=1-overview-of-game-engine>1 Overview of Game Engine</h2>
+<p><strong>Basic Elements</strong>:</p>
+<ul>
+<li>engine structure and layer</li>
+<li>data organization and management</li>
+</ul>
+<p><strong>Rendering</strong>:</p>
+<ul>
+<li>model, material, shader and texture</li>
+<li>light and shadow</li>
+<li>render pipeline</li>
+<li>sky, terrain, etc</li>
+</ul>
+<p><strong>Animation</strong>:</p>
+<ul>
+<li>basic concepts of animation</li>
+<li>animation structure and pipeline</li>
+</ul>
+<p><strong>Physics</strong>:</p>
+<ul>
+<li>basic concepts of physics system</li>
+<li>gameplay applications</li>
+<li>performance optimization</li>
+</ul>
+<p><strong>Gameplay</strong>:</p>
+<ul>
+<li>event system</li>
+<li>scripts system</li>
+<li>graph driven</li>
+</ul>
+<p><strong>Misc. System</strong>:</p>
+<ul>
+<li>effects</li>
+<li>navigation</li>
+<li>camera</li>
+</ul>
+<p><strong>Tool Set</strong>:</p>
+<ul>
+<li>C++ reflection</li>
+<li>data schema</li>
+</ul>
+<p><strong>Onlien Gaming</strong>:</p>
+<ul>
+<li>lockstep synchronization</li>
+<li>state synchronization</li>
+<li>consistency</li>
+</ul>
+<h2 id=2-layered-architecture-of-game-engine>2 Layered Architecture of Game Engine</h2>
+<h2 id=3-how-to-build-a-game-world>3 How to Build a Game World</h2>
 <h2 id=4-rendering-on-game-engine>4 Rendering on Game Engine</h2>
-<h3 id=outline>Outline</h3>
+<h3 id=outline-of-rendering>Outline of Rendering</h3>
 <p><strong>Basics of Game Rendering</strong>:</p>
 <ul>
 <li>Hardware architecture</li>
@@ -406,8 +496,7 @@ $$</p>
 <li>PBR/IBL</li>
 <li>cascade shadow/VSSM</li>
 </ul>
-<h2 id=6-游戏中地形大气和云的渲染>6 游戏中地形大气和云的渲染</h2>
-<h3 id=terrain>Terrain</h3>
+<h2 id=61-terrain>6(1) Terrain</h2>
 <p><strong>Heightfield</strong>:</p>
 <p><strong>Adaptive Mesh Tessellation</strong>:</p>
 <p>地形自适应</p>
@@ -418,6 +507,31 @@ $$</p>
 <ul>
 <li>DerictX 11: hull shader+tesslator+domain shader</li>
 <li>DerictX 12: mesh shader</li>
+</ul>
+<h2 id=62-sky-and-atmosphere>6(2) Sky and Atmosphere</h2>
+<h3 id=atmosphere>Atmosphere</h3>
+<p><strong>Analytic Atmosphere Appearance Modeling</strong>:</p>
+<ul>
+<li>pros:</li>
+<li>cons:</li>
+</ul>
+<p><strong>Participating Meida</strong>:</p>
+<h3 id=cloud>Cloud</h3>
+<p><strong>Cloud Type</strong>:</p>
+<p><strong>Mesh-Based Cloud Modeling</strong>:</p>
+<ul>
+<li>pros: high quality</li>
+<li>cons: overall expensive/don&rsquo;t support dynamic weather</li>
+</ul>
+<p><strong>Billboard Cloud</strong>:</p>
+<ul>
+<li>pros: efficient</li>
+<li>cons: limited visual effect/limited cloud type</li>
+</ul>
+<p><strong>Volumentric Cloud Modeling</strong>:</p>
+<ul>
+<li>pros:</li>
+<li>cons: efficiency must be considered</li>
 </ul>
 <h2 id=7-render-pipeline-post-process-and-everything>7 Render Pipeline, Post-process and Everything</h2>
 <h3 id=ambient-occlusion>Ambient Occlusion</h3>
@@ -452,6 +566,7 @@ $$</p>
 <h3 id=fog>Fog</h3>
 <p><strong>Depth Fog</strong>:</p>
 <p><strong>Height Fog</strong>:</p>
+<p><strong>Voxel-based Volumetric Fog</strong>:</p>
 <h3 id=anti-aliasing>Anti-aliasing</h3>
 <p><strong>Reason of Aliasing</strong>:</p>
 <p>Aliasing is a series of rendering artifact which is caused by high-frequency signal vs. insufficient of limited rendering resolutions.</p>
@@ -460,9 +575,237 @@ $$</p>
 <p>The general strategy of screen-based anti-aliasing schemes is using a sampling pattern to get more samples and then weight and sum samples to produce a pixel color.</p>
 <p><a href=https://zhytou.github.io/post/2024-8-1/games101/#aliasing target=_blank>Games101 Anti-aliasing</a></p>
 <h3 id=post-processs>Post-processs</h3>
+<p>Post-process in 3D Graphics refers to any algorithm that will be applied to thefinal image. It can be done for stylistic reasons (color correction, contrast, etc.) or for realistic reasons (tone mapping, depth of field, etc.)</p>
 <p><strong>Bloom</strong>:</p>
+<p>泛光(Bloom)是一种使得亮光部分产生“泛光”或“辉光”效果的技术。它用于模拟真实相机成像的瑕疵效果，即产生从图像明亮区域边界向外延伸的光线条纹，从而给人的感觉是极其明亮的光线压制住了摄像机或是透过眼睛看到该场景。</p>
+<p>泛光一般的做法如下：</p>
+<ul>
+<li>检测高光部分，使用rgb值构成的多项式，比如：r×0.2126+g×0.7152+b×0.0722。</li>
+<li>对提取的亮部分进行高斯模糊处理，产生一个光晕效果。</li>
+<li>多次迭代高斯模糊来实现不同程度的“泛光”效果。（高斯金字塔）</li>
+<li>将模糊处理后的亮部分与原始图像进行混合合成，最终得到泛光效果。</li>
+</ul>
 <p><strong>Tone Mapping</strong>:</p>
-<p>****:</p>
+<blockquote>
+<p>The purpose of the Tone Mapping function is to map the wide range of highdynamicrange (HDR) colors into standard dynamic range (SDR) that a display can output.</p>
+</blockquote>
+<p>颜色映射(Tone Mapping)是一种用于将HDR图像转换为LDR图像的技术。在HDR图像中，像素的亮度值可以超出典型的显示设备所能表示的范围，因此需要进行色调映射以适应标准的显示器或打印设备。</p>
+<p>在实践中，颜色映射主要使用一个多项式，即色调映射曲线，来进行变化。</p>
+<p><strong>Color Grading</strong>:</p>
+<p>色彩分级(Color Grading)是一种用于调整图像色彩和色调的技术，常用于电影制作和摄影中。通过对色彩、对比度、亮度等参数的调整，可以改变图像的整体感觉和氛围，达到艺术和表现效果。</p>
+<p>具体来说，色彩分级通常依赖查找表(Look-Up Table，LUT)来实现。LUT是一种用于将输入颜色映射到输出颜色的数据结构。在实际开发中，为了节省内存和提高效率，LUT往往不会存储一个完整的256×256×256的纹理，这样的纹理会占用过多的空间。相反，通常会选择一个较小的尺寸来存储LUT，比如一张64×64×64的LUT。此外，早期图形API还不支持3D纹理，所以LUT通常还会进一步处理为一张二维图片。比如，一张64×64×64的LUT通常是用一张分辨率为512×512的二维纹理存储，如下图所示。</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-9-12/2d_lut.png alt="2d lut">
+</figure></p>
+<p>其中，LUT由8×8个小方格组成，每个小方格的Blue分量为固定值。而对于，每个小方格横竖方向又各自分为64个像素，以左下角为原点，横向小格的Red分量依次增加，纵向小格的Green分量依次增加。</p>
+<h3 id=render-pipeline>Render Pipeline</h3>
+<p><strong>Forward Rendering</strong>:</p>
+<p>前向渲染(Forward Rendering)是渲染基础方法。它会遍历每一个图元和光源，依次计算该图元涉及的像素颜色。其伪代码如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt>for(auto mesh : meshes) {
+  for(auto light : lights) {
+    color = shading(mesh, light);
+  }
+}
+</code></pre></div><p><strong>Sort and Render Transparent after Opaque Objects</strong>:</p>
+<p>对于一个包含透明物的场景，前向渲染总是优先渲染不透明物体，接着将透明物体排序由远及近的渲染。至于，下图出现的难以排序的情况，则直接不管了。</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-9-12/transparent.png alt="draw transparent">
+</figure></p>
+<p><strong>Deferred Rendering</strong>:</p>
+<p>延迟渲染(Deferred Rendering)是目前较为流行的一种渲染方法。它先遍历场景中图元，并将图元的几何信息存储在缓冲中，然后在后处理阶段根据光照信息计算最终颜色。其伪代码实现如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt>for(auto mesh : meshes) {
+  write(g_buffers, mesh);
+}
+
+for (auto pixel : pixels) {
+  g_buffer = read(g_buffers);
+  for (auto light : lights) {
+    shading(g_buffer, light);
+  }
+}
+</code></pre></div><p>相比前向渲染，延迟渲染大大减少了shading函数调用次数，使其只需要针对可被照亮的片元计算。不过，它大量使用G-buffer，导致其内存和带宽开销非常大。此外，它不支持透明物体绘制且对MSAA不友好。</p>
+<p><strong>Tile-based Rendering</strong>:</p>
+<p>基于块的渲染是一种在移动端广泛应用的渲染技术。它将屏幕分成小块（每块包含一定数量的像素），每个块独立处理，以提高渲染效率。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt></code></pre></div><h2 id=8-basics-of-animation-system>8 Basics of Animation System</h2>
+<h3 id=challenges-in-game-animation>Challenges in Game Animation</h3>
+<p><strong>Interactive and dynamic animation</strong>:</p>
+<ul>
+<li>Vary according to the interaction</li>
+<li>Cooperate with other gameplay systems</li>
+<li>Make adjustments in complex environments</li>
+</ul>
+<p><strong>Real-time</strong>:</p>
+<ul>
+<li>Compute per frame</li>
+<li>Massive animation data</li>
+</ul>
+<p><strong>Realism</strong>:</p>
+<ul>
+<li>More vivid expression</li>
+<li>More authentic experience</li>
+</ul>
+<h3 id=outline-of-animation-system>Outline of Animation System</h3>
+<p>Basics of Animation Technology</p>
+<ul>
+<li>2D Animation</li>
+<li>3D Animation</li>
+<li>Skinned Animation Implementation（蒙皮动画）</li>
+<li>Animation Compression</li>
+<li>Animation DCC</li>
+</ul>
+<p>Advanced Animation Technology</p>
+<ul>
+<li>Animation Blend</li>
+<li>Inverse Kinematics</li>
+<li>Animation Pipeline</li>
+<li>Animation Graph</li>
+<li>Facial Animation</li>
+<li>Retargeting</li>
+</ul>
+<h3 id=2d-animation-techniques-in-games>2D Animation Techniques in Games</h3>
+<p><strong>Sprite Animation</strong>:</p>
+<p><strong>Live2D</strong>:</p>
+<h3 id=3d-animation-techniques-in-games>3D Animation Techniques in Games</h3>
+<p><strong>Degrees of Freedom</strong>:</p>
+<p>Degrees of freedom(DoF) refer to the number of independent variables or parameters of a system.</p>
+<p><strong>Rigid Hierachical Animation</strong>:</p>
+<p><strong>Pre-vertex Animation</strong>:</p>
+<h3 id=skinned-animation-implementation>Skinned Animation Implementation</h3>
+<p><strong>How to Animate a Mesh</strong>:</p>
+<h3 id=math-of-3d-rotation>Math of 3D Rotation</h3>
+<p><strong>2D Orientation Math</strong>:</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-9-12/2d_orientation.png alt="2d orientation">
+</figure></p>
+<p><strong>3D Orientation Math</strong>:</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-9-12/3d_orientation.png alt="3d orientation">
+</figure></p>
+<h2 id=9-advanced-animation-technology>9 Advanced Animation Technology</h2>
+<h2 id=10-physic-system>10 Physic System</h2>
+<h2 id=11-tool-chains>11 Tool Chains</h2>
+<h3 id=outline-of-tool-chains>Outline of Tool Chains</h3>
+<p><strong>Foundation of Tool Chains</strong>:</p>
+<ul>
+<li>What is Game Engine Tool Chains</li>
+<li>Complicated Tool GUI</li>
+<li>How to Load Assets - Deserialization</li>
+<li>How to Make a Robust Tool</li>
+<li>How to Make Tool Chain</li>
+<li>What You See is What You Get</li>
+<li>One More Thing - Plugin</li>
+</ul>
+<p><strong>Application & Advanced Topic</strong>:</p>
+<ul>
+<li>Common Game Production Workflow</li>
+<li>Common Editors</li>
+<li>Reflection</li>
+<li>Collaborative Editing</li>
+</ul>
+<h3 id=what-is-game-engine-tool-chain>What is Game Engine Tool Chain</h3>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-9-12/tool_chain.png alt="Tool Chain Architecture">
+</figure></p>
+<p>引擎中的工具链其实是用户和Engine Runtine之间的中间层。它提供上图绿色线框中所提供功能，包括：蓝图编辑器、第三方资产导入、脚本管理等，其核心目的是允许让developers、artists以及designers能够一起工作。</p>
+<p>此外，在商业引擎中Tool Chain往往比Engine Runtime复杂度更高，也更难以开发和维护。</p>
+<h3 id=complicated-tool-gui>Complicated Tool GUI</h3>
+<p><strong>Immediate Mode</strong>:</p>
+<p>GUI通常有两种实现方式，即：及时模式(Immediate Mode)和保留模式(Retained Mode)。其中，前者是一种简单直接的GUI实现方式，它总是立刻响应用户，并重新绘制整个界面；而后者基于对象模型来描述和管理GUI，它会保存界面状态，每次仅更新发生变化的部分。</p>
+<p>在及时模式下，GUI每一帧都需要重新绘制整个界面，响应用户输入和更新界面状态。换句话说，用户界面的状态和视图是即时生成的，不需要保留或存储界面的状态。它的特点以及优缺点如下：</p>
+<ul>
+<li>Characteristic: lightweight/procedural programming/widgets don&rsquo;t maintain any data or state</li>
+<li>Pros: straightforward/simple/quick prototype</li>
+<li>Cons: poor scalability/poor performance/poor maintainability</li>
+</ul>
+<p><strong>Retained Mode</strong>:</p>
+<p>在保留模式下，界面元素和状态会被保留在内存中，每次只需要更新发生变化的部分，而不需要重新绘制整个界面。它的特点以及优缺点如下：</p>
+<ul>
+<li>Characteristic: object-oriented/widgets contain their own state and data/draw widgets as needed</li>
+<li>Pros: high scalability/high performance/high maintainability</li>
+<li>Cons: complex for developers(callbacks/synchronization between GUI)</li>
+<li>Examples: Unreal UMG/WPF GUI/QT</li>
+</ul>
+<p><strong>Design Pattern</strong>:</p>
+<ul>
+<li>MVC</li>
+<li>MVP</li>
+<li>MVVM</li>
+</ul>
+<p><strong>Serialization and Deserialization</strong>:</p>
+<p>序列化（Serialization）是指将对象转换为字节流或其他格式，以便在网络传输或持久化存储时进行传输或保存的过程。解序列化（Deserialization）则是将序列化后的数据重新转换为对象的过程。</p>
+<p>常见的序列化存储格式包括：</p>
+<ul>
+<li>Text files(can be read/good for debug): txt/json/yaml/xml</li>
+<li>Binary files(need less storage): uasset/fbx binary</li>
+</ul>
+<p><strong>Asset Reference</strong>:</p>
+<p>Asset reference is a way to seperate redundant data into asset files and complete association by establishing reference relationshops.</p>
+<p><strong>Build Variance by Data Inheritance</strong>:</p>
+<p>Inherit the data of the inherited object and allow overriding assignments to the data defined in its data structure.</p>
+<h3 id=how-to-load-asset---deserialization>How to Load Asset - Deserialization</h3>
+<h3 id=how-to-make-a-robust-tool>How to Make a Robust Tool</h3>
+<p><strong>Core Functions</strong>:</p>
+<ul>
+<li>Undo and Redo</li>
+<li>Crash Recovery</li>
+</ul>
+<p><strong>How to Implement Undo/Redo/Crash Recovery?</strong>:</p>
+<p>Abstract all user operations to atomic commands which can invoke, revoke and serialize, deserialize.(Similar to crash recovery of DB)</p>
+<p><strong>How to Define a Command</strong>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#080;font-weight:700>public</span> <span style=color:#080;font-weight:700>interface</span> <span style=color:#b06;font-weight:700>ICommand</span><span style=color:#333>&lt;</span>TData<span style=color:#333>&gt;</span>
+<span style=color:#333>{</span>
+  <span style=color:#339;font-weight:700>long</span> UID<span style=color:#333>;</span>
+  TData Data<span style=color:#333>;</span>
+
+  <span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>Invoke</span><span style=color:#333>();</span>
+  <span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>Revoke</span><span style=color:#333>();</span>
+  <span style=color:#339;font-weight:700>byte</span><span style=color:#333>[]</span> <span style=color:#06b;font-weight:700>Serialize</span><span style=color:#333>();</span>
+  <span style=color:#339;font-weight:700>void</span> <span style=color:#06b;font-weight:700>Deserialize</span><span style=color:#333>(</span><span style=color:#339;font-weight:700>byte</span><span style=color:#333>[]</span> data<span style=color:#333>);</span>
+<span style=color:#333>}</span>
+</code></pre></div><ul>
+<li>UID: monotonic increase over time/unique identification</li>
+<li>Serialize/Deserialize: usually provide by GO data</li>
+</ul>
+<h3 id=how-to-make-tool-chain>How to Make Tool Chain</h3>
+<p><strong>Challenge</strong>: various tools for different users</p>
+<ul>
+<li>different views for different tools</li>
+<li>each tool has its own data structure</li>
+<li>same data may have different view for different user</li>
+</ul>
+<p>develop all tools seperately?</p>
+<ul>
+<li>no saclability</li>
+<li>no maintainbility</li>
+</ul>
+<p><strong>Schema</strong>: a description structure</p>
+<p>two definition ways:</p>
+<ul>
+<li>defined in code(oop)</li>
+<li>standalone schema definition(xml/json use reflection)</li>
+</ul>
+<h3 id=what-you-see-is-what-you-get>What You See is What You Get</h3>
+<ul>
+<li>Stanealone Tool</li>
+<li>In Game Tool: Editor Mode/Play in Editor</li>
+</ul>
+<h2 id=advanced-topics-of-tool-chain>Advanced Topics of Tool Chain</h2>
+<h3 id=architecture-of-a-world-editor>Architecture of A World Editor</h3>
+<p>World editor is a hub for everything to build the world.</p>
+<h3 id=plugin-architecture>Plugin Architecture</h3>
+<h3 id=design-narrative-tools>Design Narrative Tools</h3>
+<h3 id=reflection-and-gameplay>Reflection and Gameplay</h3>
+<p><strong>Reflection</strong>:</p>
+<p>In computer science, reflective programming or reflection is the ability of a process to examine, introspect, and modify its own structure and behavior.</p>
+<p>By generating a code meta information map, reflection build the bridge between code and tools</p>
+<p><strong>How to Implement Reflection in C++</strong>:</p>
+<ul>
+<li>Collect type info from code</li>
+<li>Generate code to provide accessors for fields and methods</li>
+<li>Manage all accessors with a &lt;string,accessor> map</li>
+</ul>
+<p><strong>Code Rendering</strong>:</p>
+<h3 id=collaborative-editing>Collaborative Editing</h3>
 </div>
 </div>
 </article>
