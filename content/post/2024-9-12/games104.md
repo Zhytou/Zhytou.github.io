@@ -1,5 +1,5 @@
 ---
-title: "Games104"
+title: "GAMES104"
 date: 2024-09-12T13:55:22+08:00
 draft: false
 ---
@@ -154,6 +154,8 @@ draft: false
 - Single Instruction Multiple Threads
 
 **GPU Architecture**:
+
+> [深入GPU硬件架构及运行机制](https://www.cnblogs.com/timlly/p/11471507.html)
 
 - GPC(Graphics Processing Cluster): A dedicated hardware block for
 computing, rasterization, shading, and texturing, usually consisting of serval TPCs.

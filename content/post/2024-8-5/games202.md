@@ -1,5 +1,5 @@
 ---
-title: "GAMES202 学习笔记"
+title: "GAMES202"
 date: 2024-08-05T18:26:29+08:00
 draft: false
 ---
