@@ -1,7 +1,7 @@
 <!doctype html><html lang=en>
 <head>
 <meta charset=utf-8>
-<title>GAMES101 学习笔记 | Zhytou</title>
+<title>GAMES101 | Zhytou</title>
 <meta http-equiv=x-ua-compatible content="IE=edge">
 <meta name=generator content="Hugo 0.91.2">
 <meta name=viewport content="width=device-width,initial-scale=1">
@@ -9,19 +9,19 @@
 <link rel=stylesheet type=text/css media=screen href=/css/normalize.css>
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
-<meta property="og:title" content="GAMES101 学习笔记">
+<meta property="og:title" content="GAMES101">
 <meta property="og:description" content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2024-8-1/games101/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2024-08-01T17:06:45+08:00">
 <meta property="article:modified_time" content="2024-08-01T17:06:45+08:00">
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="GAMES101 学习笔记">
+<meta name=twitter:title content="GAMES101">
 <meta name=twitter:description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
-<meta itemprop=name content="GAMES101 学习笔记">
+<meta itemprop=name content="GAMES101">
 <meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
 <meta itemprop=dateModified content="2024-08-01T17:06:45+08:00">
-<meta itemprop=wordCount content="586">
+<meta itemprop=wordCount content="570">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -62,7 +62,7 @@
 </div>
 </div>
 <div class=matter>
-<h1 class=title>GAMES101 学习笔记</h1>
+<h1 class=title>GAMES101</h1>
 <p class=post-meta>
 <span class=post-meta>
 </span>
@@ -142,6 +142,13 @@
 <p>其实，这种表达方式被称为齐次坐标(Homogeneous Coordinates)，即原本n维的向量用一个n+1维向量来表示。其核心目的是为了更优雅的表示平移的距离，比如：</p>
 <p><figure>
 <img src=https://zhytou.github.io/post/2024-8-1/homogeneous_coordinates.png alt=平移>
+</figure></p>
+<p><strong>旋转矩阵推导</strong>：</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-9-12/2d_orientation.png alt=2d旋转>
+</figure></p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-9-12/3d_orientation.png alt=3d旋转>
 </figure></p>
 <h3 id=triangle>Triangle</h3>
 <p><strong>判断点在三角形内部</strong>：</p>
@@ -236,7 +243,7 @@
 <li>应用阶段：输入一堆三维空间中的点。</li>
 <li>几何阶段：依次进行MVP变换，并进行视锥体剔除、裁剪和屏幕映射，得到三角形顶点对应屏幕像素位置。</li>
 <li>光栅化：通过顶点插值，得到被三角形覆盖的所有像素位置。</li>
-<li>片元处理：依次对像素着色，并进行深度、透明度等测试，最终得到显示在屏幕上的图像。</li>
+<li>片元处理：进行着色计算，并依次进行透明度、模板和深度测试，最终得到显示在屏幕上的图像。</li>
 </ul>
 <p><figure>
 <img src=https://pica.zhimg.com/80/v2-85a9e77245f43d4bab56f2052c3d81f0_720w.webp alt=渲染管线>
@@ -244,22 +251,26 @@
 <p><strong>OpenGL中的坐标变换</strong>：</p>
 <p>几何阶段中的顶点处理应该是渲染管线中较为复杂的部分，下面详细总结其流程：</p>
 <ul>
-<li>World Coordinates:输入坐标(x1, y1, z1, 1)；</li>
-<li>Eye/Camera Coordinates:将原点通过平移和旋转的方式移动到相机处，得到相机坐标系下的坐标(x2, y2, z2, 1)</li>
-<li>Clip Space:将数据投影至距离相机n处的平面，同时直接剔除视锥体之外的三角形，得到裁剪空间下的坐标(x3, y3, n, w3)=(x2/z2<em>n, y2/z2</em>n, n, n/z2)；</li>
-<li>Normalized Device Coordinates：除去w，得到裁剪后的归一化坐标(x4, y3, z4, 1)=(x2, y2, z2, 1)。</li>
+<li>World Coordinates:输入坐标；</li>
+<li>Eye/Camera Coordinates:将原点通过平移和旋转的方式移动到相机处，得到相机坐标系下的坐标</li>
+<li>Clip Space:将数据投影至距离相机n处的平面，得到裁剪空间下的坐标；</li>
+<li>Normalized Device Coordinates：除去w，得到归一化坐标，并裁剪掉大于1或小于-1的x，y坐标（此时忽略z，因为投影到固定平面上了）。</li>
 </ul>
 <p>其中，视锥体剔除和裁剪的区别如下：</p>
 <p><figure>
 <img src=https://pica.zhimg.com/80/v2-109bce4132140a2490f0de65666519b2_720w.webp alt=视锥体剔除和裁剪的区别>
 </figure></p>
 <p><strong>各种测试</strong>：</p>
-<p>在完成片元着色后，会进行各种测试和混合操作，最终得到呈现在屏幕上的图片。这些测试按从前到后的顺序为：</p>
+<p>在完成片元着色计算后，紧接着会进行各种测试和混合操作，最终得到呈现在屏幕上的图片。这些测试按从前到后的顺序为：</p>
 <ul>
 <li>模板测试</li>
-<li>透明度测试用于处理半透明物体，根据片元的透明度值来决定如何处理片元的颜色混合。</li>
-<li>深度测试用于比较片元的深度值与深度缓冲区中对应位置的深度值，并决定是否绘制该片元。深度测试可以确保物体的遮挡关系正确，避免后面的物体遮挡前面的物体。</li>
+<li>透明度测试：它其实和半透明渲染没什么关系，只是用到了alpha做判断，当alpha值小于某个阈值时丢弃该片元。</li>
+<li>深度测试：它用于比较片元的深度值与深度缓冲区中对应位置的深度值，并决定是否绘制该片元。深度测试可以确保物体的遮挡关系正确，避免后面的物体遮挡前面的物体。</li>
 </ul>
+<p><strong>混合</strong>：</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-8-1/color_blend.png alt=颜色混合>
+</figure></p>
 <p><strong>背面剔除</strong>：</p>
 <p>面剔除(Face culling)通过检查三角形的法线方向，剔除背面朝向观察者的三角形，从而减小开销。</p>
 <p>在OpenGL中，可以先使用函数glEnable(GL_CULL_FACE)开启面剔除功能。接着，使用函数glCullFace函数来实现。它需要传入一个参数，用于指定剔除面类，其可能的选项包括：</p>

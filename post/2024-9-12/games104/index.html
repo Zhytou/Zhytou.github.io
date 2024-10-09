@@ -1,7 +1,7 @@
 <!doctype html><html lang=en>
 <head>
 <meta charset=utf-8>
-<title>Games104 | Zhytou</title>
+<title>GAMES104 | Zhytou</title>
 <meta http-equiv=x-ua-compatible content="IE=edge">
 <meta name=generator content="Hugo 0.91.2">
 <meta name=viewport content="width=device-width,initial-scale=1">
@@ -9,19 +9,19 @@
 <link rel=stylesheet type=text/css media=screen href=/css/normalize.css>
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
-<meta property="og:title" content="Games104">
+<meta property="og:title" content="GAMES104">
 <meta property="og:description" content="1 Overview of Game Engine 2 Layered Architecture of Game Engine 3 How to Build a Game World 4 Rendering on Game Engine  Outline of Rendering GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Classic Shadow Solution Moving Wave of High Quality Shader Management 5 Summary   6(1) Terrain  Hard Tessellation   6(2) Sky and Atmosphere  Atmosphere Cloud   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs Render Pipeline   8 Basics of Animation System  Challenges in Game Animation Outline of Animation System 2D Animation Techniques in Games 3D Animation Techniques in Games Skinned Animation Implementation Math of 3D Rotation   9 Advanced Animation Technology 10 Physic System 11 Tool Chains  Outline of Tool Chains What is Game Engine Tool Chain Complicated Tool GUI How to Load Asset - Deserialization How to Make a Robust Tool How to Make Tool Chain What You See is What You Get   Advanced Topics of Tool Chain  Architecture of A World Editor Plugin Architecture Design Narrative Tools Reflection and Gameplay Collaborative Editing    1 Overview of Game Engine Basic Elements:">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2024-9-12/games104/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2024-09-12T13:55:22+08:00">
 <meta property="article:modified_time" content="2024-09-12T13:55:22+08:00">
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="Games104">
+<meta name=twitter:title content="GAMES104">
 <meta name=twitter:description content="1 Overview of Game Engine 2 Layered Architecture of Game Engine 3 How to Build a Game World 4 Rendering on Game Engine  Outline of Rendering GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Classic Shadow Solution Moving Wave of High Quality Shader Management 5 Summary   6(1) Terrain  Hard Tessellation   6(2) Sky and Atmosphere  Atmosphere Cloud   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs Render Pipeline   8 Basics of Animation System  Challenges in Game Animation Outline of Animation System 2D Animation Techniques in Games 3D Animation Techniques in Games Skinned Animation Implementation Math of 3D Rotation   9 Advanced Animation Technology 10 Physic System 11 Tool Chains  Outline of Tool Chains What is Game Engine Tool Chain Complicated Tool GUI How to Load Asset - Deserialization How to Make a Robust Tool How to Make Tool Chain What You See is What You Get   Advanced Topics of Tool Chain  Architecture of A World Editor Plugin Architecture Design Narrative Tools Reflection and Gameplay Collaborative Editing    1 Overview of Game Engine Basic Elements:">
-<meta itemprop=name content="Games104">
+<meta itemprop=name content="GAMES104">
 <meta itemprop=description content="1 Overview of Game Engine 2 Layered Architecture of Game Engine 3 How to Build a Game World 4 Rendering on Game Engine  Outline of Rendering GPU Renderable Render Objects in Engine Visibility Culling Texture Comperssion Authoring Tools of Modeling Cluster-based Mesh Pipeline 4 Summary   5 Lighting, Materials and Shders  Participants of Rendering Computation The Rendering Equation Starting from Simple Pre-computed Global Illumination Physically Based Material Image Based Lighting Classic Shadow Solution Moving Wave of High Quality Shader Management 5 Summary   6(1) Terrain  Hard Tessellation   6(2) Sky and Atmosphere  Atmosphere Cloud   7 Render Pipeline, Post-process and Everything  Ambient Occlusion Fog Anti-aliasing Post-processs Render Pipeline   8 Basics of Animation System  Challenges in Game Animation Outline of Animation System 2D Animation Techniques in Games 3D Animation Techniques in Games Skinned Animation Implementation Math of 3D Rotation   9 Advanced Animation Technology 10 Physic System 11 Tool Chains  Outline of Tool Chains What is Game Engine Tool Chain Complicated Tool GUI How to Load Asset - Deserialization How to Make a Robust Tool How to Make Tool Chain What You See is What You Get   Advanced Topics of Tool Chain  Architecture of A World Editor Plugin Architecture Design Narrative Tools Reflection and Gameplay Collaborative Editing    1 Overview of Game Engine Basic Elements:"><meta itemprop=datePublished content="2024-09-12T13:55:22+08:00">
 <meta itemprop=dateModified content="2024-09-12T13:55:22+08:00">
-<meta itemprop=wordCount content="2077">
+<meta itemprop=wordCount content="2083">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -62,7 +62,7 @@
 </div>
 </div>
 <div class=matter>
-<h1 class=title>Games104</h1>
+<h1 class=title>GAMES104</h1>
 <p class=post-meta>
 <span class=post-meta>
 </span>
@@ -242,6 +242,9 @@
 <li>Single Instruction Multiple Threads</li>
 </ul>
 <p><strong>GPU Architecture</strong>:</p>
+<blockquote>
+<p><a href=https://www.cnblogs.com/timlly/p/11471507.html target=_blank>深入GPU硬件架构及运行机制</a></p>
+</blockquote>
 <ul>
 <li>GPC(Graphics Processing Cluster): A dedicated hardware block for
 computing, rasterization, shading, and texturing, usually consisting of serval TPCs.</li>
@@ -607,7 +610,14 @@ $$</p>
   }
 }
 </code></pre></div><p><strong>Sort and Render Transparent after Opaque Objects</strong>:</p>
-<p>对于一个包含透明物的场景，前向渲染总是优先渲染不透明物体，接着将透明物体排序由远及近的渲染。至于，下图出现的难以排序的情况，则直接不管了。</p>
+<p>对于一个包含透明物的场景，前向渲染总是优先渲染不透明物体，接着将透明物体排序由远及近的渲染。具体来说，在渲染不透明物体时，需要开启深度测试和深度写入功能；接着，按由远至近的顺序渲染透明物体，同时要注意开启深度测试和混合功能，同时关闭深度写入；最后，根据混合公式，计算出每个像素的颜色，如下图所示。</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-8-1/color_blend.png alt=blend>
+</figure></p>
+<p>对于OpenGL来说，它开启混合功能和指定混合方程的代码如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++>glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+</code></pre></div><p>至于一些特殊情况，比如下图出现的难以排序的情况，目前没有什么特别好的解决方案，普遍做法是直接不处理。</p>
 <p><figure>
 <img src=https://zhytou.github.io/post/2024-9-12/transparent.png alt="draw transparent">
 </figure></p>

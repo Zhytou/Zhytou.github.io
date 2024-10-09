@@ -1,7 +1,7 @@
 <!doctype html><html lang=en>
 <head>
 <meta charset=utf-8>
-<title>GAMES202 学习笔记 | Zhytou</title>
+<title>GAMES202 | Zhytou</title>
 <meta http-equiv=x-ua-compatible content="IE=edge">
 <meta name=generator content="Hugo 0.91.2">
 <meta name=viewport content="width=device-width,initial-scale=1">
@@ -9,19 +9,19 @@
 <link rel=stylesheet type=text/css media=screen href=/css/normalize.css>
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
-<meta property="og:title" content="GAMES202 学习笔记">
+<meta property="og:title" content="GAMES202">
 <meta property="og:description" content="1 Introdution 2 Recap of CG Basics  Graphics Pipeline OpenGL The Rendering Equation   3 Real-Time Shadows  Shadow Map Percentage Closer Filtering Percentage Closer Soft Shadow Variance Soft Shadow Map Cascaded Shadow Map   4 Real-Time Environment Map  Recap: Image-Based Lighting Split Sum Approximation Precomputed Radiance Transfer   5 Real-Time Global Illumination  Reflective Shadow Maps Light Propagation Volumes Voxel Global Illumination Screen Space Ambient Occlusion Horizon Based Ambient Occlusion+ Screen Space Directional Occlusin Screen Space Reflection    1 Introdution Real-Time High Quality Rendering:">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2024-8-5/games202/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2024-08-05T18:26:29+08:00">
 <meta property="article:modified_time" content="2024-08-05T18:26:29+08:00">
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="GAMES202 学习笔记">
+<meta name=twitter:title content="GAMES202">
 <meta name=twitter:description content="1 Introdution 2 Recap of CG Basics  Graphics Pipeline OpenGL The Rendering Equation   3 Real-Time Shadows  Shadow Map Percentage Closer Filtering Percentage Closer Soft Shadow Variance Soft Shadow Map Cascaded Shadow Map   4 Real-Time Environment Map  Recap: Image-Based Lighting Split Sum Approximation Precomputed Radiance Transfer   5 Real-Time Global Illumination  Reflective Shadow Maps Light Propagation Volumes Voxel Global Illumination Screen Space Ambient Occlusion Horizon Based Ambient Occlusion+ Screen Space Directional Occlusin Screen Space Reflection    1 Introdution Real-Time High Quality Rendering:">
-<meta itemprop=name content="GAMES202 学习笔记">
+<meta itemprop=name content="GAMES202">
 <meta itemprop=description content="1 Introdution 2 Recap of CG Basics  Graphics Pipeline OpenGL The Rendering Equation   3 Real-Time Shadows  Shadow Map Percentage Closer Filtering Percentage Closer Soft Shadow Variance Soft Shadow Map Cascaded Shadow Map   4 Real-Time Environment Map  Recap: Image-Based Lighting Split Sum Approximation Precomputed Radiance Transfer   5 Real-Time Global Illumination  Reflective Shadow Maps Light Propagation Volumes Voxel Global Illumination Screen Space Ambient Occlusion Horizon Based Ambient Occlusion+ Screen Space Directional Occlusin Screen Space Reflection    1 Introdution Real-Time High Quality Rendering:"><meta itemprop=datePublished content="2024-08-05T18:26:29+08:00">
 <meta itemprop=dateModified content="2024-08-05T18:26:29+08:00">
-<meta itemprop=wordCount content="805">
+<meta itemprop=wordCount content="869">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -62,7 +62,7 @@
 </div>
 </div>
 <div class=matter>
-<h1 class=title>GAMES202 学习笔记</h1>
+<h1 class=title>GAMES202</h1>
 <p class=post-meta>
 <span class=post-meta>
 </span>
@@ -321,7 +321,13 @@ $$</p>
 <h3 id=cascaded-shadow-map>Cascaded Shadow Map</h3>
 <p>由于相机和光源视角不同，从光源视角光栅化后的每个像素投影到屏幕空间后，对应的区域大小也不相同，所以往往会出现距离相机较近位置的Shadow Map精度不够，而距离相机较远位置的Shadow Map精度又过高的问题，于是就会出现阴影边缘的明显锯齿。</p>
 <p>缓解这个问题的方法是把视锥沿着Z轴切分成多段，每段单独计算出一个光源坐标空间内的紧凑AABB，然后基于这个AABB生成多张Shadow Map，也就是所谓的级联式阴影（Cascaded Shadow Map）。在进行深度查询时，首先根据当前像素在相机空间中的Z值确定其位于哪个分段中，然后找到对应分段的Shadow Map和投影矩阵。在实际操作中，通常会选择3~4级分段，划分位置通常是指数划分和均匀划分的结果进行插值后得到。鉴于划分是基于视锥的，所以较远处的Shadow Map可以预先计算好，或者每隔几帧才更新一次，以此提高渲染效率。</p>
-<p>关于级联阴影的问题，可以参考这篇<a href=https://blog.csdn.net/pizi0475/article/details/7933743 target=_blank>文章</a>。</p>
+<p><strong>Issues in CSM</strong>:</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-8-5/csm_seam.png alt="blend between cascades">
+</figure></p>
+<p>级联阴影之间有时会因为前后两层的分辨率不同而产生阴影间隙，如上图所示。解决办法则是使用前后两张阴影贴图进行线性插值。</p>
+<p>除此之外，由于使用紧凑AABB划分视锥，那么视锥的一些微小变换就可能造成阴影贴图的有效分辨率大大减小。一种合理的解决方案则是使用球体包围盒代替紧凑AABB。</p>
+<p>关于级联阴影更多的问题，可以参考这篇<a href=https://blog.csdn.net/pizi0475/article/details/7933743 target=_blank>文章</a>。</p>
 <h2 id=4-real-time-environment-map>4 Real-Time Environment Map</h2>
 <h3 id=recap-image-based-lighting>Recap: Image-Based Lighting</h3>
 <p>基于图像的光照(Image Based Lighting, IBL)是使用图片表示场景中所有光照的技术。它通常是一个包含场景周围环境的全景图像或立方体贴图，其中每个像素都被视作一个光源。</p>
@@ -342,6 +348,7 @@ $$</p>
 <img src=https://learnopengl-cn.github.io/img/07/03/02/ibl_prefilter_map.png alt=预滤波环境贴图>
 </figure></p>
 <p><strong>Look-Up Texture</strong>:</p>
+<p>至于第二项，则可以通过下图中的公式进行计算。</p>
 <p><figure>
 <img src=https://zhytou.github.io/post/2024-8-5/lut.png alt=lut>
 </figure></p>
@@ -434,7 +441,7 @@ $$</p>
 <li>由于没有法线信息，无法考虑cos。</li>
 </ul>
 <h3 id=horizon-based-ambient-occlusion>Horizon Based Ambient Occlusion+</h3>
-<p>屏幕空间水平基准环境光遮蔽（Horizon Based Ambient Occlusion, HBAO）是对SSAO的一种改进。它整体和SSAO思路类似。只不过HBAO要求获取着色点法线信息，因此它可以采样半球同时考虑cos。</p>
+<p>屏幕空间水平基准环境光遮蔽（Horizon Based Ambient Occlusion, HBAO）是对SSAO的一种改进。它整体和SSAO思路类似。只不过HBAO要求获取着色点法线信息，因此它可以采样半球同时考虑cos。此外，HBAO还引入的了光线步进(Ray Marching)来计算采样点到着色点之间的可见性，从而大大增强了其真实性。</p>
 <h3 id=screen-space-directional-occlusin>Screen Space Directional Occlusin</h3>
 <p>屏幕空间的方向性遮挡（Screen Space Directional Occlusin, SSDO）也是一种屏幕空间的全局光照技术。它的做法整体和SSAO或HBAO类似，也即在半球中采样一系列点，判断这些点是否为次级光源，从而计算该着色点处间接光。</p>
 <p><strong>SSAO vs SSDO</strong>：</p>
@@ -453,9 +460,30 @@ $$</p>
 <h3 id=screen-space-reflection>Screen Space Reflection</h3>
 <p>屏幕空间反射（Screen Space Reflection, SSR）是一种屏幕空间的全局光照技术。具体来说，它利用屏幕空间信息进行光线追踪。因此，和AO技术相比，SSR不仅仅考虑diffuse的间接光，同样也可以计算specular的间接光。</p>
 <p><strong>Ray Marching</strong>：</p>
-<p>光线步进（Ray Marching）是SSR中进行光线追踪的方法，它的实现步骤如下：</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-glsl data-lang=glsl>
-</code></pre></div>
+<p>光线步进（Ray Marching）是SSR中进行光线追踪的方法。根据实现不同，又可分为线性光线步进（Linear Ray Marching）和层次光线步进（Hierarchical Ray Marching）。其中，线性光线步进每次沿着追踪方向前进固定步长，其使用GLSL实现的代码如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-glsl data-lang=glsl><span style=color:#080;font-weight:700>bool</span> RayMarch(<span style=color:#080;font-weight:700>vec3</span> ori, <span style=color:#080;font-weight:700>vec3</span> dir, <span style=color:#080;font-weight:700>out</span> <span style=color:#080;font-weight:700>vec3</span> hitPos) {
+  hitPos <span style=color:#333>=</span> ori;
+  <span style=color:#080;font-weight:700>for</span> (<span style=color:#080;font-weight:700>int</span> i <span style=color:#333>=</span> <span style=color:#40e;font-weight:700>0</span>; i <span style=color:#333>&lt;</span> <span style=color:#00d;font-weight:700>100</span>; i<span style=color:#333>++</span>) {
+    hitPos <span style=color:#333>+=</span> dir <span style=color:#333>*</span> STEP_LEN;
+    <span style=color:#080;font-weight:700>float</span> depth <span style=color:#333>=</span> GetDepth(hitPos);
+    <span style=color:#080;font-weight:700>float</span> gDepth <span style=color:#333>=</span> GetGBufferDepth(GetScreenCoordinate(hitPos));
+    <span style=color:#080;font-weight:700>if</span> (gDepth <span style=color:#333>&gt;</span> depth) {
+      <span style=color:#080;font-weight:700>return</span> <span style=color:#080;font-weight:700>true</span>;
+    }
+  }
+  <span style=color:#080;font-weight:700>return</span> <span style=color:#080;font-weight:700>false</span>;
+}
+</code></pre></div><p>至于层次光线步进，它每次前进的步长则是自适应的，有点类似网络中拥塞窗口的变化。其执行流程如下：</p>
+<ul>
+<li>首先，将发生反射/光线追踪的视锥切分成固定大小的格子；</li>
+<li>接着，开始光线步进；
+<ul>
+<li>若没发生碰撞，则将步长翻倍，继续前进；</li>
+<li>反之，缩短步长为二分之一，直到步长为1时，跳出循环。</li>
+</ul>
+</li>
+<li>返回碰撞点。</li>
+</ul>
 </div>
 </div>
 </article>
