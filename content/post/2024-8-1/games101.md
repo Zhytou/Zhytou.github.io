@@ -37,6 +37,7 @@ draft: false
   - [PBR Implementation](#pbr-implementation)
   - [PBR GI——IBL](#pbr-giibl)
 - [Ray Tracing](#ray-tracing)
+  - [Collision detection](#collision-detection)
   - [Scene Management](#scene-management)
 - [References](#references)
 
@@ -531,7 +532,62 @@ void main()
 
 ## Ray Tracing
 
+### Collision detection
+
+记光线起点为 $\mathbf{O}$，方向为单位向量 $\mathbf{D}$，则射线上任意点可表示为：  
+$$ \mathbf{R}(t) = \mathbf{O} + t\mathbf{D} \quad (t \geq 0) $$
+
+**三角形**：
+
+给定三角形的三个顶点 $\mathbf{V_0}, \mathbf{V_1}, \mathbf{V_2}$，那么三角形确定的平面法向量 $\mathbf{N}$ 可通过叉乘计算：
+
+$$ \mathbf{N} = (\mathbf{V_1} - \mathbf{V_0}) \times (\mathbf{V_2} - \mathbf{V_0}) $$  
+
+进一步，可确定此平面方程为：
+
+$$ (\mathbf{P} - \mathbf{V_0}) \cdot \mathbf{N} = 0 $$
+
+将射线方程代入平面方程：  
+
+$$ (\mathbf{O} + t\mathbf{D} - \mathbf{V_0}) \cdot \mathbf{N} = 0 $$  
+
+解得：  
+
+$$ t = \frac{(\mathbf{V_0} - \mathbf{O}) \cdot \mathbf{N}}{\mathbf{D} \cdot \mathbf{N}} $$  
+
+- 若分母 $\mathbf{D} \cdot \mathbf{N} \approx 0$，射线与平面平行（无交
+点）；  
+- 若 $t < 0$，交点在射线反方向。
+
+此时，只需判断该交点是否在三角形内部，即可确认射线与三角形是否发生碰撞。
+
+具体来说，可以使用重心法确认，即将交点表示为三个顶点的线性组合：
+
+记
+$$ \mathbf{e_1} = \mathbf{V_1} - \mathbf{V_0}, \quad \mathbf{e_2} = \mathbf{V_2} - \mathbf{V_0}, \quad \mathbf{OP} = \mathbf{P} - \mathbf{V_0} $$
+
+那么$\mathbf{OP}$可表示为 $\mathbf{e_1}$ 和 $\mathbf{e_2}$ 的线性组合：  
+$$ \mathbf{OP} = u\mathbf{e_1} + v\mathbf{e_2} $$  
+
+求出$u$和$v$，若 $u \geq 0, v \geq 0, u + v \leq 1$，则交点在三角形内部。
+
+**AABB**：
+
 ### Scene Management
+
+**Octree**：
+
+八叉树（Octree）是三维空间划分的数据结构之一，它用于加速空间查询。简单来说，八叉树的空间划分方式是，把一个立方体分割为八个小立法体，然后递归地分割小立方体。
+
+![octree](https://en.wikipedia.org/wiki/Octree#/media/File:Octree2.svg)
+
+**BVH**:
+
+包围体积层次结构（Bounding Volume Hierarchy, BVH）是一种用于加速射线追踪的数据结构。BVH的基本思想是，将场景中的物体划分为一个个包围盒，然后递归地将这些包围盒划分为更小的包围盒，直到达到某个终止条件。
+
+**SAH**:
+
+表面积启发算法（Surface Area Heuristics, SAH）通过改变包围盒的划分位置从而最小化光线遍历代价的一种优化方法。
 
 ## References
 
