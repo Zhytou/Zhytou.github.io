@@ -10,18 +10,18 @@
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
 <meta property="og:title" content="GAMES101">
-<meta property="og:description" content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
+<meta property="og:description" content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2024-8-1/games101/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2024-08-01T17:06:45+08:00">
 <meta property="article:modified_time" content="2024-08-01T17:06:45+08:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="GAMES101">
-<meta name=twitter:description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
+<meta name=twitter:description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
 <meta itemprop=name content="GAMES101">
-<meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
+<meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
 <meta itemprop=dateModified content="2024-08-01T17:06:45+08:00">
-<meta itemprop=wordCount content="570">
+<meta itemprop=wordCount content="718">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -120,6 +120,7 @@
 </li>
 <li><a href=#ray-tracing>Ray Tracing</a>
 <ul>
+<li><a href=#collision-detection>Collision detection</a></li>
 <li><a href=#scene-management>Scene Management</a></li>
 </ul>
 </li>
@@ -251,10 +252,15 @@
 <p><strong>OpenGL中的坐标变换</strong>：</p>
 <p>几何阶段中的顶点处理应该是渲染管线中较为复杂的部分，下面详细总结其流程：</p>
 <ul>
-<li>World Coordinates:输入坐标；</li>
-<li>Eye/Camera Coordinates:将原点通过平移和旋转的方式移动到相机处，得到相机坐标系下的坐标</li>
-<li>Clip Space:将数据投影至距离相机n处的平面，得到裁剪空间下的坐标；</li>
-<li>Normalized Device Coordinates：除去w，得到归一化坐标，并裁剪掉大于1或小于-1的x，y坐标（此时忽略z，因为投影到固定平面上了）。</li>
+<li>World Coordinates:输入坐标。</li>
+<li>Eye/Camera Coordinates:将原点通过平移和旋转的方式移动到相机处，得到相机坐标系下的坐标。</li>
+<li>Clip Space:将数据投影至距离相机n处的平面，得到裁剪空间下的坐标。其坐标转换公式如下所示。其中，P为投影矩阵，far和near分别为远和近裁剪面的距离，ratio为宽高比，$\theta$为视角。</li>
+</ul>
+<p>$$
+P(x,y,z,1)^{T}=(\frac{1}{ratio \cdot tan\frac{\theta}{2}}x, \frac{1}{tan\frac{\theta}{2}}y, \frac{z-near}{far-near}, -z)^{T}
+$$</p>
+<ul>
+<li>Normalized Device Coordinates：此时，除去w，便可得到归一化坐标。随后，裁剪掉大于1或小于-1的x，y坐标（忽略z，因为投影到固定平面上了）。</li>
 </ul>
 <p>其中，视锥体剔除和裁剪的区别如下：</p>
 <p><figure>
@@ -404,7 +410,7 @@ $$</p>
 </ul>
 <p><strong>菲涅尔项</strong>：</p>
 <p>其中，菲涅尔方程描述的是被反射的光线对比光线被折射的部分所占的比率，这个比率会随着观察角度变化而变化。比如，当我们站在湖边低头看脚下的湖水，会发现水是透明的，反射不会特别强烈；而如果我们看远处的湖面时，会发现水并不透明，而且反射非常强烈。</p>
-<p>目前，菲涅尔项一般都采用Schlick近似$$。因为计算成本低廉，而且精度足。</p>
+<p>目前，菲涅尔项一般都采用Schlick近似。因为计算成本低廉，而且精度足。</p>
 <p><strong>法线分布函数</strong>：</p>
 <p>法线分布函数用于描述给定法线$\vec{n}$、半程向量$\vec{h}$和粗糙度$\alpha$时，法线方向和半程向量方向一致的比例。它满足一些列基本性质，包括：</p>
 <ul>
@@ -441,7 +447,7 @@ $$</p>
 <h3 id=disney-principled-brdf>Disney Principled BRDF</h3>
 <p>迪士尼动画工作室在SIGGRAPH 2012上著名的talk《Physically-based shading at Disney》中提出了迪士尼原则的BRDF（Disney Principled BRDF），奠定了后续游戏行业和电影行业PBR的方向和标准。它的核心贡献其实是避免了过去PBR中复杂晦涩物理参数，而引入了一系列直观的参数，包括：用于表示表示材料吸收光的金属度（metallic）和用于表示材料镜面反射集中度的粗糙度（roughness）等。</p>
 <p><strong>漫反射/镜面反射的比例</strong>：</p>
-<p>在Cook-Torrance BRDF中，$k_d$和$k_s$参数分别表示了漫反射和镜面反射的比例。将它们用菲涅尔项和金属度表示如下：</p>
+<p>在Cook-Torrance BRDF中，$k_d$和$k_s$参数分别表示了漫反射和镜面反射的比例。将它们用菲涅尔项和金属度（能够反映折射部分，也就是被金属吸收的部分）表示如下：</p>
 <p>$$
 k_d=(1-F)*(1-metallic)\
 k_s=F
@@ -502,7 +508,41 @@ $$</p>
 <a href=https://learnopengl-cn.github.io/07%20PBR/03%20IBL/02%20Specular%20IBL/ target=_blank>learnopengl中镜面反射IBL</a></p>
 </blockquote>
 <h2 id=ray-tracing>Ray Tracing</h2>
+<h3 id=collision-detection>Collision detection</h3>
+<p>记光线起点为 $\mathbf{O}$，方向为单位向量 $\mathbf{D}$，则射线上任意点可表示为：<br>
+$$ \mathbf{R}(t) = \mathbf{O} + t\mathbf{D} \quad (t \geq 0) $$</p>
+<p><strong>三角形</strong>：</p>
+<p>给定三角形的三个顶点 $\mathbf{V_0}, \mathbf{V_1}, \mathbf{V_2}$，那么三角形确定的平面法向量 $\mathbf{N}$ 可通过叉乘计算：</p>
+<p>$$ \mathbf{N} = (\mathbf{V_1} - \mathbf{V_0}) \times (\mathbf{V_2} - \mathbf{V_0}) $$</p>
+<p>进一步，可确定此平面方程为：</p>
+<p>$$ (\mathbf{P} - \mathbf{V_0}) \cdot \mathbf{N} = 0 $$</p>
+<p>将射线方程代入平面方程：</p>
+<p>$$ (\mathbf{O} + t\mathbf{D} - \mathbf{V_0}) \cdot \mathbf{N} = 0 $$</p>
+<p>解得：</p>
+<p>$$ t = \frac{(\mathbf{V_0} - \mathbf{O}) \cdot \mathbf{N}}{\mathbf{D} \cdot \mathbf{N}} $$</p>
+<ul>
+<li>若分母 $\mathbf{D} \cdot \mathbf{N} \approx 0$，射线与平面平行（无交
+点）；</li>
+<li>若 $t &lt; 0$，交点在射线反方向。</li>
+</ul>
+<p>此时，只需判断该交点是否在三角形内部，即可确认射线与三角形是否发生碰撞。</p>
+<p>具体来说，可以使用重心法确认，即将交点表示为三个顶点的线性组合：</p>
+<p>记
+$$ \mathbf{e_1} = \mathbf{V_1} - \mathbf{V_0}, \quad \mathbf{e_2} = \mathbf{V_2} - \mathbf{V_0}, \quad \mathbf{OP} = \mathbf{P} - \mathbf{V_0} $$</p>
+<p>那么$\mathbf{OP}$可表示为 $\mathbf{e_1}$ 和 $\mathbf{e_2}$ 的线性组合：<br>
+$$ \mathbf{OP} = u\mathbf{e_1} + v\mathbf{e_2} $$</p>
+<p>求出$u$和$v$，若 $u \geq 0, v \geq 0, u + v \leq 1$，则交点在三角形内部。</p>
+<p><strong>AABB</strong>：</p>
 <h3 id=scene-management>Scene Management</h3>
+<p><strong>Octree</strong>：</p>
+<p>八叉树（Octree）是三维空间划分的数据结构之一，它用于加速空间查询。简单来说，八叉树的空间划分方式是，把一个立方体分割为八个小立法体，然后递归地分割小立方体。</p>
+<p><figure>
+<img src=https://en.wikipedia.org/wiki/Octree#/media/File:Octree2.svg alt=octree>
+</figure></p>
+<p><strong>BVH</strong>:</p>
+<p>包围体积层次结构（Bounding Volume Hierarchy, BVH）是一种用于加速射线追踪的数据结构。BVH的基本思想是，将场景中的物体划分为一个个包围盒，然后递归地将这些包围盒划分为更小的包围盒，直到达到某个终止条件。</p>
+<p><strong>SAH</strong>:</p>
+<p>表面积启发算法（Surface Area Heuristics, SAH）通过改变包围盒的划分位置从而最小化光线遍历代价的一种优化方法。</p>
 <h2 id=references>References</h2>
 <ul>
 <li><a href=https://sites.cs.ucsb.edu/~lingqi/teaching/games101.html target=_blank>GAMES101: 现代计算机图形学入门</a></li>
