@@ -555,8 +555,7 @@ $$ (\mathbf{O} + t\mathbf{D} - \mathbf{V_0}) \cdot \mathbf{N} = 0 $$
 
 $$ t = \frac{(\mathbf{V_0} - \mathbf{O}) \cdot \mathbf{N}}{\mathbf{D} \cdot \mathbf{N}} $$  
 
-- 若分母 $\mathbf{D} \cdot \mathbf{N} \approx 0$，射线与平面平行（无交
-点）；  
+- 若分母 $\mathbf{D} \cdot \mathbf{N} \approx 0$，射线与平面平行（无交点）；  
 - 若 $t < 0$，交点在射线反方向。
 
 此时，只需判断该交点是否在三角形内部，即可确认射线与三角形是否发生碰撞。

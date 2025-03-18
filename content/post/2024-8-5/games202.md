@@ -428,8 +428,8 @@ $$
 具体来说，AO技术基于一个假设，即任何一个着色点的间接光都是常数，且只考虑diffuse。由此，该位置的渲染方程由此可以化简为：
 
 $$
-L_o^{indir}(x, w_o)=\int_H^2L_i^{indir}(x, w_i)f_r(x, w_o, w_i)V(x, wi)cos\theta dw_i\\
-L_o^{indir}(x, w_o)=L_i^{indir}f_r\int_H^2V(x, wi)cos\theta dw_i\\
+L_o^{indir}(x, w_o)=\int_H^2L_i^{indir}(x, w_i)f_r(x, w_o, w_i)V(x, w_i)cos\theta dw_i\\
+L_o^{indir}(x, w_o)=L_i^{indir}f_r\int_H^2V(x, w_i)cos\theta dw_i\\
 $$
 
 **Ambient Map**：
