@@ -418,8 +418,8 @@ $$</p>
 <p>环境光遮蔽（Ambient Occlusion, AO）是一种简单全局光照技术。它通过计算物体之间相互遮挡而导致的间接光衰减，进而刻画出相邻物体间隙的明暗。</p>
 <p>具体来说，AO技术基于一个假设，即任何一个着色点的间接光都是常数，且只考虑diffuse。由此，该位置的渲染方程由此可以化简为：</p>
 <p>$$
-L_o^{indir}(x, w_o)=\int_H^2L_i^{indir}(x, w_i)f_r(x, w_o, w_i)V(x, wi)cos\theta dw_i\
-L_o^{indir}(x, w_o)=L_i^{indir}f_r\int_H^2V(x, wi)cos\theta dw_i\
+L_o^{indir}(x, w_o)=\int_H^2L_i^{indir}(x, w_i)f_r(x, w_o, w_i)V(x, w_i)cos\theta dw_i\
+L_o^{indir}(x, w_o)=L_i^{indir}f_r\int_H^2V(x, w_i)cos\theta dw_i\
 $$</p>
 <p><strong>Ambient Map</strong>：</p>
 <p>早期的AO技术以预计算为主。它使用光线追踪得到一张AO贴图，即原理中提到的关于visibility的积分，从而在实时渲染中实现环境光遮蔽效果。不过这种方法的缺点也比较明显，它需要额外的纹理存储，且只能表现静态场景。</p>
