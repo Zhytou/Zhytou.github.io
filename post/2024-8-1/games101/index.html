@@ -21,7 +21,7 @@
 <meta itemprop=name content="GAMES101">
 <meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
 <meta itemprop=dateModified content="2024-08-01T17:06:45+08:00">
-<meta itemprop=wordCount content="717">
+<meta itemprop=wordCount content="745">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -291,15 +291,26 @@ $$</p>
 <p>不过，Early-Z会带来透明测试的冲突，例如某个片元A虽然遮挡了另一个片元B，但A却是透明的，GPU应当渲染的是片元B，这就产生了矛盾。</p>
 <h2 id=texture>Texture</h2>
 <h3 id=texture-mapping>Texture Mapping</h3>
-<p>纹理贴图(Texture Mapping)简单的理解就是将一张二维图像，按照一定的映射关系，将每个像素贴合到物体表面的对应位置。</p>
-<hr>
+<p>纹理贴图（Texture Mapping）是计算机图形学中将二维图像映射到三维物体表面的技术。通过定义纹理坐标（UV 坐标，范围通常为 [0,1]），将图像的每个像素对应到物体表面的顶点，最终在渲染时填充物体表面的颜色。</p>
 <p><strong>纹理环绕</strong>：</p>
+<ul>
+<li>GL_REPEAT：重复纹理（默认），坐标超出部分循环平铺。</li>
+<li>GL_MIRRORED_REPEAT：镜像重复，超出部分镜像翻转后平铺。</li>
+<li>GL_CLAMP_TO_EDGE：边缘拉伸，超出部分拉伸到边缘。</li>
+</ul>
 <p><strong>纹理过滤</strong>：</p>
+<p>当纹理像素（Texel）与屏幕像素（Pixel）大小不匹配时，通过插值算法优化显示效果，分为放大过滤（纹理太小）和缩小过滤（纹理太大）。</p>
 <p><strong>Mipmap</strong>：</p>
-<p>多级渐远纹理(Mipmap)</p>
+<p>多级渐远纹理（Mipmap）是一种在计算机图形学中用于优化纹理渲染的技术，由一系列不同分辨率的纹理图像组成，这些图像是原始纹理的逐级降采样版本。具体来说，它的功能包括：</p>
+<ul>
+<li>提高渲染性能：在渲染场景时，远处的物体通常不需要使用高分辨率的纹理，因为它们在屏幕上只占据很少的像素。使用 Mipmap 可以根据物体与相机的距离选择合适分辨率的纹理进行渲染，减少纹理过滤时所需的计算量，从而提高渲染速度。</li>
+<li>减少纹理闪烁：当物体远离相机时，如果直接使用高分辨率纹理，由于纹理采样的不连续性，会导致纹理出现闪烁现象。Mipmap 通过提供不同分辨率的纹理，使得纹理在不同距离下的过渡更加平滑，减少了闪烁问题。</li>
+</ul>
+<p>Mipmap 由多个层级（Level）组成，每个层级的纹理分辨率是上一层级的一半。层级 0 是原始纹理，层级 1 的纹理分辨率是层级 0 的一半，层级 2 的纹理分辨率是层级 1 的一半，依此类推。</p>
+<p>在实际开发中，有时并不需要直接指定使用哪个 Mipmap 层级，而是通过纹理过滤器（Texture Filter）来自动选择合适的 Mipmap 层级。具体而言，由于GPU一次最少会渲染四个相邻的片元，它可以同时获得这四个片元的uv坐标，从而根据uv坐标的变换情况来选择合适的Mipmap层级。比如，邻近的片元uv坐标中u的差值为0.05，而此时层级为1的纹理分辨率为1024×1024，那么这两个片元选取的纹理像素点位置将相差0.05*1024=51.2，这显然跨度过大，很可能会造成锯齿效应，因此需要选择层级更高的纹理。</p>
 <h3 id=light-mapping>Light Mapping</h3>
 <h3 id=normal-mapping>Normal Mapping</h3>
-<p>除了可以保存物体的颜色信息，纹理还可以用于保存物体的法线信息，也就是法线贴图(Normal Mapping)。它的主要作用就是通过(U, V)</p>
+<p>除了可以保存物体的颜色信息，纹理还可以用于保存物体的法线信息，也就是法线贴图（Normal Mapping）。它的主要作用就是通过uv坐标来获取法线信息，从而在片元着色器中计算出更加逼真的光照效果。</p>
 <h3 id=displacement-mapping>Displacement Mapping</h3>
 <p>视觉贴图是一种用于模拟表面几何细节的贴图，通过改变顶点的位置来实现凹凸效果。</p>
 <h2 id=pbr>PBR</h2>
@@ -367,8 +378,8 @@ $$</p>
 <p>因此，从宏观上看，光在介质表面扣除吸收部分，即剩下：（镜面）反射、漫反射和透射三部分。</p>
 <p><strong>菲涅尔效应和方程</strong>：</p>
 <h3 id=brdf-and-bxdf>BRDF and BxDF</h3>
-<p>BRDF(Bidirectional Reflectance Distribution Function)，译作双向反射分布函数，是一个用来描述物体表面如何反射光线的方程。简单来说，它就是微表面模型的数学表达。</p>
-<p>具体的，BRDF表示了当给定一条入射光的时候，某一条特定的出射光线的性质是怎么样的。它的精确定义是出射光辐射率(Radiance)的微分和入射光辐照度(Irradiance)的微分之比，即$f(l,v)=\frac{dL_o(v)}{dE(l)}$。其中，v和l分别为出射和入射光线方向。</p>
+<p>BRDF（Bidirectional Reflectance Distribution Function），译作双向反射分布函数，是一个用来描述物体表面如何反射光线的方程。简单来说，它就是微表面模型的数学表达。</p>
+<p>具体的，BRDF表示了当给定一条入射光的时候，某一条特定的出射光线的性质是怎么样的。它的精确定义是出射光辐射率（Radiance）的微分和入射光辐照度（Irradiance）的微分之比，即$f(l,v)=\frac{dL_o(v)}{dE(l)}$。其中，v和l分别为出射和入射光线方向。</p>
 <p>其实，采用ωi和ωo作为输入参数的Blinn-Phong光照模型也可以被当作是一个BRDF。不过由于Blinn-Phong模型并没有遵循能量守恒定律，因此它不被认为是基于物理的渲染。至于，目前广泛用于基于物理渲染和实时渲染的BRDF模型则是一种被称为Cook-Torrance的BRDF模型。我们将在后两节详细介绍它。</p>
 <p>除了BRDF之外，图形学中还有一些其他的双向分布函数，比如BRDF、BTDF、BSDF、BSSRDF等，这些一起被称作BxDF。</p>
 <p><figure>
@@ -386,7 +397,7 @@ $$</p>
 <p><a href=https://learnopengl-cn.github.io/07%20PBR/01%20Theory/#brdf target=_blank>learnopengl中关于Cook-Torrance BRDF的介绍</a></p>
 </blockquote>
 <p>Cook-Torrance BRDF是一种目前最流行一种BRDF反射模型，它包含漫反射和镜面反射两个部分：$f_r=k_df_{lambert}+k_sf_{cook-torrance}$。其中，$f_{lambert}=\frac\rho\pi$，而$f_{cook-torrance}=\frac{DFG}{4(\vec{w_o}<em>\vec{n})(\vec{w_i}</em>\vec{n})}$。</p>
-<p>此外，上述表达式其实只考虑直接光，即它是一个局部光照模型。若在有限光源的情况下，计算Cook-Torrance BRDF的间接光/环境光。其方法和传统模型类似，可通过一个名为环境光遮蔽贴图(Ambient Occlusion, AO)的方式获取每个位置的环境光强度，比如：</p>
+<p>此外，上述表达式其实只考虑直接光，即它是一个局部光照模型。若在有限光源的情况下，计算Cook-Torrance BRDF的间接光/环境光。其方法和传统模型类似，可通过一个名为环境光遮蔽贴图（Ambient Occlusion, AO）的方式获取每个位置的环境光强度，比如：</p>
 <div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-GLSL data-lang=GLSL><span style=color:#888>// albedo就是片元位置的baseColor</span>
 <span style=color:#080;font-weight:700>vec3</span> ambient <span style=color:#333>=</span> <span style=color:#080;font-weight:700>vec3</span>(<span style=color:#60e;font-weight:700>0.03</span>) <span style=color:#333>*</span> albedo <span style=color:#333>*</span> ao;
 </code></pre></div><p>至于，使用IBL技术表示的全局光照则需要使用更复杂的手段解决，比如预计算PRT等。</p>
@@ -402,7 +413,7 @@ f_r &= \frac\rho\pi
 $$</p>
 <p>其中，$\rho$表示的是发生反射位置的颜色。</p>
 <h3 id=specular-part>Specular Part</h3>
-<p>Cook-Torrance BRDF的镜面反射部分包含法线分布函数(Normal Distribution Function)、菲涅尔方程(Fresnel Equation)、几何函数(Geometry Function)以及用于矫正的分母 。</p>
+<p>Cook-Torrance BRDF的镜面反射部分包含法线分布函数（Normal Distribution Function)、菲涅尔方程（Fresnel Equation）、几何函数（Geometry Function）以及用于矫正的分母 。</p>
 <p>其中，分母作为微观几何的局部空间和整个宏观表面的局部空间之间变换的微平面量的校正，有两点需要注意：</p>
 <ul>
 <li>对于分母中的点积，仅仅避免负值是不够的 - 也必须避免零值。通常通过在常规的clamp或绝对值操作之后添加非常小的正值来完成。</li>
@@ -483,9 +494,9 @@ $$</p>
 <p><strong>线性空间</strong>：</p>
 <p>在渲染中，颜色值的计算总是发生在线性空间中的。因为，线性空间中的颜色计算才是正确的。然而人眼对亮度的感知是非线性的，所以为了更好的利用表示颜色带宽，所以引入了Gama矫正。因此，在渲染时，也需要将输出颜色给进行Gama矫正。</p>
 <p><strong>色调调整</strong>：</p>
-<p>一般来说，当存储在帧缓冲(Framebuffer)中时，亮度和颜色的值是默认被限制在0.0到1.0之间的。换句话说，显示器只能显示值为0.0到1.0间的颜色。然而，光照方程中却没有这个限制。当片段颜色超过1.0时，被称作HDR(High Dynamic Range, 高动态范围)。与之相对的，处于0.0到1.0的颜色则被称为标准动态范围(LDR，Low Dynamic Range)。</p>
+<p>一般来说，当存储在帧缓冲（Framebuffer）中时，亮度和颜色的值是默认被限制在0.0到1.0之间的。换句话说，显示器只能显示值为0.0到1.0间的颜色。然而，光照方程中却没有这个限制。当片段颜色超过1.0时，被称作HDR（High Dynamic Range, 高动态范围）。与之相对的，处于0.0到1.0的颜色则被称为标准动态范围（LDR，Low Dynamic Range）。</p>
 <p>在实时渲染中，使用HDR记录颜色信息是很重要的，因为它允许片段保留更多的细节，同时还让我们能够根据光源的真实强度指定它的强度。不过，由于显示器只能显示LDR范围的颜色，将计算得到的HDR结果转换为LDR颜色就是一个必要过程，即色调映射。</p>
-<p>色调映射(Tone Mapping)是一个损失很小的转换浮点颜色值至我们所需的LDR[0.0, 1.0]范围内的过程。最简单的色调映射算法是Reinhard色调映射，它涉及到分散整个HDR颜色值到LDR颜色值上，所有的值都有对应。比如：</p>
+<p>色调映射（Tone Mapping）是一个损失很小的转换浮点颜色值至我们所需的LDR[0.0, 1.0]范围内的过程。最简单的色调映射算法是Reinhard色调映射，它涉及到分散整个HDR颜色值到LDR颜色值上，所有的值都有对应。比如：</p>
 <div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-GLSL data-lang=GLSL><span style=color:#080;font-weight:700>void</span> main()
 {             
   <span style=color:#080;font-weight:700>const</span> <span style=color:#080;font-weight:700>float</span> gamma <span style=color:#333>=</span> <span style=color:#60e;font-weight:700>2.2</span>;
@@ -541,7 +552,7 @@ $$ \mathbf{OP} = u\mathbf{e_1} + v\mathbf{e_2} $$</p>
 <p><strong>BVH</strong>:</p>
 <p>包围体积层次结构（Bounding Volume Hierarchy, BVH）是一种用于加速射线追踪的数据结构。BVH的基本思想是，将场景中的物体划分为一个个包围盒，然后递归地将这些包围盒划分为更小的包围盒，直到达到某个终止条件。</p>
 <p><strong>SAH</strong>:</p>
-<p>表面积启发算法（Surface Area Heuristics, SAH）通过改变包围盒的划分位置从而最小化光线遍历代价的一种优化方法。</p>
+<p>表面积启发算法（Surface Area Heuristics, SAH）通过改变包围盒的划分位置从而最小化光线遍历代价的一种优化方法。其具体实现往往是定义一个代价函数，然后通过枚举所有可能的划分位置，找到最小代价的划分位置。其中，代价函数一般包括两部分：遍历代价和划分代价。最常见的代价函数为，扫描线穿过包围盒的代价为1，包围盒划分代价为0.125。</p>
 <h2 id=references>References</h2>
 <ul>
 <li><a href=https://sites.cs.ucsb.edu/~lingqi/teaching/games101.html target=_blank>GAMES101: 现代计算机图形学入门</a></li>
