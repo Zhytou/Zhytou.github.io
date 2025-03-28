@@ -27,6 +27,10 @@ draft: false
   - [Horizon Based Ambient Occlusion+](#horizon-based-ambient-occlusion)
   - [Screen Space Directional Occlusin](#screen-space-directional-occlusin)
   - [Screen Space Reflection](#screen-space-reflection)
+- [6 Real-Time Physically-Based Materials](#6-real-time-physically-based-materials)
+  - [PBR Materials in RTR](#pbr-materials-in-rtr)
+  - [Microfacet BRDF](#microfacet-brdf)
+- [7 Real-Time Ray Tracing](#7-real-time-ray-tracing)
 
 ## 1 Introdution
 
@@ -510,3 +514,16 @@ bool RayMarch(vec3 ori, vec3 dir, out vec3 hitPos) {
   - 若没发生碰撞，则将步长翻倍，继续前进；
   - 反之，缩短步长为二分之一，直到步长为1时，跳出循环。
 - 返回碰撞点。
+
+## 6 Real-Time Physically-Based Materials
+
+> PBR在RTR主要是指PBR材质，但PBR实际是一类技术的泛称。
+
+### PBR Materials in RTR
+
+- For surface: mostly just microfacet models and Disney principled BRDF;
+- For volumes: mostly just foucused on fast and approximate single scattering and multiple scattering(for example, cloud, hair, skin).
+
+### Microfacet BRDF
+
+## 7 Real-Time Ray Tracing
