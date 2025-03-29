@@ -21,7 +21,7 @@
 <meta itemprop=name content="GAMES101">
 <meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
 <meta itemprop=dateModified content="2024-08-01T17:06:45+08:00">
-<meta itemprop=wordCount content="745">
+<meta itemprop=wordCount content="755">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -519,6 +519,12 @@ $$</p>
 <a href=https://learnopengl-cn.github.io/07%20PBR/03%20IBL/02%20Specular%20IBL/ target=_blank>learnopengl中镜面反射IBL</a></p>
 </blockquote>
 <h2 id=ray-tracing>Ray Tracing</h2>
+<p><strong>光线追踪 vs 路径追踪</strong>：</p>
+<p>一般来说光线追踪是指一种解决渲染问题的思路，而路径追踪是光线追踪这种思路下的具体的算法。除了路径追踪外，还包括：</p>
+<ul>
+<li>光线投射（Ray Casting/Whitted-style Ray Tracing）：同样向场景发射光线，但只做一次交点计算，不考虑光线的反射和折射。接着，通过交点和阴影连线，计算光照效果。</li>
+<li>光子映射（Photon Mapping）：首先从光源发射大量光子并追踪其在场景中的传播（记录位置、能量等信息），接着从摄像机发射光线，通过查询光子数据计算场景光照，同时模拟直接光照、间接光照及焦散等复杂光影效果。</li>
+</ul>
 <h3 id=collision-detection>Collision detection</h3>
 <p>记光线起点为 $\mathbf{O}$，方向为单位向量 $\mathbf{D}$，则射线上任意点可表示为：<br>
 $$ \mathbf{R}(t) = \mathbf{O} + t\mathbf{D} \quad (t \geq 0) $$</p>

@@ -1,0 +1,185 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<title>Nerf | Zhytou</title>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=generator content="Hugo 0.91.2">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel="shortcut icon" href=/favicon.ico>
+<link rel=stylesheet type=text/css media=screen href=/css/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=/css/main.css>
+<link rel=stylesheet type=text/css media=screen href=/css/all.css>
+<meta property="og:title" content="Nerf">
+<meta property="og:description" content="渲染与反渲染  
+反渲染（Inverse Rendering）是计算机视觉和计算机图形学中的一个重要概念，旨在从观察到的图像中推断出场景的三维结构、光照条件和材质属性等信息。通过这些信息，我们可以重建场景的三维模型，或者生成新的视角下的图像。
+反渲染的关键点包括：
+ 由图像反渲染的得到场景形状（shape）和外观（apperance）如何表示？ 如何根据这些信息进一步生成新的视角下的图像，即如何再次渲染（render）？  形状表征 点云（Point Cloud）：点云是一种稀疏的三维表示方法，由一组离散的点组成，每个点包含其在三维空间中的坐标和其他属性（如颜色、法线等）。点云通常用于表示复杂的三维形状，如扫描得到的物体表面。
+网格（Mesh）：网格是一种更为常见的三维表示方法，由顶点、边和面组成。网格可以表示更复杂的形状，并且通常具有更高的渲染效率。网格的每个面通常是一个三角形或四边形，顶点之间通过边连接形成面。
+占据场（Occupancy Field）：占据场是一种隐式的三维表示方法，通过一个函数来判断空间中某个点是否被占据。占据场通常用于表示稀疏的三维结构，如室内场景或城市环境。
+有符号距离场（Signed Distance Field，SDF）：有符号距离场也是一种隐式的三维表示方法。它通过一个函数来计算空间中某个点到最近表面的距离。SDF可以用于表示复杂的形状，并且在物体重建和碰撞检测等应用中具有很好的性能。
+ 3D隐式表示
+ 外观表征  
+神经辐射场  Representing Scenes as Neural Radiance Fields for View Synthesis
+ 神经辐射场（Neural Radiancce Field，Nerf）是一种基于深度学习的3D场景表示与视图合成方法，能够从多视角2D图像中重建出高质量的三维场景，并生成任意视角下的逼真新视图。其核心思想是通过神经网络隐式地建模场景中每个3D点的颜色和密度分布，结合光线追踪技术实现物理真实的渲染效果。
+场景表示 如前文所述，实现反渲染首先需要通过某种方式表示由图像得到的3D内容。在Nerf中，这一点依靠神经网络模型来实现。具体来说，Nerf使用一个多层感知机（MLP）来表示场景中的每个3D点。该MLP接受一个3D坐标（x, y, z）和一个2D视角方向（θ, φ）作为输入，输出该点在该视角下的颜色（r, g, b）和不透明度（σ）。
+体渲染 有了反渲染所需的3D内容表示后，Nerf依靠体渲染技术（Volume Rendering）来生成新视角下的图像。在计算机图形学中，体渲染是一类通过对3D体数据进行采样和积分来生成2D图像的方法。区别于传统的表面渲染方法，如光栅化（Rasterization）或光线追踪（Ray Tracing），体渲染主要针对以点云、体素和辐射场之类的体数据表示的场景。它通过对3D空间中的每个点进行采样，计算其颜色和不透明度，并将这些信息结合起来生成最终的2D图像。
+体渲染方程：
+不同表面渲染，体渲染并不使用由吉姆·卡吉雅提出的渲染方程。它使用的是体积渲染方程（Volume Rendering Equation），该方程描述了从3D体数据生成2D图像的过程。体积渲染方程可以表示为：
+$$ I(\mathbf{r}) = \int_{t_n}^{t_f} T(t) \sigma(\mathbf{r}(t)) c(\mathbf{r}(t), \mathbf{d}) dt $$
+其中，
+体渲染方程在Nerf中的求解：
+Nerf的工作流  光线采样：从相机位置发射光线，沿着光线的方向进行采样。每个采样点对应于3D空间中的一个点。 MLP预测：对于每个采样点，使用MLP预测其颜色和不透明度。输入为3D坐标和视角方向，输出为颜色（r, g, b）和不透明度（σ）。 体积积分：根据体积渲染方程，对采样点的颜色和不透明度进行积分，计算最终的像素颜色。积分过程通常使用数值方法，如梯形法则或蒙特卡洛方法。 合成图像：将所有采样点的颜色和不透明度结合起来，生成最终的2D图像。 损失函数：通过与真实图像进行比较，计算损失函数（如均方误差），并使用反向传播算法更新MLP的参数。 迭代训练：重复上述步骤，直到模型收敛或达到预定的训练轮数。 生成新视角图像：训练完成后，可以使用训练好的MLP生成任意视角下的图像。只需输入新的3D坐标和视角方向，模型将输出对应的颜色和不透明度，从而实现新视角图像的合成。 后处理：对生成的图像进行后处理，如去噪、增强等，以提高图像质量。  ">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://zhytou.github.io/post/2025-3-28/nerf/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2025-03-23T10:58:52+08:00">
+<meta property="article:modified_time" content="2025-03-23T10:58:52+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Nerf">
+<meta name=twitter:description content="渲染与反渲染  
+反渲染（Inverse Rendering）是计算机视觉和计算机图形学中的一个重要概念，旨在从观察到的图像中推断出场景的三维结构、光照条件和材质属性等信息。通过这些信息，我们可以重建场景的三维模型，或者生成新的视角下的图像。
+反渲染的关键点包括：
+ 由图像反渲染的得到场景形状（shape）和外观（apperance）如何表示？ 如何根据这些信息进一步生成新的视角下的图像，即如何再次渲染（render）？  形状表征 点云（Point Cloud）：点云是一种稀疏的三维表示方法，由一组离散的点组成，每个点包含其在三维空间中的坐标和其他属性（如颜色、法线等）。点云通常用于表示复杂的三维形状，如扫描得到的物体表面。
+网格（Mesh）：网格是一种更为常见的三维表示方法，由顶点、边和面组成。网格可以表示更复杂的形状，并且通常具有更高的渲染效率。网格的每个面通常是一个三角形或四边形，顶点之间通过边连接形成面。
+占据场（Occupancy Field）：占据场是一种隐式的三维表示方法，通过一个函数来判断空间中某个点是否被占据。占据场通常用于表示稀疏的三维结构，如室内场景或城市环境。
+有符号距离场（Signed Distance Field，SDF）：有符号距离场也是一种隐式的三维表示方法。它通过一个函数来计算空间中某个点到最近表面的距离。SDF可以用于表示复杂的形状，并且在物体重建和碰撞检测等应用中具有很好的性能。
+ 3D隐式表示
+ 外观表征  
+神经辐射场  Representing Scenes as Neural Radiance Fields for View Synthesis
+ 神经辐射场（Neural Radiancce Field，Nerf）是一种基于深度学习的3D场景表示与视图合成方法，能够从多视角2D图像中重建出高质量的三维场景，并生成任意视角下的逼真新视图。其核心思想是通过神经网络隐式地建模场景中每个3D点的颜色和密度分布，结合光线追踪技术实现物理真实的渲染效果。
+场景表示 如前文所述，实现反渲染首先需要通过某种方式表示由图像得到的3D内容。在Nerf中，这一点依靠神经网络模型来实现。具体来说，Nerf使用一个多层感知机（MLP）来表示场景中的每个3D点。该MLP接受一个3D坐标（x, y, z）和一个2D视角方向（θ, φ）作为输入，输出该点在该视角下的颜色（r, g, b）和不透明度（σ）。
+体渲染 有了反渲染所需的3D内容表示后，Nerf依靠体渲染技术（Volume Rendering）来生成新视角下的图像。在计算机图形学中，体渲染是一类通过对3D体数据进行采样和积分来生成2D图像的方法。区别于传统的表面渲染方法，如光栅化（Rasterization）或光线追踪（Ray Tracing），体渲染主要针对以点云、体素和辐射场之类的体数据表示的场景。它通过对3D空间中的每个点进行采样，计算其颜色和不透明度，并将这些信息结合起来生成最终的2D图像。
+体渲染方程：
+不同表面渲染，体渲染并不使用由吉姆·卡吉雅提出的渲染方程。它使用的是体积渲染方程（Volume Rendering Equation），该方程描述了从3D体数据生成2D图像的过程。体积渲染方程可以表示为：
+$$ I(\mathbf{r}) = \int_{t_n}^{t_f} T(t) \sigma(\mathbf{r}(t)) c(\mathbf{r}(t), \mathbf{d}) dt $$
+其中，
+体渲染方程在Nerf中的求解：
+Nerf的工作流  光线采样：从相机位置发射光线，沿着光线的方向进行采样。每个采样点对应于3D空间中的一个点。 MLP预测：对于每个采样点，使用MLP预测其颜色和不透明度。输入为3D坐标和视角方向，输出为颜色（r, g, b）和不透明度（σ）。 体积积分：根据体积渲染方程，对采样点的颜色和不透明度进行积分，计算最终的像素颜色。积分过程通常使用数值方法，如梯形法则或蒙特卡洛方法。 合成图像：将所有采样点的颜色和不透明度结合起来，生成最终的2D图像。 损失函数：通过与真实图像进行比较，计算损失函数（如均方误差），并使用反向传播算法更新MLP的参数。 迭代训练：重复上述步骤，直到模型收敛或达到预定的训练轮数。 生成新视角图像：训练完成后，可以使用训练好的MLP生成任意视角下的图像。只需输入新的3D坐标和视角方向，模型将输出对应的颜色和不透明度，从而实现新视角图像的合成。 后处理：对生成的图像进行后处理，如去噪、增强等，以提高图像质量。  ">
+<meta itemprop=name content="Nerf">
+<meta itemprop=description content="渲染与反渲染  
+反渲染（Inverse Rendering）是计算机视觉和计算机图形学中的一个重要概念，旨在从观察到的图像中推断出场景的三维结构、光照条件和材质属性等信息。通过这些信息，我们可以重建场景的三维模型，或者生成新的视角下的图像。
+反渲染的关键点包括：
+ 由图像反渲染的得到场景形状（shape）和外观（apperance）如何表示？ 如何根据这些信息进一步生成新的视角下的图像，即如何再次渲染（render）？  形状表征 点云（Point Cloud）：点云是一种稀疏的三维表示方法，由一组离散的点组成，每个点包含其在三维空间中的坐标和其他属性（如颜色、法线等）。点云通常用于表示复杂的三维形状，如扫描得到的物体表面。
+网格（Mesh）：网格是一种更为常见的三维表示方法，由顶点、边和面组成。网格可以表示更复杂的形状，并且通常具有更高的渲染效率。网格的每个面通常是一个三角形或四边形，顶点之间通过边连接形成面。
+占据场（Occupancy Field）：占据场是一种隐式的三维表示方法，通过一个函数来判断空间中某个点是否被占据。占据场通常用于表示稀疏的三维结构，如室内场景或城市环境。
+有符号距离场（Signed Distance Field，SDF）：有符号距离场也是一种隐式的三维表示方法。它通过一个函数来计算空间中某个点到最近表面的距离。SDF可以用于表示复杂的形状，并且在物体重建和碰撞检测等应用中具有很好的性能。
+ 3D隐式表示
+ 外观表征  
+神经辐射场  Representing Scenes as Neural Radiance Fields for View Synthesis
+ 神经辐射场（Neural Radiancce Field，Nerf）是一种基于深度学习的3D场景表示与视图合成方法，能够从多视角2D图像中重建出高质量的三维场景，并生成任意视角下的逼真新视图。其核心思想是通过神经网络隐式地建模场景中每个3D点的颜色和密度分布，结合光线追踪技术实现物理真实的渲染效果。
+场景表示 如前文所述，实现反渲染首先需要通过某种方式表示由图像得到的3D内容。在Nerf中，这一点依靠神经网络模型来实现。具体来说，Nerf使用一个多层感知机（MLP）来表示场景中的每个3D点。该MLP接受一个3D坐标（x, y, z）和一个2D视角方向（θ, φ）作为输入，输出该点在该视角下的颜色（r, g, b）和不透明度（σ）。
+体渲染 有了反渲染所需的3D内容表示后，Nerf依靠体渲染技术（Volume Rendering）来生成新视角下的图像。在计算机图形学中，体渲染是一类通过对3D体数据进行采样和积分来生成2D图像的方法。区别于传统的表面渲染方法，如光栅化（Rasterization）或光线追踪（Ray Tracing），体渲染主要针对以点云、体素和辐射场之类的体数据表示的场景。它通过对3D空间中的每个点进行采样，计算其颜色和不透明度，并将这些信息结合起来生成最终的2D图像。
+体渲染方程：
+不同表面渲染，体渲染并不使用由吉姆·卡吉雅提出的渲染方程。它使用的是体积渲染方程（Volume Rendering Equation），该方程描述了从3D体数据生成2D图像的过程。体积渲染方程可以表示为：
+$$ I(\mathbf{r}) = \int_{t_n}^{t_f} T(t) \sigma(\mathbf{r}(t)) c(\mathbf{r}(t), \mathbf{d}) dt $$
+其中，
+体渲染方程在Nerf中的求解：
+Nerf的工作流  光线采样：从相机位置发射光线，沿着光线的方向进行采样。每个采样点对应于3D空间中的一个点。 MLP预测：对于每个采样点，使用MLP预测其颜色和不透明度。输入为3D坐标和视角方向，输出为颜色（r, g, b）和不透明度（σ）。 体积积分：根据体积渲染方程，对采样点的颜色和不透明度进行积分，计算最终的像素颜色。积分过程通常使用数值方法，如梯形法则或蒙特卡洛方法。 合成图像：将所有采样点的颜色和不透明度结合起来，生成最终的2D图像。 损失函数：通过与真实图像进行比较，计算损失函数（如均方误差），并使用反向传播算法更新MLP的参数。 迭代训练：重复上述步骤，直到模型收敛或达到预定的训练轮数。 生成新视角图像：训练完成后，可以使用训练好的MLP生成任意视角下的图像。只需输入新的3D坐标和视角方向，模型将输出对应的颜色和不透明度，从而实现新视角图像的合成。 后处理：对生成的图像进行后处理，如去噪、增强等，以提高图像质量。  "><meta itemprop=datePublished content="2025-03-23T10:58:52+08:00">
+<meta itemprop=dateModified content="2025-03-23T10:58:52+08:00">
+<meta itemprop=wordCount content="68">
+<meta itemprop=keywords content>
+</head>
+<body>
+<header>
+<div id=avatar>
+<a href=https://zhytou.github.io/><img src=https://avatars.githubusercontent.com/u/56868292 alt=Zhytou></a>
+</div>
+<div id=titletext>
+<h2 id=title><a href=https://zhytou.github.io/>Zhytou</a></h2>
+</div>
+<div id=title-description>
+<p id=subtitle>May the force be with me.</p>
+<div id=social>
+<nav><ul>
+<li><a href=https://github.com/Zhytou rel=me><i title=Github class="icons fab fa-github"></i></a></li>
+<li><a><i title="Switch Dark Mode" class="dark-mode icons fas fa-moon"></i></a></li>
+</ul></nav>
+</div>
+</div>
+<div id=mainmenu>
+<nav>
+<ul>
+<li><a href=/>Home</a></li>
+<li><a href=/post>Posts</a></li>
+<li><a href=/about>About</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<main>
+<div class=post>
+<article>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>23</span>
+<span class=rest>Mar 2025</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>Nerf</h1>
+<p class=post-meta>
+<span class=post-meta>
+</span>
+</p>
+</div>
+</div>
+<div class=markdown>
+<h2 id=渲染与反渲染>渲染与反渲染</h2>
+<p><figure>
+<img src=https://zhytou.github.io/post/2025-4-11/inverse_render.png alt=inverse_render>
+</figure></p>
+<p>反渲染（Inverse Rendering）是计算机视觉和计算机图形学中的一个重要概念，旨在从观察到的图像中推断出场景的三维结构、光照条件和材质属性等信息。通过这些信息，我们可以重建场景的三维模型，或者生成新的视角下的图像。</p>
+<p>反渲染的关键点包括：</p>
+<ul>
+<li>由图像反渲染的得到场景形状（shape）和外观（apperance）如何表示？</li>
+<li>如何根据这些信息进一步生成新的视角下的图像，即如何再次渲染（render）？</li>
+</ul>
+<h3 id=形状表征>形状表征</h3>
+<p>点云（Point Cloud）：点云是一种稀疏的三维表示方法，由一组离散的点组成，每个点包含其在三维空间中的坐标和其他属性（如颜色、法线等）。点云通常用于表示复杂的三维形状，如扫描得到的物体表面。</p>
+<p>网格（Mesh）：网格是一种更为常见的三维表示方法，由顶点、边和面组成。网格可以表示更复杂的形状，并且通常具有更高的渲染效率。网格的每个面通常是一个三角形或四边形，顶点之间通过边连接形成面。</p>
+<p>占据场（Occupancy Field）：占据场是一种隐式的三维表示方法，通过一个函数来判断空间中某个点是否被占据。占据场通常用于表示稀疏的三维结构，如室内场景或城市环境。</p>
+<p>有符号距离场（Signed Distance Field，SDF）：有符号距离场也是一种隐式的三维表示方法。它通过一个函数来计算空间中某个点到最近表面的距离。SDF可以用于表示复杂的形状，并且在物体重建和碰撞检测等应用中具有很好的性能。</p>
+<blockquote>
+<p><a href=https://blog.csdn.net/weixin_43117620/article/details/131980822 target=_blank>3D隐式表示</a></p>
+</blockquote>
+<h3 id=外观表征>外观表征</h3>
+<p><figure>
+<img src=https://zhytou.github.io/post/2025-4-11/apperance_representation.png alt=apperance_representation>
+</figure></p>
+<h2 id=神经辐射场>神经辐射场</h2>
+<blockquote>
+<p><a href=https://arxiv.org/pdf/2003.08934 target=_blank>Representing Scenes as Neural Radiance Fields for View Synthesis</a></p>
+</blockquote>
+<p>神经辐射场（Neural Radiancce Field，Nerf）是一种基于深度学习的3D场景表示与视图合成方法，能够从多视角2D图像中重建出高质量的三维场景，并生成任意视角下的逼真新视图。其核心思想是通过神经网络隐式地建模场景中每个3D点的颜色和密度分布，结合光线追踪技术实现物理真实的渲染效果。</p>
+<h3 id=场景表示>场景表示</h3>
+<p>如前文所述，实现反渲染首先需要通过某种方式表示由图像得到的3D内容。在Nerf中，这一点依靠神经网络模型来实现。具体来说，Nerf使用一个多层感知机（MLP）来表示场景中的每个3D点。该MLP接受一个3D坐标（x, y, z）和一个2D视角方向（θ, φ）作为输入，输出该点在该视角下的颜色（r, g, b）和不透明度（σ）。</p>
+<h3 id=体渲染>体渲染</h3>
+<p>有了反渲染所需的3D内容表示后，Nerf依靠体渲染技术（Volume Rendering）来生成新视角下的图像。在计算机图形学中，体渲染是一类通过对3D体数据进行采样和积分来生成2D图像的方法。区别于传统的表面渲染方法，如光栅化（Rasterization）或光线追踪（Ray Tracing），体渲染主要针对以点云、体素和辐射场之类的体数据表示的场景。它通过对3D空间中的每个点进行采样，计算其颜色和不透明度，并将这些信息结合起来生成最终的2D图像。</p>
+<p><strong>体渲染方程</strong>：</p>
+<p>不同表面渲染，体渲染并不使用由吉姆·卡吉雅提出的渲染方程。它使用的是体积渲染方程（Volume Rendering Equation），该方程描述了从3D体数据生成2D图像的过程。体积渲染方程可以表示为：</p>
+<p>$$
+I(\mathbf{r}) = \int_{t_n}^{t_f} T(t) \sigma(\mathbf{r}(t)) c(\mathbf{r}(t), \mathbf{d}) dt
+$$</p>
+<p>其中，</p>
+<p><strong>体渲染方程在Nerf中的求解</strong>：</p>
+<h3 id=nerf的工作流>Nerf的工作流</h3>
+<ol>
+<li><strong>光线采样</strong>：从相机位置发射光线，沿着光线的方向进行采样。每个采样点对应于3D空间中的一个点。</li>
+<li><strong>MLP预测</strong>：对于每个采样点，使用MLP预测其颜色和不透明度。输入为3D坐标和视角方向，输出为颜色（r, g, b）和不透明度（σ）。</li>
+<li><strong>体积积分</strong>：根据体积渲染方程，对采样点的颜色和不透明度进行积分，计算最终的像素颜色。积分过程通常使用数值方法，如梯形法则或蒙特卡洛方法。</li>
+<li><strong>合成图像</strong>：将所有采样点的颜色和不透明度结合起来，生成最终的2D图像。</li>
+<li><strong>损失函数</strong>：通过与真实图像进行比较，计算损失函数（如均方误差），并使用反向传播算法更新MLP的参数。</li>
+<li><strong>迭代训练</strong>：重复上述步骤，直到模型收敛或达到预定的训练轮数。</li>
+<li><strong>生成新视角图像</strong>：训练完成后，可以使用训练好的MLP生成任意视角下的图像。只需输入新的3D坐标和视角方向，模型将输出对应的颜色和不透明度，从而实现新视角图像的合成。</li>
+<li><strong>后处理</strong>：对生成的图像进行后处理，如去噪、增强等，以提高图像质量。</li>
+</ol>
+</div>
+</div>
+</article>
+</div>
+</main>
+<footer>
+© Copyright <a href=https://github.com/Zhytou>Zhytou</a> | <a href=https://github.com/dataCobra/hugo-vitae>Vitae</a> theme for <a href=https://gohugo.io>Hugo</a>
+</footer><script src=/js/dark-mode.js></script>
+</body>
+</html>

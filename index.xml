@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Zhytou</title><link>https://zhytou.github.io/</link><description>Recent content on zhytou.github.io</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>© Copyright Zhytou | Vitae theme for Hugo</copyright><lastBuildDate>Sun, 12 Jan 2025 20:12:46 +0800</lastBuildDate><atom:link href="https://zhytou.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>2024年度总结</title><link>https://zhytou.github.io/post/2025-1-12/2024-summary/</link><pubDate>Sun, 12 Jan 2025 20:12:46 +0800</pubDate><guid>https://zhytou.github.io/post/2025-1-12/2024-summary/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Zhytou</title><link>https://zhytou.github.io/</link><description>Recent content on zhytou.github.io</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>© Copyright Zhytou | Vitae theme for Hugo</copyright><lastBuildDate>Sun, 23 Mar 2025 10:58:52 +0800</lastBuildDate><atom:link href="https://zhytou.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Nerf</title><link>https://zhytou.github.io/post/2025-3-28/nerf/</link><pubDate>Sun, 23 Mar 2025 10:58:52 +0800</pubDate><guid>https://zhytou.github.io/post/2025-3-28/nerf/</guid><description>
+渲染与反渲染
+反渲染（Inverse Rendering）是计算机视觉和计算机图形学中的一个重要概念，旨在从观察到的图像中推断出场景的三维结构、光照条件和材质属性等信息。通过这些信息，我们可以重建场景的三维模型，或者生成新的视角下的图像。
+反渲染的关键点包括：
+由图像反渲染 …</description></item><item><title>2024年度总结</title><link>https://zhytou.github.io/post/2025-1-12/2024-summary/</link><pubDate>Sun, 12 Jan 2025 20:12:46 +0800</pubDate><guid>https://zhytou.github.io/post/2025-1-12/2024-summary/</guid><description>
 Timeline 小论文：
 找实习和写论文举棋不定：
 浣江实验室：
