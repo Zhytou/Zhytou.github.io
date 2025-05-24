@@ -2,7 +2,8 @@
 渲染与反渲染
 反渲染（Inverse Rendering）是计算机视觉和计算机图形学中的一个重要概念，旨在从观察到的图像中推断出场景的三维结构、光照条件和材质属性等信息。通过这些信息，我们可以重建场景的三维模型，或者生成新的视角下的图像。
 反渲染的关键点包括：
-由图像反渲染 …</description></item><item><title>2024年度总结</title><link>https://zhytou.github.io/post/2025-1-12/2024-summary/</link><pubDate>Sun, 12 Jan 2025 20:12:46 +0800</pubDate><guid>https://zhytou.github.io/post/2025-1-12/2024-summary/</guid><description>
+由图像反渲染 …</description></item><item><title>GPU-Driven Pipeline</title><link>https://zhytou.github.io/post/2025-3-18/gpu-driven/</link><pubDate>Tue, 18 Mar 2025 19:46:08 +0800</pubDate><guid>https://zhytou.github.io/post/2025-3-18/gpu-driven/</guid><description>
+GPU驱动管线（GPU-Driven Pipeline）是一种将原本由CPU承担的大量渲染任务转移到GPU上进行处理的渲染管线架构。在传统渲染管线中，CPU负责管理场景中的大量数据，如模型的加载、裁剪、排序以及绘制调用的提交等，这使得CPU成为渲染流程中的瓶颈。而GPU驱动管线则 …</description></item><item><title>2024年度总结</title><link>https://zhytou.github.io/post/2025-1-12/2024-summary/</link><pubDate>Sun, 12 Jan 2025 20:12:46 +0800</pubDate><guid>https://zhytou.github.io/post/2025-1-12/2024-summary/</guid><description>
 Timeline 小论文：
 找实习和写论文举棋不定：
 浣江实验室：
