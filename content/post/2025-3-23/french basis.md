@@ -1,10 +1,40 @@
 ---
 title: "你好，法语A1学习笔记"
 date: 2025-03-23T10:46:41+08:00
-draft: true
+draft: false
 ---
 
-## 1.1 Bienvenue 欢迎
+## 0 Phoetique 语音
+
+**音素**
+
+- 法语中最小的语音单位；
+- 法语共有 36 个音素，包括 16 个元音、3 个半元音和 17 个辅音。
+
+**字母**
+
+- 法语采用 26 个拉丁字母，与英语相同。
+- 特殊符号：部分字母带有变音符号，影响发音，如：
+  - 尖音符（é）：表示闭前不圆唇元音 /e/，如 “été”（夏天）。
+  - 钝音符（è）：表示开前不圆唇元音 /ɛ/，如 “père”（父亲）。
+  - 长音符（â、ô 等）：多表示发音更短促或口型更圆，如 “fâché”（生气的）。
+  - 分音符（ë、ï 等）：表示该字母单独发音，不与前面字母组合，如 “Noël”（圣诞节）。
+
+**发音规则**
+
+在法语中位于单词末尾的辅音字母一般不发音但是当后一个单词以元音开头时，该词末不发音的辅音字母与后面单词的词首元音合成一个音节，这种现象叫做“联诵”
+
+“连音” (enchaînement)是指前一个单词词末原本就发音的辅音音素与后一个以元 开头 单词的第一个音节在 流中 然形成的连读 例如 uneitudiante [ynetydjüt]。
+
+**字母组合**
+
+**键入**
+
+![bond classification](https://zhytou.github.io/post/2025-3-23/french_typing.png)
+
+## 1 Rencontres 相遇
+
+### 1.1 Bienvenue 欢迎
 
 **询问名字**
 
@@ -32,7 +62,7 @@ draft: true
 - Ma+阴性单数名词
 - Mon+阳性单数名称
 
-## 1.2 Qui est-ce 这是谁
+### 1.2 Qui est-ce 这是谁
 
 **动词变位**
 
@@ -84,7 +114,7 @@ draft: true
 - au + 阳性/单数国家：au Japon
 - aux 附属国家：aux Etats-Unis
 
-## 1.3 Ca va bien 你好吗
+### 1.3 Ca va bien 你好吗
 
 **主有形容词**
 
@@ -109,7 +139,7 @@ draft: true
 | une | 单数阴性名词前   | une table    | 一张桌子    |
 | des | 复数名词前       | des stylos   | 一些笔     |
 
-**不定冠词**
+**定冠词**
 
 定冠词表示确指或已提及的事物，相当于英语的 "the"
 
@@ -154,7 +184,9 @@ draft: true
 - 你的西班牙朋友最近怎么样？
 - Luis? Il va bien.
 
-## 2.1 Trouvez l'objet
+## 2 Portraits 画像
+
+### 2.1 Trouvez l'objet 找出物品
 
 **询问物体**
 
@@ -163,4 +195,76 @@ draft: true
 - Oui, son chapeau et son blouson. Ils sont dans la chambre de Melanie, sous l'etagere a cote de la fenetre.
 - 对的，就是他的帽子和夹克衫。这两样东西在梅拉妮的房间里，在窗户旁边的架子下面。
 
+**这里有**
+
+il y a在法语中表示“有、存在”，类似英文中there be结构。不过，值得注意的是，无论存在数量是多少，il ya a的形式保持不变。
+
+- Il y a un livre sur la chaise.
+- 椅子上有一本书。
+- Il y a des livres sur la chaise.
+- 椅子上有一些书。
+
+**Qu'est-ce疑问句结构**
+
+疑问词que就其本质而言是个代词，对表语或宾语进行提问，类似英文中的what一词。qu'est-ce que与之类似，也能起到相同的作用。只不过它后面为“主语+谓语”的陈述语序，而que则为倒装。此外，qu'est-ce que通常更正式，而que则适合和熟人交谈时使用。
+
+除了qu'est-ce que外，还有三种不同的疑问结构，它们的用法总结如下：
+
+| 结构           | 目标语法成分      | 提问对象限制     | 例证                   |  
+|----------------|------------------|----------------|------------------------|  
+| qu'est-ce qui  | 主语     | 仅物体    | *Qu'est-ce **qui** tombe ?* (什么东西在掉落？)→ 主语为物 |  
+| qu'est-ce que  | 宾语     | 仅物体    | *Qu'est-ce **que** tu vois ?* (你看见什么？)→ 宾语为物 |  
+| qui est-ce qui | 主语     | 仅人类    | *Qui est-ce **qui** chante ?* (谁在唱歌？)→ 主语为人 |  
+| qui est-ce que | 宾语     | 仅人类    | *Qui est-ce **que** tu aimes ?* (你爱谁？)→ 宾语为人 |  
+
+### 2.2 Portrait-robot 模拟画像
+
+**重读人称代词**
+
+除了主语人称代词（je\tu\il\elle）之外，法语中还有一类重读人称代词，它们的作用包括：
+
+- 位于介词后面，做介词宾语；
+  - Tu viens avec moi？
+  - 你和我一起来吗？
+- 作主语的同位语，用来强调主语；
+  - Moi, je m'appelle Paul.
+  - 我叫保罗。
+- 位于c'est后，作表语；
+  - Oui, c'est elle.
+  - 是的，是她。
+- 用在没有谓语的省略句中；
+  - Je suis jornaliste, et vous？
+  - 我是记者，你呢？
+
+整体而言，这就类似与英文中I和me、we和us的关系。它们的变化如表格所示
+
+| 主语代词 | 重读形式 |
+|----------|--------|
+| je       | moi    | 
+| tu       | toi    |
+| il       | lui    |
+| elle     | elle   |
+| nous     | nous   |
+| vous     | vous   |
+| ils      | eux    |
+| elles    | elles  |
+
+**否定结构**
+
+法语的否定句一般使用ne pas结构。其中，ne和pas分别位于谓语动词两边。
+
+- Ce ne sont pas mes fleurs.
+- 这不是我的花。
+- Je n'habite pas ici.
+- 我不住在这儿。
+
+**性数配合**
+
+法语中名词具有阴阳性、单复数两大词性变化，而用于限定或修饰它的形容词、冠词，以及用于指代它的代词等，都必须与相关联的名词配合，保证阴阳性和单复数的一致。
+
+### 2.3 Shopping 购物
+ 
+### 2.4 Le coin des artistes 艺术家之角
+
+## 3 Ca se trouve où? 在哪儿呢
 
