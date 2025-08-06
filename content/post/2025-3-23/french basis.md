@@ -30,7 +30,11 @@ draft: false
 
 **键入**
 
+在windows语言设置中，添加加拿大法语键盘即可。其中，快速切换键盘布局可用shift+alt。
+
 ![bond classification](https://zhytou.github.io/post/2025-3-23/french_typing.png)
+
+此外，问好通过shift+6即可。
 
 ## 1 Rencontres 相遇
 
@@ -159,7 +163,6 @@ draft: false
 - Je vais bien, merici.
 - 我也还可以，谢谢
 
-
 值得一提的是，在表明个人近况时，法语中不使用être动词，而是使用aller。它本意是**去/移动**，但在这类问候表达中引申为**进展/处于...状态**，强调身心状态的动态变化过程，比静态描述的être更符合法语对"存在状态流动性"的认知逻辑。
 
 | 人称代词    | Aller (去)      |
@@ -170,7 +173,6 @@ draft: false
 | nous       | allons          |
 | vous       | allez           |
 | ils/elles  | vont            |
-
 
 - Comment ca va?
 - Comment vas-tu?
@@ -204,6 +206,24 @@ il y a在法语中表示“有、存在”，类似英文中there be结构。不
 - Il y a des livres sur la chaise.
 - 椅子上有一些书。
 
+**方位介词**
+
+- au-dessous
+- 在下面
+- au-dessus
+- 在上面
+- avec
+- à côté
+- 在……旁边
+- à droite
+- 在……右边
+- à gauche
+- 在……左边
+- sous
+- 在……下面
+- sur
+- 在……上面
+
 **Qu'est-ce疑问句结构**
 
 疑问词que就其本质而言是个代词，对表语或宾语进行提问，类似英文中的what一词。qu'est-ce que与之类似，也能起到相同的作用。只不过它后面为“主语+谓语”的陈述语序，而que则为倒装。此外，qu'est-ce que通常更正式，而que则适合和熟人交谈时使用。
@@ -218,6 +238,8 @@ il y a在法语中表示“有、存在”，类似英文中there be结构。不
 | qui est-ce que | 宾语     | 仅人类    | *Qui est-ce **que** tu aimes ?* (你爱谁？)→ 宾语为人 |  
 
 ### 2.2 Portrait-robot 模拟画像
+
+**颜色**
 
 **重读人称代词**
 
@@ -263,8 +285,73 @@ il y a在法语中表示“有、存在”，类似英文中there be结构。不
 法语中名词具有阴阳性、单复数两大词性变化，而用于限定或修饰它的形容词、冠词，以及用于指代它的代词等，都必须与相关联的名词配合，保证阴阳性和单复数的一致。
 
 ### 2.3 Shopping 购物
- 
+
+**购物用语**
+
+- Vous avez quelles couleurs, s'il vous plait?
+- 请问，有哪些颜色？
+- Vous avez le gris en taille 38?
+- 灰色的有38号吗？
+
+其中，vous avez本意是你有xxxx的含义，但在购物时常用于询问款式、颜色和尺寸等。此外，s'il vous plait是礼貌用语，表示请、麻烦您。
+
+**询问价格**
+
+coûte表示价值……多少，它配合疑问词combien，可以用于询问商品价格。
+
+- Combien coûte cette robe?
+- 这条裙子多少钱？
+- Elle coûte 55 euros.
+- 55欧元
+
+**疑问词comment和combien**
+
+疑问词comment就动作方式、方法、所处的状态提问，类似英文中的how一词。
+
+- Comment est-ce que tu trouves ce pantalon?
+- 你觉得这条裤子怎么样？
+- Très joli.
+- 很漂亮！
+
+- Elle est comment, ton amie Christine?
+- 你的朋友克里斯蒂娜怎么样？
+- Elle est belle et intelligence.
+- 她既美丽又聪明。
+
+疑问词combien就数量、价格等提问，它通常和一词一起用来提问价格。
+
+- Elle coûte combien, cette robe?
+- 这条裙子多少钱？
+- Combien ça coûte?
+- 这个多少钱？
+
+**指示代词与指示形容词**
+
+指示代词用来代替前文提到的人或事物，避免重复，它需要与所指代的名词在性、数上保持一致。
+
+| 类型       | 单数阳性 | 单数阴性 | 复数（阴阳同形） | 含义                     |
+|------------|----------|----------|------------------|--------------------------|
+| 简单形式   | celui    | celle    | ceux             | 这个/那个（代替阳性名词）；这个/那个（代替阴性名词）；这些/那些（代替复数名词） |
+|            |          |          | celles           |                          |
+| 复合形式   | celui-ci | celle-ci | ceux-ci          | 这个（近指）；这些（近指） |
+|            |          |          | celles-ci        |                          |
+|            | celui-là | celle-là | ceux-là          | 那个（远指）；那些（远指） |
+|            |          |          | celles-là        |                          |
+
+指示形容词用于修饰名词，表明所指的人或事物是 “这个 / 这些”“那个 / 那些”，需要与所修饰的名词在性、数上保持一致。
+
+| 单数阳性 | 单数阴性 | 复数（阴阳同形） | 含义 |
+|----------|----------|------------------|------|
+| ce       | cette    | ces              | 这个/这些（近指，离说话人近） |
+| cet      | cette    | ces              | 这个（单数阳性名词以元音或哑音h开头时，ce变为cet，避免连读困难） |
+| ce       | cette    | ces              | 那个/那些（远指，离说话人远，通过语境或手势区分近指和远指） |
+
+值得注意的是，法语中不太强调这与那之间的区别，ce均可表示英语中的this和that，而ces则对应these和those。
+
 ### 2.4 Le coin des artistes 艺术家之角
 
 ## 3 Ca se trouve où? 在哪儿呢
+
+### 3.1 Appartement à louer
+
 
