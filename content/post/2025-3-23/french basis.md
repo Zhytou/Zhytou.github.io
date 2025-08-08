@@ -19,6 +19,11 @@ draft: false
   - [3.2 C'est par où? 从哪儿走？](#32-cest-par-où-从哪儿走)
   - [3.3 Bon voyage! 旅途愉快！](#33-bon-voyage-旅途愉快)
   - [3.4 Marseille 马赛](#34-marseille-马赛)
+- [4 Au rythme du temps 跟随时间的节奏](#4-au-rythme-du-temps-跟随时间的节奏)
+  - [4.1 Un aller simple 单程车票](#41-un-aller-simple-单程车票)
+  - [4.2 à Londres 在伦敦](#42-à-londres-在伦敦)
+- [5 La vie de tous les jours 日常生活](#5-la-vie-de-tous-les-jours-日常生活)
+  - [On fait des crêpes? 咱们做可丽饼吗？](#on-fait-des-crêpes-咱们做可丽饼吗)
 
 
 ## 0 Phoetique 语音
@@ -102,7 +107,83 @@ draft: false
 - Ma+阴性单数名词
 - Mon+阳性单数名称
 
+**打招呼/再见**
+
+- Bonjour/Salut
+- 您好
+
+- Bonjour/Bon matin
+- 早上好
+- Bon après-midi
+- 下午好
+- Bonsoir
+- 晚上好
+
+- Au revoir
+- 再见
+- À bientôt
+- 回头见
+
+- Bonne journée
+- 祝你今天愉快
+- Bonne soirée
+- 祝你晚上愉快
+- Bonne nuit
+- 晚安
+
+**连接词**
+
+- Bien sûr
+- 当然
+
+- Moi aussi
+- 我也是
+
+- Et toi
+- 你呢
+
+- Mais
+- 但
+
+- Et cetera/etc.
+- 等等
+
 ### 1.2 Qui est-ce 这是谁
+
+**亲属关系**
+
+- homme
+- 男人
+- femme
+- 女人
+
+- père
+- 父亲
+- mère
+- 母亲
+- frère
+- 哥哥、弟弟
+- soeur
+- 姐姐、妹妹
+- fille
+- 女儿、女孩
+- garçon
+- 儿子、男孩
+
+- tante
+- 姑姑、阿姨
+- oncle
+- 舅舅、叔叔
+
+- neveu
+- 侄子、外甥
+- nièce
+- 侄女、外甥女
+
+- mari
+- 丈夫
+- femme
+- 妻子
 
 **动词变位**
 
@@ -188,7 +269,14 @@ draft: false
 |-----|----------------------|-----------|-----------|
 | un  | 单数阳性名词前	 | un livre     | 一本书      |
 | une | 单数阴性名词前   | une table    | 一张桌子    |
+| du  | 不可数阳性名词前 | du pain      | 一些面包    |
+| de la  | 不可数阴性名词前 | de la confiture  | 一些果酱    |
 | des | 复数名词前       | des stylos   | 一些笔     |
+
+值得注意的是，对于首字母为元音或哑音h的不可数名词来说，需要使用de l'修饰。其本质如下：
+
+- du = de le
+- de la = de la
 
 **定冠词**
 
@@ -201,7 +289,7 @@ draft: false
 | l'  | 元音/哑音h开头的单数名词前	   | l'ami (m)           | 这个朋友      |
 | les | 复数名词前                    | les maisons         | 这些房子      |
 
-**问候**：
+**问候他人**：
 
 - Salut, tu vas bien?
 - 最近过得怎么样哦？
@@ -244,6 +332,55 @@ draft: false
 
 ### 2.1 Trouvez l'objet 找出物品
 
+**日常用品**
+
+- un sac
+- 包
+- une clé
+- 钥匙
+- une poche
+- 口袋
+- un portable
+- 手机
+- un chargeur
+- 充电宝
+- un portefeuille
+- 钱包
+- une valise
+- 行李箱
+
+**文具书笔**
+
+- un stylo
+- 钢笔
+- un crayon
+- 铅笔
+- une gomme
+- 橡皮
+- un livre
+- 书
+- une page
+- 书页
+- une règle
+- 尺子
+
+**家居物品**
+
+- un lit
+- 床
+- une chaise
+- 椅子
+- une table
+- 桌子
+- un placard
+- 壁橱
+- un canapé
+- 沙发
+- une fenêtre
+- 窗户
+- un porte
+- 门
+
 **询问物体**
 
 - Son chapeau et son blouson, c'est ca？
@@ -267,6 +404,7 @@ il y a在法语中表示“有、存在”，类似英文中there be结构。不
 - au-dessus
 - 在上面
 - avec
+- 和
 - à côté
 - 在……旁边
 - à droite
@@ -320,6 +458,8 @@ il y a在法语中表示“有、存在”，类似英文中there be结构。不
 - 一件大衣
 - un pull
 - 一件套衫
+- une cravate
+- 一条领带
 
 **重读人称代词**
 
@@ -443,11 +583,45 @@ coûte表示价值……多少，它配合疑问词combien，可以用于询问�
 
 ### 3.1 Appartement à louer
 
-**描述房间**
+**住所空间**
+
+- la masion
+- 房子
+- l'appartment
+- 公寓
+- la chambre
+- 房间
+- la cuisine
+- 厨房
+- le salon
+- 客厅
+- la salle de bain
+- 浴室（洗澡的房间）
+- la toilette
+- 厕所
+- le couloir
+- 走廊
+- le jardin
+- 花园
+- la cour
+- 院子
+- le balcon
+- 阳台
+- le garage
+- 车库
+- le bureau
+- 办公室
+- le bâtiment
+- 大楼
 
 **初识介词**
 
 在法语中，介词可以按构成方式分为简单形式和复合形式两类。其中，前者是指单个单词所构成的介词，它包括：
+
+- à
+- en
+- dans
+- avec
 
 后者则是指介词短语，通常是由前面提到的单词与名词组合而成，比如：
 
@@ -473,14 +647,22 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 
 **城市中的区域**
 
-- banque
-- jardin
-- métro
-- musèe
-- opéra
-- place
-- pont
-- poste
+- la banque
+- 银行
+- le jardin
+- 花园
+- le métro
+- 地铁
+- le musèe
+- 博物馆
+- l'opéra
+- 歌剧院
+- la place
+- 广场
+- le pont
+- 桥
+- la poste
+- 邮局
 
 **介词与缩合冠词**
 
@@ -550,4 +732,113 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 
 ### 3.4 Marseille 马赛
 
+## 4 Au rythme du temps 跟随时间的节奏
 
+### 4.1 Un aller simple 单程车票
+
+**时间相关**
+
+- lundi
+- 周一
+- mardi
+- 周二
+- mercredi
+- 周三
+- jeudi
+- 周四
+- vendredi
+- 周五
+- samedi
+- 周六
+- dimanche
+- 周日
+
+- Je vais à Paris du lundi au mercredi seulement.
+- Nous avons deux heures de français le vendredi aprèsmidi.
+
+### 4.2 à Londres 在伦敦
+
+**职业**
+
+- acteur(trice)
+- docteur
+- informaticien(ienne)
+
+**est-ce que疑问结构**
+
+在法语中，est-ce que常常用来引导疑问句，其后句子为陈述语序。
+
+在一般疑问句中，est-ce que位于句首。比如，你在伦敦工作吗可以用三种不同的方法提问。
+
+- Tu travailles à Londres?
+- Est-ce que tu travailles à Londres?
+- Travailles-tu à Londres?
+
+其中，第一种提问方式多用于口语表达，通过略微上提语调来表明提问。第二种则使用了est-ce que结构来引导疑问句。至于第三种主谓倒装的提问方式，则多用于书面语。
+
+除了一般疑问句之外，est-ce que还可以在句首加疑问副词形成特殊疑问句，比如：
+
+- Comment est-ce que tu t'appelles?
+- 你叫什么名字？
+- Quand est-ce que le film commence?
+- 电影什么时候开始？
+- Où est-ce que tu habites?
+- 你住在哪里？
+- Pourquoi est-ce que tu es en retard?
+- 你为什么迟到了？
+
+## 5 La vie de tous les jours 日常生活
+
+### On fait des crêpes? 咱们做可丽饼吗？
+
+- un pain
+- 面包
+- une pomme
+- 苹果
+- un fromage
+- 奶酪
+- une banane
+- 香蕉
+- un café
+- 咖啡
+- du beurre
+- 黄油
+- du cidre
+- 苹果酒
+- du coca
+- 可乐
+- de la farine
+- 面粉
+- du lait
+- 牛奶
+- des légumes
+- 蔬菜
+- un oeuf
+- 鸡蛋
+- du poisson
+- 鱼
+- du riz
+- 米饭
+- une salade
+- 沙拉
+- de sucre
+- 糖
+- de la viande
+- 肉
+- du vin
+- 葡萄酒
+- les pâtes
+- 意大利面
+- une pizza
+- 披萨
+
+**动词变位**
+
+| 人称      | boire (喝) | acheter (买) | manger (吃) | faire (做) |
+|----------|------------|--------------|-------------|------------|
+| je       | bois       |   achète   | mange       | fais   |
+| tu       | bois       |   achètes  | manges      | fais   |
+| il/elle  | boit       |   achète   | mange       | fait   |
+| nous     | buvons     |   achetons | mangeons    | faisons|
+| vous     | buvez      |   achetez  | mangez      | faites |
+| ils/elles| boivent    |   achètent | mangent     | font   |
