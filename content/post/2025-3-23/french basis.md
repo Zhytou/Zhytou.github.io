@@ -22,8 +22,15 @@ draft: false
 - [4 Au rythme du temps 跟随时间的节奏](#4-au-rythme-du-temps-跟随时间的节奏)
   - [4.1 Un aller simple 单程车票](#41-un-aller-simple-单程车票)
   - [4.2 à Londres 在伦敦](#42-à-londres-在伦敦)
+  - [4.3 Le dimanche matin 周日的上午](#43-le-dimanche-matin-周日的上午)
 - [5 La vie de tous les jours 日常生活](#5-la-vie-de-tous-les-jours-日常生活)
-  - [On fait des crêpes? 咱们做可丽饼吗？](#on-fait-des-crêpes-咱们做可丽饼吗)
+  - [5.1 On fait des crêpes? 咱们做可丽饼吗？](#51-on-fait-des-crêpes-咱们做可丽饼吗)
+  - [5.2 Il est comment？ 它是什么样的？](#52-il-est-comment-它是什么样的)
+- [6 Vivre avec les autres 与人相处](#6-vivre-avec-les-autres-与人相处)
+  - [6.1 C'est interdit! 这是被禁止的！](#61-cest-interdit-这是被禁止的)
+  - [6.2 Petties annouces 启事](#62-petties-annouces-启事)
+  - [6.3 Qu'est-ce qu'on lui offre? 我们送她什么呢？](#63-quest-ce-quon-lui-offre-我们送她什么呢)
+- [7 Un peu, beaucoup, passionnément 一点，非常，特别](#7-un-peu-beaucoup-passionnément-一点非常特别)
 
 
 ## 0 Phoetique 语音
@@ -145,6 +152,9 @@ draft: false
 - Mais
 - 但
 
+- parce que
+- 因为
+
 - Et cetera/etc.
 - 等等
 
@@ -244,7 +254,7 @@ draft: false
 - en + 阴性/单数国家：en Chine, en France
   - 特例，单数元音开头: en Iran, en Iraq
 - au + 阳性/单数国家：au Japon
-- aux 附属国家：aux Etats-Unis
+- aux 复数国家：aux Etats-Unis
 
 ### 1.3 Ca va bien 你好吗
 
@@ -277,6 +287,11 @@ draft: false
 
 - du = de le
 - de la = de la
+
+此外，另一种常见的介词缩合是
+
+- au = à le
+- aux = à les
 
 **定冠词**
 
@@ -585,7 +600,7 @@ coûte表示价值……多少，它配合疑问词combien，可以用于询问�
 
 **住所空间**
 
-- la masion
+- la maison
 - 房子
 - l'appartment
 - 公寓
@@ -787,9 +802,51 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 - Pourquoi est-ce que tu es en retard?
 - 你为什么迟到了？
 
+### 4.3 Le dimanche matin 周日的上午
+
+**自反代词**
+
+| 人称       |  主语代词  | 重读代词 | 自反代词  |
+|------------|----------| ---------|----------|
+| je         |  je      |   moi    | me       |
+| tu         |  tu      |   toi    | te       |
+| il         |  il      |   lui    | se       |
+| elle       |  elle    |   elle   | se       |
+| on         |  on      |   soi    | se       |
+| nous       |  nous    |   nous   | nous     |
+| vous       |  vous    |   vous   | vous     |
+| ils        |  ils     |   eux    | se       |
+| elles      |  elles   |   elles  | se       |
+
+
+法语中的自反代词是一类特殊代词，它通常用于表示动作的执行者和承受者是同一人。比如，Je m'appelle xxx，直接转换到英语中就是I call myself xxx。
+
+具体而言，自反代词通常与动词连用，构成自反动词，主要有以下几种功能：
+
+- 表示动作作用于主语自身，相当于中文的“自己……”；
+- 当主语是复数时，自反代词可表示主语之间相互做动作，相当于中文的“互相……”。
+- 部分自反动词的自反代词不表示“自己”或“相互”，而是用于构成被动含义或描述主语的状态，这类动词需单独记忆。
+
+比如：
+
+- Tu te coiffes.
+- 你给自己梳头。
+- Nous nous parlons tous les jours.
+- 我们每天互相说话。
+
+**从事某种运动或乐器**
+
+- jouer au football
+- jouer au tennis
+- jouer au basket-ball
+- jouer aux éches
+- jouer aux cartes
+- jouer du piano
+- jouer du violon
+
 ## 5 La vie de tous les jours 日常生活
 
-### On fait des crêpes? 咱们做可丽饼吗？
+### 5.1 On fait des crêpes? 咱们做可丽饼吗？
 
 - un pain
 - 面包
@@ -842,3 +899,85 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 | nous     | buvons     |   achetons | mangeons    | faisons|
 | vous     | buvez      |   achetez  | mangez      | faites |
 | ils/elles| boivent    |   achètent | mangent     | font   |
+
+### 5.2 Il est comment？ 它是什么样的？
+
+**常用形容词**
+
+- grand/grande/grands/grandes
+- 大，高
+- petit/petite/petits/petites
+- 小，矮
+- beau/belle/beaux/belles
+- 美丽的
+- laid/laide/laids/laides
+- 丑陋的
+
+**复合过去时**
+
+法语中的复合过去时是表示 “已经完成的动作” 的时态，相当于英语的现在完成时或一般过去时。
+
+具体而言，复合过去时由助动词（avoir或être）的直陈式现在时+过去分词构成，核心是根据动词类型选择助动词。
+
+- 大多数动词用avoir作助动词（及物动词、不及物动词中不表示 “位置移动或状态变化” 的动词）。
+- 部分不及物动词用 être 作助动词（主要是表示 “位置移动、状态变化、生死” 的动词，即 “代动词” 之外的少数不及物动词），常见的有：aller（去）、arriver（到达）、partir（离开）、entrer（进入）、sortir（出去）、venir（来）、revenir（回来）、monter（上）、descendre（下）、naître（出生）、mourir（死亡）、rester（停留）、tomber（摔倒）、rester（留下）等。
+- 自反动词（自反代词+谓语的组合）必须用être作助动词。
+
+## 6 Vivre avec les autres 与人相处
+
+### 6.1 C'est interdit! 这是被禁止的！
+
+**命令式**
+
+法语中的命令式用于表达命令、请求、建议或禁止，直接针对对方发出指令，比如：
+
+- Passez-moi le sel, s'il vous plaît.
+- 请把盐递给我。
+- Allons au cinéma ce soir!
+- 今晚去看电影吧！
+
+命令式中否定也使用ne+动词+pas的结构，比如：
+
+- Ne parle pas!
+- 别说话！
+- Ne fumez pas ici!
+- 请勿在此吸烟！
+
+**间接宾语人称代词**
+
+法语中人称代词大体上，可以分成以下6类：
+
+- 主格人称代词，用作主语；
+- 宾格人称代词，分直接宾语和间接宾语；
+- 自反人称代词，特殊的宾格，代指自己或表达相互的含义；
+- 重读人称代词，表示强调，单独使用或搭配介词；
+- 物主形容词，表示所属关系；
+- 物主代词，表示“我的东西”。
+
+| 人称 | 主格代词 | 直接宾格代词 | 间接宾格代词 | 自反代词 | 重读代词 | 物主形容词 | 物主代词 |
+|------|---------|-------------|-------------|---------|---------|------------|---------|
+| 我 | je  | me  | me  | me  | moi | mon/ma/mes | le mien/la mienne<br>les miens/les miennes |
+| 你 | tu  | te  | te  | te  | toi | ton/ta/tes | le tien/la tienne<br>les tiens/les tiennes |
+| 他 | il  | le  | lui | se  | lui | son/sa/ses | le sien/la sienne<br>les siens/les siennes |
+| 她 | elle | la | lui | se  | elle | son/sa/ses | le sien/la sienne<br>les siens/les siennes |
+| 我们 | nous | nous | nous | nous  | nous  | notre/notre/nos  | le nôtre/la nôtre<br>les nôtres |
+| 您/你们 | vous | vous | vous | vous | vous | votre/votre/vos | le vôtre/la vôtre<br>les vôtres |
+| 他们 | ils   | les | leur | se | eux | leur/leur/leurs | le leur/la leur<br>les leurs |
+| 她们 | elles | les | leur | se | elles | leur/leur/leurs| le leur/la leur<br>les leurs |
+
+对于间接宾格代词而言，它的作用就是用来替代介词引导的间接宾语，比如：
+
+- Nous disons bonjour à Sophie.
+- 我们向索菲亚问好。
+- Nous lui disons bonjour.
+- 我们向她问好。
+- Il ne parle à ses parents.
+- 他不和父母说话。
+- Il ne leur parle pas.
+- 他不和他们说话。
+
+### 6.2 Petties annouces 启事
+
+### 6.3 Qu'est-ce qu'on lui offre? 我们送她什么呢？
+
+## 7 Un peu, beaucoup, passionnément 一点，非常，特别
