@@ -4,7 +4,7 @@ date: 2025-03-23T10:46:41+08:00
 draft: false
 ---
 
-- [0 Phoetique 语音](#0-phoetique-语音)
+- [0 Base 基础](#0-base-基础)
 - [1 Rencontres 相遇](#1-rencontres-相遇)
   - [1.1 Bienvenue 欢迎](#11-bienvenue-欢迎)
   - [1.2 Qui est-ce 这是谁](#12-qui-est-ce-这是谁)
@@ -33,7 +33,7 @@ draft: false
 - [7 Un peu, beaucoup, passionnément 一点，非常，特别](#7-un-peu-beaucoup-passionnément-一点非常特别)
 
 
-## 0 Phoetique 语音
+## 0 Base 基础
 
 **音素**
 
@@ -51,7 +51,7 @@ draft: false
 
 **发音规则**
 
-在法语中位于单词末尾的辅音字母一般不发音但是当后一个单词以元音开头时，该词末不发音的辅音字母与后面单词的词首元音合成一个音节，这种现象叫做“联诵”
+在法语中位于单词末尾的辅音字母一般不发音但是当后一个单词以元音开头时，该词末不发音的辅音字母与后面单词的词首元音合成一个音节，这种现象叫做“联诵”。
 
 “连音” (enchaînement)是指前一个单词词末原本就发音的辅音音素与后一个以元 开头 单词的第一个音节在 流中 然形成的连读 例如 uneitudiante [ynetydjüt]。
 
@@ -73,6 +73,117 @@ draft: false
 
 值得一提的是，英语作为日耳曼语族的分支，其发展轨迹独具特色。尽管源自古盎格鲁-撒克逊人的日耳曼语系，但1066年诺曼征服后，法语成为英国统治阶级语言长达三百年。这场深刻的文化交融使英语吸纳了超过一万个法语词汇，尤其在法律、宗教、艺术等领域。如今英语词汇中约58%的高级词汇（如justice、literature）源自法语，形成"日耳曼语法骨架"与"罗曼语词汇血肉"共生的语言奇观。这种双重特质使英语成为印欧语系中最为特殊的语言样本。
 
+**基础短句**
+
+1. 你叫什么名字？
+
+- Comment tu t'appellez?
+- Comment vous appelez-vous ?
+- Je m'appelle xxx.
+
+2. 你从哪里来？
+
+- Où est-ce que tu viens?
+- Je viens de Chine.
+
+3. 你住在哪里？
+
+- Où est-ce que tu habitez?
+- J'abite à Hangzhou.
+
+4. 你好吗？
+
+- Comment ca va?
+- Tres bien, merci.
+
+5. 你呢？
+
+- Et toi?
+
+6. 初次见面！
+
+-  Enchanté
+-  Enchantée
+
+7. 你在做什么？
+
+- Qu'est-ce que tu fais?
+- Je lis un livre.
+
+8. 你会说什么xx语吗？
+
+- Est-ce que tu parles chinois?
+- Oui.
+
+9.  你为什么学习xxx语？
+
+- Pourquoi est-ce que tu étudies le chinois?
+
+10. 因为xxx。
+
+- Parce que c'est intéressant.
+
+11. 你学习xxx语多久了？
+
+- Depuis combien de temps étudies-tu le xxx ?
+
+12. 你的爱好是什么？
+
+- Qu'est-ce que tu aimes faire?
+- J'aime lire et écouter de la musique.
+
+13. 你做过xxx吗？
+
+- Est-ce que tu as déjà fait xxx?
+- Est-ce que tu as déjà visité Paris?
+- Oui, j'y suis allé(e).
+
+14. 我可以做xxx吗？
+
+-
+
+15. 你什么时候做了xxx吗？
+
+- 
+
+16. 你喜欢xxx吗？
+
+- Est-ce que tu aimes xxx?
+
+17. xxx是什么意思？
+
+- 
+
+18. 你会xxx吗？
+
+
+19. 这里有xxx吗？
+
+- Est-ce que il y a xxx?
+
+20. 请再说一次。
+
+- Pardon.
+
+21. xxx多少钱？
+
+- Combien xxx coute?
+
+22. 我想去xxx。
+
+
+23. 要怎么到xxx？
+
+
+
+24. 是哪个xx？
+25. 那位是谁？
+26. 现在几点？
+27. 有推荐的食物吗？
+28. 我要这个。
+29. 请结账。
+30. 你可以帮我xxx吗？
+
 ## 1 Rencontres 相遇
 
 ### 1.1 Bienvenue 欢迎
@@ -86,6 +197,11 @@ draft: false
 - Je m'applle xxx.
 - 我的名字是xxx。
 
+- Tu connais Paul? Est-ce qu'il vient de Paris?
+- 你认识保罗吗？
+- Oui, il vient de Paris.
+- 是的，他来自巴黎。
+
 **介绍他人**
 
 - C'est qui?
@@ -93,8 +209,6 @@ draft: false
 - Voici Aldo.
 - C'est Aldo.
 - 这是阿尔多。
-- C'est la vie.
-- 这就是生活。
 
 **自我介绍**
 
@@ -119,17 +233,14 @@ draft: false
 - Bonjour/Salut
 - 您好
 
-- Bonjour/Bon matin
+- Bonjour
+- 早上好/日安
+- Bon matin
 - 早上好
 - Bon après-midi
 - 下午好
 - Bonsoir
-- 晚上好
-
-- Au revoir
-- 再见
-- À bientôt
-- 回头见
+- 晚上好/晚安
 
 - Bonne journée
 - 祝你今天愉快
@@ -137,6 +248,15 @@ draft: false
 - 祝你晚上愉快
 - Bonne nuit
 - 晚安
+
+- Au revoir
+- 再见
+- À bientôt
+- 回头见
+- À demain
+- 明天见
+
+观察上述短句，可以发现问候语句主要以bon开头，而再见等短句则以介词à开头。以au revoir为例，它实际是à le revoir的缩合形式：介词à与阳性定冠词le合并为au；revoir作为名词，由前缀re和词根voir组成。其中，前缀re往往代表“再一次”，而词根voir则意为“看见”。
 
 **连接词**
 
@@ -152,8 +272,14 @@ draft: false
 - Mais
 - 但
 
-- parce que
+- Parce que
 - 因为
+
+- D'acoord
+- 好的
+
+- Peut-être
+- 也许
 
 - Et cetera/etc.
 - 等等
@@ -171,10 +297,17 @@ draft: false
 - 父亲
 - mère
 - 母亲
+
+- grand-père
+- 祖父
+- grande-mère
+- 祖母
+
 - frère
 - 哥哥、弟弟
 - soeur
 - 姐姐、妹妹
+
 - fille
 - 女儿、女孩
 - garçon
@@ -190,10 +323,36 @@ draft: false
 - nièce
 - 侄女、外甥女
 
+- cousin
+- 堂兄、堂弟
+- cousine
+- 堂姐、堂妹
+
 - mari
 - 丈夫
 - femme
 - 妻子
+
+- voison
+- 邻居
+
+**国籍/语言**
+
+- pays
+- 国家
+- ville
+- 城市
+- capitale
+- 首都
+
+在法语中，所有语言名称必须带定冠词，且统一为阳性，比如：
+
+- le français
+- l’anglais
+- le chinois
+- l’arabe
+
+值得注意的是，parle后续不用加定冠词，因为在法语中，je parle francais直译类似i speak freachly。具体介绍查看[网站](https://www.reddit.com/r/learnfrench/comments/tu2ypv/je_parle_fran%C3%A7ais_vs_je_parle_le_fran%C3%A7ais/)
 
 **动词变位**
 
@@ -250,11 +409,21 @@ draft: false
 
 **地点介词**
 
-- a + 城市
-- en + 阴性/单数国家：en Chine, en France
+在法语中，地点介词（非方位介词）主要有à、en和de三种。其中，à和en主要表示“在……/去……”两种含义，相当于英文的at/to。它们的使用规则如下：
+
+- à + 城市
+- en + 阴性单数国家：en Chine, en France
   - 特例，单数元音开头: en Iran, en Iraq
-- au + 阳性/单数国家：au Japon
-- aux 复数国家：aux Etats-Unis
+- au + 阳性单数国家：au Japon
+- aux + 复数国家：aux Etats-Unis
+
+至于de，它搭配地点名词时，主要表达“来自……/从……”的含义。与介词à类似，它也会根据地点阴阳性发生变化，比如：
+
+- de + 城市
+- de + 阴性单数国家
+- du + 阳性单数国家
+- d' + 单数元音开头国家
+- des + 复数国家
 
 ### 1.3 Ca va bien 你好吗
 
@@ -275,11 +444,11 @@ draft: false
 
 不定冠词表示不确指或初次提及的事物，相当于英语的 "a/an" 或 "some"。
 
-| 形式 | 用法                 | 例子      | 翻译      |
-|-----|----------------------|-----------|-----------|
-| un  | 单数阳性名词前	 | un livre     | 一本书      |
-| une | 单数阴性名词前   | une table    | 一张桌子    |
-| du  | 不可数阳性名词前 | du pain      | 一些面包    |
+| 形式 | 用法           | 例子          | 翻译      |
+|-----|-----------------|--------------|-----------|
+| un  | 单数阳性名词前	 | un livre     | 一本书     |
+| une | 单数阴性名词前   | une table    | 一张桌子   |
+| du  | 不可数阳性名词前 | du pain      | 一些面包   |
 | de la  | 不可数阴性名词前 | de la confiture  | 一些果酱    |
 | des | 复数名词前       | des stylos   | 一些笔     |
 
@@ -287,6 +456,7 @@ draft: false
 
 - du = de le
 - de la = de la
+- des = de les
 
 此外，另一种常见的介词缩合是
 
@@ -480,20 +650,20 @@ il y a在法语中表示“有、存在”，类似英文中there be结构。不
 
 除了主语人称代词（je\tu\il\elle）之外，法语中还有一类重读人称代词，它们的作用包括：
 
-- 位于介词后面，做介词宾语；
+1. 位于介词后面，做介词宾语。
   - Tu viens avec moi？
   - 你和我一起来吗？
-- 作主语的同位语，用来强调主语；
+2. 作主语的同位语，用来强调主语。
   - Moi, je m'appelle Paul.
   - 我叫保罗。
-- 位于c'est后，作表语；
+3. 位于c'est后，作表语。
   - Oui, c'est elle.
   - 是的，是她。
-- 用在没有谓语的省略句中；
+4. 用在没有谓语的省略句中。
   - Je suis jornaliste, et vous？
   - 我是记者，你呢？
 
-整体而言，这就类似与英文中I和me、we和us的关系。它们的变化如表格所示
+整体而言，这就类似与英文中I和me、we和us的关系。它们的变化如表格所示：
 
 | 主语代词 | 重读形式 |
 |----------|--------|
@@ -528,7 +698,9 @@ il y a在法语中表示“有、存在”，类似英文中there be结构。不
 - Vous avez le gris en taille 38?
 - 灰色的有38号吗？
 
-vous avez本意是你有xxxx的含义，但在购物时常用于询问款式、颜色和尺寸等。此外，s'il vous plait是礼貌用语，表示请、麻烦您。
+在法语的购物场景中，常用vous avez配合礼貌用语s'il vous plait，表示“请问您有……”，来询问商品款式、颜色和尺寸的等信息。其中，avez的动词原型为avoir，本意是“有……”。
+
+除此之外，购物时还可以使用je cherche或je voudrais说明自己的需求。其中，前者本意为“我在找……”，而后者则类似英文中I'd like的表达方式。
 
 - Excuse-moi, je cherche un manteau.
 - 对不起，我在找一件大衣。
@@ -537,7 +709,7 @@ vous avez本意是你有xxxx的含义，但在购物时常用于询问款式、�
 - Je cherche un pull vert avec une cravate.
 - 我在找一件绿色的套衫搭配领带。
 
-可见，购物时可以使用je cherche说明自己的需求（寻找某物）。
+值得一提的是，je voudrais涉及到了法语中条件现在时的语法。具体而言，条件式现在时常用于表达委婉的请求、愿望或设想，je voudrais在购物等场景中使用，就体现了这种委婉语气，比直陈式的je veux显得更礼貌、客气，非常符合日常交流中注重礼仪的表达习惯。
 
 **询问价格**
 
@@ -584,13 +756,27 @@ coûte表示价值……多少，它配合疑问词combien，可以用于询问�
 
 指示形容词用于修饰名词，表明所指的人或事物是 “这个 / 这些”“那个 / 那些”，需要与所修饰的名词在性、数上保持一致。
 
-| 单数阳性 | 单数阴性 | 复数（阴阳同形） | 含义 |
-|----------|----------|------------------|------|
-| ce       | cette    | ces              | 这个/这些（近指，离说话人近） |
-| cet      | cette    | ces              | 这个（单数阳性名词以元音或哑音h开头时，ce变为cet，避免连读困难） |
-| ce       | cette    | ces              | 那个/那些（远指，离说话人远，通过语境或手势区分近指和远指） |
+| 单数阳性  | 单数阴性  | 复数（阴阳同形） | 含义 |
+|----------|----------|---------|------|
+| ce       | cette    | ces     | 这个/这些（近指，离说话人近） |
+| cet      | cette    | ces     | 这个（单数阳性名词以元音或哑音h开头时，ce变为cet，避免连读困难） |
+| ce       | cette    | ces     | 那个/那些（远指，离说话人远，通过语境或手势区分近指和远指） |
 
 值得注意的是，法语中不太强调这与那之间的区别，ce均可表示英语中的this和that，而ces则对应these和those。
+
+**voilà和voici**
+
+在法语中，除了可以用c'est表示“这是……”之外，voilà和voici也是一种常用的表达。它们作为介词，直接连接名词，表示”这/那就是……”的含义。比如：
+
+- Voici ce qui s'est passé.
+- 这就是所发生的事。
+- Voilà mon jardin。
+- 这就是我的花园。
+
+除此之外，它们也可放在句首，单独成句，表示“看!”。
+
+- Voilà,la balance des comptes.
+- 看，结算差额。
 
 ### 2.4 Le coin des artistes 艺术家之角
 
@@ -633,12 +819,30 @@ coûte表示价值……多少，它配合疑问词combien，可以用于询问�
 
 在法语中，介词可以按构成方式分为简单形式和复合形式两类。其中，前者是指单个单词所构成的介词，它包括：
 
-- à
+- à/au/aux
+- 在……、去……
+- de/du/des/d'
+- 来自、属于……的
 - en
+- 在
 - dans
+- 在……里
 - avec
+- 和……一起、搭配
+- pour
+- 给……
 
-后者则是指介词短语，通常是由前面提到的单词与名词组合而成，比如：
+后者则是指介词短语，通常是由前面提到的单词与名词组合而成，在A1级别的法语中常见的介词搭配包括：
+
+1. habiter à/au/aux/en 住在……
+
+2. aller à/au/aux/en 去……
+
+3. venir de/du/des/d' 来自……
+
+4. parler avec 和……交谈
+
+5. de nom ……的
 
 **疑问副词où**
 
@@ -662,10 +866,14 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 
 **城市中的区域**
 
+- le magasin
+- 超市、仓库
 - la banque
 - 银行
 - le jardin
 - 花园
+- le parc
+- 公园
 - le métro
 - 地铁
 - le musèe
@@ -678,6 +886,10 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 - 桥
 - la poste
 - 邮局
+- la quatier
+- 街区、社区
+- le rue
+- 街
 
 **介词与缩合冠词**
 
@@ -703,16 +915,33 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 - Ils se rencontrent sur la place de l'Opéra.
 - 他们是在歌剧院广场相遇的。
 
-**去和来的动词变位**
+**动词变位**
 
-| 主语       | Aller (去) | Venir (来) |
-|------------|------------|------------|
-| je         | vais       | viens      |
-| tu         | vas        | viens      |
-| il/elle/on | va         | vient      |
-| nous       | allons     | venons     |
-| vous       | allez      | venez      |
-| ils/elles  | vont       | viennent   |
+| 主语       | Aller (去) | Venir (来)  | Travailler（工作） |
+|------------|------------|------------|--------------------|
+| je         | vais       | viens      | travaille   |
+| tu         | vas        | viens      | travailles  |
+| il/elle/on | va         | vient      | travaille   |
+| nous       | allons     | venons     | travaillons |
+| vous       | allez      | venez      | travaillez  |
+| ils/elles  | vont       | viennent   | travaillent |
+
+**工作地点**
+
+- Où est-ce que tu travaille?
+- 你在哪儿工作？
+- Je suis employé à l'hôpital.
+- 我是医院的一名员工。
+
+- Où travaille-tu?
+- 你在哪儿工作？
+- Je travaille dans un café.
+- 我在一家咖啡店里工作。
+
+- Elle travaille au Canada?
+- 她在加拿大工作吗？
+- Oui
+- 是的。
 
 **交通方式**
 
@@ -753,6 +982,26 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 
 **时间相关**
 
+- le matin
+- 早上
+- le midi
+- 中午
+- l'après-midi 
+- 下午
+- le soir
+- 晚上
+- la nuit
+- 夜里
+- le minuit
+- 午夜
+
+和英语不同，法语表示在早上、中午和晚上时无需介词，直接用定冠词修饰放在句尾即可，比如：
+
+- Je lis souvent des livres le soir
+- 我经常在晚上看书。
+
+除了早中晚之外，描述星期几时，也是直接使用定冠词即可。
+
 - lundi
 - 周一
 - mardi
@@ -768,8 +1017,57 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 - dimanche
 - 周日
 
+比如：
+
 - Je vais à Paris du lundi au mercredi seulement.
+- 我在周一到周三去巴黎。
 - Nous avons deux heures de français le vendredi aprèsmidi.
+- 周五下午我们有两个小时的法语。
+
+除了早中晚和星期的描述外，A1还涉及了部分时间相关单词和短语如下：
+
+- l'heure
+- 小时
+- le jour
+- 一天、白天
+- la semaine
+- 一周
+
+- demain adv./n.
+- 在明天、明天
+- aujourd'hui adv./n.
+- 在今天、今天
+
+- maintenant adv.
+- 现在
+- déjà adv.
+- 过去、曾经
+
+- déjà vu
+- 似曾相识
+
+- à l'heure
+- 准时
+- en retard
+- 迟到
+
+值得一提的是，法语中今天的单词aujourd'hui实际由à le jour de hui缩合而来。其中，hui在古法语中表示“今天的”含义，因此à le jour de hui字面可理解为“在属于今天的这一天”，后经缩合简化，最终固定为表示“今天”的副词。
+
+**频率**
+
+- toujours
+- 总是
+- sovent
+- 经常
+- parfois
+- 有时
+- rarement
+- 很少
+- jamais
+- 从不
+
+- tous les jours
+- 每天
 
 ### 4.2 à Londres 在伦敦
 
@@ -848,46 +1146,117 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 
 ### 5.1 On fait des crêpes? 咱们做可丽饼吗？
 
+**餐具**
+
+- la fourchette
+- 餐叉
+- le couteau
+- 餐刀
+- l'assiette
+- 餐盘
+- la serviett
+- 餐巾
+
+- le plateau
+- 盘子
+- la cuillère
+- 勺子
+- la tasse
+- 玻璃杯
+
+**糕点**
+
+- un baguette
+- 法棍
+- un éclair
+- 闪电泡芙
+- une brioche
+- 奶油蛋糕
+- un macaron
+- 马卡龙
+- un gateau
+- 蛋糕
 - un pain
 - 面包
-- une pomme
-- 苹果
 - un fromage
 - 奶酪
-- une banane
-- 香蕉
-- un café
-- 咖啡
 - du beurre
 - 黄油
+- un oeuf
+- 鸡蛋
+- de la farine
+- 面粉
+
+**调味料**
+
+- de sucre
+- 糖
+
+**饮料**
+
+- un café
+- 咖啡
 - du cidre
 - 苹果酒
 - du coca
 - 可乐
-- de la farine
-- 面粉
 - du lait
 - 牛奶
-- des légumes
-- 蔬菜
-- un oeuf
-- 鸡蛋
-- du poisson
-- 鱼
-- du riz
-- 米饭
-- une salade
-- 沙拉
-- de sucre
-- 糖
-- de la viande
-- 肉
 - du vin
 - 葡萄酒
+
+**水果**
+
+- une pomme
+- 苹果
+- une banane
+- 香蕉
+
+**蔬菜**
+
+- des légumes
+- 蔬菜
+- une salade
+- 沙拉
+
+**肉类**
+
+- de la viande
+- 肉
+- du poisson
+- 鱼
+
+**主食**
+
+- du riz
+- 米饭
 - les pâtes
 - 意大利面
 - une pizza
 - 披萨
+
+值得注意的是，描述食物的原材料或口味时，需要分别使用介词de和à。其中，前者多用于表示材质构成，而后者则说明食物带有、融入了某种食材的味道。比如：
+
+- un gateau au café
+- 咖啡蛋糕
+- un café à la vanille
+- 香草味咖啡
+- du pain de seigle
+- 黑麦面包
+
+**用餐礼仪**
+
+- merci
+- 谢谢
+
+- de rien
+- 不客气
+
+- s'il vous plait
+- 请、麻烦您
+
+- bon appetite
+- 用餐愉快
 
 **动词变位**
 
