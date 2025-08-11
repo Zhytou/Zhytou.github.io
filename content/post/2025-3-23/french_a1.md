@@ -347,6 +347,25 @@ draft: false
 
 值得注意的是，parle后续不用加定冠词，因为在法语中，je parle francais直译类似i speak freachly。具体介绍查看[网站](https://www.reddit.com/r/learnfrench/comments/tu2ypv/je_parle_fran%C3%A7ais_vs_je_parle_le_fran%C3%A7ais/)
 
+**形容词后置**
+
+除了国籍之外，法语中还有不少形容词在修饰名词时需要后置，其大致可分为以下三种情况：
+
+1. 表示颜色、国籍和宗教的形容词；
+2. 表示形状、大小、年龄和材质的形容词；
+3. 部分表示特质、特征的形容词。
+
+值得注意的是，部分形容词前置和后置意思不同，比如：
+
+- un grand homme
+- 伟人
+- un homme grand
+  位高大的男人
+- un ancien président
+- 前总统
+- une maison ancienne
+- 古老的房子
+
 **动词变位**
 
 | 主语       | Avoir（有）     | Etre（是）      | Habiter（住）     |
@@ -402,13 +421,18 @@ draft: false
 
 **地点介词**
 
-在法语中，地点介词（非方位介词）主要有à、en和de三种。其中，à和en主要表示“在……/去……”两种含义，相当于英文的at/to。它们的使用规则如下：
+在法语中，地点介词（非方位介词）主要有à、en和de三种。其中，à和en主要表示“在……”两种含义，相当于英文的at。它们的使用规则如下：
 
 - à + 城市
 - en + 阴性单数国家：en Chine, en France
   - 特例，单数元音开头: en Iran, en Iraq
 - au + 阳性单数国家：au Japon
 - aux + 复数国家：aux Etats-Unis
+
+此外，当à表示“去……”时，其后面加的阴性单数国家，无需使用en替代，比如：
+
+- Comment aller à la gare？
+- 火车站怎么去？
 
 至于de，它搭配地点名词时，主要表达“来自……/从……”的含义。与介词à类似，它也会根据地点阴阳性发生变化，比如：
 
@@ -843,8 +867,10 @@ coûte表示价值……多少，它配合疑问词combien，可以用于询问�
 
 2. aller à/au/aux/en 去……
 
-- Comment aller à la gare
+- Comment aller **à la gare**？
 - 火车站怎么去？
+- Tu vas au lit?
+- 你上床睡觉吗？
 - Je vais au bureau du lundi au mercredi.
 - 我在周一到周三去办公室。
 - Tu vas au travail en bus?
@@ -905,8 +931,10 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 
 ### 3.2 C'est par où? 从哪儿走？
 
-**城市中的区域**
+**城市区域**
 
+- l'ecole
+- 学校
 - le magasin
 - 超市、仓库
 - la banque
@@ -1118,9 +1146,21 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 
 **职业**
 
-- acteur(trice)
-- docteur
-- informaticien(ienne)
+- métier
+- 职业
+
+- acteur/actrice
+- 演员
+- docteur/docteure
+- 医生
+- informaticien/informaticienne
+- 程序员
+- avocat/avocate
+- 律师
+- professeur/professeure
+- 教授
+- vendeur/vendeuse
+- 售货员
 
 **est-ce que疑问结构**
 
@@ -1328,9 +1368,14 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 
 - s'il vous plait
 - 请、麻烦您
+- s'il te plait
+- 请、麻烦你
 
 - bon appetite
 - 用餐愉快
+
+- je peux vous aider?
+- 我能帮你吗？
 
 **动词变位**
 
@@ -1447,7 +1492,14 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 - Je connais bien Paris.
 - 我很了解巴黎。
 
-可见，savoir可以表示“有做……的能力”，其具体语法为savoir+动词不定式。其中，动词不定式即动词的一种基本形式，它不随人称和数的变化而改变，是一种无人称形式。简单来说，就是动词的原形，通常以-er，-ir，或-re结尾。
+可见，savoir可以表示“有做……的能力”，强调“掌握知识、技能或信息”，侧重内在的“知晓”或“精通”。其具体语法为savoir+动词不定式。其中，动词不定式即动词的一种基本形式，它不随人称和数的变化而改变，是一种无人称形式。简单来说，就是动词的原形，通常以-er，-ir，或-re结尾。
+
+除此之外，法语中还有一个pouvoir同样与能力相关，它则强调“拥有做某事的能力、许可或可能性”，侧重外部条件。
+
+- Je peux nager.
+- 我会游泳。
+- Peux-tu venir demain?
+- 你明天能来吗？
 
 **Il faut**
 
@@ -1458,11 +1510,9 @@ Il faut句型是无人称动词falloir的基本用法，它表示“必须、需
 - Combien de kilos de farine faut-il?
 - 需要几公斤面粉？
 
-值得一提的是，无人动词是一类特殊的动词，它们仅有单数第三人称的变位形式，且句中主语为中性代词 “il”，但这个 “il” 并无实际意义。
+值得一提的是，无人称动词是一类特殊的动词，它们仅有单数第三人称的变位形式，且句中主语为中性代词 “il”，但这个 “il” 并无实际意义。
 
 **最近将来时**
-
-
 
 ### 6.3 Qu'est-ce qu'on lui offre? 我们送她什么呢？
 
@@ -1537,5 +1587,27 @@ Il faut句型是无人称动词falloir的基本用法，它表示“必须、需
 ## 8 Tou le monde en parle…… 大家都在说这事儿
 
 ### 8.1 Enfant de la ville 城里的孩子
+
+**未完成过去时**
+
+未完成过去时表示在过去某个起止点不明确的时间段内延续的动作或持续的状态。这种动作或状态往往不知何时开始，也无法预测何时结束。
+
+**最近过去时**
+
+最近过去时表示刚刚发生且已完成的动作，它的特点是使用venir de+动词不定式的结构。比如：
+
+- Je viens de rentrer en Chine.
+- 我刚刚回到中国。
+- Elle vient de finir son travail.
+- 她刚刚完成工作。
+
+**过去时**
+
+法语中，描述过去的时态总共包括：
+
+1. 复合过去时
+
+2. 简单过去时
+
 
 ### 8.2 Fait divers 社会杂闻
