@@ -4,6 +4,16 @@ date: 2025-03-18T19:46:08+08:00
 draft: False
 ---
 
+- [Bottleneck of Traditional Rendering Pipeline](#bottleneck-of-traditional-rendering-pipeline)
+- [Key Ideas of GPU-Driven Pipeline](#key-ideas-of-gpu-driven-pipeline)
+  - [Indirect Draw](#indirect-draw)
+  - [Compute Shader](#compute-shader)
+  - [GPU-Driven Culling](#gpu-driven-culling)
+  - [Mesh Cluster Rendering](#mesh-cluster-rendering)
+- [Nanite: State-of-the-Art in GPU-Driven Pipeline Architecture](#nanite-state-of-the-art-in-gpu-driven-pipeline-architecture)
+  - [Geometory Represetation](#geometory-represetation)
+  - [Runtime LoD Selection](#runtime-lod-selection)
+  - [Nanite Rasterization](#nanite-rasterization)
 
 GPU驱动管线（GPU-Driven Pipeline）是一种将原本由CPU承担的大量渲染任务转移到GPU上进行处理的渲染管线架构。在传统渲染管线中，CPU负责管理场景中的大量数据，如模型的加载、裁剪、排序以及绘制调用的提交等，这使得CPU成为渲染流程中的瓶颈。而GPU驱动管线则通过Indirect Draw、Compute Shader等机制让GPU能够更自主地处理这些任务，充分发挥其强大的并行计算能力，从而突破了渲染性能。
 
@@ -92,3 +102,15 @@ glDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, buffer_offset);
 通过批量处理同一集群内的网格数据，从而最小化CPU与GPU之间的状态切换开销，实现高效批量渲染。
 
 ## Nanite: State-of-the-Art in GPU-Driven Pipeline Architecture
+
+Nanite是虚幻引擎5引入的​​虚拟化几何系统​​，旨在实现​​电影级高精度模型​​的实时渲染。其核心思想是通过智能的​​数据流式加载​和​​GPU驱动的渲染管线​​，动态适应不同视角下的几何细节需求，从而突破传统渲染的三角形数量限制。
+
+### Geometory Represetation
+
+### Runtime LoD Selection
+
+### Nanite Rasterization
+
+**Hardware Rasterization**
+
+

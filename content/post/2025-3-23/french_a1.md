@@ -43,8 +43,6 @@ draft: false
   - [9.2 Projets d'avenir](#92-projets-davenir)
   - [9.3 Envie de changement 作出改变的意愿](#93-envie-de-changement-作出改变的意愿)
   - [9.4 Le pain, mangez-en! 面包，吃吧！](#94-le-pain-mangez-en-面包吃吧)
-  - [](#)
-
 
 ## 0 Base 基础
 
@@ -710,6 +708,18 @@ il y a在法语中表示“有、存在”，类似英文中there be结构。不
 
 **衣物**
 
+- un vêtement
+- 服装
+- vêtements d'homme
+- 男式服装
+- vêtements de travail
+- 工作服
+- vêtements de sport
+- 运动服
+
+- une paire de chaussures
+- 一双鞋子
+
 - un pantalon
 - 一条裤子
 
@@ -726,7 +736,9 @@ il y a在法语中表示“有、存在”，类似英文中there be结构。不
 - un manteau
 - 一件大衣
 - un pull
-- 一件套衫
+- 一件毛衣
+- une veste
+- 一件外套
 
 - une ceinture
 - 一条腰带
@@ -736,6 +748,36 @@ il y a在法语中表示“有、存在”，类似英文中there be结构。不
 - 一条领带
 - une couverture
 - 一条毯子
+
+**穿戴**
+
+- essaye
+- 试穿
+- porte
+- 穿、戴
+
+- mettre
+- 穿上
+- enlever
+- 脱下
+
+**en连接颜色**
+
+一般情况下，描述衣物颜色都是衣服+颜色即可，比如：
+
+- une jupe verte
+- 绿色裙子
+- un pull noir
+- 黑色毛衣
+
+但颜色以名词形式出现或同时强调衣物材质时，就需要使用en连接，比如：
+
+- un manteau en laine en marron
+- 棕色羊毛大衣
+- un short en orange
+- 橙色短裤
+- une jupe en vert
+- 绿色裙子（vert作名词，无性数变化）
 
 **重读人称代词**
 
@@ -782,6 +824,39 @@ il y a在法语中表示“有、存在”，类似英文中there be结构。不
 
 ### 2.3 Shopping 购物
 
+**询问价格**
+
+coûte表示价值……多少，它配合疑问词combien，可以用于询问商品价格。
+
+- Combien coûte cette robe?
+- 这条裙子多少钱？
+- Elle coûte 55 euros.
+- 55欧元
+
+| 主语代词 | Coûter（价值） |
+|----------|----------|
+| je       | coûte    | 
+| tu       | coûtes   |
+| il       | coûte    |
+| elle     | coûte    |
+| nous     | coûtons  |
+| vous     | coûtez   |
+| ils      | coûtent  |
+| elles    | coûtent  |
+
+- cher/chère
+- 贵的
+- gratuit/gratuite
+- 免费的
+
+- eruor
+- 欧
+- centime
+- 分
+
+- en promotion
+- 在促销
+
 **购物用语**
 
 - Vous avez quelles couleurs, s'il vous plait?
@@ -800,23 +875,14 @@ il y a在法语中表示“有、存在”，类似英文中there be结构。不
 - Je cherche un pull vert avec une cravate.
 - 我在找一件绿色的套衫搭配领带。
 
-
 值得一提的是，je voudrais涉及到了法语中条件现在时的语法。具体而言，条件式现在时常用于表达委婉的请求、愿望或设想，je voudrais在购物等场景中使用，就体现了这种委婉语气，比直陈式的je veux显得更礼貌、客气，非常符合日常交流中注重礼仪的表达习惯。
+
 最后，补充一个j'ai besoin de的表达，它译作“我需要……”。其中，ai是avoir的动词变位，而besoin则为名词，表示“欲望”。至于介词de则连接具体需要的物品，当其后为可数名词单数时，注意连接不定冠词。
 
 - J'ai besoin d'un verre à pied.
 - 我需要一支高脚杯。
 - J'ai besoin d'une pile rechargeable.
 - 我需要一块充电电池。
-
-**询问价格**
-
-coûte表示价值……多少，它配合疑问词combien，可以用于询问商品价格。
-
-- Combien coûte cette robe?
-- 这条裙子多少钱？
-- Elle coûte 55 euros.
-- 55欧元
 
 **疑问副词comment和combien**
 
@@ -1229,6 +1295,8 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 
 - acteur/actrice
 - 演员
+- auteur/autrice
+- 作家
 - docteur/docteure
 - 医生
 - informaticien/informaticienne
@@ -1545,11 +1613,16 @@ où用来提问地点状语，表示在哪儿或去哪儿。比如
 - 美丽的
 - laid/laide/laids/laides
 - 丑陋的
+- mouche
+- 丑陋的
 
 - court/courte
 - 短的
 - long/longue
 - 长的
+
+- bizarre
+- 奇怪的
 
 - nouveau/nouvelle
 - 新的
@@ -1945,5 +2018,3 @@ commencer à + 动词不定式意为“开始……、着手……”。
 - 完成这项工作，你就可以去度假了。
 
 ### 9.4 Le pain, mangez-en! 面包，吃吧！
-
-### 
