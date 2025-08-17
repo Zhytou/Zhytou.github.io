@@ -10,36 +10,24 @@
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
 <meta property="og:title" content="GPU-Driven Pipeline">
-<meta property="og:description" content="GPU驱动管线（GPU-Driven Pipeline）是一种将原本由CPU承担的大量渲染任务转移到GPU上进行处理的渲染管线架构。在传统渲染管线中，CPU负责管理场景中的大量数据，如模型的加载、裁剪、排序以及绘制调用的提交等，这使得CPU成为渲染流程中的瓶颈。而GPU驱动管线则通过Indirect Draw、Compute Shader等机制让GPU能够更自主地处理这些任务，充分发挥其强大的并行计算能力，从而突破了渲染性能。
+<meta property="og:description" content="Bottleneck of Traditional Rendering Pipeline Key Ideas of GPU-Driven Pipeline  Indirect Draw Compute Shader GPU-Driven Culling Mesh Cluster Rendering   Nanite: State-of-the-Art in GPU-Driven Pipeline Architecture  Geometory Represetation Runtime LoD Selection Nanite Rasterization    GPU驱动管线（GPU-Driven Pipeline）是一种将原本由CPU承担的大量渲染任务转移到GPU上进行处理的渲染管线架构。在传统渲染管线中，CPU负责管理场景中的大量数据，如模型的加载、裁剪、排序以及绘制调用的提交等，这使得CPU成为渲染流程中的瓶颈。而GPU驱动管线则通过Indirect Draw、Compute Shader等机制让GPU能够更自主地处理这些任务，充分发挥其强大的并行计算能力，从而突破了渲染性能。
 Bottleneck of Traditional Rendering Pipeline  High CPU overload   视锥/遮挡裁剪 准备drawcall   CPU can not follow up GPU
-  GPU state exchange overhead when solving large amount of drawcalls
-  Key Ideas of GPU-Driven Pipeline Indirect Draw Draw from GPU buffer
-GPU驱动管线的核心目标是最小化CPU参与渲染流程的频率。传统绘制方式（如 glDrawArray/glDrawElements）需由CPU直接传递绘制参数（如图元数量、索引范围等），这会导致CPU-GPU通信开销较高。间接绘制则将这些参数存储在GPU可访问的缓冲区中，由GPU自行读取参数并执行绘制，从而大幅减少CPU的介入。
-Api support
-// CPU直接传递参数 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); // 参数来自GPU缓冲区 glDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, buffer_offset); Compute Shader High-speed general purpose computing">
+  GPU state exchange overhead when solving large amount of drawcalls">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2025-3-18/gpu-driven/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2025-03-18T19:46:08+08:00">
 <meta property="article:modified_time" content="2025-03-18T19:46:08+08:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="GPU-Driven Pipeline">
-<meta name=twitter:description content="GPU驱动管线（GPU-Driven Pipeline）是一种将原本由CPU承担的大量渲染任务转移到GPU上进行处理的渲染管线架构。在传统渲染管线中，CPU负责管理场景中的大量数据，如模型的加载、裁剪、排序以及绘制调用的提交等，这使得CPU成为渲染流程中的瓶颈。而GPU驱动管线则通过Indirect Draw、Compute Shader等机制让GPU能够更自主地处理这些任务，充分发挥其强大的并行计算能力，从而突破了渲染性能。
+<meta name=twitter:description content="Bottleneck of Traditional Rendering Pipeline Key Ideas of GPU-Driven Pipeline  Indirect Draw Compute Shader GPU-Driven Culling Mesh Cluster Rendering   Nanite: State-of-the-Art in GPU-Driven Pipeline Architecture  Geometory Represetation Runtime LoD Selection Nanite Rasterization    GPU驱动管线（GPU-Driven Pipeline）是一种将原本由CPU承担的大量渲染任务转移到GPU上进行处理的渲染管线架构。在传统渲染管线中，CPU负责管理场景中的大量数据，如模型的加载、裁剪、排序以及绘制调用的提交等，这使得CPU成为渲染流程中的瓶颈。而GPU驱动管线则通过Indirect Draw、Compute Shader等机制让GPU能够更自主地处理这些任务，充分发挥其强大的并行计算能力，从而突破了渲染性能。
 Bottleneck of Traditional Rendering Pipeline  High CPU overload   视锥/遮挡裁剪 准备drawcall   CPU can not follow up GPU
-  GPU state exchange overhead when solving large amount of drawcalls
-  Key Ideas of GPU-Driven Pipeline Indirect Draw Draw from GPU buffer
-GPU驱动管线的核心目标是最小化CPU参与渲染流程的频率。传统绘制方式（如 glDrawArray/glDrawElements）需由CPU直接传递绘制参数（如图元数量、索引范围等），这会导致CPU-GPU通信开销较高。间接绘制则将这些参数存储在GPU可访问的缓冲区中，由GPU自行读取参数并执行绘制，从而大幅减少CPU的介入。
-Api support
-// CPU直接传递参数 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); // 参数来自GPU缓冲区 glDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, buffer_offset); Compute Shader High-speed general purpose computing">
+  GPU state exchange overhead when solving large amount of drawcalls">
 <meta itemprop=name content="GPU-Driven Pipeline">
-<meta itemprop=description content="GPU驱动管线（GPU-Driven Pipeline）是一种将原本由CPU承担的大量渲染任务转移到GPU上进行处理的渲染管线架构。在传统渲染管线中，CPU负责管理场景中的大量数据，如模型的加载、裁剪、排序以及绘制调用的提交等，这使得CPU成为渲染流程中的瓶颈。而GPU驱动管线则通过Indirect Draw、Compute Shader等机制让GPU能够更自主地处理这些任务，充分发挥其强大的并行计算能力，从而突破了渲染性能。
+<meta itemprop=description content="Bottleneck of Traditional Rendering Pipeline Key Ideas of GPU-Driven Pipeline  Indirect Draw Compute Shader GPU-Driven Culling Mesh Cluster Rendering   Nanite: State-of-the-Art in GPU-Driven Pipeline Architecture  Geometory Represetation Runtime LoD Selection Nanite Rasterization    GPU驱动管线（GPU-Driven Pipeline）是一种将原本由CPU承担的大量渲染任务转移到GPU上进行处理的渲染管线架构。在传统渲染管线中，CPU负责管理场景中的大量数据，如模型的加载、裁剪、排序以及绘制调用的提交等，这使得CPU成为渲染流程中的瓶颈。而GPU驱动管线则通过Indirect Draw、Compute Shader等机制让GPU能够更自主地处理这些任务，充分发挥其强大的并行计算能力，从而突破了渲染性能。
 Bottleneck of Traditional Rendering Pipeline  High CPU overload   视锥/遮挡裁剪 准备drawcall   CPU can not follow up GPU
-  GPU state exchange overhead when solving large amount of drawcalls
-  Key Ideas of GPU-Driven Pipeline Indirect Draw Draw from GPU buffer
-GPU驱动管线的核心目标是最小化CPU参与渲染流程的频率。传统绘制方式（如 glDrawArray/glDrawElements）需由CPU直接传递绘制参数（如图元数量、索引范围等），这会导致CPU-GPU通信开销较高。间接绘制则将这些参数存储在GPU可访问的缓冲区中，由GPU自行读取参数并执行绘制，从而大幅减少CPU的介入。
-Api support
-// CPU直接传递参数 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); // 参数来自GPU缓冲区 glDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, buffer_offset); Compute Shader High-speed general purpose computing"><meta itemprop=datePublished content="2025-03-18T19:46:08+08:00">
+  GPU state exchange overhead when solving large amount of drawcalls"><meta itemprop=datePublished content="2025-03-18T19:46:08+08:00">
 <meta itemprop=dateModified content="2025-03-18T19:46:08+08:00">
-<meta itemprop=wordCount content="133">
+<meta itemprop=wordCount content="175">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -88,6 +76,24 @@ Api support
 </div>
 </div>
 <div class=markdown>
+<ul>
+<li><a href=#bottleneck-of-traditional-rendering-pipeline>Bottleneck of Traditional Rendering Pipeline</a></li>
+<li><a href=#key-ideas-of-gpu-driven-pipeline>Key Ideas of GPU-Driven Pipeline</a>
+<ul>
+<li><a href=#indirect-draw>Indirect Draw</a></li>
+<li><a href=#compute-shader>Compute Shader</a></li>
+<li><a href=#gpu-driven-culling>GPU-Driven Culling</a></li>
+<li><a href=#mesh-cluster-rendering>Mesh Cluster Rendering</a></li>
+</ul>
+</li>
+<li><a href=#nanite-state-of-the-art-in-gpu-driven-pipeline-architecture>Nanite: State-of-the-Art in GPU-Driven Pipeline Architecture</a>
+<ul>
+<li><a href=#geometory-represetation>Geometory Represetation</a></li>
+<li><a href=#runtime-lod-selection>Runtime LoD Selection</a></li>
+<li><a href=#nanite-rasterization>Nanite Rasterization</a></li>
+</ul>
+</li>
+</ul>
 <p>GPU驱动管线（GPU-Driven Pipeline）是一种将原本由CPU承担的大量渲染任务转移到GPU上进行处理的渲染管线架构。在传统渲染管线中，CPU负责管理场景中的大量数据，如模型的加载、裁剪、排序以及绘制调用的提交等，这使得CPU成为渲染流程中的瓶颈。而GPU驱动管线则通过Indirect Draw、Compute Shader等机制让GPU能够更自主地处理这些任务，充分发挥其强大的并行计算能力，从而突破了渲染性能。</p>
 <h2 id=bottleneck-of-traditional-rendering-pipeline>Bottleneck of Traditional Rendering Pipeline</h2>
 <ol>
@@ -158,6 +164,11 @@ Api support
 <p><strong>Avoid frequent state switch</strong></p>
 <p>通过批量处理同一集群内的网格数据，从而最小化CPU与GPU之间的状态切换开销，实现高效批量渲染。</p>
 <h2 id=nanite-state-of-the-art-in-gpu-driven-pipeline-architecture>Nanite: State-of-the-Art in GPU-Driven Pipeline Architecture</h2>
+<p>Nanite是虚幻引擎5引入的​​虚拟化几何系统​​，旨在实现​​电影级高精度模型​​的实时渲染。其核心思想是通过智能的​​数据流式加载​和​​GPU驱动的渲染管线​​，动态适应不同视角下的几何细节需求，从而突破传统渲染的三角形数量限制。</p>
+<h3 id=geometory-represetation>Geometory Represetation</h3>
+<h3 id=runtime-lod-selection>Runtime LoD Selection</h3>
+<h3 id=nanite-rasterization>Nanite Rasterization</h3>
+<p><strong>Hardware Rasterization</strong></p>
 </div>
 </div>
 </article>
