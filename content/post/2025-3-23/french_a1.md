@@ -89,17 +89,18 @@ draft: false
 1. 你叫什么名字？
 
 - Comment tu t'appellez?
-- Comment vous appelez-vous ?
+- Comment vous appelez-vous?
 - Je m'appelle xxx.
 
 2. 你从哪里来？
 
-- Où est-ce que tu viens?
+- D'où viens-tu?
+- D'où est-ce que tu viens?
 - Je viens de Chine.
 
 3. 你住在哪里？
 
-- Où est-ce que tu habitez?
+- Où est-ce que tu habites?
 - J'abite à Hangzhou.
 
 4. 你好吗？
@@ -113,8 +114,8 @@ draft: false
 
 6. 初次见面！
 
--  Enchanté
--  Enchantée
+-  Enchanté!
+-  Enchantée!
 
 7. 你在做什么？
 
