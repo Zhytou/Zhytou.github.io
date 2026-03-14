@@ -1,7 +1,7 @@
 <!doctype html><html lang=en>
 <head>
 <meta charset=utf-8>
-<title>C++实现反射 | Zhytou</title>
+<title>反射：从Unreal和Qt出发，比较C++与Java的语言特性 | Zhytou</title>
 <meta http-equiv=x-ua-compatible content="IE=edge">
 <meta name=generator content="Hugo 0.91.2">
 <meta name=viewport content="width=device-width,initial-scale=1">
@@ -9,31 +9,31 @@
 <link rel=stylesheet type=text/css media=screen href=/css/normalize.css>
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
-<meta property="og:title" content="C++实现反射">
-<meta property="og:description" content="最近在实习的过程中，老板要求写一个回测系统。其大致工作模式就是hft-sys写死，会动态链接加载不同model，通过model类名实例化对象并调用内部函数。因此，整个的难点其实就是动态链接+反射。这篇博客就记录一下自己在网上查到的资料以及相关实践。
+<meta property="og:title" content="反射：从Unreal和Qt出发，比较C++与Java的语言特性">
+<meta property="og:description" content="title: &ldquo;C++实现反射&rdquo; date: 2023-10-27T15:17:54+08:00 draft: false 最近在实习的过程中，老板要求写一个回测系统。其大致工作模式就是hft-sys写死，会动态链接加载不同model，通过model类名实例化对象并调用内部函数。因此，整个的难点其实就是动态链接+反射。这篇博客就记录一下自己在网上查到的资料以及相关实践。
 总的来说，C++实现发射的方法包括：
  侵入式 运行时 编译期  侵入式 侵入式的做法其实有些类似Qt，在需要支持反射的类定义中添加宏，从而引入一系列帮助系统确认类型的metadata。
 其原理也非常容易理解，使用一个全局Map管理类名和其构造函数的键值对，并用宏帮助注册。
 // reflect.h using ModelConstructorFn = Model *(*) (); // 用于保存Model Info的全局Map map<string, ModelConstructorFn> miMap; // ModelInfo类，用于保存模型信息 struct ModelInfo { ModelInfo(const string& name, ObjectConstructorFn ctor): name_(name), ctor_(ctor) { if (miMap.find(name) == miMap.end()) { miMap[name] = ctor; } } ~ModelInfo() {} string name_; ModelConstructorFn ctor_; }; #define DECLARE_MODEL(name) \ protected: \ static ModelInfo model_info_; \ public: \ static Model* CreateModel();  #define IMPLEMENT_MODEL(name) \ ModelInfo name::model_info_(#name, (ModelConstructorFn) name::CreateModel);\ Model* name::CreateModel() { \ return new name; \ } // model.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://zhytou.github.io/post/2023-10-27/cpp-reflect/"><meta property="article:section" content="post">
-<meta property="article:published_time" content="2023-10-27T15:17:54+08:00">
-<meta property="article:modified_time" content="2023-10-27T15:17:54+08:00">
+<meta property="og:url" content="https://zhytou.github.io/post/2026-3-14/reflect-and-compile/"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2026-03-14T16:33:10+08:00">
+<meta property="article:modified_time" content="2026-03-14T16:33:10+08:00">
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="C++实现反射">
-<meta name=twitter:description content="最近在实习的过程中，老板要求写一个回测系统。其大致工作模式就是hft-sys写死，会动态链接加载不同model，通过model类名实例化对象并调用内部函数。因此，整个的难点其实就是动态链接+反射。这篇博客就记录一下自己在网上查到的资料以及相关实践。
+<meta name=twitter:title content="反射：从Unreal和Qt出发，比较C++与Java的语言特性">
+<meta name=twitter:description content="title: &ldquo;C++实现反射&rdquo; date: 2023-10-27T15:17:54+08:00 draft: false 最近在实习的过程中，老板要求写一个回测系统。其大致工作模式就是hft-sys写死，会动态链接加载不同model，通过model类名实例化对象并调用内部函数。因此，整个的难点其实就是动态链接+反射。这篇博客就记录一下自己在网上查到的资料以及相关实践。
 总的来说，C++实现发射的方法包括：
  侵入式 运行时 编译期  侵入式 侵入式的做法其实有些类似Qt，在需要支持反射的类定义中添加宏，从而引入一系列帮助系统确认类型的metadata。
 其原理也非常容易理解，使用一个全局Map管理类名和其构造函数的键值对，并用宏帮助注册。
 // reflect.h using ModelConstructorFn = Model *(*) (); // 用于保存Model Info的全局Map map<string, ModelConstructorFn> miMap; // ModelInfo类，用于保存模型信息 struct ModelInfo { ModelInfo(const string& name, ObjectConstructorFn ctor): name_(name), ctor_(ctor) { if (miMap.find(name) == miMap.end()) { miMap[name] = ctor; } } ~ModelInfo() {} string name_; ModelConstructorFn ctor_; }; #define DECLARE_MODEL(name) \ protected: \ static ModelInfo model_info_; \ public: \ static Model* CreateModel();  #define IMPLEMENT_MODEL(name) \ ModelInfo name::model_info_(#name, (ModelConstructorFn) name::CreateModel);\ Model* name::CreateModel() { \ return new name; \ } // model.">
-<meta itemprop=name content="C++实现反射">
-<meta itemprop=description content="最近在实习的过程中，老板要求写一个回测系统。其大致工作模式就是hft-sys写死，会动态链接加载不同model，通过model类名实例化对象并调用内部函数。因此，整个的难点其实就是动态链接+反射。这篇博客就记录一下自己在网上查到的资料以及相关实践。
+<meta itemprop=name content="反射：从Unreal和Qt出发，比较C++与Java的语言特性">
+<meta itemprop=description content="title: &ldquo;C++实现反射&rdquo; date: 2023-10-27T15:17:54+08:00 draft: false 最近在实习的过程中，老板要求写一个回测系统。其大致工作模式就是hft-sys写死，会动态链接加载不同model，通过model类名实例化对象并调用内部函数。因此，整个的难点其实就是动态链接+反射。这篇博客就记录一下自己在网上查到的资料以及相关实践。
 总的来说，C++实现发射的方法包括：
  侵入式 运行时 编译期  侵入式 侵入式的做法其实有些类似Qt，在需要支持反射的类定义中添加宏，从而引入一系列帮助系统确认类型的metadata。
 其原理也非常容易理解，使用一个全局Map管理类名和其构造函数的键值对，并用宏帮助注册。
-// reflect.h using ModelConstructorFn = Model *(*) (); // 用于保存Model Info的全局Map map<string, ModelConstructorFn> miMap; // ModelInfo类，用于保存模型信息 struct ModelInfo { ModelInfo(const string& name, ObjectConstructorFn ctor): name_(name), ctor_(ctor) { if (miMap.find(name) == miMap.end()) { miMap[name] = ctor; } } ~ModelInfo() {} string name_; ModelConstructorFn ctor_; }; #define DECLARE_MODEL(name) \ protected: \ static ModelInfo model_info_; \ public: \ static Model* CreateModel();  #define IMPLEMENT_MODEL(name) \ ModelInfo name::model_info_(#name, (ModelConstructorFn) name::CreateModel);\ Model* name::CreateModel() { \ return new name; \ } // model."><meta itemprop=datePublished content="2023-10-27T15:17:54+08:00">
-<meta itemprop=dateModified content="2023-10-27T15:17:54+08:00">
-<meta itemprop=wordCount content="294">
+// reflect.h using ModelConstructorFn = Model *(*) (); // 用于保存Model Info的全局Map map<string, ModelConstructorFn> miMap; // ModelInfo类，用于保存模型信息 struct ModelInfo { ModelInfo(const string& name, ObjectConstructorFn ctor): name_(name), ctor_(ctor) { if (miMap.find(name) == miMap.end()) { miMap[name] = ctor; } } ~ModelInfo() {} string name_; ModelConstructorFn ctor_; }; #define DECLARE_MODEL(name) \ protected: \ static ModelInfo model_info_; \ public: \ static Model* CreateModel();  #define IMPLEMENT_MODEL(name) \ ModelInfo name::model_info_(#name, (ModelConstructorFn) name::CreateModel);\ Model* name::CreateModel() { \ return new name; \ } // model."><meta itemprop=datePublished content="2026-03-14T16:33:10+08:00">
+<meta itemprop=dateModified content="2026-03-14T16:33:10+08:00">
+<meta itemprop=wordCount content="300">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -69,12 +69,12 @@
 <div class=post-header>
 <div class=meta>
 <div class=date>
-<span class=day>27</span>
-<span class=rest>Oct 2023</span>
+<span class=day>14</span>
+<span class=rest>Mar 2026</span>
 </div>
 </div>
 <div class=matter>
-<h1 class=title>C++实现反射</h1>
+<h1 class=title>反射：从Unreal和Qt出发，比较C++与Java的语言特性</h1>
 <p class=post-meta>
 <span class=post-meta>
 </span>
@@ -82,6 +82,10 @@
 </div>
 </div>
 <div class=markdown>
+<hr>
+<h2 id=draft-false>title: &ldquo;C++实现反射&rdquo;
+date: 2023-10-27T15:17:54+08:00
+draft: false</h2>
 <p>最近在实习的过程中，老板要求写一个回测系统。其大致工作模式就是hft-sys写死，会动态链接加载不同model，通过model类名实例化对象并调用内部函数。因此，整个的难点其实就是动态链接+反射。这篇博客就记录一下自己在网上查到的资料以及相关实践。</p>
 <p>总的来说，C++实现发射的方法包括：</p>
 <ul>
