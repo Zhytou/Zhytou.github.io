@@ -256,13 +256,38 @@ RTTR_REGISTRATION
 
 ### Qt MOC
 
-与仅依靠原生C++功能所实现的反射方案不同，Qt为了避免手动注册引入了第三方工具，也即MOC（Meta-Object Compiler）在编译期自动生成反射代码。具体而言，该工具会扫描头文件，识别包含Q_OBJECT的类，提取类的继承关系、信号槽函数、属性等信息，并根据这些信息生成对应的反射代码，也即“——moc.cpp”
+与仅依靠原生C++功能所实现的反射方案不同，Qt为了避免手动注册引入了第三方工具，也即MOC（Meta-Object Compiler）在编译期自动生成反射代码。具体而言，该工具会扫描头文件，识别包含Q_OBJECT的类，提取类的继承关系、信号槽函数、属性等信息，并根据这些信息生成对应的反射代码，也即__moc.cpp
 
 **Q_OBJECT/Q_PROPERTY**
 
-Q_OBJECT与Q_PROPERTY
+Q_OBJECT与Q_PROPERTY是Qt框架中用于实现反射的两个重要宏。
+
+- Q_OBJECT宏用于声明一个类为Qt的元对象类，从而使该类能够利用Qt的信号槽机制、属性系统等功能。
+- Q_PROPERTY宏用于声明一个类的属性，包括属性名、属性类型、属性访问权限等。
+
+```c++
+class Model : public QObject {
+    Q_OBJECT
+public:
+    Model(QObject *parent = nullptr) : QObject(parent) {}
+    virtual ~Model() {}
+
+    QString name() const { return name_; }
+    void setName(const QString &name) {
+        if (name_ != name) {
+            name_ = name;
+            emit nameChanged(name_);
+        }
+    }
+private:
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    QString name_;
+};
+```
 
 **Signal & Slot**
+
+信号槽函数（Signal-Slot）是Qt框架中用于实现对象间通信的机制，利用MOC自动生成的反射代码，使得信号槽函数的调用在编译期就能够被检查和优化，避免了运行时的动态查找和调用。
 
 ### Unreal UHT
 
