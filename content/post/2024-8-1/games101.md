@@ -18,9 +18,14 @@ draft: false
   - [Clipping](#clipping)
   - [Hidden Surface Removal Algorithms](#hidden-surface-removal-algorithms)
 - [Graphics Pipeline](#graphics-pipeline)
-  - [OpenGL Pipeline Overview](#opengl-pipeline-overview)
+  - [Application Stage](#application-stage)
   - [Coordinate Transformations](#coordinate-transformations)
-  - [Test and bledning](#test-and-bledning)
+  - [Rasterization Stage](#rasterization-stage)
+  - [Fragment Stage](#fragment-stage)
+- [Modern Graphics Pipeline](#modern-graphics-pipeline)
+  - [Geometry Shader](#geometry-shader)
+  - [Tessellation Shader](#tessellation-shader)
+  - [Compute Shader](#compute-shader)
 - [Shading](#shading)
   - [Shading Frequency](#shading-frequency)
   - [Illumination Model](#illumination-model)
@@ -217,18 +222,24 @@ Z-Buffer（也称深度缓冲）是当前 GPU 最主流的消隐方案。它额�
 
 ## Graphics Pipeline
 
-### OpenGL Pipeline Overview
-
-- 应用阶段：输入一堆三维空间中的点。
-- 几何阶段：依次进行MVP变换，并进行裁剪和屏幕映射，得到三角形顶点对应屏幕像素位置。
-- 光栅化：通过顶点插值，得到被三角形覆盖的所有像素位置。
-- 片元处理：进行着色计算，并依次进行透明度、模板和深度测试，最终得到显示在屏幕上的图像。
-
 ![渲染管线](https://pica.zhimg.com/80/v2-85a9e77245f43d4bab56f2052c3d81f0_720w.webp)
+
+### Application Stage
+
+应用阶段完全由 CPU 应用程序控制，属于软件阶段，无硬件固定流程。常见操作包括：
+
+- 加载模型、纹理、材质、灯光、场景矩阵数据
+- 场景空间逻辑更新、动画更新、物理计算
+- 组织渲染队列、透明物体排序、视锥剔除
+- 向 GPU 提交绘制指令与顶点数据
+
+该阶段所有逻辑完全可控，由开发者代码实现。
 
 ### Coordinate Transformations
 
-几何阶段中的顶点处理应该是渲染管线中较为复杂的部分，下面详细总结其流程：
+几何阶段负责所有顶点的空间变换、图元组装、裁剪、屏幕映射，决定模型“在哪里画”。其中顶点着色、几何着色、投影变换可编程；裁剪、屏幕映射由硬件固定完成。
+
+该阶段中的顶点处理应该是渲染管线中较为复杂的部分，下面详细总结其流程：
 
 - **Model Space**:用于渲染的模型文件内的坐标，也即模型空间坐标。
 
@@ -249,18 +260,39 @@ $$
 P(x,y,z,1)^{T}=(\frac{1}{ratio \cdot tan\frac{\theta}{2}}x, \frac{1}{tan\frac{\theta}{2}}y, \frac{z-near}{far-near}, -z)^{T}
 $$
 
-- **Screen Space**:该阶段由 视口变换（Viewport Transform） + 深度范围变换 共同完成，将 \([-1,1]\) 区间的 NDC 坐标，线性映射为帧缓冲区上的像素坐标，也就是屏幕空间坐标。
+- **Screen Space**:该阶段由视口变换（Viewport Transform）和深度范围变换 共同完成，将 [-1,1] 区间的 NDC 坐标，线性映射为帧缓冲区上的像素坐标，也就是屏幕空间坐标。
 
-以OpenGL为例，
+### Rasterization Stage
 
-### Test and bledning
+光栅化阶段完全由 GPU 硬件光栅器执行，不可编程。它能够将三角形图元转换为屏幕上覆盖的所有片元。具体操作包括：
 
-在完成片元着色计算后，紧接着会进行各种测试和混合操作，最终得到呈现在屏幕上的图片。这些测试按从前到后的顺序为：
+- 三角形设置：计算三角形边界方程
+- 三角形遍历：遍历所有覆盖像素，生成片元
+- 顶点属性插值：对 UV、法线、颜色、深度进行平滑插值
 
-- 模板测试
+### Fragment Stage
 
-- 透明度测试：它其实和半透明渲染没什么关系，只是用到了alpha做判断，当alpha值小于某个阈值时丢弃该片元。
-- 深度测试：它用于比较片元的深度值与深度缓冲区中对应位置的深度值，并决定是否绘制该片元。深度测试可以确保物体的遮挡关系正确，避免后面的物体遮挡前面的物体。
+片元处理阶段决定每个像素“画什么颜色”，包含可编程片元着色与硬件固定测试、混合流程。
+
+**逐片元着色（完全可编程）**：
+
+读取插值后的 UV、法线、位置，执行 PBR 光照、纹理采样、法线贴图、颜色计算，输出最终片元颜色与深度。
+
+**逐像素测试与混合（固定/可配置）**：
+
+所有测试严格按照固定顺序执行，顺序不可颠倒。其中，深度测试不通过、模板测试失败、AlphaTest 丢弃的片元，均不会进入颜色混合阶段。
+
+- 裁剪测试 Scissor Test：判断像素是否在视口范围内
+- 模板测试 Stencil Test：实现描边、阴影、轮廓、镜面遮罩
+- 透明度测试 Alpha Test：根据 Alpha 阈值直接 discard 片元，用于树叶、镂空贴图（不实现半透明）
+- 深度测试 Depth Test：对比深度缓冲，正确处理场景遮挡关系
+- 颜色混合 Blend：半透明物体专属，将当前片元颜色与帧缓冲原有颜色混合
+
+![颜色混合](https://zhytou.github.io/post/2024-8-1/color_blend.png)
+
+如图所示，通过颜色混合，可以实现基础的半透明薄片渲染。不过，由于半透明物体需要混合历史颜色，它无法开启深度写入（glDepthMask(GL_FALSE)）。这就要求场景中的半透明物体必须严格按照从后往前（Back-to-Front）的顺序进行手工 CPU 排序渲染，否则会发生严重的穿帮错乱。
+
+此外，对于更加复杂的折射和反射时，需要使用其他技术，比如：OIT（Order Independent Translucency）以及Ray Tracing等。
 
 **Early-Z测试**：
 
@@ -268,9 +300,31 @@ $$
 
 不过，Early-Z会带来透明测试的冲突，例如某个片元A虽然遮挡了另一个片元B，但A却是透明的，GPU应当渲染的是片元B，这就产生了矛盾。
 
-**混合**：
+## Modern Graphics Pipeline
 
-![颜色混合](https://zhytou.github.io/post/2024-8-1/color_blend.png)
+### Geometry Shader
+
+管线位置：位于 Tessellation 之后，光栅化（Rasterizer）之前。
+
+最核心作用（拓扑结构大变身）：它是管线中唯一能够感知完整图元（三角形三个顶点及邻接信息）并能彻底改变网格拓扑结构的阶段。它不适合大规模生成顶点（存在严重的阻断式硬件卡顿瓶颈），但极度擅长做异构转换。例如：将一个 3D 坐标点扩展为一个永远面朝摄像机的 2D 正方形面片（粒子系统 Billboard 公告板技术，如火花、烟花、浓烟），或者做模型描边生成、多视角单通道级联阴影贴图生成。
+
+### Tessellation Shader
+
+管线位置：紧跟在 Vertex Shader 之后，Geometry Shader 之前。
+
+内部架构：由 TCS（控制着色器） $\rightarrow$ Tessellator（固定硬件单元） $\rightarrow$ TES（评估着色器） 三段式组成。
+
+最核心作用（几何体无中生有）：输入参数化的控制点（GL_PATCHES），利用显卡专用硬件芯片在二维参数空间（$U,V$）内执行全自动的高密度多边形切碎。它通过极低的显存带宽开销生成海量真顶点，配合位移贴图（Displacement Map）能从物理上彻底改变模型的微观凹凸轮廓（如高尔夫球坑、地形起伏）。
+
+### Compute Shader
+
+管线位置：编制之外的独立通道。 它不属于上述单向渲染管线的任何一环，不参与光栅化，也不直接输出屏幕像素。
+
+最核心作用（GPGPU 通用并行计算）：拥有直接读写乱序显存（SSBO、Image Load/Store）的特权，能以极高的并发率执行纯数学计算。
+
+单干场景：一个即可。用于物理模拟（粒子运动、流体碰撞）、AI 矩阵运算、海量数据并行排序。
+
+联手场景（体积云、物理网格）：作为传统管线的“后勤军师”。Compute Shader 先行启动，在后台通过数学算法（如柏林噪声）计算出 3D 空间中的体积云密度信息并写入显存，随后停机；传统渲染管线（VS/FS）无缝接棒，读取该显存数据并使用光线步进（Raymarching）算法将其渲染到屏幕上。
 
 ## Shading
 
