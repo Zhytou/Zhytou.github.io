@@ -10,18 +10,18 @@
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
 <meta property="og:title" content="GAMES101">
-<meta property="og:description" content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
+<meta property="og:description" content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  OpenGL Pipeline Overview Coordinate Transformations Test and bledning   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Opuque Froward Rendering Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2024-8-1/games101/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2024-08-01T17:06:45+08:00">
 <meta property="article:modified_time" content="2024-08-01T17:06:45+08:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="GAMES101">
-<meta name=twitter:description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
+<meta name=twitter:description content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  OpenGL Pipeline Overview Coordinate Transformations Test and bledning   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Opuque Froward Rendering Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
 <meta itemprop=name content="GAMES101">
-<meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing MSAA FXAA TAA Visibility/Occlusion   Shading  Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model Shading Frequency OpenGL Graphics Pipeline   Texture  Texture Mapping Light Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
+<meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  OpenGL Pipeline Overview Coordinate Transformations Test and bledning   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Opuque Froward Rendering Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
 <meta itemprop=dateModified content="2024-08-01T17:06:45+08:00">
-<meta itemprop=wordCount content="755">
+<meta itemprop=wordCount content="1180">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -80,25 +80,46 @@
 <li><a href=#rasterization>Rasterization</a>
 <ul>
 <li><a href=#aliasing>Aliasing</a></li>
+<li><a href=#ssaa>SSAA</a></li>
 <li><a href=#msaa>MSAA</a></li>
 <li><a href=#fxaa>FXAA</a></li>
 <li><a href=#taa>TAA</a></li>
-<li><a href=#visibilityocclusion>Visibility/Occlusion</a></li>
+</ul>
+</li>
+<li><a href=#visibilityocclusion>Visibility/Occlusion</a>
+<ul>
+<li><a href=#culling>Culling</a></li>
+<li><a href=#clipping>Clipping</a></li>
+<li><a href=#hidden-surface-removal-algorithms>Hidden Surface Removal Algorithms</a></li>
+</ul>
+</li>
+<li><a href=#graphics-pipeline>Graphics Pipeline</a>
+<ul>
+<li><a href=#opengl-pipeline-overview>OpenGL Pipeline Overview</a></li>
+<li><a href=#coordinate-transformations>Coordinate Transformations</a></li>
+<li><a href=#test-and-bledning>Test and bledning</a></li>
 </ul>
 </li>
 <li><a href=#shading>Shading</a>
 <ul>
+<li><a href=#shading-frequency>Shading Frequency</a></li>
 <li><a href=#illumination-model>Illumination Model</a></li>
 <li><a href=#lamberts-cosine-law>Lambert’s Cosine Law</a></li>
 <li><a href=#phongblinn-phong-model>Phong/Blinn-Phong Model</a></li>
-<li><a href=#shading-frequency>Shading Frequency</a></li>
-<li><a href=#opengl-graphics-pipeline>OpenGL Graphics Pipeline</a></li>
+</ul>
+</li>
+<li><a href=#render>Render</a>
+<ul>
+<li><a href=#opuque-froward-rendering>Opuque Froward Rendering</a></li>
+<li><a href=#deferred-rendering>Deferred Rendering</a></li>
+<li><a href=#transparent-rendering>Transparent Rendering</a></li>
 </ul>
 </li>
 <li><a href=#texture>Texture</a>
 <ul>
 <li><a href=#texture-mapping>Texture Mapping</a></li>
 <li><a href=#light-mapping>Light Mapping</a></li>
+<li><a href=#skybox-mapping>Skybox Mapping</a></li>
 <li><a href=#normal-mapping>Normal Mapping</a></li>
 <li><a href=#displacement-mapping>Displacement Mapping</a></li>
 </ul>
@@ -187,33 +208,160 @@
 <p><strong>抗锯齿/抗走样原理</strong>：</p>
 <p>根据走样原理，由此可得出抗锯齿原理其实就是尽可能避免信号高频部分发生重叠。一般来说，常见的抗锯齿方法有两种，分别是：</p>
 <ul>
-<li><strong>模糊+采样（Blur Anti-aliasing）</strong>：即先使用一个平滑滤波器去滤除部分高频信号，再进行采样。</li>
-<li><strong>超采样抗锯齿（Supersampling Anti-aliasing，SSAA）</strong>：即使用一个更高的采样频率来避免潜在的重叠。</li>
+<li><strong>提高采样频率</strong>：直接使用更高的采样频率对原信号进行采样，从而将频谱副本推得更远，避免重叠。</li>
+<li><strong>模糊+采样</strong>：先使用一个平滑滤波器去滤除部分高频信号，再进行采样，进而避免潜在的高频重叠。</li>
 </ul>
-<h3 id=msaa>MSAA</h3>
-<p>多重采样抗锯齿(Multisample Anti-aliasing, MSAA)是对SSAA的改进。它借鉴了超采样的思想，但同时又避免了超采样的性能消耗。因为在前面提到的SSAA中，每个子采样点都要进行单独的着色，这样在片元着色器比较复杂的情况下其实是非常浪费性能的。</p>
+<h3 id=ssaa>SSAA</h3>
+<p>超采样抗锯齿（Supersampling Anti-Aliasing，SSAA）正是上述第一种思路（提高采样频率）的直接体现。它以高于目标分辨率的分辨率渲染场景，然后通过下采样将多个子像素的颜色平均，得到最终像素颜色。这种方法效果最好，但由于每个子采样点都需要完整执行片元着色器，性能开销极大。</p>
 <p><figure>
-<img src=https://zhytou.github.io/post/2024-8-1/msaa.png alt=MSAA>
+<img src=https://zhytou.github.io/post/2024-8-1/ssaa.png alt=SSAA>
 </figure></p>
-<p>相比之下，MSAA虽然增加了每个像素点的子采样点数量，但对于每个像素来说都只需要运行一次片元着色器。因为，它使用采样点的覆盖率来计算该像素的颜色。同样的，深度和模板测试也受多个采样点的影响。</p>
-<p>不过，MSAA的问题在于和延迟渲染不太兼容，因为延迟渲染时，场景光栅化之后都被输入到GBuffer上了，并不会直接着色。</p>
+<h3 id=msaa>MSAA</h3>
+<p>多重采样抗锯齿(Multisample Anti-aliasing, MSAA)是对SSAA的改进。它保留了SSAA在子像素层面进行覆盖率和深度/模板测试的思想，但避免了SSAA中最耗时的部分：对每个子采样点执行片元着色器。</p>
+<p>MSAA的核心优化在于：它假设每个像素内的颜色变化主要来自几何边缘，而非材质内部。因此，每个像素只执行一次片元着色器，而多个子采样点仅用于更精确地计算几何覆盖率（即像素中每个采样点是否被三角形覆盖）。最终颜色根据覆盖率对片元着色器的结果进行混合。深度和模板测试同样在子采样点级别进行，以保证几何边缘的精确性。以4xMSAA为例，其运行流程如下：</p>
+<ul>
+<li>首先，GPU会将屏幕上的任意一个普通像素，在内部划分出4个互相错开的子采样点（四角/四等分位置）。</li>
+<li>接着，GPU对每一个子采样点独立执行覆盖率检测与深度、模板测试：判断该采样点是否被当前三角形图元覆盖，以及是否被前方几何体遮挡。</li>
+<li>若像素内至少存在一个有效子采样点（被图元覆盖且通过深度/模板测试），则GPU会以像素中心为输入，执行一次片元着色器。所有子采样点均共享该颜色，这也是MSAA相比SSAA大幅节省性能的核心，不会为4个子采样分别重复着色。</li>
+<li>然后，为不同状态的子采样分配对应颜色：被当前图元覆盖的子采样，赋值为片元着色输出的颜色；未被覆盖、或是被其他物体遮挡的子采样，保留原有背景 / 后方物体的颜色。</li>
+<li>最后，进入解析阶段：硬件将同一个像素内 4 个子采样的颜色做加权平均，输出最终像素颜色。</li>
+</ul>
+<p>然而，MSAA的一个主要问题是与延迟渲染管线不兼容。在延迟渲染中，场景的几何信息（位置、法线、颜色等）会被写入G-Buffer，但光照计算发生在后期。MSAA需要对每个子采样点维护并最终解析这些几何属性，这极大地增加了G-Buffer的复杂度和带宽开销，使得传统MSAA难以高效地集成到延迟渲染框架中。</p>
 <h3 id=fxaa>FXAA</h3>
-<p>快速近似抗锯齿(Fast Approximate Anti-Aliasing, FXAA)是一种廉价但效果不错的抗锯齿算法。不同于SSAA和MSAA，FXAA直接检测边缘，然后使用平滑滤波器去模糊这些边缘，从而达到抗锯齿效果。</p>
+<p>SSAA、MSAA依靠提升采样频率实现抗锯齿，属于GPU光栅化阶段的硬件原生功能。这类硬件抗锯齿方案在现代延迟渲染逐渐成为主流后，因巨大性能开销而难。为此，以模糊为核心的后处理抗锯齿方案应运而生。</p>
+<p>其中，快速近似抗锯齿（Fast Approximate Anti-Aliasing, FXAA）便是一种代表性方案。它完全脱离几何光栅化流程，在整帧画面渲染完成后，通过全屏着色器实现：</p>
+<ul>
+<li>边缘检测：将全屏 RGB 颜色转化为人类视觉更敏感的亮度（Luma）信息，通过计算像素间的亮度差值与对比度，快速识别出画面中的锯齿边缘。</li>
+<li>低通滤波：确定锯齿边缘的长度和方向后，利用平滑滤波器对该区域进行局部模糊混合（Blur Blending），以此在视觉上弱化阶梯状走样。</li>
+</ul>
+<p>FXAA兼容性极强，可适配前向渲染、延迟渲染等所有管线，运行成本极低。但它也存在明显缺陷：算法会对边缘统一做模糊，容易造成画面整体发虚，丢失细线、纹理、文字等精细细节。</p>
 <h3 id=taa>TAA</h3>
-<p>时域抗锯齿(Temporal Anti-Aliasing, TAA)是一种基于时域的抗锯齿技术，旨在进一步减少图形中的锯齿现象。它利用前一帧和当前帧之间的像素信息进行抗锯齿处理，通过时间上的积累和混合来减少锯齿，并提高图像的质量和稳定性。</p>
-<h3 id=visibilityocclusion>Visibility/Occlusion</h3>
-<p><strong>画家算法</strong>：受画家作画启发，根据片元位置从后往前依次着色，计算framebuffer值。此时，后着色的片元颜色会覆盖旧的framebuffer值。对于首位交替重叠的特殊情况难以处理。</p>
-<p><strong>Z-Buffer算法</strong>：额外添加一个z-buffer记录当前像素的最小z值。</p>
+<p>时域抗锯齿(Temporal Anti-Aliasing, TAA)是另一种重要的后处理抗锯齿方案。它利用前一帧和当前帧之间的像素信息进行抗锯齿处理，通过时间上的积累和混合来减少锯齿，并提高图像的质量和稳定性。在具体运行流程中，TAA 通过全屏着色器主要执行以下核心步骤：</p>
+<ul>
+<li>时域抖动（Jittering）：顶点着色器在每帧计算投影矩阵时，控制相机在亚像素级别（通常小于 1 像素）进行微弱的随机晃动。连续数帧的累积，使得原本因单帧像素网格限制而漏掉的几何细节能交替被不同的像素捕捉到。</li>
+<li>时域回溯（Reprojection）：由于场景中的相机和物体都在运动，Shader 需要利用管线输出的速度缓冲（Velocity Buffer / Motion Vectors），精确计算出当前像素在上一帧的屏幕绝对坐标，从而跨越时间去采样上一帧的颜色缓存（History Buffer）。</li>
+<li>历史混合（Blending）：将当前帧捕获的动态像素与历史帧的像素进行高比例的线性加权混合（例如 10%当前 ＋ 90%历史），实现像素级在时间轴上的平滑过度。</li>
+<li>邻域剪裁（Neighborhood Clamping）：这是消除残影的关键技术。Shader 会检查历史颜色是否超出了当前像素周围3×3邻域的颜色区间（Bounding Box）。若超出，则判定该处的历史信息因遮挡改变而失效，强制将其裁剪丢弃，以此消除动态鬼影与残影（Ghosting）。</li>
+</ul>
+<h2 id=visibilityocclusion>Visibility/Occlusion</h2>
+<p>可见性与遮挡判断是渲染管线中用于减少无效渲染、保证正确遮挡关系的核心环节。该过程由粗到细、从CPU到GPU分层进行，主要包括剔除和深度消隐等算法。</p>
+<h3 id=culling>Culling</h3>
+<p>剔除（Culling）是指在渲染过程中，根据模型几何关系或朝向判断某些图元或物体不可见，从而直接将其丢弃，避免进入后续流程造成不必要的性能开销。Culling根据执行阶段和原理不同，可分为：</p>
+<ul>
+<li><strong>视锥体剔除</strong>：发生在应用阶段，一般由CPU运行。属于对象级/集群级的粗粒度空间判定。CPU会检查整个网格体的包围盒（AABB/OBB）是否在相机视锥体六个平面内部，若完全不在，则直接将整个模型丢弃，在源头上免除向GPU发送无效DrawCall。</li>
+<li><strong>背面剔除</strong>：发生在光栅化阶段，属于GPU固定管线电路。GPU通过检查三角形的法线方向，剔除背面朝向观察者的三角形，从而减小开销。</li>
+</ul>
+<p>在OpenGL中，可以先使用函数glEnable(GL_CULL_FACE)开启面剔除功能。接着，使用函数glCullFace函数来实现。它需要传入一个参数，用于指定剔除面类，其可能的选项包括：</p>
+<ul>
+<li>GL_BACK：只剔除背面。</li>
+<li>GL_FRONT：只剔除正面。</li>
+<li>GL_FRONT_AND_BACK：剔除背面和正面。</li>
+</ul>
+<h3 id=clipping>Clipping</h3>
+<p>裁剪（Clipping）与剔除不同，它不进行丢弃决策，而是进行几何修正。当图元（如三角形）部分位于视锥体外、部分位于视锥体内时，裁剪单元会计算图元与视锥体边界的交点，生成新的顶点，并将原图元分割成若干个完全位于视锥体内的小图元。</p>
+<p><figure>
+<img src=https://pica.zhimg.com/80/v2-109bce4132140a2490f0de65666519b2_720w.webp alt=剔除和裁剪的区别>
+</figure></p>
+<p>这确保了任何跨越边界的三角形都能被正确渲染，避免了因顶点位于视平面背后而导致的数学错误。简单来说，剔除是“全丢或全留”，而裁剪是“切掉外边，留下里边”。</p>
+<h3 id=hidden-surface-removal-algorithms>Hidden Surface Removal Algorithms</h3>
+<p>消隐算法（Hidden Surface Removal Algorithms）用于解决多个物体在同一像素上重叠时的遮挡关系问题，即判断哪个片元最终应该显示在屏幕上。</p>
+<p><strong>画家算法</strong>:</p>
+<p>受画家作画启发，按照片元距离观察者的远近，从最远处开始依次向帧缓冲中写入颜色。后绘制的近处片元会覆盖先前绘制的远处片元，从而自然形成正确的遮挡关系。</p>
+<p>不过，由于它依赖图元级的宏观排序，面对空间穿插（两面交叉横切）以及循环遮挡（A挡B，B挡C，C挡A的闭环状态）的拓扑结构时，算法在数学上直接失效，渲染出的画面会发生严重的物理遮挡穿帮。</p>
+<p><strong>Z-Buffer算法</strong>：</p>
+<p>Z-Buffer（也称深度缓冲）是当前 GPU 最主流的消隐方案。它额外维护一张与帧缓冲尺寸相同的深度缓冲，为每个像素记录当前已渲染片元的最小深度值（即离观察者最近的距离）。当新的片元到达时，GPU 比较其深度值与缓冲中已有深度值：若新片元深度更小（更近），则覆盖颜色并更新深度缓冲；否则丢弃该片元。这一过程与物体的绘制顺序无关，且硬件原生支持，效率极高。</p>
+<p><strong>扫描线算法</strong>：</p>
+<p>扫描线算法是一种经典的图像空间消隐算法，在早期软渲染时代具有重要历史地位。与传统逐像素处理不同，该算法以屏幕上的水平扫描线为基本处理单元，自上而下逐行推进，一次性解算整条扫描线上所有多边形之间的相交与遮挡关系。</p>
+<p>在数据结构层面，算法维护了边表（Edge Table, ET）和活动边表（Active Edge Table, AET）。当扫描线横切过多个三角形的边界时，算法将扫描线划分为若干个连续的X轴区间（Spans）。利用图形的时空连续性，在一个区间内遮挡关系保持恒定，因此算法只需在区间起点处比较一次Z值，即可确定整个区间应显示哪个三角形的颜色，随后按区间进行批量写操作。</p>
+<p>尽管传统的硬件扫描线消隐已被淘汰，但其核心思想——沿扫描线方向利用几何连续性批量处理像素——在近年来得到了复兴。在虚幻引擎5的Nanite虚拟几何体系中，软光栅化器在Compute Shader中执行类似扫描线的区间消隐逻辑。通过将屏幕划分为2×2像素的像素块（Quad），Nanite在每个块内进行深度连续性测试，一次性消隐并合并微多边形三角形（像素级三角形），极大地降低了海量小三角形带来的过度绘制（Overdraw）问题。这可以看作扫描线思想在现代GPU Compute Shader中的一次成功演化。</p>
+<h2 id=graphics-pipeline>Graphics Pipeline</h2>
+<h3 id=opengl-pipeline-overview>OpenGL Pipeline Overview</h3>
+<ul>
+<li>应用阶段：输入一堆三维空间中的点。</li>
+<li>几何阶段：依次进行MVP变换，并进行裁剪和屏幕映射，得到三角形顶点对应屏幕像素位置。</li>
+<li>光栅化：通过顶点插值，得到被三角形覆盖的所有像素位置。</li>
+<li>片元处理：进行着色计算，并依次进行透明度、模板和深度测试，最终得到显示在屏幕上的图像。</li>
+</ul>
+<p><figure>
+<img src=https://pica.zhimg.com/80/v2-85a9e77245f43d4bab56f2052c3d81f0_720w.webp alt=渲染管线>
+</figure></p>
+<h3 id=coordinate-transformations>Coordinate Transformations</h3>
+<p>几何阶段中的顶点处理应该是渲染管线中较为复杂的部分，下面详细总结其流程：</p>
+<ul>
+<li>
+<p><strong>Model Space</strong>:用于渲染的模型文件内的坐标，也即模型空间坐标。</p>
+</li>
+<li>
+<p><strong>World Space</strong>:依次对模型进行平移、旋转和缩放变换，得到世界空间坐标。其中，除坐标外，顶点的其他属性同样需要受该模型变换矩阵矩阵影响，比如:</p>
+</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-glsl data-lang=glsl>oFragPos <span style=color:#333>=</span> (uModelMatrix <span style=color:#333>*</span> <span style=color:#080;font-weight:700>vec4</span>(iVertPos, <span style=color:#60e;font-weight:700>1.0</span>)).xyz;
+oFragNormal <span style=color:#333>=</span> (uNormalMatrix <span style=color:#333>*</span> <span style=color:#080;font-weight:700>vec4</span>(iVertNormal, <span style=color:#60e;font-weight:700>0.0</span>)).xyz;
+oFragTangent <span style=color:#333>=</span> (uModelMatrix <span style=color:#333>*</span> <span style=color:#080;font-weight:700>vec4</span>(iVertTangent, <span style=color:#60e;font-weight:700>0.0</span>)).xyz;
+oFragUV <span style=color:#333>=</span> iVertUV;
+</code></pre></div><ul>
+<li>
+<p><strong>View/Camera Space</strong>:将世界空间整体做平移、旋转变换，把坐标系原点对齐到相机位置，Z 轴朝向相机视线反方向，最终得到相机坐标系下的坐标。</p>
+</li>
+<li>
+<p><strong>Clip Space</strong>:将数据投影至距离相机n处的平面，得到裁剪空间下的坐标。其坐标转换公式如下所示。其中，P为投影矩阵，far和near分别为远和近裁剪面的距离，ratio为宽高比，$\theta$为视角。此时，除去w，便可得到归一化坐标（Normalized Device Coordinates）。随后，裁剪掉x、y或z任意一个大于1或小于-1的坐标。</p>
+</li>
+</ul>
+<p>$$
+P(x,y,z,1)^{T}=(\frac{1}{ratio \cdot tan\frac{\theta}{2}}x, \frac{1}{tan\frac{\theta}{2}}y, \frac{z-near}{far-near}, -z)^{T}
+$$</p>
+<ul>
+<li><strong>Screen Space</strong>:该阶段由 视口变换（Viewport Transform） + 深度范围变换 共同完成，将 ([-1,1]) 区间的 NDC 坐标，线性映射为帧缓冲区上的像素坐标，也就是屏幕空间坐标。</li>
+</ul>
+<p>以OpenGL为例，</p>
+<h3 id=test-and-bledning>Test and bledning</h3>
+<p>在完成片元着色计算后，紧接着会进行各种测试和混合操作，最终得到呈现在屏幕上的图片。这些测试按从前到后的顺序为：</p>
+<ul>
+<li>
+<p>模板测试</p>
+</li>
+<li>
+<p>透明度测试：它其实和半透明渲染没什么关系，只是用到了alpha做判断，当alpha值小于某个阈值时丢弃该片元。</p>
+</li>
+<li>
+<p>深度测试：它用于比较片元的深度值与深度缓冲区中对应位置的深度值，并决定是否绘制该片元。深度测试可以确保物体的遮挡关系正确，避免后面的物体遮挡前面的物体。</p>
+</li>
+</ul>
+<p><strong>Early-Z测试</strong>：</p>
+<p>一般来说，深度测试都发生在片元着色之后。为了减少进入片元着色的像素数量，一种提前进行深度测试的Early-Z技术被提出了。它位于光栅化阶段之后，像素处理阶段之前。</p>
+<p>不过，Early-Z会带来透明测试的冲突，例如某个片元A虽然遮挡了另一个片元B，但A却是透明的，GPU应当渲染的是片元B，这就产生了矛盾。</p>
+<p><strong>混合</strong>：</p>
+<p><figure>
+<img src=https://zhytou.github.io/post/2024-8-1/color_blend.png alt=颜色混合>
+</figure></p>
 <h2 id=shading>Shading</h2>
 <blockquote>
 <p>In computer graphics, shading is the process of applying a material to an object.</p>
 </blockquote>
 <p>着色（Shading）是计算机图形学中用于模拟光照效果的过程，通过对物体表面的光照属性进行计算，为物体赋予逼真的外观。</p>
+<h3 id=shading-frequency>Shading Frequency</h3>
+<p>根据着色的位置的频率，可将其划分为三类典型的着色方法：</p>
+<ul>
+<li>面着色（Flat Shading）：一个平面计算一次，计算结果应用给该平面的每个点；</li>
+<li>顶点着色（Vertex Shading/Grouraud Shading）：每个顶点都计算一次，然后面内点做插值；</li>
+<li>像素着色（Pixel Shading/Phong Shading）：算出每个顶点法线，对法线进行插值得到面内每个像素的法线，再做着色计算。</li>
+</ul>
+<p><figure>
+<img src=shading_frequency.jpg alt=Shaing_Frequency>
+</figure></p>
+<p>上图为三种着色方式的渲染效果对比：</p>
+<ul>
+<li>对于面着色而言，物体表面呈现出极其强烈的低多边形块状感（Low-Poly / Faceted Look）。由于相邻三角面之间完全没有过渡，几何边缘的阶跃非常刺眼，几乎无法表现光滑的球体或生物皮肤。</li>
+<li>而在高洛德着色渲染图中，多面体的棱角感被大大削弱，表面整体变得相对平滑。然而，细看会发现它的内部光照过渡略显生硬（呈现出一种不自然的“倒三角线性淡化”痕迹），且高光亮点非常暗淡或直接丢失。</li>
+<li>在这三者中冯氏着色呈现出最好的效果，球体表面呈现出完美、丝滑的圆润质感。最关键的是，它精确地还原了一个凝聚、明亮且具有强烈方向感的镜面高光点（Specular Highlight），让物体的材质瞬间有了“反光和硬度”的真实物理质感。</li>
+</ul>
+<p>在基于GPU的现代渲染管线中，着色逻辑的实现位置由着色频率决定：若采用高洛德着色，光照计算需要放在顶点着色器中完成。而目前主流游戏与商用 3A 项目，均统一使用冯氏着色，将法线贴图采样、光照运算、BRDF等核心逻辑放在片元着色器内执行。顶点着色器如今仅负责输出顶点世界坐标、原始法线等基础数据，交由光栅化阶段完成插值即可。</p>
 <h3 id=illumination-model>Illumination Model</h3>
-<p>光照模型（Illumination Model），有时也被称为着色模型，是用于计算任意给定位置的光线强度的数学模型。根据是否考虑光源和场景中物体相互作用产生的二次光照，可将光照模型分为局部光照模型和全局光照模型。其中，常见的局部光照模型包括：Lambert漫反射模型、Phong光照模型、Blinn-Phong光照模型和Cook-Torrance模型等。而全局光照模型则包括：光线追踪、路径追踪、辐射度算法和光子映射等。</p>
-<p>具体的，局部光照大都基于经验（当然也有Cook-Torrance模型这种PBR的特例），而全局光照模型是基于光学物理原理的。后者的计算依赖于光能在现实世界中的传播情况，会考虑光线与整个场景中各物体表面及物体表面间的相互影响，包括多次反射、透射、散射等。正是这个原因，全局光照模型通常需要相当大的计算量，但同时也能取得非常逼真的真实效果。此外，局部光照模型往往无法直接生成阴影，而全局光照模型则可以。</p>
+<p>光照模型（Illumination Model），有时也被称为着色模型，是用于计算任意给定位置的光线强度的数学模型。</p>
+<p>图形学中的光照模型在历史演进中主要分为两大阵营：经验/半经验光照模型与基于物理的光照模型。前者（如 Lambert, Phong, Blinn-Phong）侧重于利用简化的数学公式在极低能耗下凑出“看起来正确”的视觉视觉经验；后者（如 Cook-Torrance）则严格遵循热力学能量守恒与微表面光学理论。</p>
+<p>下面，本章将依次聚焦介绍经验模型中最核心的Lambert漫反射模型以及Phong反射模型，而关于Cook-Torrance BRDF的介绍则统一归纳于后续的PBR章节中。</p>
 <h3 id=lamberts-cosine-law>Lambert&rsquo;s Cosine Law</h3>
-<p>Lambertian模型用于描述粗糙材料的表面。它是一种理想模型，只考虑漫反射，即完全漫反射。这些反射光，在不同角度的辐射强度会依余弦公式变化，角度越大强度越弱。</p>
+<p>Lambert模型用于描述粗糙材料的表面。它是一种理想模型，只考虑漫反射，即完全漫反射。这些反射光，在不同角度的辐射强度会依余弦公式变化，角度越大强度越弱。</p>
 <p><figure>
 <img src=https://zhytou.github.io/post/2024-8-1/lambert_cosine_law.png alt=Lambert余弦定理>
 </figure></p>
@@ -233,62 +381,10 @@
 </figure></p>
 <p><strong>Ambient</strong>：</p>
 <p>至于环境光的计算方式就非常简单了。它表示为光的颜色乘以一个很小的常量环境因子，再乘以物体的颜色。</p>
-<h3 id=shading-frequency>Shading Frequency</h3>
-<ul>
-<li>面着色（Flat Shading）：一个平面计算一次，计算结果应用给该平面的每个点</li>
-<li>顶点着色（Vertex Shading/Grouraud Shading）：每个顶点都计算一次，然后面内点做插值</li>
-<li>像素着色（Pixel Shading/Phong Shading）：算出每个顶点法线，对法线进行插值得到面内每个像素的法线，再做着色计算</li>
-</ul>
-<h3 id=opengl-graphics-pipeline>OpenGL Graphics Pipeline</h3>
-<ul>
-<li>应用阶段：输入一堆三维空间中的点。</li>
-<li>几何阶段：依次进行MVP变换，并进行视锥体剔除、裁剪和屏幕映射，得到三角形顶点对应屏幕像素位置。</li>
-<li>光栅化：通过顶点插值，得到被三角形覆盖的所有像素位置。</li>
-<li>片元处理：进行着色计算，并依次进行透明度、模板和深度测试，最终得到显示在屏幕上的图像。</li>
-</ul>
-<p><figure>
-<img src=https://pica.zhimg.com/80/v2-85a9e77245f43d4bab56f2052c3d81f0_720w.webp alt=渲染管线>
-</figure></p>
-<p><strong>OpenGL中的坐标变换</strong>：</p>
-<p>几何阶段中的顶点处理应该是渲染管线中较为复杂的部分，下面详细总结其流程：</p>
-<ul>
-<li>World Coordinates:输入坐标。</li>
-<li>Eye/Camera Coordinates:将原点通过平移和旋转的方式移动到相机处，得到相机坐标系下的坐标。</li>
-<li>Clip Space:将数据投影至距离相机n处的平面，得到裁剪空间下的坐标。其坐标转换公式如下所示。其中，P为投影矩阵，far和near分别为远和近裁剪面的距离，ratio为宽高比，$\theta$为视角。</li>
-</ul>
-<p>$$
-P(x,y,z,1)^{T}=(\frac{1}{ratio \cdot tan\frac{\theta}{2}}x, \frac{1}{tan\frac{\theta}{2}}y, \frac{z-near}{far-near}, -z)^{T}
-$$</p>
-<ul>
-<li>Normalized Device Coordinates：此时，除去w，便可得到归一化坐标。随后，裁剪掉大于1或小于-1的x，y坐标（忽略z，因为投影到固定平面上了）。</li>
-</ul>
-<p>其中，视锥体剔除和裁剪的区别如下：</p>
-<p><figure>
-<img src=https://pica.zhimg.com/80/v2-109bce4132140a2490f0de65666519b2_720w.webp alt=视锥体剔除和裁剪的区别>
-</figure></p>
-<p><strong>各种测试</strong>：</p>
-<p>在完成片元着色计算后，紧接着会进行各种测试和混合操作，最终得到呈现在屏幕上的图片。这些测试按从前到后的顺序为：</p>
-<ul>
-<li>模板测试</li>
-<li>透明度测试：它其实和半透明渲染没什么关系，只是用到了alpha做判断，当alpha值小于某个阈值时丢弃该片元。</li>
-<li>深度测试：它用于比较片元的深度值与深度缓冲区中对应位置的深度值，并决定是否绘制该片元。深度测试可以确保物体的遮挡关系正确，避免后面的物体遮挡前面的物体。</li>
-</ul>
-<p><strong>混合</strong>：</p>
-<p><figure>
-<img src=https://zhytou.github.io/post/2024-8-1/color_blend.png alt=颜色混合>
-</figure></p>
-<p><strong>背面剔除</strong>：</p>
-<p>面剔除(Face culling)通过检查三角形的法线方向，剔除背面朝向观察者的三角形，从而减小开销。</p>
-<p>在OpenGL中，可以先使用函数glEnable(GL_CULL_FACE)开启面剔除功能。接着，使用函数glCullFace函数来实现。它需要传入一个参数，用于指定剔除面类，其可能的选项包括：</p>
-<ul>
-<li>GL_BACK：只剔除背面。</li>
-<li>GL_FRONT：只剔除正面。</li>
-<li>GL_FRONT_AND_BACK：剔除背面和正面。</li>
-</ul>
-<p><strong>延迟渲染</strong>：</p>
-<p><strong>Early-Z测试</strong>：</p>
-<p>一般来说，深度测试都发生在片元着色之后。为了减少进入片元着色的像素数量，一种提前进行深度测试的Early-Z技术被提出了。它位于光栅化阶段之后，像素处理阶段之前。</p>
-<p>不过，Early-Z会带来透明测试的冲突，例如某个片元A虽然遮挡了另一个片元B，但A却是透明的，GPU应当渲染的是片元B，这就产生了矛盾。</p>
+<h2 id=render>Render</h2>
+<h3 id=opuque-froward-rendering>Opuque Froward Rendering</h3>
+<h3 id=deferred-rendering>Deferred Rendering</h3>
+<h3 id=transparent-rendering>Transparent Rendering</h3>
 <h2 id=texture>Texture</h2>
 <h3 id=texture-mapping>Texture Mapping</h3>
 <p>纹理贴图（Texture Mapping）是计算机图形学中将二维图像映射到三维物体表面的技术。通过定义纹理坐标（UV 坐标，范围通常为 [0,1]），将图像的每个像素对应到物体表面的顶点，最终在渲染时填充物体表面的颜色。</p>
@@ -309,10 +405,69 @@ $$</p>
 <p>Mipmap 由多个层级（Level）组成，每个层级的纹理分辨率是上一层级的一半。层级 0 是原始纹理，层级 1 的纹理分辨率是层级 0 的一半，层级 2 的纹理分辨率是层级 1 的一半，依此类推。</p>
 <p>在实际开发中，有时并不需要直接指定使用哪个 Mipmap 层级，而是通过纹理过滤器（Texture Filter）来自动选择合适的 Mipmap 层级。具体而言，由于GPU一次最少会渲染四个相邻的片元，它可以同时获得这四个片元的uv坐标，从而根据uv坐标的变换情况来选择合适的Mipmap层级。比如，邻近的片元uv坐标中u的差值为0.05，而此时层级为1的纹理分辨率为1024×1024，那么这两个片元选取的纹理像素点位置将相差0.05*1024=51.2，这显然跨度过大，很可能会造成锯齿效应，因此需要选择层级更高的纹理。</p>
 <h3 id=light-mapping>Light Mapping</h3>
+<p>光照贴图（Light Mapping）是一种典型的时空复用、预计算（Baking）抗静态光照走样的技术。它的核心思想是：将场景中静态光源对静态几何体的复杂光照（包括直接光、间接阴影、全局光照 GI）在离线阶段提前烘焙到一张 2D 纹理上，运行时直接采样并与基础色相乘。</p>
+<h3 id=skybox-mapping>Skybox Mapping</h3>
+<p>天空盒贴图（Skybox Mapping）是一种用于高效模拟无限远无限大无边界环境背景的渲染技术。其核心物理思想是：假想场景被一个无限大的立方体（或球体）包裹，通过阻断深度写入，使得无论相机如何物理平移，该背景在视差上永远处于无穷远处。</p>
+<p>为了确保天空盒永远不遮挡场景中的任何真实几何体，在顶点着色器中，通常将变换后的裁剪空间坐标W分量直接赋给Z分量（即 gl_Position.z = gl_Position.w;）。经过透视除法后，Z/W = 1.0，强行将其压入不透明物体 Z-Buffer 的最远端（后裁剪面）。</p>
 <h3 id=normal-mapping>Normal Mapping</h3>
-<p>除了可以保存物体的颜色信息，纹理还可以用于保存物体的法线信息，也就是法线贴图（Normal Mapping）。它的主要作用就是通过uv坐标来获取法线信息，从而在片元着色器中计算出更加逼真的光照效果。</p>
-<h3 id=displacement-mapping>Displacement Mapping</h3>
-<p>视觉贴图是一种用于模拟表面几何细节的贴图，通过改变顶点的位置来实现凹凸效果。</p>
+<p>法线贴图（Normal Mapping）是一种在像素级伪造表面细节的经验着色技术。它的核心物理思想是：保持低模（Low-Poly）的稀疏几何顶点不变，通过高频改变每个片元的法线方向，诱导光照方程（如 PBR）计算出具有凹凸感的高光与阴影变化。</p>
+<p><strong>法线贴图的解码/编码</strong>：</p>
+<p>由于图形纹理规范中，像素分量范围固定为[0,1]，但三维方向向量的合法范围是[-1,1]，因此法线贴图在采样时必须进行值域还原，将其映射至[-1,1]的正确范围中。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-glsl data-lang=glsl><span style=color:#888>// Decode normal from GBuffer/Texture storage format[0.0, 1.0] to shader format[-1, 1]</span>
+<span style=color:#080;font-weight:700>vec3</span> N_decode(<span style=color:#080;font-weight:700>vec3</span> N) {
+    <span style=color:#080;font-weight:700>return</span> N <span style=color:#333>*</span> <span style=color:#60e;font-weight:700>2.0</span> <span style=color:#333>-</span> <span style=color:#60e;font-weight:700>1.0</span>;
+}
+</code></pre></div><p>类似的，也可以定义一个编码函数，将[-1,1]的法线映射至[0,1]的范围中。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-glsl data-lang=glsl><span style=color:#888>// Encode normal from shader format[-1, 1] to GBuffer/Texture storage format[0.0, 1.0]</span>
+<span style=color:#080;font-weight:700>vec3</span> N_encode(<span style=color:#080;font-weight:700>vec3</span> N) {
+    <span style=color:#080;font-weight:700>return</span> (N <span style=color:#333>+</span> <span style=color:#60e;font-weight:700>1.0</span>) <span style=color:#333>/</span> <span style=color:#60e;font-weight:700>2.0</span>;
+}
+</code></pre></div><p><strong>切线空间</strong>：</p>
+<p>纹理映射本质上是一个从三维空间 $(x, y, z)$ 到二维空间 $(u, v)$ 的函数映射。为了让法线贴图能够跟随模型的任意旋转和骨骼动画而不失效，贴图中存储的并非世界空间下的绝对法线，而是相对于表面局部的切线空间法线。</p>
+<p>对于三维空间中的任意参数化曲面 $P(u, v)$，其切线空间由三个基向量构成：</p>
+<ul>
+<li>切向量（Tangent）：P对u的偏导数 $\frac{\partial P}{\partial u}$ ,它表示在 UV 贴图上沿 U 轴（水平向右）移动极小单位时，三维世界中对应物理点 P 的移动方向与速率。</li>
+<li>副切向量（Bitangent）：P对v的偏导数 $\frac{\partial P}{\partial v}$ ,它表示在 UV 贴图上沿 V 轴（垂直向下）移动极小单位时，三维世界中对应物理点 P 的移动方向与速率。</li>
+<li>面法线（Normal）：原始表面的几何法线，通常由 T 和 B 的叉乘得出。</li>
+</ul>
+<p>在实际的离散网格中，切线空间通常由三角形图元的顶点信息确定。已知三角形三个顶点的空间坐标为 $(P_1, P_2, P_3)$，对应的纹理 UV 坐标为 $((u_1,v_1),(u_2,v_2),(u_3,v_3))$。此时，我们可以通过三维空间中的边向量 $E$ 与二维纹理坐标的差值 $\Delta u, \Delta v$，建立起如下线性组合关系：</p>
+<p>$$
+\begin{cases}
+E_1 = \Delta u_1 \cdot T + \Delta v_1 \cdot B \
+E_2 = \Delta u_2 \cdot T + \Delta v_2 \cdot B
+\end{cases}
+$$</p>
+<p>$$
+\begin{bmatrix}
+E_{1x} & E_{1y} & E_{1z} \
+E_{2x} & E_{2y} & E_{2z}
+\end{bmatrix} =
+\begin{bmatrix}
+\Delta u_1 & \Delta v_1 \
+\Delta u_2 & \Delta v_2
+\end{bmatrix}
+\begin{bmatrix}
+T_x & T_y & T_z \
+B_x & B_y & B_z
+\end{bmatrix}
+$$</p>
+<p>进一步，可以计算出切线空间的基向量T和B，即</p>
+<p>$$
+T = \frac{1}{\Delta u_1 \Delta v_2 - \Delta v_1 \Delta u_2} (\Delta v_2 \cdot E_1 - \Delta v_1 \cdot E_2)
+$$</p>
+<p>$$
+B = \frac{1}{\Delta u_1 \Delta v_2 - \Delta v_1 \Delta u_2} (-\Delta u_2 \cdot E_1 + \Delta u_1 \cdot E_2)
+$$</p>
+<p>此外，在实际渲染时，法线贴图中采样出来的法线TN，是切线空间中的法线。因此，其采样出来切线空间法线还需要进行转换，才能得到世界空间法线，进而参与后续光照计算。具体而言，该转换方法如下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-glsl data-lang=glsl><span style=color:#888>// Transform tangent-space normal from normal map to world space</span>
+<span style=color:#080;font-weight:700>vec3</span> N_toWorld(<span style=color:#080;font-weight:700>vec3</span> N, <span style=color:#080;font-weight:700>vec3</span> T, <span style=color:#080;font-weight:700>vec3</span> TN) {
+    <span style=color:#080;font-weight:700>vec3</span> B <span style=color:#333>=</span> normalize(cross(N, T));
+
+    mat3 TBN <span style=color:#333>=</span> mat3(T, B, N);
+    <span style=color:#080;font-weight:700>return</span> normalize(TBN <span style=color:#333>*</span> TN);
+}
+</code></pre></div><h3 id=displacement-mapping>Displacement Mapping</h3>
+<p>位移/置换贴图（Displacement Mapping）是一种真正改变模型几何拓扑结构的微观细节渲染技术。不同于法线贴图在像素着色器里的“视觉欺骗”，位移贴图通过一张标量高度图（Height Map），在管线的前端真正物理性地抬升或压低顶点。</p>
 <h2 id=pbr>PBR</h2>
 <blockquote>
 <p><a href=https://github.com/QianMo/PBR-White-Paper/tree/master target=_blank>PBR 白皮书</a></p>
