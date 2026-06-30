@@ -27,8 +27,9 @@ draft: false
   - [Lambert's Cosine Law](#lamberts-cosine-law)
   - [Phong/Blinn-Phong Model](#phongblinn-phong-model)
 - [Render](#render)
-  - [Opuque Shading](#opuque-shading)
-  - [Transparent Shading](#transparent-shading)
+  - [Opuque Froward Rendering](#opuque-froward-rendering)
+  - [Deferred Rendering](#deferred-rendering)
+  - [Transparent Rendering](#transparent-rendering)
 - [Texture](#texture)
   - [Texture Mapping](#texture-mapping)
   - [Light Mapping](#light-mapping)
@@ -257,6 +258,7 @@ $$
 在完成片元着色计算后，紧接着会进行各种测试和混合操作，最终得到呈现在屏幕上的图片。这些测试按从前到后的顺序为：
 
 - 模板测试
+
 - 透明度测试：它其实和半透明渲染没什么关系，只是用到了alpha做判断，当alpha值小于某个阈值时丢弃该片元。
 - 深度测试：它用于比较片元的深度值与深度缓冲区中对应位置的深度值，并决定是否绘制该片元。深度测试可以确保物体的遮挡关系正确，避免后面的物体遮挡前面的物体。
 
@@ -334,9 +336,11 @@ Lambert模型用于描述粗糙材料的表面。它是一种理想模型，只�
 
 ## Render
 
-### Opuque Shading
+### Opuque Froward Rendering
 
-### Transparent Shading
+### Deferred Rendering
+
+### Transparent Rendering
 
 ## Texture
 
@@ -379,6 +383,8 @@ Mipmap 由多个层级（Level）组成，每个层级的纹理分辨率是上�
 
 法线贴图（Normal Mapping）是一种在像素级伪造表面细节的经验着色技术。它的核心物理思想是：保持低模（Low-Poly）的稀疏几何顶点不变，通过高频改变每个片元的法线方向，诱导光照方程（如 PBR）计算出具有凹凸感的高光与阴影变化。
 
+**法线贴图的解码/编码**：
+
 由于图形纹理规范中，像素分量范围固定为[0,1]，但三维方向向量的合法范围是[-1,1]，因此法线贴图在采样时必须进行值域还原，将其映射至[-1,1]的正确范围中。
 
 ```glsl
@@ -388,7 +394,60 @@ vec3 N_decode(vec3 N) {
 }
 ```
 
-此外，为了让法线贴图能跟随模型任意旋转、动画而不失效，贴图中的法线通常存储在相对表面的切线空间中。因此，其采样出来切线空间法线还需要进行转换，才能得到世界空间法线，进而参与后续光照计算。具体而言，该转换方法如下：
+类似的，也可以定义一个编码函数，将[-1,1]的法线映射至[0,1]的范围中。
+
+```glsl
+// Encode normal from shader format[-1, 1] to GBuffer/Texture storage format[0.0, 1.0]
+vec3 N_encode(vec3 N) {
+    return (N + 1.0) / 2.0;
+}
+```
+
+**切线空间**：
+
+纹理映射本质上是一个从三维空间 $(x, y, z)$ 到二维空间 $(u, v)$ 的函数映射。为了让法线贴图能够跟随模型的任意旋转和骨骼动画而不失效，贴图中存储的并非世界空间下的绝对法线，而是相对于表面局部的切线空间法线。
+
+对于三维空间中的任意参数化曲面 $P(u, v)$，其切线空间由三个基向量构成：
+
+- 切向量（Tangent）：P对u的偏导数 $\frac{\partial P}{\partial u}$ ,它表示在 UV 贴图上沿 U 轴（水平向右）移动极小单位时，三维世界中对应物理点 P 的移动方向与速率。
+- 副切向量（Bitangent）：P对v的偏导数 $\frac{\partial P}{\partial v}$ ,它表示在 UV 贴图上沿 V  轴（垂直向下）移动极小单位时，三维世界中对应物理点 P 的移动方向与速率。
+- 面法线（Normal）：原始表面的几何法线，通常由 T 和 B 的叉乘得出。
+
+在实际的离散网格中，切线空间通常由三角形图元的顶点信息确定。已知三角形三个顶点的空间坐标为 $(P_1, P_2, P_3)$，对应的纹理 UV 坐标为 $((u_1,v_1),(u_2,v_2),(u_3,v_3))$。此时，我们可以通过三维空间中的边向量 $E$ 与二维纹理坐标的差值 $\Delta u, \Delta v$，建立起如下线性组合关系：
+
+$$
+\begin{cases}
+E_1 = \Delta u_1 \cdot T + \Delta v_1 \cdot B \\
+E_2 = \Delta u_2 \cdot T + \Delta v_2 \cdot B
+\end{cases}
+$$
+
+$$
+\begin{bmatrix} 
+E_{1x} & E_{1y} & E_{1z} \\ 
+E_{2x} & E_{2y} & E_{2z} 
+\end{bmatrix} = 
+\begin{bmatrix} 
+\Delta u_1 & \Delta v_1 \\ 
+\Delta u_2 & \Delta v_2 
+\end{bmatrix} 
+\begin{bmatrix} 
+T_x & T_y & T_z \\ 
+B_x & B_y & B_z 
+\end{bmatrix}
+$$
+
+进一步，可以计算出切线空间的基向量T和B，即
+
+$$
+T = \frac{1}{\Delta u_1 \Delta v_2 - \Delta v_1 \Delta u_2} (\Delta v_2 \cdot E_1 - \Delta v_1 \cdot E_2)
+$$
+
+$$
+B = \frac{1}{\Delta u_1 \Delta v_2 - \Delta v_1 \Delta u_2} (-\Delta u_2 \cdot E_1 + \Delta u_1 \cdot E_2)
+$$
+
+此外，在实际渲染时，法线贴图中采样出来的法线TN，是切线空间中的法线。因此，其采样出来切线空间法线还需要进行转换，才能得到世界空间法线，进而参与后续光照计算。具体而言，该转换方法如下：
 
 ```glsl
 // Transform tangent-space normal from normal map to world space
