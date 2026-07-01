@@ -32,7 +32,6 @@ draft: false
   - [Lambert's Cosine Law](#lamberts-cosine-law)
   - [Phong/Blinn-Phong Model](#phongblinn-phong-model)
 - [Render](#render)
-  - [Opuque Froward Rendering](#opuque-froward-rendering)
   - [Deferred Rendering](#deferred-rendering)
   - [Transparent Rendering](#transparent-rendering)
 - [Texture](#texture)
@@ -260,7 +259,9 @@ $$
 P(x,y,z,1)^{T}=(\frac{1}{ratio \cdot tan\frac{\theta}{2}}x, \frac{1}{tan\frac{\theta}{2}}y, \frac{z-near}{far-near}, -z)^{T}
 $$
 
-- **Screen Space**:该阶段由视口变换（Viewport Transform）和深度范围变换 共同完成，将 [-1,1] 区间的 NDC 坐标，线性映射为帧缓冲区上的像素坐标，也就是屏幕空间坐标。
+换句话说，裁剪由投影矩阵与GPU硬件裁剪单元共同完成。其中，投影矩阵（无论是正交还是透视）的本质，是把相机的 3D 视锥体（Frustum）空间，通过数学魔法强行压扁、扭曲成一个规范化立方体。而GPU硬件裁剪单元则是高效地执行裁剪操作的专用电路，它会检查每个顶点的坐标是否在[-1,1]区间内，若不在则丢弃该顶点。
+
+- **Screen Space**:该阶段由视口变换（Viewport Transform）和深度范围变换共同完成，将[-1,1]区间的NDC坐标，线性映射为帧缓冲区上的像素坐标，也就是屏幕空间坐标。具体来说，就是把x和y从[-1, 1]的范围映射到[0, width]和[0, height]的范围内，而z则映射到[0, 1]的深度范围内。
 
 ### Rasterization Stage
 
@@ -296,9 +297,13 @@ $$
 
 **Early-Z测试**：
 
-一般来说，深度测试都发生在片元着色之后。为了减少进入片元着色的像素数量，一种提前进行深度测试的Early-Z技术被提出了。它位于光栅化阶段之后，像素处理阶段之前。
+一般来说，深度测试都发生在片元着色之后。为了减少进入片元着色的像素数量，一种提前进行深度测试的Early-Z技术被提出了。它位于光栅化阶段之后，像素处理阶段之前。不过，Early-Z会带来透明测试的冲突，例如某个片元A虽然遮挡了另一个片元B，但A却是透明的，GPU应当渲染的是片元B，这就产生了矛盾。
 
-不过，Early-Z会带来透明测试的冲突，例如某个片元A虽然遮挡了另一个片元B，但A却是透明的，GPU应当渲染的是片元B，这就产生了矛盾。
+除了由渲染API直接提供的Early-Z测试，现代游戏引擎还将这种Early-Z的思想，与Deferred Rendering技术相结合，直接作为渲染管线中的独立Pass存在。比如：UE5中GPU-Driven的最佳实践——Nanite就将这种Early-Z的思想推向了极致，并演进为了生成Visibility Buffer的Deferred Geometry Pass。
+
+传统的Deferred Rendering需要在Geometry Pass中向显存写入包含颜色、法线等多张大纹理的G-Buffer，这会带来高昂的显存带宽开销。而Nanite的Visibility Buffer管线选择在第一阶段只运行一个极致精简的Early-Z变种 Pass：它不计算也不存储任何材质属性，光栅化后在屏幕上仅输出Depth以及一张记录着Primitive ID、Instance ID以及Material ID的极精简缓冲区。在随后的材质着色阶段，引擎再启动全屏后处理，像素通过读取自身的ID，直接去显存缓冲区中乱序抓取对应的顶点数据并原地进行数学插值，最后根据Material ID索引对应的材质进行着色。
+
+这种演进彻底颠覆了传统管线盲目向显存塞入海量材质属性的低效模式，通过“先算可见性、后抓取属性”的逻辑，将显存写入的带宽开销降低了 80% 以上，成为了现代 GPU-Driven 渲染体系的核心基石。
 
 ## Modern Graphics Pipeline
 
@@ -390,11 +395,17 @@ Lambert模型用于描述粗糙材料的表面。它是一种理想模型，只�
 
 ## Render
 
-### Opuque Froward Rendering
-
 ### Deferred Rendering
 
+> [【《Real-Time Rendering 3rd》 提炼总结】(七) 第七章续 · 延迟渲染(Deferred Rendering)的前生今世](https://zhuanlan.zhihu.com/p/28489928)
+
 ### Transparent Rendering
+
+**Screen Space Refraction**：
+
+屏幕空间折射（Screen Space Refraction）是一种在渲染过程中模拟透明物体的折射效果的技术。它通过在渲染过程中，将透明物体的折射效果（如玻璃、水等）模拟为透明的，而不是不透明的，来实现透明渲染。
+
+**OIT**:
 
 ## Texture
 
