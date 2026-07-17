@@ -10,18 +10,18 @@
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
 <meta property="og:title" content="GAMES101">
-<meta property="og:description" content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  OpenGL Pipeline Overview Coordinate Transformations Test and bledning   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Opuque Froward Rendering Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
+<meta property="og:description" content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  Application Stage Coordinate Transformations Rasterization Stage Fragment Stage   Modern Graphics Pipeline  Geometry Shader Tessellation Shader Compute Shader   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2024-8-1/games101/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2024-08-01T17:06:45+08:00">
 <meta property="article:modified_time" content="2024-08-01T17:06:45+08:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="GAMES101">
-<meta name=twitter:description content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  OpenGL Pipeline Overview Coordinate Transformations Test and bledning   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Opuque Froward Rendering Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
+<meta name=twitter:description content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  Application Stage Coordinate Transformations Rasterization Stage Fragment Stage   Modern Graphics Pipeline  Geometry Shader Tessellation Shader Compute Shader   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
 <meta itemprop=name content="GAMES101">
-<meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  OpenGL Pipeline Overview Coordinate Transformations Test and bledning   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Opuque Froward Rendering Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
+<meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  Application Stage Coordinate Transformations Rasterization Stage Fragment Stage   Modern Graphics Pipeline  Geometry Shader Tessellation Shader Compute Shader   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
 <meta itemprop=dateModified content="2024-08-01T17:06:45+08:00">
-<meta itemprop=wordCount content="1180">
+<meta itemprop=wordCount content="1303">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -95,9 +95,17 @@
 </li>
 <li><a href=#graphics-pipeline>Graphics Pipeline</a>
 <ul>
-<li><a href=#opengl-pipeline-overview>OpenGL Pipeline Overview</a></li>
+<li><a href=#application-stage>Application Stage</a></li>
 <li><a href=#coordinate-transformations>Coordinate Transformations</a></li>
-<li><a href=#test-and-bledning>Test and bledning</a></li>
+<li><a href=#rasterization-stage>Rasterization Stage</a></li>
+<li><a href=#fragment-stage>Fragment Stage</a></li>
+</ul>
+</li>
+<li><a href=#modern-graphics-pipeline>Modern Graphics Pipeline</a>
+<ul>
+<li><a href=#geometry-shader>Geometry Shader</a></li>
+<li><a href=#tessellation-shader>Tessellation Shader</a></li>
+<li><a href=#compute-shader>Compute Shader</a></li>
 </ul>
 </li>
 <li><a href=#shading>Shading</a>
@@ -110,7 +118,6 @@
 </li>
 <li><a href=#render>Render</a>
 <ul>
-<li><a href=#opuque-froward-rendering>Opuque Froward Rendering</a></li>
 <li><a href=#deferred-rendering>Deferred Rendering</a></li>
 <li><a href=#transparent-rendering>Transparent Rendering</a></li>
 </ul>
@@ -275,18 +282,21 @@
 <p>在数据结构层面，算法维护了边表（Edge Table, ET）和活动边表（Active Edge Table, AET）。当扫描线横切过多个三角形的边界时，算法将扫描线划分为若干个连续的X轴区间（Spans）。利用图形的时空连续性，在一个区间内遮挡关系保持恒定，因此算法只需在区间起点处比较一次Z值，即可确定整个区间应显示哪个三角形的颜色，随后按区间进行批量写操作。</p>
 <p>尽管传统的硬件扫描线消隐已被淘汰，但其核心思想——沿扫描线方向利用几何连续性批量处理像素——在近年来得到了复兴。在虚幻引擎5的Nanite虚拟几何体系中，软光栅化器在Compute Shader中执行类似扫描线的区间消隐逻辑。通过将屏幕划分为2×2像素的像素块（Quad），Nanite在每个块内进行深度连续性测试，一次性消隐并合并微多边形三角形（像素级三角形），极大地降低了海量小三角形带来的过度绘制（Overdraw）问题。这可以看作扫描线思想在现代GPU Compute Shader中的一次成功演化。</p>
 <h2 id=graphics-pipeline>Graphics Pipeline</h2>
-<h3 id=opengl-pipeline-overview>OpenGL Pipeline Overview</h3>
-<ul>
-<li>应用阶段：输入一堆三维空间中的点。</li>
-<li>几何阶段：依次进行MVP变换，并进行裁剪和屏幕映射，得到三角形顶点对应屏幕像素位置。</li>
-<li>光栅化：通过顶点插值，得到被三角形覆盖的所有像素位置。</li>
-<li>片元处理：进行着色计算，并依次进行透明度、模板和深度测试，最终得到显示在屏幕上的图像。</li>
-</ul>
 <p><figure>
 <img src=https://pica.zhimg.com/80/v2-85a9e77245f43d4bab56f2052c3d81f0_720w.webp alt=渲染管线>
 </figure></p>
+<h3 id=application-stage>Application Stage</h3>
+<p>应用阶段完全由 CPU 应用程序控制，属于软件阶段，无硬件固定流程。常见操作包括：</p>
+<ul>
+<li>加载模型、纹理、材质、灯光、场景矩阵数据</li>
+<li>场景空间逻辑更新、动画更新、物理计算</li>
+<li>组织渲染队列、透明物体排序、视锥剔除</li>
+<li>向 GPU 提交绘制指令与顶点数据</li>
+</ul>
+<p>该阶段所有逻辑完全可控，由开发者代码实现。</p>
 <h3 id=coordinate-transformations>Coordinate Transformations</h3>
-<p>几何阶段中的顶点处理应该是渲染管线中较为复杂的部分，下面详细总结其流程：</p>
+<p>几何阶段负责所有顶点的空间变换、图元组装、裁剪、屏幕映射，决定模型“在哪里画”。其中顶点着色、几何着色、投影变换可编程；裁剪、屏幕映射由硬件固定完成。</p>
+<p>该阶段中的顶点处理应该是渲染管线中较为复杂的部分，下面详细总结其流程：</p>
 <ul>
 <li>
 <p><strong>Model Space</strong>:用于渲染的模型文件内的坐标，也即模型空间坐标。</p>
@@ -310,30 +320,53 @@ oFragUV <span style=color:#333>=</span> iVertUV;
 <p>$$
 P(x,y,z,1)^{T}=(\frac{1}{ratio \cdot tan\frac{\theta}{2}}x, \frac{1}{tan\frac{\theta}{2}}y, \frac{z-near}{far-near}, -z)^{T}
 $$</p>
+<p>换句话说，裁剪由投影矩阵与GPU硬件裁剪单元共同完成。其中，投影矩阵（无论是正交还是透视）的本质，是把相机的 3D 视锥体（Frustum）空间，通过数学魔法强行压扁、扭曲成一个规范化立方体。而GPU硬件裁剪单元则是高效地执行裁剪操作的专用电路，它会检查每个顶点的坐标是否在[-1,1]区间内，若不在则丢弃该顶点。</p>
 <ul>
-<li><strong>Screen Space</strong>:该阶段由 视口变换（Viewport Transform） + 深度范围变换 共同完成，将 ([-1,1]) 区间的 NDC 坐标，线性映射为帧缓冲区上的像素坐标，也就是屏幕空间坐标。</li>
+<li><strong>Screen Space</strong>:该阶段由视口变换（Viewport Transform）和深度范围变换共同完成，将[-1,1]区间的NDC坐标，线性映射为帧缓冲区上的像素坐标，也就是屏幕空间坐标。具体来说，就是把x和y从[-1, 1]的范围映射到[0, width]和[0, height]的范围内，而z则映射到[0, 1]的深度范围内。</li>
 </ul>
-<p>以OpenGL为例，</p>
-<h3 id=test-and-bledning>Test and bledning</h3>
-<p>在完成片元着色计算后，紧接着会进行各种测试和混合操作，最终得到呈现在屏幕上的图片。这些测试按从前到后的顺序为：</p>
+<h3 id=rasterization-stage>Rasterization Stage</h3>
+<p>光栅化阶段完全由 GPU 硬件光栅器执行，不可编程。它能够将三角形图元转换为屏幕上覆盖的所有片元。具体操作包括：</p>
 <ul>
-<li>
-<p>模板测试</p>
-</li>
-<li>
-<p>透明度测试：它其实和半透明渲染没什么关系，只是用到了alpha做判断，当alpha值小于某个阈值时丢弃该片元。</p>
-</li>
-<li>
-<p>深度测试：它用于比较片元的深度值与深度缓冲区中对应位置的深度值，并决定是否绘制该片元。深度测试可以确保物体的遮挡关系正确，避免后面的物体遮挡前面的物体。</p>
-</li>
+<li>三角形设置：计算三角形边界方程</li>
+<li>三角形遍历：遍历所有覆盖像素，生成片元</li>
+<li>顶点属性插值：对 UV、法线、颜色、深度进行平滑插值</li>
 </ul>
-<p><strong>Early-Z测试</strong>：</p>
-<p>一般来说，深度测试都发生在片元着色之后。为了减少进入片元着色的像素数量，一种提前进行深度测试的Early-Z技术被提出了。它位于光栅化阶段之后，像素处理阶段之前。</p>
-<p>不过，Early-Z会带来透明测试的冲突，例如某个片元A虽然遮挡了另一个片元B，但A却是透明的，GPU应当渲染的是片元B，这就产生了矛盾。</p>
-<p><strong>混合</strong>：</p>
+<h3 id=fragment-stage>Fragment Stage</h3>
+<p>片元处理阶段决定每个像素“画什么颜色”，包含可编程片元着色与硬件固定测试、混合流程。</p>
+<p><strong>逐片元着色（完全可编程）</strong>：</p>
+<p>读取插值后的 UV、法线、位置，执行 PBR 光照、纹理采样、法线贴图、颜色计算，输出最终片元颜色与深度。</p>
+<p><strong>逐像素测试与混合（固定/可配置）</strong>：</p>
+<p>所有测试严格按照固定顺序执行，顺序不可颠倒。其中，深度测试不通过、模板测试失败、AlphaTest 丢弃的片元，均不会进入颜色混合阶段。</p>
+<ul>
+<li>裁剪测试 Scissor Test：判断像素是否在视口范围内</li>
+<li>模板测试 Stencil Test：实现描边、阴影、轮廓、镜面遮罩</li>
+<li>透明度测试 Alpha Test：根据 Alpha 阈值直接 discard 片元，用于树叶、镂空贴图（不实现半透明）</li>
+<li>深度测试 Depth Test：对比深度缓冲，正确处理场景遮挡关系</li>
+<li>颜色混合 Blend：半透明物体专属，将当前片元颜色与帧缓冲原有颜色混合</li>
+</ul>
 <p><figure>
 <img src=https://zhytou.github.io/post/2024-8-1/color_blend.png alt=颜色混合>
 </figure></p>
+<p>如图所示，通过颜色混合，可以实现基础的半透明薄片渲染。不过，由于半透明物体需要混合历史颜色，它无法开启深度写入（glDepthMask(GL_FALSE)）。这就要求场景中的半透明物体必须严格按照从后往前（Back-to-Front）的顺序进行手工 CPU 排序渲染，否则会发生严重的穿帮错乱。</p>
+<p>此外，对于更加复杂的折射和反射时，需要使用其他技术，比如：OIT（Order Independent Translucency）以及Ray Tracing等。</p>
+<p><strong>Early-Z测试</strong>：</p>
+<p>一般来说，深度测试都发生在片元着色之后。为了减少进入片元着色的像素数量，一种提前进行深度测试的Early-Z技术被提出了。它位于光栅化阶段之后，像素处理阶段之前。不过，Early-Z会带来透明测试的冲突，例如某个片元A虽然遮挡了另一个片元B，但A却是透明的，GPU应当渲染的是片元B，这就产生了矛盾。</p>
+<p>除了由渲染API直接提供的Early-Z测试，现代游戏引擎还将这种Early-Z的思想，与Deferred Rendering技术相结合，直接作为渲染管线中的独立Pass存在。比如：UE5中GPU-Driven的最佳实践——Nanite就将这种Early-Z的思想推向了极致，并演进为了生成Visibility Buffer的Deferred Geometry Pass。</p>
+<p>传统的Deferred Rendering需要在Geometry Pass中向显存写入包含颜色、法线等多张大纹理的G-Buffer，这会带来高昂的显存带宽开销。而Nanite的Visibility Buffer管线选择在第一阶段只运行一个极致精简的Early-Z变种 Pass：它不计算也不存储任何材质属性，光栅化后在屏幕上仅输出Depth以及一张记录着Primitive ID、Instance ID以及Material ID的极精简缓冲区。在随后的材质着色阶段，引擎再启动全屏后处理，像素通过读取自身的ID，直接去显存缓冲区中乱序抓取对应的顶点数据并原地进行数学插值，最后根据Material ID索引对应的材质进行着色。</p>
+<p>这种演进彻底颠覆了传统管线盲目向显存塞入海量材质属性的低效模式，通过“先算可见性、后抓取属性”的逻辑，将显存写入的带宽开销降低了 80% 以上，成为了现代 GPU-Driven 渲染体系的核心基石。</p>
+<h2 id=modern-graphics-pipeline>Modern Graphics Pipeline</h2>
+<h3 id=geometry-shader>Geometry Shader</h3>
+<p>管线位置：位于 Tessellation 之后，光栅化（Rasterizer）之前。</p>
+<p>最核心作用（拓扑结构大变身）：它是管线中唯一能够感知完整图元（三角形三个顶点及邻接信息）并能彻底改变网格拓扑结构的阶段。它不适合大规模生成顶点（存在严重的阻断式硬件卡顿瓶颈），但极度擅长做异构转换。例如：将一个 3D 坐标点扩展为一个永远面朝摄像机的 2D 正方形面片（粒子系统 Billboard 公告板技术，如火花、烟花、浓烟），或者做模型描边生成、多视角单通道级联阴影贴图生成。</p>
+<h3 id=tessellation-shader>Tessellation Shader</h3>
+<p>管线位置：紧跟在 Vertex Shader 之后，Geometry Shader 之前。</p>
+<p>内部架构：由 TCS（控制着色器） $\rightarrow$ Tessellator（固定硬件单元） $\rightarrow$ TES（评估着色器） 三段式组成。</p>
+<p>最核心作用（几何体无中生有）：输入参数化的控制点（GL_PATCHES），利用显卡专用硬件芯片在二维参数空间（$U,V$）内执行全自动的高密度多边形切碎。它通过极低的显存带宽开销生成海量真顶点，配合位移贴图（Displacement Map）能从物理上彻底改变模型的微观凹凸轮廓（如高尔夫球坑、地形起伏）。</p>
+<h3 id=compute-shader>Compute Shader</h3>
+<p>管线位置：编制之外的独立通道。 它不属于上述单向渲染管线的任何一环，不参与光栅化，也不直接输出屏幕像素。</p>
+<p>最核心作用（GPGPU 通用并行计算）：拥有直接读写乱序显存（SSBO、Image Load/Store）的特权，能以极高的并发率执行纯数学计算。</p>
+<p>单干场景：一个即可。用于物理模拟（粒子运动、流体碰撞）、AI 矩阵运算、海量数据并行排序。</p>
+<p>联手场景（体积云、物理网格）：作为传统管线的“后勤军师”。Compute Shader 先行启动，在后台通过数学算法（如柏林噪声）计算出 3D 空间中的体积云密度信息并写入显存，随后停机；传统渲染管线（VS/FS）无缝接棒，读取该显存数据并使用光线步进（Raymarching）算法将其渲染到屏幕上。</p>
 <h2 id=shading>Shading</h2>
 <blockquote>
 <p>In computer graphics, shading is the process of applying a material to an object.</p>
@@ -382,9 +415,14 @@ $$</p>
 <p><strong>Ambient</strong>：</p>
 <p>至于环境光的计算方式就非常简单了。它表示为光的颜色乘以一个很小的常量环境因子，再乘以物体的颜色。</p>
 <h2 id=render>Render</h2>
-<h3 id=opuque-froward-rendering>Opuque Froward Rendering</h3>
 <h3 id=deferred-rendering>Deferred Rendering</h3>
+<blockquote>
+<p><a href=https://zhuanlan.zhihu.com/p/28489928 target=_blank>【《Real-Time Rendering 3rd》 提炼总结】(七) 第七章续 · 延迟渲染(Deferred Rendering)的前生今世</a></p>
+</blockquote>
 <h3 id=transparent-rendering>Transparent Rendering</h3>
+<p><strong>Screen Space Refraction</strong>：</p>
+<p>屏幕空间折射（Screen Space Refraction）是一种在渲染过程中模拟透明物体的折射效果的技术。它通过在渲染过程中，将透明物体的折射效果（如玻璃、水等）模拟为透明的，而不是不透明的，来实现透明渲染。</p>
+<p><strong>OIT</strong>:</p>
 <h2 id=texture>Texture</h2>
 <h3 id=texture-mapping>Texture Mapping</h3>
 <p>纹理贴图（Texture Mapping）是计算机图形学中将二维图像映射到三维物体表面的技术。通过定义纹理坐标（UV 坐标，范围通常为 [0,1]），将图像的每个像素对应到物体表面的顶点，最终在渲染时填充物体表面的颜色。</p>
