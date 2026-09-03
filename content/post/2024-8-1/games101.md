@@ -48,13 +48,18 @@ draft: false
   - [Cook-Torrance BRDF](#cook-torrance-brdf)
   - [Diffuse Part](#diffuse-part)
   - [Specular Part](#specular-part)
-  - [Disney Principled BRDF](#disney-principled-brdf)
-  - [Linear Space and Tone Mapping](#linear-space-and-tone-mapping)
+  - [PBR Textures](#pbr-textures)
   - [PBR Implementation](#pbr-implementation)
   - [PBR GI——IBL](#pbr-giibl)
+- [Disney Principled BxDF](#disney-principled-bxdf)
+  - [Disney Principle and Parameters](#disney-principle-and-parameters)
+  - [Disney BRDF Equation](#disney-brdf-equation)
+- [Post-processing](#post-processing)
+  - [Linear Space and Tone Mapping](#linear-space-and-tone-mapping)
 - [Ray Tracing](#ray-tracing)
   - [Collision detection](#collision-detection)
   - [Scene Management](#scene-management)
+  - [SDS senario](#sds-senario)
 - [References](#references)
 
 ## Transformation
@@ -405,6 +410,9 @@ Lambert模型用于描述粗糙材料的表面。它是一种理想模型，只�
 
 屏幕空间折射（Screen Space Refraction）是一种在渲染过程中模拟透明物体的折射效果的技术。它通过在渲染过程中，将透明物体的折射效果（如玻璃、水等）模拟为透明的，而不是不透明的，来实现透明渲染。
 
+> [Interactive Image-Space Refraction of Nearby Geometry](https://cwyman.org/papers/graphite05_InteractiveNearbyRefraction.pdf)
+> [An Approximate Image-Space Approach for Interactive Refraction](https://cwyman.org/papers/sig05_approxISRefr.pdf)
+
 **OIT**:
 
 ## Texture
@@ -707,29 +715,7 @@ k_{direct}=\frac{(\alpha+1)^2}{8}\\
 k_{ibl}=\frac{\alpha^2}{2}
 $$
 
-### Disney Principled BRDF
-
-迪士尼动画工作室在SIGGRAPH 2012上著名的talk《Physically-based shading at Disney》中提出了迪士尼原则的BRDF（Disney Principled BRDF），奠定了后续游戏行业和电影行业PBR的方向和标准。它的核心贡献其实是避免了过去PBR中复杂晦涩物理参数，而引入了一系列直观的参数，包括：用于表示表示材料吸收光的金属度（metallic）和用于表示材料镜面反射集中度的粗糙度（roughness）等。
-
-**漫反射/镜面反射的比例**：
-
-在Cook-Torrance BRDF中，$k_d$和$k_s$参数分别表示了漫反射和镜面反射的比例。将它们用菲涅尔项和金属度（能够反映折射部分，也就是被金属吸收的部分）表示如下：
-
-$$
-k_d=(1-F)*(1-metallic)\\
-k_s=F
-$$
-
-换句话说，Cook-Torrance BRDF可改写为
-
-$$
-\begin{align}
-f_r =& k_df_{lambert}+k_sf_{cook-torrance}\\
-=& (1-F)*(1-metallic)\frac\rho\pi+F\frac{DG}{4(\vec{w_o}*\vec{n})(\vec{w_i}*\vec{n})}  
-\end{align}
-$$
-
-**PBR常见材料/纹理**：
+### PBR Textures
 
 ![PBR纹理列表](https://zhytou.github.io/post/2024-8-1/pbr_textures.png)
 
@@ -746,6 +732,60 @@ $$
 - diffuse/albedo：每个Texel表示对应位置的表面颜色。
 - specular：每个Texel表示对应位置的$F_0$，即入射角为0°时的菲涅尔系数。
 - glossiness：每个Texel表示对应位置粗糙程度。
+
+### PBR Implementation
+
+> [learnopengl中关于使用opengl实现一个PBR着色器](https://learnopengl-cn.github.io/07%20PBR/02%20Lighting/)
+
+### PBR GI——IBL
+
+> [learnopengl中漫反射IBL](https://learnopengl-cn.github.io/07%20PBR/03%20IBL/01%20Diffuse%20irradiance/)
+> [learnopengl中镜面反射IBL](https://learnopengl-cn.github.io/07%20PBR/03%20IBL/02%20Specular%20IBL/)
+
+## Disney Principled BxDF
+
+迪士尼动画工作室在SIGGRAPH 2012上著名的talk《Physically-based shading at Disney》中提出了迪士尼原则的BRDF（Disney Principled BRDF），奠定了后续游戏行业和电影行业PBR的方向和标准。它的核心贡献其实是避免了过去PBR中复杂晦涩物理参数，而引入了一系列直观的参数，包括：用于表示表示材料吸收光的金属度（metallic）和用于表示材料镜面反射集中度的粗糙度（roughness）等。
+
+### Disney Principle and Parameters
+
+迪士尼的核心理念是使用直观的参数尽可能还原丰富的真实视觉表现。它本质上是一种“艺术导向（Artist-Friendly）”而非完全物理严格的 BRDF 模型。其核心参数定义如下：
+
+- baseColor（固有色）：表面颜色，通常由纹理贴图提供。
+- subsurface（次表面）：使用次表面近似控制漫反射形状。
+- metallic（金属度）：金属（0 = 电介质，1 =金属）。这是两种不同模型之间的线性混合。金属模型没有漫反射成分，并且还具有等于基础色的着色入射镜面反射。
+- specular（镜面反射强度）：入射镜面反射量。用于取代折射率。
+- specularTint（镜面反射颜色）：对美术控制的让步，用于对基础色（basecolor）的入射镜面反射进行颜色控制。掠射镜面反射仍然是非彩色的。
+- roughness（粗糙度）：表面粗糙度，控制漫反射和镜面反射。
+- anisotropic（各向异性强度）：各向异性程度。用于控制镜面反射高光的纵横比。（0 =各向同性，1 =最大各向异性。）
+- sheen（光泽度）：一种额外的掠射分量（grazing component），主要用于布料。
+sheenTint（光泽颜色）：对sheen（光泽度）的颜色控制。
+clearcoat（清漆强度）：有特殊用途的第二个镜面波瓣（specular lobe）。
+clearcoatGloss（清漆光泽度）：控制透明涂层光泽度，0 = “缎面（satin）”外观，1 = “光泽（gloss）”外观。
+
+**金属度插值**：
+
+从本质上而言，Disney Principled BRDF模型是金属和非金属的混合型模型，最终结果是基于金属度（metallic）在金属BRDF和非金属BRDF之间进行线性插值。
+
+具体而言，这种插值主要涉及两部分，
+
+- 高光基础反射率 $F_0$ 的插值: 绝缘体的 $F_0^{\text{dielectric}}$ 由 specular 参数决定（通常为 $0.08 \times \text{specular} \times \text{specularTint}$），而金属的 $F_0^{\text{metallic}}$ 直接等于 baseColor。插值得到统一的 $F_0$
+- 漫反射组件的衰减: 由于纯金属会吸收所有透射光（无折射与内部散射），漫反射能量被直接乘以 $(1 - \text{metallic})$ 进行削减
+
+### Disney BRDF Equation
+
+**迪士尼漫反射**：
+
+迪士尼指出，传统的 Lambert 漫反射模型过于简单（$f = \frac{\text{baseColor}}{\pi}$），在掠射角处显得太暗。若仅简单添加菲涅尔透射衰减，由于能量被高光带走，反而会导致边缘进一步变暗，这与 MERL 实测材质库的数据严重不符。通过分析实测数据，迪士尼发现：粗糙表面在掠射角（Grazing Angle）且观察方向靠近光源方向时，会因微观结构的相互遮挡与阴影消退产生强烈的“掠射逆反射（Grazing Retro-reflection）”提亮现象；而光滑表面则在掠射角处呈现边缘变暗。为此，迪士尼基于 Schlick 菲涅尔形式构造了一个由粗糙度驱动的经验漫反射模型：
+
+$$f_r^{\text{DisneyDiffuse}} = \frac{\text{baseColor}}{\pi} \left[ 1 + (F_D - 1)(1 - \cos\theta_i)^5 \right] \left[ 1 + (F_D - 1)(1 - \cos\theta_o)^5 \right]$$
+
+其中，$F_D$ 为掠射逆反射控制因子，公式为：
+
+$$F_D = 0.5 + 2 \cdot \text{roughness} \cdot \cos^2\theta_d$$
+
+$\theta_i$ 与 $\theta_o$ 分别为入射光线和观察视线的法线夹角。$\theta_d$ 为半角向量 $\boldsymbol{h}$ 与视角/入射角的夹角（当视角与光源重合，即处于逆反射位置时，$\theta_d = 0 \implies \cos^2\theta_d = 1$）。
+
+## Post-processing
 
 ### Linear Space and Tone Mapping
 
@@ -777,15 +817,6 @@ void main()
   color = vec4(mapped, 1.0);
 }   
 ```
-
-### PBR Implementation
-
-> [learnopengl中关于使用opengl实现一个PBR着色器](https://learnopengl-cn.github.io/07%20PBR/02%20Lighting/)
-
-### PBR GI——IBL
-
-> [learnopengl中漫反射IBL](https://learnopengl-cn.github.io/07%20PBR/03%20IBL/01%20Diffuse%20irradiance/)
-> [learnopengl中镜面反射IBL](https://learnopengl-cn.github.io/07%20PBR/03%20IBL/02%20Specular%20IBL/)
 
 ## Ray Tracing
 
@@ -851,6 +882,8 @@ $$ \mathbf{OP} = u\mathbf{e_1} + v\mathbf{e_2} $$
 **SAH**:
 
 表面积启发算法（Surface Area Heuristics, SAH）通过改变包围盒的划分位置从而最小化光线遍历代价的一种优化方法。其具体实现往往是定义一个代价函数，然后通过枚举所有可能的划分位置，找到最小代价的划分位置。其中，代价函数一般包括两部分：遍历代价和划分代价。最常见的代价函数为，扫描线穿过包围盒的代价为1，包围盒划分代价为0.125。
+
+### SDS senario
 
 ## References
 
