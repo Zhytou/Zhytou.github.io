@@ -8,21 +8,66 @@ draft: false
 
 **CGI & Servlet**：
 
-早期的动态网页技术主要包括CGI（通用网关接口，Common Gateway Interface）和Servlet。其中，CGI通过定义Web服务器与外部程序的标准接口，使得外部程序能够根据Web请求生成动态内容。CGI模式的具体工作流程如图1所示。
+早期的动态网页技术主要包括CGI（通用网关接口，Common Gateway Interface）和Servlet。其中，CGI通过定义Web服务器与外部程序的标准接口，使得外部程序能够根据Web请求生成动态内容。这里的Web服务器是指Apache、Nginx等，而外部程序可以是任何语言编写的可执行文件，如C、C++、Perl、Python等。
 
 ![图1 CGI工作流程](https://lushunjian.github.io/blog/2019/01/21/web%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF%E7%9A%84%E6%BC%94%E5%8F%98/CGI.png)
+
+如图1所示，在早期的CGI模式下，每次Web请求都会fork一个新的外部程序进程来处理请求，这种方式虽然简单，但在高并发场景下性能较差，因为频繁的进程创建和销毁会带来较大的开销。以Apache服务器为例，在保证其开启CGI功能后，使用如下配置文件来设置CGI目录：
+
+```xml
+# 1. 设置 URL 路径与服务器物理路径的映射 (Alias)
+ScriptAlias /cgi-bin/ "/var/www/cgi-bin/"
+
+# 2. 配置该目录的执行权限
+<Directory "/var/www/cgi-bin">
+    AllowOverride None
+    Options +ExecCGI              # 允许在该目录执行 CGI 程序
+    SetHandler cgi-script         # 声明该目录下的文件由 cgi-script 模块处理
+    Require all granted           # 允许外部访问
+</Directory>
+```
+
+此时，用户访问 /cgi-bin/ 目录下的可执行文件即可被 Apache 唤醒。以 C++ 编写的外部 CGI 程序 calculator.cgi 为例，Web 服务器在接收到 HTTP 请求后，会把请求参数放入环境变量中（如 QUERY_STRING），C++ 程序只需读取环境变量并向标准输出（std::cout）打印 HTTP 头部与 HTML 主体：
+
+```c++
+// 外部 C++ 程序：/var/www/cgi-bin/calculator.cgi
+#include <iostream>
+#include <cstdlib>
+
+int main() {
+    // 1. 获取 Web 服务器通过环境变量注入的请求参数
+    char* query_string = getenv("QUERY_STRING");
+
+    // 2. 必须先向 stdout 输出 HTTP 响应头 (注意末尾需要双换行 \r\n\r\n)
+    std::cout << "Content-Type: text/html; charset=utf-8\r\n\r\n";
+
+    // 3. 输出 HTML 动态内容，这些标准输出会被 Web 服务器捕获发回给浏览器
+    std::cout << "<html><body>";
+    std::cout << "<h1>C++ CGI 节点响应成功</h1>";
+    if (query_string) {
+        std::cout << "<p>接收到的 URL 参数: " << query_string << "</p>";
+    }
+    std::cout << "</body></html>";
+
+    return 0; // 进程执行完毕退出
+}
+```
 
 相比之下，尽管两者的整体工作架构类似，但Servlet模式把服务器中接收请求和返回响应的部分封装起来了，免去了开发者重复造轮子的工作。开发者只需要根据JDK中Servlet API实现业务逻辑即可。换句话说，开发者编写的Servlet程序其实就类似CGI模式下的外部程序。此外，Servlet拥有更好的可移植性和更高的运行效率，因为Servlet对象运行在JVM上且由Servlet容器管理，可以持久驻留在内存中为多个请求服务，而不需要像CGI一样每次请求都启动一个新进程来执行外部程序。
 
 **JSP：HTML Template**：
 
-在CGI和Servlet的模式下，服务代码往往和HTML大量杂糅在一起。为了处理更复杂的应用并且方便后期维护，人们开始尝试把HTML返回中固定的部分存起来（我们称之为模版），把动态的部分标记出来。当Web请求处理的时候，程序先获取动态数据，再把模版读入进来，把动态数据填充进去，形成最终返回。因此，各种服务器端脚本语言开始出现:
+在CGI和Servlet的模式下，服务代码往往和HTML大量杂糅在一起。为了处理更复杂的 Web 应用并降低后期维护成本，人们开始引入**模板（Template）**的思想：把 HTML 返回中固定的 UI 结构保存为静态文件，只把动态数据部分标记出来。当 Web 请求到达时，服务端程序先从数据库获取动态数据，再读入模板进行数据填充，最终生成完整的 HTML 页面返回给浏览器。
+
+这种直接在静态 HTML 中嵌入的动态内容与控制逻辑，通常借助服务器端脚本语言来实现。以在 HTML 中嵌入动态数据为例，开发者无需像 C++ 或纯 Servlet 那样通过 out.println() 手动拼接字符串，而是只需在 HTML 中插入脚本标签即可由服务端的解释引擎动态渲染。常见的服务器端脚本语言包括:
 
 - ASP(1996) - 微软推出 Active Server Pages，使用 VBScript 等语言来渲染动态页面。
 - PHP(1995 发布，2000 年代开始流行) - 简单的服务器端脚本语言，适用于构建动态网站。
 - JSP/Servlet(1997) - Sun 公司发布 Java Server Pages，使用 Java 语言开发 Web 应用。
 
 其中，JSP(JavaServer Pages)是一种基于Java的Web开发技术，它使HTML页面具备动态内容生成能力。JSP本质上也是一种Servlet，它将Java代码和HTML标签混合编写，然后由Web容器将其转译为一个Servlet类并执行。
+
+值得注意的是，此时的网页交互体验仍然处于一种相对原始的状态。虽然用户能够看到动态生成的内容，但所有的页面状态变更（如表单提交、数据筛选、翻页）都必须依赖向服务器重新发起 HTTP 请求，并**重新渲染渲染整个 HTML 页面**。这种“全页刷新”带来的白屏与卡顿体验，随着互联网的发展以及用户对高频、流畅交互需求的提升，逐渐暴露出了巨大瓶颈。
 
 **MVC: J2EE vs ASP.NET**:
 
@@ -36,15 +81,24 @@ draft: false
 
 在J2EE Web应用的体系中，Servlet和JSP分别承担了Controller和View的职责，而Model则是由J2EE的另一个重要组件EJB（Enterprise Java Bean）负责。类似的，由微软推出的ASP.NET平台也同样采用了MVC架构模式。
 
-**JavaScript Popularity And AJAX Occurrence ：Frontend Backend Split**：
+**JavaScript and AJAX：Frontend/Backend Split**：
 
-随着JavaScript在浏览器中的广泛应用以及AJAX(Asynchronous JavaScript and XML)技术的出现，Web应用程序架构发生了重大转变。因为JavaScript能够直接操作DOM局部更新页面内容，而AJAX技术又使得其能与服务器进行异步通信获取所需数据。这种新模式逐渐取代了传统的JSP技术，改善了服务端大包大揽的状况，使得交互和显示的任务从服务端被剥离出来，进一步形成了前端负责界面显示和用户交互而后端专注于业务逻辑处理的现代Web应用架构。
+随着 JavaScript 在浏览器中的广泛应用以及 AJAX（Asynchronous JavaScript and XML）技术的出现，Web 应用程序架构发生了重大转变。因为 JavaScript 能够直接操作 DOM 局部更新页面内容，而 AJAX 技术又使得其能与服务器进行异步通信获取所需数据。
 
-**More Framework**:
+这种新模式逐渐取代了传统的 JSP/ASP 模板渲染，改善了服务端大包大揽的状况：渲染和交互任务完全下放到客户端，形成前端负责界面显示和用户交互，后端专注于数据接口与业务逻辑的现代前后端分离架构。
 
-此后，前后端分离的格局形成，大量Web框架涌现。在前端领域，Vue和React等现代JavaScript框架应运而生，提供了更高效、组件化的方式构建用户界面。与此同时，Node.js的出现使JavaScript可以运行在服务器端，开发人员能够使用同一种语言编写前后端代码，提高了开发效率，也催生了以MERN（MongoDB+Express+Node+React）等为代表的全栈工程师。
+此后，前后端分离的格局形成，大量 Web 框架涌现：
 
-在后端领域，各种语言的框架百花齐放。其中，Python有Flask和Django，JavaScript有Express，而在Java阵营中，Spring框架则凭借其轻量、模块化的设计，成为了最主要和流行的企业级Web应用开发框架之一。
+- 前端领域：为了解决手动操作 DOM 带来的“状态难以同步”与“维护噩梦”，Vue 和 React 等现代 JavaScript 框架应运而生。它们引入了数据驱动视图（UI = f(State)）和虚拟 DOM（Virtual DOM）机制，提供了更高效、组件化的方式构建用户界面。与此同时，Node.js 的出现使 JavaScript 可以运行在服务器端，催生了以 MERN（MongoDB + Express + Node + React）等为代表的全栈工程师。
+- 后端领域：各种语言的框架百花齐放。其中 Python 有 Flask 和 Django，JavaScript (Node.js) 有 Express / NestJS，而在 Java 阵营中，Spring 框架（配合 Spring Boot）则凭借其轻量、模块化、控制反转（IoC）与面向切面编程（AOP）的设计，成为了企业级 Web 应用开发的主要框架。
+
+**Modern Web Backend Structure: Nginx Reverse Proxy & Microservices**:
+
+随着业务规模与用户并发量的爆发式增长，传统的单体应用（Monolithic Architecture）架构遇到了扩展性瓶颈。现代 Web 后端普遍演进为 “网关层（Nginx）+ 动态微服务（Microservices）+ 分布式缓存/中间件” 的典型高并发架构形态。
+
+- 入口网关（Nginx 反向代理层）：部署在网络最前线，直接对外监听 80/443 端口。Nginx 不参与具体的业务逻辑代码运行，而是利用高并发事件驱动模型（epoll）承担 SSL 证书解密、静态资源托管、限流防刷以及 URL 路由转发职责。通过 proxy_pass 或 upstream 配置指令，以 TCP 网络长连接的形式将动态 HTTP 请求分发给后端的业务服务，避免了传统 CGI 创建进程的巨大开销。
+- 后端微服务集群（Microservices）：后端业务代码按功能拆分为独立自治的微服务（如用户服务、订单服务、风控服务），每个微服务独立运行在容器（Docker/K8s）中并监听特定端口。微服务可根据语言特性灵活选型：Java (Spring Boot) 用于标准企业业务，C++ 或 Go 用于高性能计算或低延迟交易。
+- 高性能数据缓存与中间件（Redis / Message Queue）：微服务之间不再依靠磁盘文件或直接高频查询数据库，而是引入 Redis 等高性能内存缓存数据库，用于实时状态对账、 Session 共享及分布式锁；同时配合 Kafka/RabbitMQ 等消息队列实现异步解耦与高并发削峰。
 
 ## Servlet
 
