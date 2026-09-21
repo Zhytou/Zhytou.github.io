@@ -10,18 +10,18 @@
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
 <meta property="og:title" content="GAMES101">
-<meta property="og:description" content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  Application Stage Coordinate Transformations Rasterization Stage Fragment Stage   Modern Graphics Pipeline  Geometry Shader Tessellation Shader Compute Shader   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
+<meta property="og:description" content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  Application Stage Coordinate Transformations Rasterization Stage Fragment Stage   Modern Graphics Pipeline  Geometry Shader Tessellation Shader Compute Shader   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part PBR Textures PBR Implementation PBR GI——IBL   Disney Principled BxDF  Disney Principle and Parameters Disney BRDF Equation   Post-processing  Linear Space and Tone Mapping   Ray Tracing  Collision detection Scene Management SDS senario   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2024-8-1/games101/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2024-08-01T17:06:45+08:00">
 <meta property="article:modified_time" content="2024-08-01T17:06:45+08:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="GAMES101">
-<meta name=twitter:description content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  Application Stage Coordinate Transformations Rasterization Stage Fragment Stage   Modern Graphics Pipeline  Geometry Shader Tessellation Shader Compute Shader   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
+<meta name=twitter:description content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  Application Stage Coordinate Transformations Rasterization Stage Fragment Stage   Modern Graphics Pipeline  Geometry Shader Tessellation Shader Compute Shader   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part PBR Textures PBR Implementation PBR GI——IBL   Disney Principled BxDF  Disney Principle and Parameters Disney BRDF Equation   Post-processing  Linear Space and Tone Mapping   Ray Tracing  Collision detection Scene Management SDS senario   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。">
 <meta itemprop=name content="GAMES101">
-<meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  Application Stage Coordinate Transformations Rasterization Stage Fragment Stage   Modern Graphics Pipeline  Geometry Shader Tessellation Shader Compute Shader   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part Disney Principled BRDF Linear Space and Tone Mapping PBR Implementation PBR GI——IBL   Ray Tracing  Collision detection Scene Management   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
+<meta itemprop=description content="Transformation  MVP Triangle   Rasterization  Aliasing SSAA MSAA FXAA TAA   Visibility/Occlusion  Culling Clipping Hidden Surface Removal Algorithms   Graphics Pipeline  Application Stage Coordinate Transformations Rasterization Stage Fragment Stage   Modern Graphics Pipeline  Geometry Shader Tessellation Shader Compute Shader   Shading  Shading Frequency Illumination Model Lambert’s Cosine Law Phong/Blinn-Phong Model   Render  Deferred Rendering Transparent Rendering   Texture  Texture Mapping Light Mapping Skybox Mapping Normal Mapping Displacement Mapping   PBR  Radiometry Optics and Microfacet Model BRDF and BxDF Rendering Equation Cook-Torrance BRDF Diffuse Part Specular Part PBR Textures PBR Implementation PBR GI——IBL   Disney Principled BxDF  Disney Principle and Parameters Disney BRDF Equation   Post-processing  Linear Space and Tone Mapping   Ray Tracing  Collision detection Scene Management SDS senario   References  Transformation MVP  模型变换（Model Transformation）：模型变换指的是对3D场景中的单个对象或模型进行变换的过程。这种变换包括对对象的顶点进行缩放、旋转和平移，将对象定位和定向到世界坐标系中。 视图/相机变换（View/Camera Transformation）：视图或相机变换涉及将整个场景从世界坐标系转换到相机或视图坐标系的过程。这种变换定义了虚拟相机在场景中的位置和方向。它包括设置相机位置、定义目标点或观察方向以及指定上方向等操作。 投影变换（Projection Transformation）：投影变换是将3D场景的坐标转换为屏幕上的2D坐标的过程。这种变换模拟了3D场景如何投影到2D平面上，考虑到透视和深度提示。常见的投影类型包括透视投影和正交投影。 视口变换(Viewport Transformation)：将处于标准平面映射到屏幕分辨率范围之内，即[-1,1]^2[0,width]*[0,height], 其中width和height指屏幕分辨率大小。  其中，模型和视图变换通常都放在顶点着色器阶段，而投影变换则由图形流水线自动实现（裁剪/透视剔除）。"><meta itemprop=datePublished content="2024-08-01T17:06:45+08:00">
 <meta itemprop=dateModified content="2024-08-01T17:06:45+08:00">
-<meta itemprop=wordCount content="1303">
+<meta itemprop=wordCount content="1431">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -140,16 +140,27 @@
 <li><a href=#cook-torrance-brdf>Cook-Torrance BRDF</a></li>
 <li><a href=#diffuse-part>Diffuse Part</a></li>
 <li><a href=#specular-part>Specular Part</a></li>
-<li><a href=#disney-principled-brdf>Disney Principled BRDF</a></li>
-<li><a href=#linear-space-and-tone-mapping>Linear Space and Tone Mapping</a></li>
+<li><a href=#pbr-textures>PBR Textures</a></li>
 <li><a href=#pbr-implementation>PBR Implementation</a></li>
 <li><a href=#pbr-giibl>PBR GI——IBL</a></li>
+</ul>
+</li>
+<li><a href=#disney-principled-bxdf>Disney Principled BxDF</a>
+<ul>
+<li><a href=#disney-principle-and-parameters>Disney Principle and Parameters</a></li>
+<li><a href=#disney-brdf-equation>Disney BRDF Equation</a></li>
+</ul>
+</li>
+<li><a href=#post-processing>Post-processing</a>
+<ul>
+<li><a href=#linear-space-and-tone-mapping>Linear Space and Tone Mapping</a></li>
 </ul>
 </li>
 <li><a href=#ray-tracing>Ray Tracing</a>
 <ul>
 <li><a href=#collision-detection>Collision detection</a></li>
 <li><a href=#scene-management>Scene Management</a></li>
+<li><a href=#sds-senario>SDS senario</a></li>
 </ul>
 </li>
 <li><a href=#references>References</a></li>
@@ -422,6 +433,10 @@ $$</p>
 <h3 id=transparent-rendering>Transparent Rendering</h3>
 <p><strong>Screen Space Refraction</strong>：</p>
 <p>屏幕空间折射（Screen Space Refraction）是一种在渲染过程中模拟透明物体的折射效果的技术。它通过在渲染过程中，将透明物体的折射效果（如玻璃、水等）模拟为透明的，而不是不透明的，来实现透明渲染。</p>
+<blockquote>
+<p><a href=https://cwyman.org/papers/graphite05_InteractiveNearbyRefraction.pdf target=_blank>Interactive Image-Space Refraction of Nearby Geometry</a>
+<a href=https://cwyman.org/papers/sig05_approxISRefr.pdf target=_blank>An Approximate Image-Space Approach for Interactive Refraction</a></p>
+</blockquote>
 <p><strong>OIT</strong>:</p>
 <h2 id=texture>Texture</h2>
 <h3 id=texture-mapping>Texture Mapping</h3>
@@ -648,22 +663,7 @@ $$</p>
 k_{direct}=\frac{(\alpha+1)^2}{8}\
 k_{ibl}=\frac{\alpha^2}{2}
 $$</p>
-<h3 id=disney-principled-brdf>Disney Principled BRDF</h3>
-<p>迪士尼动画工作室在SIGGRAPH 2012上著名的talk《Physically-based shading at Disney》中提出了迪士尼原则的BRDF（Disney Principled BRDF），奠定了后续游戏行业和电影行业PBR的方向和标准。它的核心贡献其实是避免了过去PBR中复杂晦涩物理参数，而引入了一系列直观的参数，包括：用于表示表示材料吸收光的金属度（metallic）和用于表示材料镜面反射集中度的粗糙度（roughness）等。</p>
-<p><strong>漫反射/镜面反射的比例</strong>：</p>
-<p>在Cook-Torrance BRDF中，$k_d$和$k_s$参数分别表示了漫反射和镜面反射的比例。将它们用菲涅尔项和金属度（能够反映折射部分，也就是被金属吸收的部分）表示如下：</p>
-<p>$$
-k_d=(1-F)*(1-metallic)\
-k_s=F
-$$</p>
-<p>换句话说，Cook-Torrance BRDF可改写为</p>
-<p>$$
-\begin{align}
-f_r =& k_df_{lambert}+k_sf_{cook-torrance}\
-=& (1-F)<em>(1-metallic)\frac\rho\pi+F\frac{DG}{4(\vec{w_o}</em>\vec{n})(\vec{w_i}*\vec{n})}<br>
-\end{align}
-$$</p>
-<p><strong>PBR常见材料/纹理</strong>：</p>
+<h3 id=pbr-textures>PBR Textures</h3>
 <p><figure>
 <img src=https://zhytou.github.io/post/2024-8-1/pbr_textures.png alt=PBR纹理列表>
 </figure></p>
@@ -680,6 +680,47 @@ $$</p>
 <li>specular：每个Texel表示对应位置的$F_0$，即入射角为0°时的菲涅尔系数。</li>
 <li>glossiness：每个Texel表示对应位置粗糙程度。</li>
 </ul>
+<h3 id=pbr-implementation>PBR Implementation</h3>
+<blockquote>
+<p><a href=https://learnopengl-cn.github.io/07%20PBR/02%20Lighting/ target=_blank>learnopengl中关于使用opengl实现一个PBR着色器</a></p>
+</blockquote>
+<h3 id=pbr-giibl>PBR GI——IBL</h3>
+<blockquote>
+<p><a href=https://learnopengl-cn.github.io/07%20PBR/03%20IBL/01%20Diffuse%20irradiance/ target=_blank>learnopengl中漫反射IBL</a>
+<a href=https://learnopengl-cn.github.io/07%20PBR/03%20IBL/02%20Specular%20IBL/ target=_blank>learnopengl中镜面反射IBL</a></p>
+</blockquote>
+<h2 id=disney-principled-bxdf>Disney Principled BxDF</h2>
+<p>迪士尼动画工作室在SIGGRAPH 2012上著名的talk《Physically-based shading at Disney》中提出了迪士尼原则的BRDF（Disney Principled BRDF），奠定了后续游戏行业和电影行业PBR的方向和标准。它的核心贡献其实是避免了过去PBR中复杂晦涩物理参数，而引入了一系列直观的参数，包括：用于表示表示材料吸收光的金属度（metallic）和用于表示材料镜面反射集中度的粗糙度（roughness）等。</p>
+<h3 id=disney-principle-and-parameters>Disney Principle and Parameters</h3>
+<p>迪士尼的核心理念是使用直观的参数尽可能还原丰富的真实视觉表现。它本质上是一种“艺术导向（Artist-Friendly）”而非完全物理严格的 BRDF 模型。其核心参数定义如下：</p>
+<ul>
+<li>baseColor（固有色）：表面颜色，通常由纹理贴图提供。</li>
+<li>subsurface（次表面）：使用次表面近似控制漫反射形状。</li>
+<li>metallic（金属度）：金属（0 = 电介质，1 =金属）。这是两种不同模型之间的线性混合。金属模型没有漫反射成分，并且还具有等于基础色的着色入射镜面反射。</li>
+<li>specular（镜面反射强度）：入射镜面反射量。用于取代折射率。</li>
+<li>specularTint（镜面反射颜色）：对美术控制的让步，用于对基础色（basecolor）的入射镜面反射进行颜色控制。掠射镜面反射仍然是非彩色的。</li>
+<li>roughness（粗糙度）：表面粗糙度，控制漫反射和镜面反射。</li>
+<li>anisotropic（各向异性强度）：各向异性程度。用于控制镜面反射高光的纵横比。（0 =各向同性，1 =最大各向异性。）</li>
+<li>sheen（光泽度）：一种额外的掠射分量（grazing component），主要用于布料。
+sheenTint（光泽颜色）：对sheen（光泽度）的颜色控制。
+clearcoat（清漆强度）：有特殊用途的第二个镜面波瓣（specular lobe）。
+clearcoatGloss（清漆光泽度）：控制透明涂层光泽度，0 = “缎面（satin）”外观，1 = “光泽（gloss）”外观。</li>
+</ul>
+<p><strong>金属度插值</strong>：</p>
+<p>从本质上而言，Disney Principled BRDF模型是金属和非金属的混合型模型，最终结果是基于金属度（metallic）在金属BRDF和非金属BRDF之间进行线性插值。</p>
+<p>具体而言，这种插值主要涉及两部分，</p>
+<ul>
+<li>高光基础反射率 $F_0$ 的插值: 绝缘体的 $F_0^{\text{dielectric}}$ 由 specular 参数决定（通常为 $0.08 \times \text{specular} \times \text{specularTint}$），而金属的 $F_0^{\text{metallic}}$ 直接等于 baseColor。插值得到统一的 $F_0$</li>
+<li>漫反射组件的衰减: 由于纯金属会吸收所有透射光（无折射与内部散射），漫反射能量被直接乘以 $(1 - \text{metallic})$ 进行削减</li>
+</ul>
+<h3 id=disney-brdf-equation>Disney BRDF Equation</h3>
+<p><strong>迪士尼漫反射</strong>：</p>
+<p>迪士尼指出，传统的 Lambert 漫反射模型过于简单（$f = \frac{\text{baseColor}}{\pi}$），在掠射角处显得太暗。若仅简单添加菲涅尔透射衰减，由于能量被高光带走，反而会导致边缘进一步变暗，这与 MERL 实测材质库的数据严重不符。通过分析实测数据，迪士尼发现：粗糙表面在掠射角（Grazing Angle）且观察方向靠近光源方向时，会因微观结构的相互遮挡与阴影消退产生强烈的“掠射逆反射（Grazing Retro-reflection）”提亮现象；而光滑表面则在掠射角处呈现边缘变暗。为此，迪士尼基于 Schlick 菲涅尔形式构造了一个由粗糙度驱动的经验漫反射模型：</p>
+<p>$$f_r^{\text{DisneyDiffuse}} = \frac{\text{baseColor}}{\pi} \left[ 1 + (F_D - 1)(1 - \cos\theta_i)^5 \right] \left[ 1 + (F_D - 1)(1 - \cos\theta_o)^5 \right]$$</p>
+<p>其中，$F_D$ 为掠射逆反射控制因子，公式为：</p>
+<p>$$F_D = 0.5 + 2 \cdot \text{roughness} \cdot \cos^2\theta_d$$</p>
+<p>$\theta_i$ 与 $\theta_o$ 分别为入射光线和观察视线的法线夹角。$\theta_d$ 为半角向量 $\boldsymbol{h}$ 与视角/入射角的夹角（当视角与光源重合，即处于逆反射位置时，$\theta_d = 0 \implies \cos^2\theta_d = 1$）。</p>
+<h2 id=post-processing>Post-processing</h2>
 <h3 id=linear-space-and-tone-mapping>Linear Space and Tone Mapping</h3>
 <blockquote>
 <p><a href=https://learnopengl-cn.github.io/07%20PBR/02%20Lighting/#hdr target=_blank>learnopengl中关于线性空间和HDR的介绍</a></p>
@@ -702,16 +743,7 @@ $$</p>
 
   color <span style=color:#333>=</span> <span style=color:#080;font-weight:700>vec4</span>(mapped, <span style=color:#60e;font-weight:700>1.0</span>);
 }   
-</code></pre></div><h3 id=pbr-implementation>PBR Implementation</h3>
-<blockquote>
-<p><a href=https://learnopengl-cn.github.io/07%20PBR/02%20Lighting/ target=_blank>learnopengl中关于使用opengl实现一个PBR着色器</a></p>
-</blockquote>
-<h3 id=pbr-giibl>PBR GI——IBL</h3>
-<blockquote>
-<p><a href=https://learnopengl-cn.github.io/07%20PBR/03%20IBL/01%20Diffuse%20irradiance/ target=_blank>learnopengl中漫反射IBL</a>
-<a href=https://learnopengl-cn.github.io/07%20PBR/03%20IBL/02%20Specular%20IBL/ target=_blank>learnopengl中镜面反射IBL</a></p>
-</blockquote>
-<h2 id=ray-tracing>Ray Tracing</h2>
+</code></pre></div><h2 id=ray-tracing>Ray Tracing</h2>
 <p><strong>光线追踪 vs 路径追踪</strong>：</p>
 <p>一般来说光线追踪是指一种解决渲染问题的思路，而路径追踪是光线追踪这种思路下的具体的算法。除了路径追踪外，还包括：</p>
 <ul>
@@ -752,6 +784,7 @@ $$ \mathbf{OP} = u\mathbf{e_1} + v\mathbf{e_2} $$</p>
 <p>包围体积层次结构（Bounding Volume Hierarchy, BVH）是一种用于加速射线追踪的数据结构。BVH的基本思想是，将场景中的物体划分为一个个包围盒，然后递归地将这些包围盒划分为更小的包围盒，直到达到某个终止条件。</p>
 <p><strong>SAH</strong>:</p>
 <p>表面积启发算法（Surface Area Heuristics, SAH）通过改变包围盒的划分位置从而最小化光线遍历代价的一种优化方法。其具体实现往往是定义一个代价函数，然后通过枚举所有可能的划分位置，找到最小代价的划分位置。其中，代价函数一般包括两部分：遍历代价和划分代价。最常见的代价函数为，扫描线穿过包围盒的代价为1，包围盒划分代价为0.125。</p>
+<h3 id=sds-senario>SDS senario</h3>
 <h2 id=references>References</h2>
 <ul>
 <li><a href=https://sites.cs.ucsb.edu/~lingqi/teaching/games101.html target=_blank>GAMES101: 现代计算机图形学入门</a></li>

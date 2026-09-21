@@ -3,7 +3,7 @@ What Is Reflection? C++ RTII Java Class C++ Reflection Implementation Naive Refl
 渲染与反渲染
 反渲染（Inverse Rendering）是计算机视觉和计算机图形学中的一个重要概念，旨在从观察到的图像中推断出场景的三维结构、光照条件和材质属性等信息。通过这些信息，我们可以重建场景的三维模型，或者生成新的视角下的图像。
 反渲染的关键点包括：
-由图像反渲染 …</description></item><item><title>你好，法语A1 学习笔记</title><link>https://zhytou.github.io/post/2025-3-23/french_a1/</link><pubDate>Sun, 23 Mar 2025 10:46:41 +0800</pubDate><guid>https://zhytou.github.io/post/2025-3-23/french_a1/</guid><description>
+由图像反渲染 …</description></item><item><title>你好，法语A1 学习笔记</title><link>https://zhytou.github.io/post/2025-3-23/french-a1/</link><pubDate>Sun, 23 Mar 2025 10:46:41 +0800</pubDate><guid>https://zhytou.github.io/post/2025-3-23/french-a1/</guid><description>
 0 Base 基础 1 Rencontres 相遇 1.1 Bienvenue 欢迎 1.2 Qui est-ce 这是谁 1.3 Ca va bien 你好吗 2 Portraits 画像 2.1 Trouvez l’objet 找出物品 2.2 …</description></item><item><title>GPU-Driven Pipeline</title><link>https://zhytou.github.io/post/2025-3-18/gpu-driven/</link><pubDate>Tue, 18 Mar 2025 19:46:08 +0800</pubDate><guid>https://zhytou.github.io/post/2025-3-18/gpu-driven/</guid><description>
 Bottleneck of Traditional Rendering Pipeline Key Ideas of GPU-Driven Pipeline Indirect Draw Compute Shader GPU-Driven Culling Mesh Cluster …</description></item><item><title>2024年度总结</title><link>https://zhytou.github.io/post/2025-1-12/2024-summary/</link><pubDate>Sun, 12 Jan 2025 20:12:46 +0800</pubDate><guid>https://zhytou.github.io/post/2025-1-12/2024-summary/</guid><description>
 Timeline 小论文：
@@ -20,7 +20,7 @@ Transformation MVP Triangle Rasterization Aliasing SSAA MSAA FXAA TAA Visibility
 去年加入了某私募量化做实习生。虽然当时也大致读了一下鲍尔货币金融学这本书，但理解还是非常初级。而且半年过去，去年学到的为数不多的知识又忘光光了。趁着最近工作找的又烦又累，索性再读鲍尔货币金融学，并总结一下金融知识换换脑子。
 宏观经济学基础 宏观经济 …</description></item><item><title>Java Web开发技术</title><link>https://zhytou.github.io/post/2024-5-17/java-web/</link><pubDate>Fri, 17 May 2024 20:36:27 +0800</pubDate><guid>https://zhytou.github.io/post/2024-5-17/java-web/</guid><description>
 History CGI & Servlet：
-早期的动态网页技术主要包括CGI（通用网关接口，Common Gateway Interface）和Servlet。其中，CGI通过定义Web服务器与外部程序的标准接口，使得外部程序能够根据Web请求生成动态内容。CGI模式的具体工作 …</description></item><item><title>2023年总结</title><link>https://zhytou.github.io/post/2023-12-26/2023-summary/</link><pubDate>Tue, 26 Dec 2023 14:19:14 +0800</pubDate><guid>https://zhytou.github.io/post/2023-12-26/2023-summary/</guid><description>
+早期的动态网页技术主要包括CGI（通用网关接口，Common Gateway Interface）和Servlet。其中，CGI通过定义Web服务器与外部程序的标准接口，使得外部程序能够根据Web请求生成动态内容。这里的Web服务器是 …</description></item><item><title>2023年总结</title><link>https://zhytou.github.io/post/2023-12-26/2023-summary/</link><pubDate>Tue, 26 Dec 2023 14:19:14 +0800</pubDate><guid>https://zhytou.github.io/post/2023-12-26/2023-summary/</guid><description>
 Timeline Workout Coding TODO-List Outro Timeline CG大作业：
 22年学校因为疫情很早就安排学生回家了，我大概是12月19号到的家。接着一个月都在写那一学期课程的大作业，其中耗费我最多精力的就是图形学的大作 …</description></item><item><title>CS231n笔记</title><link>https://zhytou.github.io/post/2023-11-14/cs231n/</link><pubDate>Tue, 14 Nov 2023 09:58:05 +0800</pubDate><guid>https://zhytou.github.io/post/2023-11-14/cs231n/</guid><description>
 这篇博客流水线的记录一下自己学习CS231n的笔记。
@@ -65,6 +65,6 @@ Basics 在Raft算法中，每一个服务器都 …</description></item><item><t
 Hugo Hugo是一个静态网页生成器，能够根据/content目录和config.toml设置生成一些列Html文件供用户使用。 …</description></item><item><title/><link>https://zhytou.github.io/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhytou.github.io/about/</guid><description>
 Hi, I’m Zhytou(ZHONG Yang). I obtained my Bachelor’s degree in Information Engineering from Zhejiang University. Currently, I am continuing …</description></item><item><title>Home</title><link>https://zhytou.github.io/homepage/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhytou.github.io/homepage/</guid><description>
 🎯 Focus on
-CS231n Networking Basis 💻 Code for fun
-C++ Go Python 📺 Fan of TV series & animes
- Games of Thrones Breaking Bad Yellowstone …</description></item></channel></rss>
+Game/Computer Graphics 3D Modeling 💻 Code for fun
+C++ Python Check below for more information:
+About Me Curriculum Vitae …</description></item></channel></rss>
