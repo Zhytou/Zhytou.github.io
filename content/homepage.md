@@ -4,33 +4,13 @@ title = "Home"
 
 🎯 Focus on
 
-- CS231n
-- Networking Basis
+- Game/Computer Graphics
+- 3D Modeling
 
 💻 Code for fun
 
 - C++
-- Go
 - Python
-
-📺 Fan of TV series & animes
-
-- Games of Thrones
-- Breaking Bad
-- Yellowstone
-- Attack on Titan
-- Jujutsu Kaisen
-
-🎧 Music I love
-
-- Money Trees
-- All My Life
-- Laugh Now Cry Later
-- EARTHQUAKE
-- Die For You
-- Wouldn't leave
-- 5AM Mansions
-- ....
 
 Check below for more information:
 
