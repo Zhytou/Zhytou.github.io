@@ -6,7 +6,7 @@ draft: false
 
 ## 渲染与反渲染
 
-![inverse_render](https://zhytou.github.io/post/2025-4-11/inverse_render.png)
+![inverse_render](https://zhytou.github.io/post/2025-3-28/inverse_render.png)
 
 反渲染（Inverse Rendering）是计算机视觉和计算机图形学中的一个重要概念，旨在从观察到的图像中推断出场景的三维结构、光照条件和材质属性等信息。通过这些信息，我们可以重建场景的三维模型，或者生成新的视角下的图像。
 
@@ -29,7 +29,7 @@ draft: false
 
 ### 外观表征
 
-![apperance_representation](https://zhytou.github.io/post/2025-4-11/apperance_representation.png)
+![apperance_representation](https://zhytou.github.io/post/2025-3-28/apperance_representation.png)
 
 ## 神经辐射场
 
@@ -47,13 +47,19 @@ draft: false
 
 **体渲染方程**：
 
-不同表面渲染，体渲染并不使用由吉姆·卡吉雅提出的渲染方程。它使用的是体积渲染方程（Volume Rendering Equation），该方程描述了从3D体数据生成2D图像的过程。体积渲染方程可以表示为：
+不同于表面渲染，体渲染并不使用由吉姆·卡吉雅提出的渲染方程。它使用的是体积渲染方程（Volume Rendering Equation），该方程描述了从3D体数据生成2D图像的过程。体积渲染方程可以表示为：
 
 $$
 I(\mathbf{r}) = \int_{t_n}^{t_f} T(t) \sigma(\mathbf{r}(t)) c(\mathbf{r}(t), \mathbf{d}) dt
 $$
 
-其中，
+其中，各项的具体含义如下：
+
+- $\mathbf{r}(t) = \mathbf{o} + t\mathbf{d}$：表示从相机原点 $\mathbf{o}$ 沿方向 $\mathbf{d}$ 出发的一根射线，参数 $t$ 代表光线传播的距离。
+- $t_n$ 与 $t_f$：光线开始采样和结束采样的近边界（Near）与远边界（Far）。
+- $\sigma(\mathbf{r}(t))$（体密度）：光线在位置 $\mathbf{r}(t)$ 处被阻挡或吸收的概率（类似于雾的浓度）。密度越高，说明这里越是“实体”表面。
+- $c(\mathbf{r}(t), \mathbf{d})$（颜色）：由 MLP 输出的、在当前点沿方向 $\mathbf{d}$ 发出的 RGB 颜色。
+- $T(t)$（透射率 / Transmittance）：$$T(t) = \exp \left( -\int_{t_n}^{t} \sigma(\mathbf{r}(s)) ds \right)$$它代表光线从起点 $t_n$ 一直到当前点 $t$ 能够畅通无阻（没有被前面的任何物体遮挡）的概率。如果前面阻挡物很多（密度很大），$T(t)$ 就会迅速衰减趋近于 0，意味着后面的光子再也进不来了。
 
 **体渲染方程在Nerf中的求解**：
 
