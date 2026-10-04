@@ -15,7 +15,6 @@ draft: false
   - [Unreal UHT](#unreal-uht)
 - [Reference](#reference)
 
-
 最近在学习Unreal过程中，恍惚间觉得好多地方和Qt都有异曲同工之处，尤其是二者在反射机制的实现上。回想起之前在量化实习期间，我曾为回测系统设计过一个插件化的模型加载库。当时的核心挑战在于：如何让主系统在完全不感知具体Model类型的情况下，仅凭一个字符串类名，就完成动态链接加载、对象实例化及其成员函数的调用？这本质上就是动态链接（Dynamic Linking）+ 反射（Reflection）。今天，我将从反射的概念出发，介绍Java的反射机制实现，并结合Unreal、Qt以及C++20讨论一下如何在C++这种静态语言上优雅的实现反射。
 
 ## What Is Reflection?
