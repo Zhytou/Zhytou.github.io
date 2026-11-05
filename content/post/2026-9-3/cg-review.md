@@ -5,7 +5,8 @@ draft: false
 ---
 
 - [OpenGL](#opengl)
-- [GPU Pipeline](#gpu-pipeline)
+- [GPU Architecture](#gpu-architecture)
+- [Rendering Pipeline](#rendering-pipeline)
   - [Programmable Shader](#programmable-shader)
   - [Coordinate System](#coordinate-system)
   - [Fixed-Function Hardware](#fixed-function-hardware)
@@ -17,6 +18,8 @@ draft: false
   - [RTXGI](#rtxgi)
   - [VXGI](#vxgi)
   - [SDFGI](#sdfgi)
+- [Advanced Shading \& Transparency](#advanced-shading--transparency)
+  - [Order Independent Transparency](#order-independent-transparency)
 - [Shadow Mapping](#shadow-mapping)
 - [Post-Processing](#post-processing)
 - [Anti-Aliasing](#anti-aliasing)
@@ -29,7 +32,9 @@ draft: false
 
 ## [OpenGL](https://github.com/Zhytou/CS-Notes/blob/main/language/opengl/basis.md)
 
-## GPU Pipeline
+## [GPU Architecture](https://www.cnblogs.com/timlly/p/11471507.html)
+
+## Rendering Pipeline
 
 ### Programmable Shader
 
@@ -612,6 +617,47 @@ VXGI 是一种将场景几何与光照实时离散化为 3D 体素网格（使�
 ### SDFGI
 
 > [基于符号距离场的实时动态漫反射全局光照计算](https://zhuanlan.zhihu.com/p/340214719)
+
+## Advanced Shading & Transparency
+
+### Order Independent Transparency
+
+**画家算法**：
+
+在计算机图形学中，渲染不透明物体时，我们依赖深度测试和 Z-Buffer：只要保证片元遮挡关系正确，绘制顺序完全不影响最终像素颜色。然而，当引入半透明物体时，传统的 Z-Buffer 机制失效了。因为半透明物体不会阻挡后方的光线，而是会让光线透射并发生颜色混合：
+
+$$C_{out} = \alpha_{src} \cdot C_{src} + (1 - \alpha_{src}) \cdot C_{dst}$$
+
+为正确混合，最原始的策略是画家算法，即：先渲染背景、再按“从后到前”的顺序依次绘制半透明物体。不过它也有致命的缺陷：
+
+- 视角依赖：一旦摄像机移动，物体的前后遮挡关系会动态改变，必须每帧对所有透明网格重新排序。
+- 几何体自相交与穿插：如果两个半透明网格互相穿插（例如两个环状物体套在一起），在物体级别根本无法定义一个全局的“谁前谁后”。
+
+**顺序无关透明渲染算法**：
+
+为了彻底摆脱物体级排序的束缚，现代图形学引入了顺序无关透明（OIT）概念。其核心思想是：不强制要求几何体按前后顺序提交，而是在像素/片元级别收集所有重叠的半透明片元，并在最后统一计算混合结果。
+
+以最典型的深度剥离 OIT 算法为例，其运行流程如下：
+
+- 多轮渲染：通过多次遍历几何体，每一轮利用深度测试“剥离”并记录当前最表层的片元。
+- 分层记录：第一轮记录最近的片元，第二轮记录第二近的片元……以此类推，剥离出 $N$ 层深度。
+- 最终合成：在后处理阶段，将剥离出来的多层片元按从后到前的顺序进行 Alpha 混合。
+
+可见，深度剥离巧妙地利用了 GPU 原生的 Z-Test 硬件单元，它总是将上一轮剥离出的 Z-Buffer 作为下一轮的输入纹理。如果当前片元的深度 $\le$ 上一轮记录的深度，则直接 discard；否则，更新 Z-Buffer 并将片元颜色写入对应的 Render Target。这样，最终我们就能在片元级别精确地还原出所有半透明物体的遮挡关系。
+
+虽然深度剥离能精确还原物理遮挡，但它的 Pass 数量取决于场景中最大重叠层数。当场景复杂时，Draw Call 和管线开销会呈线性暴涨，极度消耗 GPU 带宽。
+
+**加权顺序无关透明渲染算法**：
+
+为了在实时 3A 游戏中兼顾性能与视觉，工业界目前最普遍采用的是加权顺序无关透明渲染算法（Weighted Blended OIT）。它通过一个精心设计的数学加权公式，在单次几何渲染 Pass 中把所有重叠片元的颜色和透明度“融合”进两个专用的全屏帧缓冲中。其核心流程如下：
+
+- 累加缓冲（Accumulation Buffer, RGBA16F）：记录加权后的颜色贡献（$\sum C_{src} \cdot \alpha \cdot w(z)$），其中权重函数 $w(z)$ 通常与深度 $z$ 和透明度 $\alpha$ 相关（例如让近处或关键片元拥有更高权重，确保它们在数学累加中占据主导地位）。
+- 透射率缓冲（Revealage Buffer, R8 或 RGBA8）：记录整体透射率的连乘项（$\prod (1 - \alpha)$）。
+- 最终合成（Composite Pass）：在全屏 Pass 中结合上述两个缓冲，通过解析公式近似还原出合理的叠层混合画面：
+
+$$C_{final} = C_{accum}.rgb / \max(C_{accum}.a, 1e-4) \cdot (1 - \text{Revealage}) + C_{background} \cdot \text{Revealage}$$
+
+在上述合成公式中，透射率 $\text{Revealage} = \prod (1 - \alpha_i)$ 利用了乘法交换律，无论片元以何种顺序乱序写入，整体的背景阻挡比例在数学上都是绝对精确的。而颜色累加部分用无视顺序的加法替代了复杂的嵌套衰减，其中的深度权重函数 $w(z)$ 巧妙地强行赋予了近处片元主导权，从而消除了乱序带来的空间混乱。最终，将归一化的累加颜色乘以总阻挡率 $(1 - \text{Revealage})$，恰好让半透明物体“挡下了多少光，就散发出对应比例的自身颜色”，实现了性能与视觉的优雅闭环。
 
 ## Shadow Mapping
 
