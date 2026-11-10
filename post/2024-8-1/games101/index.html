@@ -621,7 +621,7 @@ f_r &= \frac\rho\pi
 $$</p>
 <p>其中，$\rho$表示的是发生反射位置的颜色。</p>
 <h3 id=specular-part>Specular Part</h3>
-<p>Cook-Torrance BRDF的镜面反射部分包含法线分布函数（Normal Distribution Function)、菲涅尔方程（Fresnel Equation）、几何函数（Geometry Function）以及用于矫正的分母 。</p>
+<p>Cook-Torrance BRDF的镜面反射部分包含法线分布函数（Normal Distribution Function）、菲涅尔方程（Fresnel Equation）、几何函数（Geometry Function）以及用于矫正的分母 。</p>
 <p>其中，分母作为微观几何的局部空间和整个宏观表面的局部空间之间变换的微平面量的校正，有两点需要注意：</p>
 <ul>
 <li>对于分母中的点积，仅仅避免负值是不够的 - 也必须避免零值。通常通过在常规的clamp或绝对值操作之后添加非常小的正值来完成。</li>

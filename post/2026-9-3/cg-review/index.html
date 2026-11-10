@@ -10,24 +10,18 @@
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
 <meta property="og:title" content="计算机图形学复习">
-<meta property="og:description" content="OpenGL GPU Pipeline  Programmable Shader Coordinate System Fixed-Function Hardware GPU-Driven Pipeline   Global Illumination  IBL Probe SSGI RTXGI VXGI SDFGI   Shadow Mapping Post-Processing Anti-Aliasing  MSAA TAA   Other  V-SYNC & Double Buffering DSLL PhysX    OpenGL GPU Pipeline Programmable Shader 1、Geometry Shader 有什么作用？如何使用它实现 Billboard 算法？
-2、Tessellation Shader 如何实现细分曲面？相比早期的 Bump map/Normal map，它有什么优势？是模型级别还是像素级别，乃至次像素级别？
-3、GPU-Driven Pipeline 中为什么大量使用了 Compute Shader 以及 Mesh/Cull Shader？它们具体是怎么工作的？">
+<meta property="og:description" content="OpenGL GPU Architecture Rendering Pipeline  Programmable Shader Coordinate System Fixed-Function Hardware GPU-Driven Pipeline   Global Illumination  IBL Probe SSGI RTGI VXGI SDFGI   Advanced Shading & Transparency  Order Independent Transparency Separable Subsurface Scattering   Shadow Mapping Post-Processing Anti-Aliasing  MSAA TAA   Other  V-SYNC & Double Buffering DSLL PhysX    OpenGL GPU Architecture Rendering Pipeline Programmable Shader 1、Geometry Shader 有什么作用？如何使用它实现 Billboard 算法？">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://zhytou.github.io/post/2026-9-3/cg-review/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2026-09-03T15:39:51+08:00">
 <meta property="article:modified_time" content="2026-09-03T15:39:51+08:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="计算机图形学复习">
-<meta name=twitter:description content="OpenGL GPU Pipeline  Programmable Shader Coordinate System Fixed-Function Hardware GPU-Driven Pipeline   Global Illumination  IBL Probe SSGI RTXGI VXGI SDFGI   Shadow Mapping Post-Processing Anti-Aliasing  MSAA TAA   Other  V-SYNC & Double Buffering DSLL PhysX    OpenGL GPU Pipeline Programmable Shader 1、Geometry Shader 有什么作用？如何使用它实现 Billboard 算法？
-2、Tessellation Shader 如何实现细分曲面？相比早期的 Bump map/Normal map，它有什么优势？是模型级别还是像素级别，乃至次像素级别？
-3、GPU-Driven Pipeline 中为什么大量使用了 Compute Shader 以及 Mesh/Cull Shader？它们具体是怎么工作的？">
+<meta name=twitter:description content="OpenGL GPU Architecture Rendering Pipeline  Programmable Shader Coordinate System Fixed-Function Hardware GPU-Driven Pipeline   Global Illumination  IBL Probe SSGI RTGI VXGI SDFGI   Advanced Shading & Transparency  Order Independent Transparency Separable Subsurface Scattering   Shadow Mapping Post-Processing Anti-Aliasing  MSAA TAA   Other  V-SYNC & Double Buffering DSLL PhysX    OpenGL GPU Architecture Rendering Pipeline Programmable Shader 1、Geometry Shader 有什么作用？如何使用它实现 Billboard 算法？">
 <meta itemprop=name content="计算机图形学复习">
-<meta itemprop=description content="OpenGL GPU Pipeline  Programmable Shader Coordinate System Fixed-Function Hardware GPU-Driven Pipeline   Global Illumination  IBL Probe SSGI RTXGI VXGI SDFGI   Shadow Mapping Post-Processing Anti-Aliasing  MSAA TAA   Other  V-SYNC & Double Buffering DSLL PhysX    OpenGL GPU Pipeline Programmable Shader 1、Geometry Shader 有什么作用？如何使用它实现 Billboard 算法？
-2、Tessellation Shader 如何实现细分曲面？相比早期的 Bump map/Normal map，它有什么优势？是模型级别还是像素级别，乃至次像素级别？
-3、GPU-Driven Pipeline 中为什么大量使用了 Compute Shader 以及 Mesh/Cull Shader？它们具体是怎么工作的？"><meta itemprop=datePublished content="2026-09-03T15:39:51+08:00">
+<meta itemprop=description content="OpenGL GPU Architecture Rendering Pipeline  Programmable Shader Coordinate System Fixed-Function Hardware GPU-Driven Pipeline   Global Illumination  IBL Probe SSGI RTGI VXGI SDFGI   Advanced Shading & Transparency  Order Independent Transparency Separable Subsurface Scattering   Shadow Mapping Post-Processing Anti-Aliasing  MSAA TAA   Other  V-SYNC & Double Buffering DSLL PhysX    OpenGL GPU Architecture Rendering Pipeline Programmable Shader 1、Geometry Shader 有什么作用？如何使用它实现 Billboard 算法？"><meta itemprop=datePublished content="2026-09-03T15:39:51+08:00">
 <meta itemprop=dateModified content="2026-09-03T15:39:51+08:00">
-<meta itemprop=wordCount content="3034">
+<meta itemprop=wordCount content="3230">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -78,7 +72,8 @@
 <div class=markdown>
 <ul>
 <li><a href=#opengl>OpenGL</a></li>
-<li><a href=#gpu-pipeline>GPU Pipeline</a>
+<li><a href=#gpu-architecture>GPU Architecture</a></li>
+<li><a href=#rendering-pipeline>Rendering Pipeline</a>
 <ul>
 <li><a href=#programmable-shader>Programmable Shader</a></li>
 <li><a href=#coordinate-system>Coordinate System</a></li>
@@ -91,9 +86,15 @@
 <li><a href=#ibl>IBL</a></li>
 <li><a href=#probe>Probe</a></li>
 <li><a href=#ssgi>SSGI</a></li>
-<li><a href=#rtxgi>RTXGI</a></li>
+<li><a href=#rtgi>RTGI</a></li>
 <li><a href=#vxgi>VXGI</a></li>
 <li><a href=#sdfgi>SDFGI</a></li>
+</ul>
+</li>
+<li><a href=#advanced-shading--transparency>Advanced Shading & Transparency</a>
+<ul>
+<li><a href=#order-independent-transparency>Order Independent Transparency</a></li>
+<li><a href=#separable-subsurface-scattering>Separable Subsurface Scattering</a></li>
 </ul>
 </li>
 <li><a href=#shadow-mapping>Shadow Mapping</a></li>
@@ -113,7 +114,8 @@
 </li>
 </ul>
 <h2 id=openglhttpsgithubcomzhytoucs-notesblobmainlanguageopenglbasismd><a href=https://github.com/Zhytou/CS-Notes/blob/main/language/opengl/basis.md target=_blank>OpenGL</a></h2>
-<h2 id=gpu-pipeline>GPU Pipeline</h2>
+<h2 id=gpu-architecturehttpswwwcnblogscomtimllyp11471507html><a href=https://www.cnblogs.com/timlly/p/11471507.html target=_blank>GPU Architecture</a></h2>
+<h2 id=rendering-pipeline>Rendering Pipeline</h2>
 <h3 id=programmable-shader>Programmable Shader</h3>
 <p>1、Geometry Shader 有什么作用？如何使用它实现 Billboard 算法？</p>
 <p>2、Tessellation Shader 如何实现细分曲面？相比早期的 Bump map/Normal map，它有什么优势？是模型级别还是像素级别，乃至次像素级别？</p>
@@ -249,7 +251,7 @@ $w_{1 \times 1}$（全局缩放因子）：通常保持为 $1.0$。</p>
 <p>IEEE 754 标准的单精度浮点数（Float32）包含 1 个符号位、8 个指数位和 23 个尾数位。浮点数在 $[0.5, 1.0]$ 范围内的可表示数值密度远远低于在 $[0.0, 0.5]$（指数位更小）范围内的密度。</p>
 <p>传统映射：近平面映射到 $0.0$，远平面映射到 $1.0$。也即在NDC空间到Screen Space的变换中，z的坐标值会从[-1, 1]映射到[0, 1]。当然也可以调用glDepthRange函数来修改这个最终范围。</p>
 <p>不过，由于相机透视投影的非线性性质，NDC空间下的z坐标值与View空间下的z坐标值是呈反比的，这导致深度变化最剧烈的远端场景恰好被分在了浮点数精度最低的 $[0.5, 1.0]$ 区间。</p>
-<p>比如：远端的物体（比如 100 米和 101 米）本身就极难区分，需要很高的精度；但透视投影偏偏把它们挤在了 精度最差、最容易发生小数点舍入重合的 1.0 附近，导致深度测试时无法精准区分谁在前谁在后。</p>
+<p>比如：远端的物体（比如 100 米和 101 米）本身就极难区分，需要很高的精度；但透视投影偏偏把它们挤在了精度最差、最容易发生小数点舍入重合的 1.0 附近，导致深度测试时无法精准区分谁在前谁在后。</p>
 <p>为了解决“远端物体落入 1.0 低精度区”的悲剧，Reversed-Z 做了一个非常彻底的颠倒——将投影矩阵和映射逻辑改成：</p>
 <ul>
 <li>近平面（Near Plane） $\to \text{Depth Buffer} = \mathbf{1.0}$（靠近相机）</li>
@@ -687,7 +689,7 @@ layout(binding <span style=color:#333>=</span> <span style=color:#00d;font-weigh
 <li><a href=https://zhytou.github.io/post/2024-8-5/games202/#screen-space-directional-occlusin target=_blank>SSDO</a></li>
 <li><a href=https://zhytou.github.io/post/2024-8-5/games202/#screen-space-reflection target=_blank>SSR</a></li>
 </ul>
-<h3 id=rtxgi>RTXGI</h3>
+<h3 id=rtgi>RTGI</h3>
 <p>1、RTX 是什么？使用它实现 GI 的常见流程是什么？</p>
 <p>RTX 是 NVIDIA 推出的基于硬件加速的光线追踪平台技术栈，核心依赖 GPU 内部的 RT Core（专门用于 BVH 树遍历与 Ray-Triangle 碰撞求交的硬件单元）以及 Tensor Core（用于 AI 降噪/DLSS）。</p>
 <p>要在代码中使用 GPU 硬件 RT Core 加速光线追踪，开发者主要通过以下两个层级进行开发：</p>
@@ -714,6 +716,51 @@ layout(binding <span style=color:#333>=</span> <span style=color:#00d;font-weigh
 <blockquote>
 <p><a href=https://zhuanlan.zhihu.com/p/340214719 target=_blank>基于符号距离场的实时动态漫反射全局光照计算</a></p>
 </blockquote>
+<h2 id=advanced-shading--transparency>Advanced Shading & Transparency</h2>
+<h3 id=order-independent-transparency>Order Independent Transparency</h3>
+<p><strong>画家算法</strong>：</p>
+<p>在计算机图形学中，渲染不透明物体时，我们依赖深度测试和 Z-Buffer：只要保证片元遮挡关系正确，绘制顺序完全不影响最终像素颜色。然而，当引入半透明物体时，传统的 Z-Buffer 机制失效了。因为半透明物体不会阻挡后方的光线，而是会让光线透射并发生颜色混合：</p>
+<p>$$C_{out} = \alpha_{src} \cdot C_{src} + (1 - \alpha_{src}) \cdot C_{dst}$$</p>
+<p>为正确混合，最原始的策略是画家算法，即：先渲染背景、再按“从后到前”的顺序依次绘制半透明物体。不过它也有致命的缺陷：</p>
+<ul>
+<li>视角依赖：一旦摄像机移动，物体的前后遮挡关系会动态改变，必须每帧对所有透明网格重新排序。</li>
+<li>几何体自相交与穿插：如果两个半透明网格互相穿插（例如两个环状物体套在一起），在物体级别根本无法定义一个全局的“谁前谁后”。</li>
+</ul>
+<p><strong>顺序无关透明渲染算法</strong>：</p>
+<p>为了彻底摆脱物体级排序的束缚，现代图形学引入了顺序无关透明（OIT）概念。其核心思想是：不强制要求几何体按前后顺序提交，而是在像素/片元级别收集所有重叠的半透明片元，并在最后统一计算混合结果。</p>
+<p>以最典型的深度剥离 OIT 算法为例，其运行流程如下：</p>
+<ul>
+<li>多轮渲染：通过多次遍历几何体，每一轮利用深度测试“剥离”并记录当前最表层的片元。</li>
+<li>分层记录：第一轮记录最近的片元，第二轮记录第二近的片元……以此类推，剥离出 $N$ 层深度。</li>
+<li>最终合成：在后处理阶段，将剥离出来的多层片元按从后到前的顺序进行 Alpha 混合。</li>
+</ul>
+<p>可见，深度剥离巧妙地利用了 GPU 原生的 Z-Test 硬件单元，它总是将上一轮剥离出的 Z-Buffer 作为下一轮的输入纹理。如果当前片元的深度 $\le$ 上一轮记录的深度，则直接 discard；否则，更新 Z-Buffer 并将片元颜色写入对应的 Render Target。这样，最终我们就能在片元级别精确地还原出所有半透明物体的遮挡关系。</p>
+<p>虽然深度剥离能精确还原物理遮挡，但它的 Pass 数量取决于场景中最大重叠层数。当场景复杂时，Draw Call 和管线开销会呈线性暴涨，极度消耗 GPU 带宽。</p>
+<p><strong>加权顺序无关透明渲染算法</strong>：</p>
+<p>为了在实时 3A 游戏中兼顾性能与视觉，工业界目前最普遍采用的是加权顺序无关透明渲染算法（Weighted Blended OIT）。它通过一个精心设计的数学加权公式，在单次几何渲染 Pass 中把所有重叠片元的颜色和透明度“融合”进两个专用的全屏帧缓冲中。其核心流程如下：</p>
+<ul>
+<li>累加缓冲（Accumulation Buffer, RGBA16F）：记录加权后的颜色贡献（$\sum C_{src} \cdot \alpha \cdot w(z)$），其中权重函数 $w(z)$ 通常与深度 $z$ 和透明度 $\alpha$ 相关（例如让近处或关键片元拥有更高权重，确保它们在数学累加中占据主导地位）。</li>
+<li>透射率缓冲（Revealage Buffer, R8 或 RGBA8）：记录整体透射率的连乘项（$\prod (1 - \alpha)$）。</li>
+<li>最终合成（Composite Pass）：在全屏 Pass 中结合上述两个缓冲，通过解析公式近似还原出合理的叠层混合画面：</li>
+</ul>
+<p>$$C_{final} = C_{accum}.rgb / \max(C_{accum}.a, 1e-4) \cdot (1 - \text{Revealage}) + C_{background} \cdot \text{Revealage}$$</p>
+<p>在上述合成公式中，透射率 $\text{Revealage} = \prod (1 - \alpha_i)$ 利用了乘法交换律，无论片元以何种顺序乱序写入，整体的背景阻挡比例在数学上都是绝对精确的。而颜色累加部分用无视顺序的加法替代了复杂的嵌套衰减，其中的深度权重函数 $w(z)$ 巧妙地强行赋予了近处片元主导权，从而消除了乱序带来的空间混乱。最终，将归一化的累加颜色乘以总阻挡率 $(1 - \text{Revealage})$，恰好让半透明物体“挡下了多少光，就散发出对应比例的自身颜色”，实现了性能与视觉的优雅闭环。</p>
+<h3 id=separable-subsurface-scattering>Separable Subsurface Scattering</h3>
+<p><strong>次表面散射</strong>：</p>
+<p>针对玉石、皮肤、蜡烛等半透明材质，传统局部着色模型显然无法正确模拟。光线在入射后会穿透表层，进入材质内部经历无数次随机散射与吸收，最后从附近另一个位置重新出射。这种内部能量扩散消除了生硬的阴影，赋予了物体边缘透光、颜色渗透以及温润通透的质感。</p>
+<p><strong>双向次表面散射分布函数</strong>：</p>
+<p>与双向反射分布函数（Bidirectional Reflection Distribution Function, BRDF）类似，双向次表面散射分布函数（Bidirectional Subsurface Scattering Distribution Function, BSSRDF）描述了光线在材质表面入射与出射之间的关系。不过，由于次表面散射不局限于单个点，而是将空间上的入射点 $x_i$ 与出射点 $x_o$ 彻底解耦，其数学定义需要建立在一个完整的表面区域积分之上：</p>
+<p>$$S(x_i, \omega_i, x_o, \omega_o) = \frac{dL_o(x_o, \omega_o)}{d \Phi_i(x_i, \omega_i)}$$</p>
+<p>其中分子为出射点的 radiance，分母为入射点的 incoming flux。由于全域 BSSRDF 积分的计算复杂度极高，实时渲染必须对其进行降维近似。</p>
+<p><strong>屏幕空间可分离次表面散射</strong>：</p>
+<p>为了在光栅化渲染管线中高效落地复杂的 BSSRDF，现代游戏引擎普遍采用屏幕空间可分离次表面散射（Screen-Space Separable Subsurface Scattering, SSSS）技术。其核心思想是将高昂的三维体积散射积分进行降维：通过在屏幕空间中利用可分离卷积来近似 BSSRDF 的扩散剖面（Diffusion Profile），将“光线进入材质后在附近另一位置出射”的非局部光照表现，转化为一个高性能的屏幕空间后处理过程。</p>
+<p>该算法将次表面散射解耦为独立的渲染通道，其核心运行流程如下：</p>
+<ul>
+<li>GBuffer 隔离与基础光照：正常计算表面的镜面高光与局部分布的漫反射，并通过 GBuffer 中的材质 ID 与 Profile 索引精准标记出需要参与次表面散射的像素区域。</li>
+<li>提取漫反射层：将标记出的局部漫反射光照结果单独剥离，存入专用的临时纹理缓冲区中。</li>
+<li>可分离屏幕空间模糊：针对 SSS 材质，结合材质特定的散射半径与通道权重，在屏幕空间内依次执行带深度权重的 1D 横向模糊与 1D 纵向模糊，从而实现内部能量在大范围内的空间扩散。</li>
+<li>最终合成：将模糊后的漫反射（内部扩散光）、锐利的表面高光以及针对薄壁区域的背面透光项（Transmission）重新叠加，输出最终像素颜色。</li>
+</ul>
 <h2 id=shadow-mapping>Shadow Mapping</h2>
 <h2 id=post-processing>Post-Processing</h2>
 <p>1、色调映射的工作原理？使用LUT进行色调映射和使用数学公式进行色调映射的区别？</p>

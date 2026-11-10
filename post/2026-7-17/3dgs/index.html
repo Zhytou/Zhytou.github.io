@@ -10,7 +10,7 @@
 <link rel=stylesheet type=text/css media=screen href=/css/main.css>
 <link rel=stylesheet type=text/css media=screen href=/css/all.css>
 <meta property="og:title" content="3D Gaussian Splatting">
-<meta property="og:description" content="3DGS  3D Gaussian Distribution Spherical Harmonics Training Rendering Pipeline   Dynamic 3DGS  4DGS Relightable 3DGS   Generative 3DGS  DreamGaussian FeedforwardGaussian    3DGS 3D高斯溅射（3D Gaussian Splatting，3DGS）是一种新兴的三维场景表示与渲染技术。它通过将场景建模为由大量高斯椭球粒子组成的粒子云，并利用球谐函数（Spherical Harmonics, SH）来编码光照信息，实现了高效、真实感的三维渲染。
+<meta property="og:description" content="3DGS  3D Gaussian Distribution Spherical Harmonics Training Rendering Pipeline   Relightable 3DGS  GS-IR   Generative 3DGS  DreamGaussian FeedforwardGaussian    3DGS 3D高斯溅射（3D Gaussian Splatting，3DGS）是一种新兴的三维场景表示与渲染技术。它通过将场景建模为由大量高斯椭球粒子组成的粒子云，并利用球谐函数（Spherical Harmonics, SH）来编码光照信息，实现了高效、真实感的三维渲染。
 本章将详细介绍 3DGS 的数学定义、几何性质、渲染管线以及其在动态场景和生成式任务中的应用。希望通过本章，能够理解下列问题：
  什么是splatting？ 训练时如何进行参数估计？ 为什么3d gassiaan是椭球？ 协方差矩阵为什么可以控制椭球的形状？ 协方差矩阵如何使用选择和缩放表示？ 为什么引入球谐函数？ 泼溅在CG中早就存在，为什么3DGS重新提出了就获得了广泛的关注，它相比普通的CG渲染技术有什么优势？ 使用3DG粒子表达场景和点云有什么区别，和隐士场等技术有什么不同？  3D Gaussian Distribution 3D高斯分布描述了一个随机变量的在三维空间中的概率分布。其概率密度函数数学表达式为：
 $$G(x) = \exp \left( -\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right)$$
@@ -21,19 +21,19 @@ $$G(x) = \exp \left( -\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right)$$
 <meta property="article:modified_time" content="2026-07-17T23:17:16+08:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="3D Gaussian Splatting">
-<meta name=twitter:description content="3DGS  3D Gaussian Distribution Spherical Harmonics Training Rendering Pipeline   Dynamic 3DGS  4DGS Relightable 3DGS   Generative 3DGS  DreamGaussian FeedforwardGaussian    3DGS 3D高斯溅射（3D Gaussian Splatting，3DGS）是一种新兴的三维场景表示与渲染技术。它通过将场景建模为由大量高斯椭球粒子组成的粒子云，并利用球谐函数（Spherical Harmonics, SH）来编码光照信息，实现了高效、真实感的三维渲染。
+<meta name=twitter:description content="3DGS  3D Gaussian Distribution Spherical Harmonics Training Rendering Pipeline   Relightable 3DGS  GS-IR   Generative 3DGS  DreamGaussian FeedforwardGaussian    3DGS 3D高斯溅射（3D Gaussian Splatting，3DGS）是一种新兴的三维场景表示与渲染技术。它通过将场景建模为由大量高斯椭球粒子组成的粒子云，并利用球谐函数（Spherical Harmonics, SH）来编码光照信息，实现了高效、真实感的三维渲染。
 本章将详细介绍 3DGS 的数学定义、几何性质、渲染管线以及其在动态场景和生成式任务中的应用。希望通过本章，能够理解下列问题：
  什么是splatting？ 训练时如何进行参数估计？ 为什么3d gassiaan是椭球？ 协方差矩阵为什么可以控制椭球的形状？ 协方差矩阵如何使用选择和缩放表示？ 为什么引入球谐函数？ 泼溅在CG中早就存在，为什么3DGS重新提出了就获得了广泛的关注，它相比普通的CG渲染技术有什么优势？ 使用3DG粒子表达场景和点云有什么区别，和隐士场等技术有什么不同？  3D Gaussian Distribution 3D高斯分布描述了一个随机变量的在三维空间中的概率分布。其概率密度函数数学表达式为：
 $$G(x) = \exp \left( -\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right)$$
  $x$：三维空间中的任意坐标点。 $\mu$：高斯分布的均值（Mean），直接对应高斯球在三维空间中的中心位置。 $\Sigma$：协方差矩阵（Covariance Matrix），它决定了高斯球在三维空间中的几何形态。  协方差矩阵：">
 <meta itemprop=name content="3D Gaussian Splatting">
-<meta itemprop=description content="3DGS  3D Gaussian Distribution Spherical Harmonics Training Rendering Pipeline   Dynamic 3DGS  4DGS Relightable 3DGS   Generative 3DGS  DreamGaussian FeedforwardGaussian    3DGS 3D高斯溅射（3D Gaussian Splatting，3DGS）是一种新兴的三维场景表示与渲染技术。它通过将场景建模为由大量高斯椭球粒子组成的粒子云，并利用球谐函数（Spherical Harmonics, SH）来编码光照信息，实现了高效、真实感的三维渲染。
+<meta itemprop=description content="3DGS  3D Gaussian Distribution Spherical Harmonics Training Rendering Pipeline   Relightable 3DGS  GS-IR   Generative 3DGS  DreamGaussian FeedforwardGaussian    3DGS 3D高斯溅射（3D Gaussian Splatting，3DGS）是一种新兴的三维场景表示与渲染技术。它通过将场景建模为由大量高斯椭球粒子组成的粒子云，并利用球谐函数（Spherical Harmonics, SH）来编码光照信息，实现了高效、真实感的三维渲染。
 本章将详细介绍 3DGS 的数学定义、几何性质、渲染管线以及其在动态场景和生成式任务中的应用。希望通过本章，能够理解下列问题：
  什么是splatting？ 训练时如何进行参数估计？ 为什么3d gassiaan是椭球？ 协方差矩阵为什么可以控制椭球的形状？ 协方差矩阵如何使用选择和缩放表示？ 为什么引入球谐函数？ 泼溅在CG中早就存在，为什么3DGS重新提出了就获得了广泛的关注，它相比普通的CG渲染技术有什么优势？ 使用3DG粒子表达场景和点云有什么区别，和隐士场等技术有什么不同？  3D Gaussian Distribution 3D高斯分布描述了一个随机变量的在三维空间中的概率分布。其概率密度函数数学表达式为：
 $$G(x) = \exp \left( -\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right)$$
  $x$：三维空间中的任意坐标点。 $\mu$：高斯分布的均值（Mean），直接对应高斯球在三维空间中的中心位置。 $\Sigma$：协方差矩阵（Covariance Matrix），它决定了高斯球在三维空间中的几何形态。  协方差矩阵："><meta itemprop=datePublished content="2026-07-17T23:17:16+08:00">
 <meta itemprop=dateModified content="2026-07-17T23:17:16+08:00">
-<meta itemprop=wordCount content="387">
+<meta itemprop=wordCount content="364">
 <meta itemprop=keywords content>
 </head>
 <body>
@@ -91,10 +91,9 @@ $$G(x) = \exp \left( -\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right)$$
 <li><a href=#rendering-pipeline>Rendering Pipeline</a></li>
 </ul>
 </li>
-<li><a href=#dynamic-3dgs>Dynamic 3DGS</a>
+<li><a href=#relightable-3dgs>Relightable 3DGS</a>
 <ul>
-<li><a href=#4dgs>4DGS</a></li>
-<li><a href=#relightable-3dgs>Relightable 3DGS</a></li>
+<li><a href=#gs-ir>GS-IR</a></li>
 </ul>
 </li>
 <li><a href=#generative-3dgs>Generative 3DGS</a>
@@ -190,11 +189,11 @@ $$G(x) = \exp \left( -\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right)$$
 <li>分块装箱（Tile-based Binning，粗筛）：屏幕被划分为 $16 \times 16$ 像素的小方块（Tile）。根据 2D 协方差矩阵 $\Sigma'$ 计算出高斯的 2D 轴对齐包围盒（AABB），检查其与哪些 Tile 相交。相交的高斯被分发到对应 Tile 的待处理队列中，并利用 GPU 并行算法（如 Radix Sort）按到相机的深度进行超高速排序。</li>
 <li>逐像素渲染与自适应截断（Per-pixel Evaluation，精测）：在像素着色阶段，每个线程负责一个屏幕像素。像素坐标 $x'$ 被直接代入对应的 2D 高斯方程中：</li>
 </ul>
-<h2 id=dynamic-3dgs>Dynamic 3DGS</h2>
-<h3 id=4dgs>4DGS</h3>
-<p>针对运动场景，通过引入时间维度 $t$ 或轻量级的变形网络（Deformation Network），预测高斯球随时间或动作的位移与形变，实现对动态现实世界的时空重建。</p>
-<h3 id=relightable-3dgs>Relightable 3DGS</h3>
-<p>可重打光 3DGS (Relightable 3DGS)：痛点：标准 3DGS 将光影和材质死死锁死在 SH 系数中，无法更换环境光源。解法：剥离纯 SH 颜色，让高斯球显式存储 PBR 材质属性（Albedo 固有色、Roughness 粗糙度、Normal 法线），并引入环境光贴图或显式光源，重新启用完整的物理光照积分（入射光 $L_{in} \times$ BRDF $f_r \times$ 余弦项 $\cos\theta$）。</p>
+<h2 id=relightable-3dgs>Relightable 3DGS</h2>
+<h3 id=gs-ir>GS-IR</h3>
+<blockquote>
+<p><a href=https://arxiv.org/html/2311.16473v3 target=_blank>GS-IR: 3D Gaussian Splatting for Inverse Rendering</a></p>
+</blockquote>
 <h2 id=generative-3dgs>Generative 3DGS</h2>
 <h3 id=dreamgaussian>DreamGaussian</h3>
 <h3 id=feedforwardgaussian>FeedforwardGaussian</h3>
