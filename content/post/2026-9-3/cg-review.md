@@ -15,11 +15,12 @@ draft: false
   - [IBL](#ibl)
   - [Probe](#probe)
   - [SSGI](#ssgi)
-  - [RTXGI](#rtxgi)
+  - [RTGI](#rtgi)
   - [VXGI](#vxgi)
   - [SDFGI](#sdfgi)
 - [Advanced Shading \& Transparency](#advanced-shading--transparency)
   - [Order Independent Transparency](#order-independent-transparency)
+  - [Separable Subsurface Scattering](#separable-subsurface-scattering)
 - [Shadow Mapping](#shadow-mapping)
 - [Post-Processing](#post-processing)
 - [Anti-Aliasing](#anti-aliasing)
@@ -185,7 +186,7 @@ IEEE 754 标准的单精度浮点数（Float32）包含 1 个符号位、8 个�
 
 不过，由于相机透视投影的非线性性质，NDC空间下的z坐标值与View空间下的z坐标值是呈反比的，这导致深度变化最剧烈的远端场景恰好被分在了浮点数精度最低的 $[0.5, 1.0]$ 区间。
 
-比如：远端的物体（比如 100 米和 101 米）本身就极难区分，需要很高的精度；但透视投影偏偏把它们挤在了 精度最差、最容易发生小数点舍入重合的 1.0 附近，导致深度测试时无法精准区分谁在前谁在后。
+比如：远端的物体（比如 100 米和 101 米）本身就极难区分，需要很高的精度；但透视投影偏偏把它们挤在了精度最差、最容易发生小数点舍入重合的 1.0 附近，导致深度测试时无法精准区分谁在前谁在后。
 
 为了解决“远端物体落入 1.0 低精度区”的悲剧，Reversed-Z 做了一个非常彻底的颠倒——将投影矩阵和映射逻辑改成：
 
@@ -592,7 +593,7 @@ vec3 GetBoxProjectedDir(vec3 worldPos, vec3 rayDir, vec3 probePos, vec3 boxMin, 
 - [SSDO](https://zhytou.github.io/post/2024-8-5/games202/#screen-space-directional-occlusin)
 - [SSR](https://zhytou.github.io/post/2024-8-5/games202/#screen-space-reflection)
 
-### RTXGI
+### RTGI
 
 1、RTX 是什么？使用它实现 GI 的常见流程是什么？
 
@@ -658,6 +659,31 @@ $$C_{out} = \alpha_{src} \cdot C_{src} + (1 - \alpha_{src}) \cdot C_{dst}$$
 $$C_{final} = C_{accum}.rgb / \max(C_{accum}.a, 1e-4) \cdot (1 - \text{Revealage}) + C_{background} \cdot \text{Revealage}$$
 
 在上述合成公式中，透射率 $\text{Revealage} = \prod (1 - \alpha_i)$ 利用了乘法交换律，无论片元以何种顺序乱序写入，整体的背景阻挡比例在数学上都是绝对精确的。而颜色累加部分用无视顺序的加法替代了复杂的嵌套衰减，其中的深度权重函数 $w(z)$ 巧妙地强行赋予了近处片元主导权，从而消除了乱序带来的空间混乱。最终，将归一化的累加颜色乘以总阻挡率 $(1 - \text{Revealage})$，恰好让半透明物体“挡下了多少光，就散发出对应比例的自身颜色”，实现了性能与视觉的优雅闭环。
+
+### Separable Subsurface Scattering
+
+**次表面散射**：
+
+针对玉石、皮肤、蜡烛等半透明材质，传统局部着色模型显然无法正确模拟。光线在入射后会穿透表层，进入材质内部经历无数次随机散射与吸收，最后从附近另一个位置重新出射。这种内部能量扩散消除了生硬的阴影，赋予了物体边缘透光、颜色渗透以及温润通透的质感。
+
+**双向次表面散射分布函数**：
+
+与双向反射分布函数（Bidirectional Reflection Distribution Function, BRDF）类似，双向次表面散射分布函数（Bidirectional Subsurface Scattering Distribution Function, BSSRDF）描述了光线在材质表面入射与出射之间的关系。不过，由于次表面散射不局限于单个点，而是将空间上的入射点 $x_i$ 与出射点 $x_o$ 彻底解耦，其数学定义需要建立在一个完整的表面区域积分之上：
+
+$$S(x_i, \omega_i, x_o, \omega_o) = \frac{dL_o(x_o, \omega_o)}{d \Phi_i(x_i, \omega_i)}$$
+
+其中分子为出射点的 radiance，分母为入射点的 incoming flux。由于全域 BSSRDF 积分的计算复杂度极高，实时渲染必须对其进行降维近似。
+
+**屏幕空间可分离次表面散射**：
+
+为了在光栅化渲染管线中高效落地复杂的 BSSRDF，现代游戏引擎普遍采用屏幕空间可分离次表面散射（Screen-Space Separable Subsurface Scattering, SSSS）技术。其核心思想是将高昂的三维体积散射积分进行降维：通过在屏幕空间中利用可分离卷积来近似 BSSRDF 的扩散剖面（Diffusion Profile），将“光线进入材质后在附近另一位置出射”的非局部光照表现，转化为一个高性能的屏幕空间后处理过程。
+
+该算法将次表面散射解耦为独立的渲染通道，其核心运行流程如下：
+
+- GBuffer 隔离与基础光照：正常计算表面的镜面高光与局部分布的漫反射，并通过 GBuffer 中的材质 ID 与 Profile 索引精准标记出需要参与次表面散射的像素区域。
+- 提取漫反射层：将标记出的局部漫反射光照结果单独剥离，存入专用的临时纹理缓冲区中。
+- 可分离屏幕空间模糊：针对 SSS 材质，结合材质特定的散射半径与通道权重，在屏幕空间内依次执行带深度权重的 1D 横向模糊与 1D 纵向模糊，从而实现内部能量在大范围内的空间扩散。
+- 最终合成：将模糊后的漫反射（内部扩散光）、锐利的表面高光以及针对薄壁区域的背面透光项（Transmission）重新叠加，输出最终像素颜色。
 
 ## Shadow Mapping
 

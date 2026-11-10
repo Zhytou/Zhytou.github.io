@@ -9,9 +9,8 @@ draft: false
   - [Spherical Harmonics](#spherical-harmonics)
   - [Training](#training)
   - [Rendering Pipeline](#rendering-pipeline)
-- [Dynamic 3DGS](#dynamic-3dgs)
-  - [4DGS](#4dgs)
-  - [Relightable 3DGS](#relightable-3dgs)
+- [Relightable 3DGS](#relightable-3dgs)
+  - [GS-IR](#gs-ir)
 - [Generative 3DGS](#generative-3dgs)
   - [DreamGaussian](#dreamgaussian)
   - [FeedforwardGaussian](#feedforwardgaussian)
@@ -141,15 +140,11 @@ $$C = \sum_{i=1}^{n} c_i \alpha_i \prod_{j=1}^{i-1} (1 - \alpha_j)$$
 - 分块装箱（Tile-based Binning，粗筛）：屏幕被划分为 $16 \times 16$ 像素的小方块（Tile）。根据 2D 协方差矩阵 $\Sigma'$ 计算出高斯的 2D 轴对齐包围盒（AABB），检查其与哪些 Tile 相交。相交的高斯被分发到对应 Tile 的待处理队列中，并利用 GPU 并行算法（如 Radix Sort）按到相机的深度进行超高速排序。
 - 逐像素渲染与自适应截断（Per-pixel Evaluation，精测）：在像素着色阶段，每个线程负责一个屏幕像素。像素坐标 $x'$ 被直接代入对应的 2D 高斯方程中：
 
-## Dynamic 3DGS
+## Relightable 3DGS
 
-### 4DGS
+### GS-IR
 
-针对运动场景，通过引入时间维度 $t$ 或轻量级的变形网络（Deformation Network），预测高斯球随时间或动作的位移与形变，实现对动态现实世界的时空重建。
-
-### Relightable 3DGS
-
-可重打光 3DGS (Relightable 3DGS)：痛点：标准 3DGS 将光影和材质死死锁死在 SH 系数中，无法更换环境光源。解法：剥离纯 SH 颜色，让高斯球显式存储 PBR 材质属性（Albedo 固有色、Roughness 粗糙度、Normal 法线），并引入环境光贴图或显式光源，重新启用完整的物理光照积分（入射光 $L_{in} \times$ BRDF $f_r \times$ 余弦项 $\cos\theta$）。
+> [GS-IR: 3D Gaussian Splatting for Inverse Rendering](https://arxiv.org/html/2311.16473v3)
 
 ## Generative 3DGS
 

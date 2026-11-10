@@ -659,7 +659,7 @@ $$
 
 ### Specular Part
 
-Cook-Torrance BRDF的镜面反射部分包含法线分布函数（Normal Distribution Function)、菲涅尔方程（Fresnel Equation）、几何函数（Geometry Function）以及用于矫正的分母 。
+Cook-Torrance BRDF的镜面反射部分包含法线分布函数（Normal Distribution Function）、菲涅尔方程（Fresnel Equation）、几何函数（Geometry Function）以及用于矫正的分母 。
 
 其中，分母作为微观几何的局部空间和整个宏观表面的局部空间之间变换的微平面量的校正，有两点需要注意：
 
