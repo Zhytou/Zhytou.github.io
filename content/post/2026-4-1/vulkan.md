@@ -4,15 +4,42 @@ date: 2026-04-1T15:03:21+08:00
 draft: false
 ---
 
-## 入门
+- [数据管理](#数据管理)
+  - [逻辑缓冲](#逻辑缓冲)
+  - [图形对象](#图形对象)
+  - [帧缓冲](#帧缓冲)
+  - [物理显存](#物理显存)
+- [资源描述符](#资源描述符)
+  - [绑定点](#绑定点)
+  - [分组槽](#分组槽)
+  - [无分组](#无分组)
+- [命令系统](#命令系统)
+  - [命令缓冲与命令池](#命令缓冲与命令池)
+  - [命令录制](#命令录制)
+  - [命令提交](#命令提交)
+- [管线状态](#管线状态)
+  - [顶点数据格式](#顶点数据格式)
+  - [管线固定功能](#管线固定功能)
 
 ## 数据管理
 
-Vulkan 在数据管理上的核心哲学，是从 OpenGL 的“隐式状态机 + 驱动全权托管”彻底转向“显式控制 + 硬件解耦”。无论承载的是网格顶点数据还是纹理像素数据，Vulkan 都把资源的逻辑声明与物理显存严格剥离：对象本身只是一份描述“我要一块什么样的存储”的元数据，真正的显存必须由开发者查询需求、显式分配并绑定上去。这一共性构成了后续所有具体类型讨论的公共前提
+Vulkan 在数据管理上的核心哲学，是从 OpenGL 的“隐式状态机 + 驱动全权托管”彻底转向“显式控制 + 硬件解耦”。无论承载的是网格顶点数据还是纹理像素数据，Vulkan 都把资源的逻辑声明与物理显存严格剥离。这使得开发者总是先创建一个描述资源用途、尺寸、格式和访问方式的 Vulkan 对象，再通过显式的内存分配与绑定，将其映射到实际的 GPU 内存。
 
-**缓冲对象**：
+这套设计的核心是两个层次：
 
-与 OpenGL 类似， Vulkan中直接管理顶点数据的对象也称为缓冲对象（Buffer Object），其用途划分与 OpenGL 高度对应——顶点、索引、统一、存储四类语义几乎一一对应，下表即为这层映射关系：
+- 逻辑资源（Resource Object）：描述 GPU 要使用什么数据、数据的组织方式以及使用场景。例如 VkBuffer、VkImage。
+- 物理内存（Memory Allocation）：负责实际承载数据，决定数据存放在哪里、如何被 GPU 访问。例如 VkDeviceMemory。
+
+值得注意的是，二者之间并非简单的一一对应关系：
+
+- 一个 VkDeviceMemory 可以被多个资源分别绑定到不同、不重叠的内存区域。
+- 一个 VkBuffer 或 VkImage 可以绑定到一块更大的 VkDeviceMemory 中，而不必独占整块内存。
+
+换句话说，资源的逻辑尺寸与实际内存分配尺寸也不一定相同，实际分配需要考虑内存对齐、资源布局、硬件粒度等因素。
+
+### 逻辑缓冲
+
+与 OpenGL 类似，Vulkan 中直接管理顶点数据的对象也称为缓冲对象（Buffer Object），其用途划分与 OpenGL 高度对应——顶点、索引、统一、存储四类语义几乎一一对应。
 
 | 缓冲区用途分类 | OpenGL 绑定目标宏 | Vulkan 对应标志位 | 核心作用与说明 |
 | --- | --- | --- | --- |
@@ -23,46 +50,157 @@ Vulkan 在数据管理上的核心哲学，是从 OpenGL 的“隐式状态机 +
 
 尽管二者在缓冲所定义的语义相似，但其实现机制却完全不同：
 
-- 在 OpenGL 中，这些宏代表的是全局上下文（Context）中的绑定槽位（Binding Target）：必须先通过 glBindBuffer 把缓冲区挂载到目标槽位，后续的 glBufferData 或绘制指令才会隐式地对该槽位生效；直到 4.5 版本引入 DSA（Direct State Access）规范，才彻底改变了这一局面——通过诸如 glCreateBuffers 和 glNamedBufferData 等直接以缓冲区句柄（ID）作为参数的 API，开发者终于可以绕过全局状态机，直接对目标对象进行修改。
+- OpenGL 的绑定目标：代表全局 Context 中的状态槽位。通过 glBindBuffer 将 Buffer 绑定到某个目标，后续操作会隐式作用于当前绑定对象。
+- Vulkan 的 Usage Flags：代表资源创建时声明的使用权限和用途。它既不是绑定槽位，也不意味着资源会自动绑定到某个硬件单元。
 
-- 而 Vulkan 的 VkBufferUsageFlags 既不是绑定槽位，也不限制缓冲区的底层形态——它们可以通过按位或自由组合，让同一个 Buffer 既充当传输源又充当顶点缓冲。这些标志的本质是驱动的权限声明与硬件优化掩码：开发者在创建时显式告知驱动该缓冲区将参与哪些管线操作，驱动据此选择最优的显存堆分配策略、内部缓存一致性机制与校验规则。换言之，OpenGL 用标志位描述“现在绑到哪”，Vulkan 用标志位声明“将来能被怎么用”。
+例如：
 
-**纹理对象**：
+```c++
+VkBufferCreateInfo bufferInfo{};
+bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+bufferInfo.size = bufferSize;
+bufferInfo.usage =
+    VK_BUFFER_USAGE_VERTEX_BUFFER_BIT |
+    VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-在 OpenGL 中，纹理对象（Texture Object）既可以
+vkCreateBuffer(
+    device,
+    &bufferInfo,
+    nullptr,
+    &vertexBuffer
+);
+```
 
-此外， Vulkan 还继承了 OpenGL 4.5 引入的采样器和纹理对象分离的设计。也即，可以将不同采样参数封装在采样器中而无需xxx。
+这里声明该 Buffer 可以作为顶点缓冲区使用，同时也可以作为数据传输的目标。需要注意，Usage Flags 必须在创建资源时声明，不能像 OpenGL 那样通过后续改变绑定目标来改变资源用途。
 
-### 逻辑缓冲
+另外，与 OpenGL 中通过 VAO 描述顶点数据布局类似，Vulkan 也需要单独描述顶点数据的格式、偏移和步长。不过，Vulkan 并没有完全对应 OpenGL VAO 的对象，而是通过 Pipeline 的 Vertex Input State 描述顶点输入布局，并在绘制命令中通过 vkCmdBindVertexBuffers 绑定实际的顶点缓冲区。
 
-**VKBuffer**：
-
-****
+因此，VkBuffer 本身只负责承载线性数据，并不关心这些数据究竟代表位置、法线还是纹理坐标。
 
 ### 图形对象
 
-VkImage
+在 OpenGL 中，纹理对象（Texture Object）既承载图像数据，也承担图像格式、尺寸、Mip Level 等资源属性的描述。不过，随着 OpenGL 版本的发展，纹理资源与采样状态逐渐实现分离。Vulkan 延续并进一步明确了这种设计，将原本耦合在一起的功能拆分为三个独立对象：
 
-VkImageView
-
-VkSampler
+- VkImage：描述图像资源本身，包括尺寸、格式、Mip Level、Array Layer、Sample Count 以及使用方式。
+- VkImageView：描述如何访问和解释某个 Image，可以选择特定的 Mip Level、Array Layer 和图像格式。
+- VkSampler：描述采样行为，例如过滤方式、寻址模式和各向异性过滤。
 
 ### 帧缓冲
 
-VkFramebuffer
-
 ### 物理显存
-
-VkDeviceMemory
-
-```c++
-```
 
 与 OpenGL 这种由驱动在后台帮你动态扩容、隐式管理的黑盒机制不同，Vulkan 的显存管理完全是显式（Explicit）的。当你向 GPU 申请一块物理显存（VkDeviceMemory）时，你必须像在 C 语言中使用 malloc 一样，清清楚楚地告诉驱动
 
-**查询限制**：
+**资源限制查询**：
 
-**AMD 扩展函数**：
+Vulkan 不会假设所有 GPU 都拥有相同的内存结构、资源大小限制和对齐要求。
+
+因此，开发者需要在初始化阶段查询物理设备的能力和限制。常用接口包括：
+
+- vkGetPhysicalDeviceProperties：查询物理设备的基本属性及设备限制。
+- vkGetPhysicalDeviceMemoryProperties：查询 Memory Heap 和 Memory Type。
+- vkGetPhysicalDeviceFormatProperties：查询特定图像格式支持的功能。
+- vkGetPhysicalDeviceImageFormatProperties：查询特定 Image 创建参数组合是否受支持。
+
+其中，VkPhysicalDeviceLimits 中与资源管理密切相关的字段包括：
+
+**分配与映射**：
+
+****
+
+**管理组件**：
+
+## 资源描述符
+
+在现代图形管线中，着色器需要读取外部的缓冲区（UBO / SSBO）或纹理（Texture / Sampler）数据。然而，GPU 硬件核心在执行着色器指令时，无法直接理解 C++ 端抽象的 VkBuffer 或 VkImage 句柄。
+
+描述符（Descriptor）正是连接这两者的底层桥梁——它本质上是一块对 GPU 硬件指令集直接可读的“胖指针（Fat Pointer）”，内部封装了资源在显存中的物理起始地址、字节长度、像素格式以及采样寻址规则等硬件元数据。
+
+> 瘦指针（Thin Pointer / 裸指针）：float* ptr —— 只有 8 个字节的起始地址。硬件只知道“从哪开始读”，但不知道读到哪算越界、也不知道里面存的是什么格式。
+> 胖指针（Fat Pointer / 带元信息的指针）内部不仅存了实际存放数据的显存物理基地址（Base Address），还硬编码了硬件执行单元直接需要的访问边界与格式说明。
+
+### 绑定点
+
+绑定点（Binding）是 Shader 与 CPU 端建立资源连接的最小逻辑槽位。
+
+以 OpenGL 为例，GLSL 通过 binding 关键字声明了资源槽位。此时，C++ 端只需 glBindBufferBase 或 glActiveTexture + glBindTexture 便可将资源正确链接。
+
+```glsl
+layout(std140, binding = 0) uniform CameraBlock {
+    mat4 uViewMatrix;
+    mat4 uProjMatrix;
+    mat4 uInvViewMatrix;
+    mat4 uInvProjMatrix;
+    vec3 uCameraPos;
+    float uCameraType;
+    float uFov;
+    float uNear;
+    float uFar;
+    float uAspect;
+};
+
+layout(binding = 0) uniform sampler2D tAlbedoMap;
+layout(binding = 1) uniform sampler2D tNormalMap;
+layout(binding = 2) uniform sampler2D tMRAOMap;
+```
+
+**基于全局状态机隐式资源绑定**：
+
+尽管 OpenGL 中也有资源绑定的概念，但它完全建立在隐式的全局状态机之上，这在现代高性能渲染架构下暴露出三个核心局限：
+
+- 槽位命名空间割裂且状态易受污染：OpenGL 为不同类型的资源（UBO、SSBO、Sampler和Texture）维护着各自独立的全局绑定表（因此上例中 CameraBlock 和 tAlbedoMap 均可使用 binding = 0）。然而，这种依赖全局上下文的状态极易在复杂的渲染 Pass 切换中被意外覆盖，且无法在多线程下并发录制。
+- 运行时驱动验证开销大：在执行 glDraw* 之前，驱动程序必须在后台动态检查当前全局状态槽位上的资源类型、格式是否与活跃 Shader 匹配，导致大量不可预测的 CPU 驱动验证开销。
+- 零散绑定带来的调用碎片化：每切换一个物体或材质，往往需要多次调用 glActiveTexture 和 glBindTexture 逐一刷新各个槽位。
+
+**基于对象状态的显式资源绑定**：
+
+为了彻底解决这些问题，Vulkan 将传统的全局隐式绑定重构为基于对象（Object-Based）的显式资源绑定体系：
+
+- 统一且显式的槽位镜像：在 Vulkan 中，所有资源共享同一套扁平化的 binding 编号空间，不允许重复。C++ 端不再依赖隐式状态匹配，而是必须通过 VkDescriptorSetLayoutBinding 结构体，在创建管线前一比一显式声明每个 binding 的编号、资源类型及可见的着色器阶段。
+- 编译期接口锁定：驱动在创建管线时即根据这些显式声明完成硬件寄存器映射与合法性校验，将运行时开销前置。
+
+**描述符集布局绑定点**：
+
+VkDescriptorSetLayoutBinding 是 Vulkan 中描述符接口的最小配置单元，它精确描述了单个绑定槽位的结构契约，包括：
+
+- 绑定点编号（binding）：与 Shader 中 layout(binding = X) 严格对应的槽位索引。
+- 资源类型（descriptorType）：指定该槽位接收的是 UBO、SSBO 还是组合图像采样器等。
+- 描述符数量（descriptorCount）：支持单个资源或资源数组（阵列大小）。
+- 着色器阶段可见性（stageFlags）：限定仅对特定阶段（如顶点或片元着色器）开放访问，协助驱动优化硬件寄存器分配。
+
+其创建方式如下：
+
+```c++
+VkDescriptorSetLayoutBinding cameraBinding{};
+cameraBinding.binding            = 0;                                         // 对应 GLSL 的 binding = 0
+cameraBinding.descriptorType     = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;         // 资源类型：UBO
+cameraBinding.descriptorCount    = 1;                                         // 数量：1个（非数组）
+cameraBinding.stageFlags         = VK_SHADER_STAGE_VERTEX_BIT;                // 仅在顶点着色器可见
+cameraBinding.pImmutableSamplers = nullptr;                                   // 采样器专用，普通情况填 nullptr
+```
+
+### 分组槽
+
+仅仅拥有统一的绑定点编号还不足以解决高频切换带来的 CPU 驱动开销。如果每次切换材质都要重新绑定，渲染循环依然会陷入调用碎片化。为此，Vulkan 引入了“描述符集布局（Layout）与描述符集实例（Set）分离”的双层分组体系，实现了资源的批量打包与原子级切换。
+
+**描述符集布局**:
+
+VkDescriptorSetLayout 实际上是由一组逻辑相关的 VkDescriptorSetLayoutBinding 组装而成，本质上是一份纯粹的接口类型签名。
+
+- 与具体数据彻底解耦：它只定义“第几号槽位放什么类型的资源”，不包含任何真实的 VkBuffer 或 VkImageView 句柄。
+- 服务于管线编译：在创建渲染管线时，只需将若干个 VkDescriptorSetLayout 装配进 VkPipelineLayout 交给驱动，驱动即可提前锁定所有资源的硬件寄存器布局。这使得同一条编译好的渲染管线，可以无缝复用于成千上万种拥有不同贴图和参数的材质实例。
+
+**描述符集和描述符池**：
+
+如果 VkDescriptorSetLayout 是接口，那么 VkDescriptorSet 就是这个接口的一个实例化对象，而 VkDescriptorPool 则是负责批量分配这些容器的底层内存池：
+
+- 池化预分配（VkDescriptorPool）：为了避免在渲染循环中频繁向操作系统申请零散内存，Vulkan 要求预先创建一个指定容量上限的 VkDescriptorPool（声明池子最多能容纳多少个 Set 以及各类描述符的总数），随后再从池中高速分配出具体的 VkDescriptorSet。
+- 资源加载期的元数据写入（vkUpdateDescriptorSets）：刚分配出来的 VkDescriptorSet 内部为空。C++ 端在资源加载阶段仅执行一次，通过 vkUpdateDescriptorSets 将具体的 VkBuffer（经 VkDescriptorBufferInfo 包装）和 VkImageView + VkSampler（经 VkDescriptorImageInfo 包装）翻译成硬件胖指针，永久写入对应的槽位中。此后在渲染循环中绝不再调用该函数。
+- 按更新频率分层的插槽复用：在创建 VkPipelineLayout 时，多个 Layout 会按顺序映射到着色器中的 set = 0, 1, 2... 槽位。引擎通常按资源的更新频率进行分层规划（例如将每帧一次的全局数据固定在 set = 0，将按材质切换的贴图组绑定在 set = 1）。
+- 渲染执行期的原子级批量绑定（vkCmdBindDescriptorSets）：进入每帧的命令缓冲区录制循环时，着色器中声明的 set 槽位编号是永久固定的。切换材质时，只需调用一次 vkCmdBindDescriptorSets，将新材质的 VkDescriptorSet 实例指针替换进固定的槽位中（例如 firstSet = 1）。由于硬件元数据早已在加载期烘焙完毕，该操作在底层仅相当于更新显存基地址指针（纳秒级），彻底避开了运行时的合法性校验与描述符重组。
+
+### 无分组
 
 ## 命令系统
 
@@ -133,7 +271,7 @@ vkEndCommandBuffer(cmd);
 
 ## 管线状态
 
-**Fixed-function state**:
+**固定管线状态**:
 
 Draw Call 触发的状态切换，主要指光栅化器、ROP、混合单元、深度/模板测试单元、着色器绑定、纹理绑定、顶点输入布局等固定功能或管线状态的变更。这和 CPU 多线程中切换上下文的方式完全不同：
 
@@ -145,5 +283,3 @@ Draw Call 触发的状态切换，主要指光栅化器、ROP、混合单元、�
 ### 顶点数据格式
 
 ### 管线固定功能
-
-## 资源绑定
