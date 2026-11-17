@@ -69,4 +69,5 @@ Hi, I’m Zhytou(ZHONG Yang). I obtained my Bachelor’s degree in Information E
 🎯 Focus on
 Game/Computer Graphics 3D Modeling 💻 Code for fun
 C++ Python Check below for more information:
-About Me Curriculum Vitae …</description></item></channel></rss>
+About Me Curriculum Vitae …</description></item><item><title>Vulkan Tutorial</title><link>https://zhytou.github.io/post/2026-4-1/vulkan/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhytou.github.io/post/2026-4-1/vulkan/</guid><description>
+数据管理 逻辑缓冲 图形对象 帧缓冲 物理显存 资源描述符 绑定点 分组槽 无分组 命令系统 命令缓冲与命令池 命令录制 命令提交 管线状态 顶点数据格式 管线固定功能 数据管理 Vulkan 在数据管理上的核心哲学，是从 OpenGL 的“ …</description></item></channel></rss>

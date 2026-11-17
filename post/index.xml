@@ -64,4 +64,5 @@ Basics 在Raft算法中，每一个服务器都 …</description></item><item><t
 个人情况 上了大学之后，英语学习就是停滞了。最近参加的一次英语考试也是大一考的四级，考了590分左右。
 断断续续复习了两个月左右。前期以熟悉题型和看网课为主，后期每天一套听力和一篇大作文加口语练习。在此期间，也总 …</description></item><item><title>Hugo搭建博客</title><link>https://zhytou.github.io/post/2022-10-17/how-to-use-hugo/</link><pubDate>Mon, 17 Oct 2022 13:34:43 +0800</pubDate><guid>https://zhytou.github.io/post/2022-10-17/how-to-use-hugo/</guid><description>
 一直想搞一个自己的网站，记录一下自己的想法。之前尝试用过JekyII和Hexo，但研究了很久还是最终选择使用Hugo,于是就有了这篇踩坑记录贴。
-Hugo Hugo是一个静态网页生成器，能够根据/content目录和config.toml设置生成一些列Html文件供用户使用。 …</description></item></channel></rss>
+Hugo Hugo是一个静态网页生成器，能够根据/content目录和config.toml设置生成一些列Html文件供用户使用。 …</description></item><item><title>Vulkan Tutorial</title><link>https://zhytou.github.io/post/2026-4-1/vulkan/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhytou.github.io/post/2026-4-1/vulkan/</guid><description>
+数据管理 逻辑缓冲 图形对象 帧缓冲 物理显存 资源描述符 绑定点 分组槽 无分组 命令系统 命令缓冲与命令池 命令录制 命令提交 管线状态 顶点数据格式 管线固定功能 数据管理 Vulkan 在数据管理上的核心哲学，是从 OpenGL 的“ …</description></item></channel></rss>
